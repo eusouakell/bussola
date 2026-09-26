@@ -38,6 +38,7 @@ merge se resolve pela união das linhas.
 ├── AGENTS.md                          007  (operação no Antigravity)
 ├── Makefile                           000  (acréscimo de targets)
 ├── .specify/                          000  (constituição congelada após 000)
+├── .github/workflows/                000 (ci.yml, deploy.yml; Q-18) → 007 (promoção de tráfego)
 ├── specs/NNN-*/                       cada ciclo, só o seu NNN
 ├── contracts/                         000  (mudança só via PR "contracts:")
 │   ├── bigquery/bussola_dados.sql

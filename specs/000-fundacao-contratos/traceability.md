@@ -27,4 +27,5 @@
 | FR-023 iam_datasets.sh com confirmação | 000 §3.5 | fundacao-contratos | specs/000-fundacao-contratos/spec.md | specs/000-fundacao-contratos/plan.md | T037 | simulação com stubs (smoke.md) | TESTED |
 | FR-024 pedidos-owner.md | mestre §16; AC-14 | fundacao-contratos | specs/000-fundacao-contratos/spec.md | specs/000-fundacao-contratos/plan.md | T040 | manual: pedidos-owner.md | DONE (envio pela Pessoa B) |
 | FR-025 questoes.md | 000 §1.5 | fundacao-contratos | specs/000-fundacao-contratos/spec.md | specs/000-fundacao-contratos/plan.md | T041 | manual: questoes.md | DONE |
+| FR-026 Pipeline CI + CD preparado (WIF) | Decisão do usuário (Q-18) | fundacao-contratos | specs/000-fundacao-contratos/spec.md | specs/000-fundacao-contratos/plan.md | T046, T047 | mcp_server/tests/contrato/test_workflows.py; CD pendente do WIF (pedido 5) | TESTED (CD travado até o WIF) |
 

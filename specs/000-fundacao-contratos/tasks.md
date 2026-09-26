@@ -83,6 +83,8 @@ partir daqui, os subagentes podem começar.
 
 - [x] T040 [P] [US6] `specs/000-fundacao-contratos/pedidos-owner.md`: 4 itens de mestre §16, com status e decisão Plano A/B (FR-024)
 - [x] T041 [P] [US6] `specs/000-fundacao-contratos/questoes.md` + correções aditivas em `docs/ciclos/contratos.md` (FR-025)
+- [x] T046 [US6] `.github/workflows/ci.yml` + `deploy.yml` (WIF, sem tráfego), pedido 5 ao owner e `tests/contrato/test_workflows.py` (FR-026, Q-18)
+- [ ] T047 [HUMANO] Pessoa B envia o pedido 5; com a resposta, um admin do repositório define `GCP_WIF_PROVIDER` e `GCP_DEPLOY_SA` (Q-18)
 
 ## Phase 9: Polish e gates
 

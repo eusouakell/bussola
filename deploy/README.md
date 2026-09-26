@@ -26,6 +26,29 @@ deploy/iam_datasets.sh                   # simulação; revisar
 deploy/iam_datasets.sh --aplicar         # só com confirmação humana
 ```
 
+## Pipeline (GitHub Actions, Q-18)
+
+| Workflow | Disparo | O que faz |
+|---|---|---|
+| `.github/workflows/ci.yml` | `pull_request`, `push` na `main` | `make lint` + `make test` com `BUSSOLA_FAKES=TRUE`, sem GCP |
+| `.github/workflows/deploy.yml` | Manual (Actions → deploy → Run workflow) | CI, depois `build_push.sh` + `deploy.sh --tag cNNN` (sem tráfego) |
+
+O `deploy.yml` autentica só por Workload Identity Federation e fica travado
+até existirem as variáveis do repositório (ou do environment `gcp`):
+
+- `GCP_WIF_PROVIDER`: nome completo do provider, criado pelo owner (pedido
+  5 de `specs/000-fundacao-contratos/pedidos-owner.md`);
+- `GCP_DEPLOY_SA`: e-mail da SA de deploy;
+- `BUSSOLA_SA_RUNTIME` (opcional): `bussola-runtime` no Plano A.
+
+Disparo pela linha de comando:
+
+```bash
+gh workflow run deploy.yml -f servico=ambos -f tag=c000 -f llm=vertex
+```
+
+Nenhum workflow move tráfego ou altera IAM. A promoção é do 007.
+
 ## Regras
 
 - Mover tráfego (`gcloud run services update-traffic`) é do ciclo 007 e pede

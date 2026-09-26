@@ -25,6 +25,7 @@ entram neste mesmo PR, que cria `contratos-v1`.
 | Q-15 | Local do Gemini × BigQuery | Agente em `global` via `BUSSOLA_LOCAL_MODELO`; resto em `us-central1` | contratos §7 |
 | Q-16 | Invoker do agente no MCP privado | `roles/run.invoker` no `bussola-mcp` para a SA do agente, com confirmação humana | contratos §6 e `deploy/README.md` |
 | Q-17 | RAG sobre `bussola_rag` com dados do cliente | RAG de conhecimento geral (normas do BACEN, crédito, boas práticas) com corpus no repositório e busca em memória; sem `bussola_rag` | contratos §1, §3, §4, §5, §7, §8; ciclo 002; constituição 1.0.1 |
+| Q-18 | Pipeline de publicação | CI (`make lint` + `make test`) em todo PR; CD manual com WIF, revisões sem tráfego | contratos §1, `.github/workflows/`, pedido 5 ao owner |
 
 ## Q-01 Usuário de controle no mock
 
@@ -280,6 +281,43 @@ gcloud run services add-iam-policy-binding bussola-mcp \
 - **Pendente (humano):** o dataset `bussola_rag` criado no T038 continua no
   projeto, vazio. Removê-lo é destrutivo e pede confirmação:
   `bq rm -r -d batalha-time-07-lkbv:bussola_rag`.
+
+## Q-18 Pipeline de publicação no GitHub Actions
+
+- **Divergência:** o 000 não previa pipeline. O PR exige `make lint` e
+  `make test` verdes (CLAUDE.md), mas só na máquina de quem abre o PR, e o
+  deploy depende do `docker` e do ADC de um integrante. O usuário pediu uma
+  pipeline para publicar o app.
+- **Decisão (usuário, 26/09/2026): "CI agora + CD preparado".**
+  - `ci.yml`: em todo `pull_request` e em `push` na `main`, roda
+    `make lint` e `make test` com `BUSSOLA_FAKES=TRUE`, sem credencial e
+    sem GCP;
+  - `deploy.yml`: disparo manual (`servico`, `tag` cNNN, `llm`). Roda o CI,
+    autentica por **Workload Identity Federation** (constituição VII:
+    nenhuma chave de SA no GitHub), faz build e push pelo
+    `deploy/build_push.sh` e publica pelo `deploy/deploy.sh --tag cNNN`,
+    sem tráfego em serviço existente;
+  - o CD fica **travado** até existirem as variáveis `GCP_WIF_PROVIDER` e
+    `GCP_DEPLOY_SA` (repositório ou environment `gcp`). Sem elas, o job
+    falha com mensagem clara e não chega ao GCP;
+  - mover tráfego e mudar IAM ficam fora dos workflows (constituição X). A
+    promoção de tráfego é do 007, com aprovação humana (sugestão: workflow
+    próprio com environment protegido por revisores).
+- **Correção:**
+  - contratos §1 (`.github/workflows/`: 000 → 007) e CLAUDE.md;
+  - pedido 5 em [`pedidos-owner.md`](./pedidos-owner.md) (pool e provider
+    WIF restritos a `theguitarvity/bussola`, SA de deploy com
+    `run.developer`, `artifactregistry.writer` e `iam.serviceAccountUser`
+    sobre a SA de runtime);
+  - `deploy/README.md` (seção "Pipeline");
+  - `tests/contrato/test_workflows.py`: CI em modo fake, CD só manual e
+    depois do CI, só WIF (sem `credentials_json` nem segredo), sem comando
+    de tráfego ou IAM, permissões mínimas e nenhuma entrada do disparo
+    interpolada direto no shell.
+- **Pendente (humano):**
+  - a Pessoa B envia o pedido 5;
+  - com a resposta, alguém com admin do repositório define as variáveis;
+  - opcional: exigir o check `ci` na proteção da `main`.
 
 ## Questões ainda abertas (herdadas)
 

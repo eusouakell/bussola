@@ -17,6 +17,7 @@ Fonte: [contexto mestre §16](../../docs/contexto-spec-master.md) e
 | 2 | Template de Model Armor `bussola-guard` | A enviar | — | — |
 | 3 | Bucket `batalha-time-07-lkbv-bussola` com Storage Object Admin | A enviar | — | — |
 | 4 | Confirmar `allUsers` como invoker no Cloud Run | A enviar | — | — |
+| 5 | Workload Identity Federation para o GitHub Actions + SA de deploy (Q-18) | A enviar | — | — |
 
 Valores de status: `A enviar`, `Enviado`, `Atendido`, `Negado`, `Sem resposta`.
 
@@ -37,7 +38,10 @@ Valores de status: `A enviar`, `Enviado`, `Atendido`, `Negado`, `Sem resposta`.
   - item 2 negado → guardrails só com callbacks do ADK e safety settings
     (005 sem Model Armor);
   - item 4 negado → o 007 publica o canal com autenticação (token de identidade)
-    em vez de `allUsers`.
+    em vez de `allUsers`;
+  - item 5 negado ou sem resposta → o CD do GitHub Actions fica travado e o
+    deploy segue pelos scripts de `deploy/`, na máquina de um integrante
+    (Q-18). O CI não depende do item 5.
 - **Registro:** quem receber a resposta atualiza a tabela acima, esta seção
   e `docs/contexto-spec-master.md` §20 (Q7).
 
@@ -49,7 +53,7 @@ Valores de status: `A enviar`, `Enviado`, `Atendido`, `Negado`, `Sem resposta`.
 > Olá, André. Somos o Time 07 e estamos construindo a Bússola, um agente de
 > planejamento financeiro sobre `hackathon_dados.extrato_sintetico`. Para
 > rodar a solução no Cloud Run com o menor privilégio possível, precisamos de
-> quatro itens que o nosso papel no projeto não permite fazer:
+> cinco itens que o nosso papel no projeto não permite fazer:
 >
 > 1. **Service Account de runtime.** Criar uma SA nova (sugestão:
 >    `bussola-runtime`) ou conceder à SA default de compute
@@ -72,6 +76,22 @@ Valores de status: `A enviar`, `Enviado`, `Atendido`, `Negado`, `Sem resposta`.
 > 4. **Confirmação de política:** é permitido conceder `allUsers` como
 >    invoker (`roles/run.invoker`) em um serviço Cloud Run, para o canal
 >    público da demo? O servidor MCP continua privado em qualquer caso.
+> 5. **Deploy pelo GitHub Actions sem chave de SA.** Workload Identity
+>    Federation para o repositório `theguitarvity/bussola`:
+>    - um pool (sugestão: `github`) e um provider OIDC (sugestão: `bussola`)
+>      com emissor `https://token.actions.githubusercontent.com`, mapeamento
+>      `google.subject=assertion.sub`,
+>      `attribute.repository=assertion.repository` e condição
+>      `assertion.repository == 'theguitarvity/bussola'`;
+>    - uma SA de deploy (sugestão: `bussola-deploy`) com
+>      `roles/run.developer` no projeto, `roles/artifactregistry.writer` no
+>      repositório `agentes` e `roles/iam.serviceAccountUser` sobre a SA de
+>      runtime (item 1);
+>    - `roles/iam.workloadIdentityUser` nessa SA para o principal
+>      `principalSet://iam.googleapis.com/projects/1061873050224/locations/global/workloadIdentityPools/github/attribute.repository/theguitarvity/bussola`.
+>
+>    Precisamos só do nome completo do provider e do e-mail da SA. O
+>    workflow publica revisões sem tráfego e não altera IAM.
 >
 > Se algum item não puder ser atendido, temos um plano alternativo com os
 > papéis atuais do time; só precisamos saber para seguir por ele.
@@ -89,6 +109,7 @@ Tudo abaixo funciona com os papéis atuais do time (mestre §5 e §16):
 | LLM | Gemini via Vertex (`aiplatform.user`) | Gemini API (`generativelanguage`) com `gemini-api-key` injetada por `--set-secrets` por quem tem accessor | Chave de API em runtime: aceitável só na PoC; registrar como dívida |
 | Guardrails | Model Armor (`bussola-guard`) + callbacks | Callbacks do ADK + safety settings do Gemini | Sem filtro gerenciado de prompt injection |
 | Build | `--source` / Cloud Build com bucket | `docker buildx` local + push para `agentes` (Artifact Registry Writer) | Build depende da máquina do integrante |
+| CD (Q-18) | `deploy.yml` no GitHub Actions com WIF (item 5) | `deploy/build_push.sh` + `deploy/deploy.sh` na máquina de um integrante | Deploy manual; o CI (`ci.yml`) roda igual nos dois planos |
 | Canal | ADK Web público (`allUsers`) | Serviço privado + acesso autenticado na demo | Demo exige login ou token |
 
 **Risco no LLM do Plano B:** `--set-secrets` injeta o segredo em runtime com a

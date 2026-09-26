@@ -69,8 +69,8 @@ dependência chegar em `main`.
 1. 1 ciclo = 1 worktree = 1 branch `NNN-<slug>` = 1 execução do Spec Master,
    com `SPECIFY_FEATURE_DIRECTORY=specs/NNN-<slug>`.
 2. Rebase em `main` antes do PR.
-3. O PR exige `make lint` e `make test` verdes e os critérios de aceite do
-   ciclo.
+3. O PR exige `make lint` e `make test` verdes (job `ci` do GitHub Actions)
+   e os critérios de aceite do ciclo.
 4. `.spec-master/` é local. A rastreabilidade é exportada para
    `specs/NNN-*/traceability.md`.
 5. Ordem de merge e revisores: [docs/ciclos/README.md](docs/ciclos/README.md)

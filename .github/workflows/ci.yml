@@ -1,0 +1,40 @@
+# Bússola: CI (Q-18 do 000). make lint + make test em modo fake, sem rede
+# para o GCP e sem credencial. Também é chamado pelo deploy.yml antes do build.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-e-testes:
+    name: make lint + make test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUSSOLA_FAKES: "TRUE"
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: "**/uv.lock"
+
+      - name: make lint
+        run: make lint
+
+      - name: make test
+        run: make test

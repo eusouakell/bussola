@@ -1,0 +1,117 @@
+# Bússola: CD preparado (Q-18 do 000). Disparo manual. Roda o CI, faz build e
+# push das imagens e publica revisões com --tag cNNN, sem tráfego, pelos
+# scripts de deploy/. Acesso ao GCP só por Workload Identity Federation
+# (constituição VII): nenhuma chave de SA no GitHub.
+#
+# Travado até o owner criar o WIF (pedido 5 de specs/000-*/pedidos-owner.md) e
+# alguém definir as variáveis do repositório (ou do environment gcp):
+#   GCP_WIF_PROVIDER    projects/<número>/locations/global/workloadIdentityPools/<pool>/providers/<provider>
+#   GCP_DEPLOY_SA       e-mail da SA de deploy
+#   BUSSOLA_SA_RUNTIME  opcional; bussola-runtime no Plano A (padrão: SA default de compute)
+#
+# Mover tráfego e mudar IAM ficam fora deste workflow: são do ciclo 007, com
+# confirmação humana (constituição X).
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      servico:
+        description: "Serviço (ambos = mcp e depois agent)"
+        type: choice
+        options: [ambos, mcp, agent]
+        default: ambos
+      tag:
+        description: "Tag da revisão no Cloud Run (cNNN, ex.: c003)"
+        type: string
+        required: true
+        default: c000
+      llm:
+        description: "LLM do agente: vertex (Plano A) ou gemini-api (Plano B)"
+        type: choice
+        options: [vertex, gemini-api]
+        default: vertex
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-gcp
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  publicar:
+    name: build, push e revisão sem tráfego
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: gcp
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GCP_WIF_PROVIDER: ${{ vars.GCP_WIF_PROVIDER }}
+      GCP_DEPLOY_SA: ${{ vars.GCP_DEPLOY_SA }}
+      BUSSOLA_SA_RUNTIME: ${{ vars.BUSSOLA_SA_RUNTIME }}
+      SERVICO: ${{ inputs.servico }}
+      TAG_REVISAO: ${{ inputs.tag }}
+      LLM: ${{ inputs.llm }}
+    steps:
+      - name: Conferir WIF e tag
+        run: |
+          if [ -z "$GCP_WIF_PROVIDER" ] || [ -z "$GCP_DEPLOY_SA" ]; then
+            echo "::error title=CD sem acesso ao GCP::Defina GCP_WIF_PROVIDER e GCP_DEPLOY_SA (pedido 5 ao owner, Q-18 do 000). O CD não usa chave de SA."
+            exit 1
+          fi
+          if ! printf '%s' "$TAG_REVISAO" | grep -Eq '^c[0-9]{3}(-[a-z0-9]+)*$'; then
+            echo "::error title=Tag inválida::Use cNNN com sufixos opcionais em minúsculas, ex.: c003 ou c003-rc1."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Credencial do Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Tag da imagem (SHA curto)
+        run: echo "IMAGEM=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+
+      - name: Build e push do MCP
+        if: inputs.servico != 'agent'
+        run: deploy/build_push.sh mcp "$IMAGEM"
+
+      - name: Build e push do agente
+        if: inputs.servico != 'mcp'
+        run: deploy/build_push.sh agent "$IMAGEM"
+
+      - name: Revisão do MCP
+        if: inputs.servico != 'agent'
+        run: deploy/deploy.sh mcp --tag "$TAG_REVISAO" --imagem "$IMAGEM"
+
+      - name: Revisão do agente
+        if: inputs.servico != 'mcp'
+        run: deploy/deploy.sh agent --tag "$TAG_REVISAO" --imagem "$IMAGEM" --llm "$LLM"
+
+      - name: Resumo
+        run: |
+          {
+            echo "### Deploy $SERVICO"
+            echo ""
+            echo "- Imagem: \`$IMAGEM\`"
+            echo "- Revisão: tag \`$TAG_REVISAO\`, sem tráfego em serviço existente."
+            echo "- Mover tráfego é do ciclo 007, com confirmação humana."
+          } >> "$GITHUB_STEP_SUMMARY"

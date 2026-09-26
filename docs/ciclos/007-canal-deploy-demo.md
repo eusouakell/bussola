@@ -82,6 +82,10 @@ Também entrega o runbook que permite **operar o produto pelo Antigravity**:
 - **Tags e tráfego:** `deploy_*.sh --tag cNNN` publica sem tráfego.
   `promover.sh <servico> <revisao|tag>` move 100%. `rollback.sh <servico>`
   volta para a revisão anterior registrada.
+- **GitHub Actions (Q-18 do 000):** o `deploy.yml` do 000 já publica
+  revisões sem tráfego via WIF. Se o time quiser promover pela pipeline, o
+  007 cria um workflow próprio de promoção, com environment protegido por
+  revisores; `deploy.yml` e `ci.yml` continuam sem comando de tráfego.
 - **`plano_b.sh`:** alterna, por variáveis, para:
   - `BQ_MODO_LEITURA=memoria`;
   - `RAG_BACKEND=lexico` (sem embedding em tempo de execução);
@@ -182,6 +186,8 @@ Também entrega o runbook que permite **operar o produto pelo Antigravity**:
 ## 4. Propriedade (escreve só aqui)
 
 - `deploy/`
+- `.github/workflows/` (workflow de promoção; `ci.yml` e `deploy.yml`
+  vêm do 000)
 - `AGENTS.md`
 - `docs/operacao.md` e `docs/roteiro-demo.md`
 - Seção "Como rodar / publicar" do `README.md`

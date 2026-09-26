@@ -64,6 +64,11 @@ parênteses.
   `ate_anomes`; `buscar_contexto_financeiro` não tem golden. Mudança
   incompatível em `Trecho` (sai `origem`, `tipo`, `anomes`), feita antes da
   tag `contratos-v1`, sem consumidor afetado. (EXPLICIT)
+- Q: Como o app é publicado pelo GitHub? → A: CI agora e CD preparado
+  (Q-18, decisão do usuário). `ci.yml` roda `make lint` e `make test` em modo
+  fake a cada PR; `deploy.yml` é manual, autentica só por WIF e publica
+  revisões `--tag cNNN` sem tráfego. Fica travado até o owner criar o WIF
+  (pedido 5). (EXPLICIT)
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -354,6 +359,11 @@ lead time externo.
 - **FR-025**: Divergências entre esta spec, a trilha e os contratos MUST ser
   registradas em `specs/000-fundacao-contratos/questoes.md`, corrigindo o
   contrato no mesmo PR.
+- **FR-026**: `.github/workflows/ci.yml` MUST rodar `make lint` e `make test`
+  com `BUSSOLA_FAKES=TRUE` em todo PR, sem credencial. `.github/workflows/deploy.yml`
+  MUST ser disparado só manualmente, depois do CI, autenticar só por Workload
+  Identity Federation (sem chave de SA) e publicar pelos scripts de `deploy/`
+  com `--tag cNNN`, sem mover tráfego nem alterar IAM (Q-18).
 
 ### Key Entities
 
