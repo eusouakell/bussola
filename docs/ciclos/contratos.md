@@ -43,6 +43,7 @@ merge se resolve pela união das linhas.
 ├── contracts/                         000  (mudança só via PR "contracts:")
 │   ├── bigquery/bussola_dados.sql
 │   ├── bigquery/bussola_app.sql
+│   ├── catalogo_produtos.json         (§3, recorte de docs/catalogo/)
 │   ├── fixtures/…                     (§8)
 │   └── env.example                    (§7)
 ├── data/
@@ -145,9 +146,28 @@ dois (Q-10 do 000).
 ### Sem dataset de RAG (Q-17 do 000)
 
 Não há `bussola_rag`. O RAG responde com conhecimento geral (normas do
-BACEN, crédito e boas práticas), a partir de um corpus curado no
-repositório (§4). Dado do cliente vem só das tabelas de `bussola_dados`,
-pelas outras ferramentas.
+BACEN, crédito, boas práticas e produtos do catálogo), a partir de um
+corpus curado no repositório (§4). Dado do cliente vem só das tabelas de
+`bussola_dados`, pelas outras ferramentas.
+
+### Catálogo de produtos (`contracts/catalogo_produtos.json`, 000)
+
+Recorte do MVP de [`docs/catalogo/`](../catalogo/README.md) §2. Lista de
+objetos:
+
+```json
+{"produto_id": "cofrinhos", "nome": "Cofrinhos", "categoria": "Metas & reserva",
+ "uso": "Criar meta/reserva e acompanhar objetivo",
+ "cuidado": "Não hardcodar rentabilidade se não consultada em fonte atual",
+ "fonte_oficial": "https://feito.itau.com.br/…", "acao_simulada": true}
+```
+
+- Modelo: `ProdutoCatalogo` em `bussola_mcp/contratos.py`.
+- `produto_id` é estável; `simular_contratacao` e o RAG (tema `produto`)
+  usam esse ID.
+- **Sem campos de taxa, rentabilidade, parcela ou prazo comercial.** Um teste
+  de contrato garante que nenhum texto do arquivo tem `%`, `a.a.`, `a.m.`
+  ou `R$` (`MARCADORES_TAXA` e `contem_taxa` em `contratos.py`).
 
 ### `bussola_app`: estado de aplicação (escrita pelo 005/006 via streaming insert)
 
@@ -212,9 +232,12 @@ class BuscadorContexto(Protocol):
   `fonte_referencia` e `fonte_url` (opcional). `doc_id` é o nome do arquivo.
   Cada seção `##` vira um trecho, com `trecho_id = "<doc_id>#<n>"` (n a
   partir de 1).
-- **Temas** (`TemaConhecimento`): `norma_bacen`, `credito` e
-  `boas_praticas`. Crédito é conteúdo geral (modalidades, custo, direitos,
-  renegociação). As dívidas do cliente vêm de `dividas_e_parcelas`.
+- **Temas** (`TemaConhecimento`): `norma_bacen`, `credito`,
+  `boas_praticas` e `produto`. Crédito é conteúdo geral (modalidades, custo,
+  direitos, renegociação). As dívidas do cliente vêm de `dividas_e_parcelas`.
+  `produto` descreve os itens do catálogo curado (§3), um documento por
+  `produto_id`, com `fonte_url` oficial obrigatória e **sem taxas nem
+  condições** (nenhum `%`, `a.a.`, `a.m.` ou `R$`).
 - **Conteúdo:** texto original em pt-BR, educativo e geral. Cita a norma
   pelo número (ex.: Resolução CMN 4.549/2017) e não copia o texto legal.
   Sem dado de cliente, sem recomendação individual.
@@ -303,7 +326,7 @@ Códigos de erro:
 | `dividas_e_parcelas` | P0 | — | `parcelas_ativas[{descr, parcela_atual, parcela_total, valor, meses_restantes}], juros_pagos_media, comprometimento_renda_pct` |
 | `simular_objetivo` | P0 | `valor_alvo > 0` e **um** entre `prazo_meses` (1–360) ou `aporte_mensal > 0`; `usar_saldo_atual: bool = false` | `modo ("prazo" \| "aporte"), valor_alvo, aporte_mensal, prazo_meses, viavel, folga_mensal, premissas{…}` |
 | `comparar_cenarios` | P0 | `valor_alvo > 0`, `prazo_meses` (1–360) | `cenarios[{nome, pct_capacidade, aporte_mensal, prazo_meses, viavel, cortes_sugeridos[{macro, micro, valor_mensal}], trade_offs[str]}], regras{…}` |
-| `buscar_contexto_financeiro` | P0 | `pergunta: str` (≤ 500 caracteres), `k: int = 5` (1–10), `tema: str \| None = None` (`norma_bacen` \| `credito` \| `boas_praticas`) | `trechos[{doc_id, trecho_id, titulo, tema, texto, fonte{nome, referencia, url}, score}]` |
+| `buscar_contexto_financeiro` | P0 | `pergunta: str` (≤ 500 caracteres), `k: int = 5` (1–10), `tema: str \| None = None` (`norma_bacen` \| `credito` \| `boas_praticas` \| `produto`) | `trechos[{doc_id, trecho_id, titulo, tema, texto, fonte{nome, referencia, url}, score}]` |
 | `resumo_mes` | P1 | `anomes` (≤ `ate_anomes`) | `anomes, renda, gasto, sobra, gastos_macro[{macro, total}]` (usado pelo 006) |
 | `referencia_coorte` | P1 | `categoria` (macro) | `faixa_renda, macro, media, mediana, qtd_usuarios` |
 
@@ -393,7 +416,10 @@ Ordens reservadas:
   Dono: 005.
   - `criar_plano(cenario)`
   - `ativar_lembretes(frequencia)`
-  - `simular_contratacao(tipo_produto)` (genérico, sem taxas)
+  - `simular_contratacao(tipo_produto)`: `tipo_produto` é um `produto_id`
+    do catálogo com `acao_simulada = true`. A resposta traz nome, uso,
+    cuidado e fonte oficial, sem taxas nem condições. Fora disso, erro
+    local `PRODUTO_FORA_DO_CATALOGO`.
   - `compartilhar_dados(destino)` (sempre recusada na PoC; existe só para
     demonstrar a classificação)
   - `ajustar_plano(aporte_mensal, prazo_meses)`, do 006: adota a rota
@@ -548,8 +574,9 @@ prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
     inclusive o controle, e para qualquer corte. Corpus ausente ou inválido
     devolve `INDISPONIVEL`.
 - `rag/trechos_exemplo.json`: amostra curada à mão do corpus de
-  conhecimento (lista de `TrechoCorpus`, cobrindo os três temas). Não é
-  gerada por `gerar_fixtures.py`, que também não a apaga.
+  conhecimento (lista de `TrechoCorpus`, cobrindo os três temas e ao menos
+  um trecho `produto`: `cofrinhos`, com `fonte.url`). Não é gerada por
+  `gerar_fixtures.py`, que também não a apaga.
 - Formato: cada arquivo de tabela, `usuarios.json` e `rag/trechos_exemplo.json`
   é uma **lista JSON** de objetos; cada golden é um envelope JSON (Q-11 do
   000).

@@ -269,6 +269,14 @@ async def test_busca_filtra_por_tema(fixtures_sinteticas):
     assert normas["dados"]["trechos"] == []
 
 
+async def test_busca_aceita_tema_produto_com_url(fixtures_sinteticas):
+    async with sessao_mock(fixtures_sinteticas) as sessao:
+        envelope = await _buscar(sessao, pergunta="dinheiro da meta", tema="produto")
+    assert _ids(envelope) == ["cofrinhos#1"]
+    (trecho,) = envelope["dados"]["trechos"]
+    assert trecho["tema"] == "produto" and trecho["fonte"]["url"]
+
+
 async def test_busca_vale_para_qualquer_cliente_e_corte(fixtures_sinteticas):
     """Conhecimento geral: o controle também recebe, e o corte não muda os trechos."""
     async with sessao_mock(fixtures_sinteticas) as sessao:

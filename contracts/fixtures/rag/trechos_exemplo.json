@@ -154,5 +154,17 @@
     "texto": "Uma referência comum é manter a soma das parcelas de dívidas abaixo de cerca de 30% da renda líquida mensal. Acima disso, qualquer imprevisto aumenta o risco de atrasar pagamentos e entrar no rotativo.",
     "titulo": "Quanto da renda comprometer com parcelas",
     "trecho_id": "comprometimento-renda#1"
+  },
+  {
+    "doc_id": "cofrinhos",
+    "fonte": {
+      "nome": "Itaú Unibanco",
+      "referencia": "Cofrinhos Itaú (página oficial)",
+      "url": "https://feito.itau.com.br/cofrinhos-itau-seu-dinheiro-a-servico-dos-seus-sonhos"
+    },
+    "tema": "produto",
+    "texto": "Os Cofrinhos servem para separar dinheiro para um objetivo, como a entrada de um imóvel, e acompanhar quanto já foi guardado até a meta. A rentabilidade não é fixa: confira as condições atuais na página oficial antes de decidir onde guardar.",
+    "titulo": "Cofrinhos",
+    "trecho_id": "cofrinhos#1"
   }
 ]

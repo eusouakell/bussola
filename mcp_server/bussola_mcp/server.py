@@ -336,10 +336,11 @@ def criar_servidor(
         k: int = 5,
         tema: str | None = None,
     ) -> dict[str, Any]:
-        """Trechos da base de conhecimento: normas do BACEN, crédito e boas práticas.
+        """Trechos da base de conhecimento: normas do BACEN, crédito, boas práticas e produtos.
 
         Conteúdo geral, não é dado do cliente. ``tema`` opcional: ``norma_bacen``,
-        ``credito`` ou ``boas_praticas``. Até ``k`` trechos (de 1 a 10), com a fonte.
+        ``credito``, ``boas_praticas`` ou ``produto`` (catálogo, sem taxas). Até ``k``
+        trechos (de 1 a 10), com a fonte.
         """
         return mock.responder(
             "buscar_contexto_financeiro",

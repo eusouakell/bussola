@@ -189,7 +189,15 @@ def test_tema_opcional_e_restrito_aos_temas_do_corpus():
     assert EntradaBuscarContexto(**COMUM, pergunta="CET").tema is None
     entrada = EntradaBuscarContexto(**COMUM, pergunta="CET", tema="norma_bacen")
     assert entrada.tema is TemaConhecimento.NORMA_BACEN
-    assert {t.value for t in TemaConhecimento} == {"norma_bacen", "credito", "boas_praticas"}
+    assert {t.value for t in TemaConhecimento} == {
+        "norma_bacen",
+        "credito",
+        "boas_praticas",
+        "produto",
+    }
+    assert EntradaBuscarContexto(**COMUM, pergunta="CET", tema="produto").tema is (
+        TemaConhecimento.PRODUTO
+    )
     assert _mensagem(EntradaBuscarContexto, **COMUM, pergunta="CET", tema="politica") == (
         "Entrada inválida: tema."
     )

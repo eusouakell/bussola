@@ -89,11 +89,22 @@ class FaixaRenda(StrEnum):
 
 
 class TemaConhecimento(StrEnum):
-    """Temas do corpus de conhecimento do RAG (contratos §3, Q-17)."""
+    """Temas do corpus de conhecimento do RAG (contratos §3 e §4, Q-17)."""
 
     NORMA_BACEN = "norma_bacen"
     CREDITO = "credito"
     BOAS_PRATICAS = "boas_praticas"
+    PRODUTO = "produto"  # catálogo curado de docs/catalogo/, sem taxas
+
+
+# Marcadores de taxa ou condição comercial. Nenhum texto do catálogo de produtos
+# nem do tema ``produto`` pode contê-los (contratos §3 e §4).
+MARCADORES_TAXA = ("%", "a.a.", "a.m.", "R$")
+
+
+def contem_taxa(texto: str) -> bool:
+    """True se ``texto`` tem algum de :data:`MARCADORES_TAXA`."""
+    return any(marcador in texto for marcador in MARCADORES_TAXA)
 
 
 class _Modelo(BaseModel):
@@ -193,6 +204,25 @@ class TrechoCorpus(_Modelo):
     tema: TemaConhecimento
     texto: str
     fonte: FonteTrecho
+
+
+# §3 catálogo de produtos (contracts/catalogo_produtos.json, recorte de docs/catalogo/)
+
+
+class ProdutoCatalogo(_Modelo):
+    """Item de ``contracts/catalogo_produtos.json``. Sem taxa, rentabilidade, parcela ou prazo.
+
+    ``produto_id`` é estável: ``simular_contratacao`` (005) e o tema ``produto`` do RAG
+    (002) usam esse ID.
+    """
+
+    produto_id: str
+    nome: str
+    categoria: str
+    uso: str
+    cuidado: str
+    fonte_oficial: str
+    acao_simulada: bool
 
 
 # Tabela (dataset.tabela) → modelo de linha. Base do teste DDL ↔ Pydantic.

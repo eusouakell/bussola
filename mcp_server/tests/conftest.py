@@ -282,6 +282,16 @@ def trechos_sinteticos() -> list[TrechoCorpus]:
             "Reserva de emergência",
             "Guarde de três a seis meses do custo de vida.",
         ),
+        TrechoCorpus(
+            doc_id="cofrinhos",
+            trecho_id="cofrinhos#1",
+            titulo="Cofrinhos",
+            tema=TemaConhecimento.PRODUTO,
+            texto="Cofrinhos separam o dinheiro de uma meta.",
+            fonte=FonteTrecho(
+                nome="Fonte sintética", referencia="Produto cofrinhos", url="https://exemplo.test/"
+            ),
+        ),
     ]
 
 
