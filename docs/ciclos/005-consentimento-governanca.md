@@ -12,6 +12,7 @@
 >
 > - [contratos.md](./contratos.md) §3 (`bussola_app`), §6, §7 e §9.
 > - Contexto mestre [§4 (AGIR), §10 F5, §11, §12, §16 e §18](../contexto-spec-master.md).
+> - [Catálogo de produtos](../catalogo/README.md) §1 e §2.
 
 ## 1. Regras de execução (EXPLICIT; prevalecem sobre qualquer inferência)
 
@@ -86,8 +87,15 @@ Implementar a **autonomia governada** do estado AGIR:
   e preenche `plano_id` no state. Evento `plano_criado`.
 - **`ativar_lembretes(frequencia)`:** evento `acao_executada`, sem envio
   real.
-- **`simular_contratacao(tipo_produto)`:** resposta genérica, sem taxas nem
-  condições. Evento `acao_executada`.
+- **`simular_contratacao(tipo_produto)`:**
+  - aceita só `produto_id` de `contracts/catalogo_produtos.json` com
+    `acao_simulada = true`;
+  - responde com nome, uso, cuidado e fonte oficial do catálogo, mais o
+    aviso "simulação, sem contratação e sem análise de crédito". Sem taxas
+    nem condições;
+  - evento `acao_executada`;
+  - produto fora do catálogo: erro `PRODUTO_FORA_DO_CATALOGO`, sem
+    execução.
 - **`compartilhar_dados(destino)`:** **sempre recusada** por política na
   PoC. Evento `guardrail_bloqueio` com motivo.
 
@@ -203,6 +211,9 @@ Implementar a **autonomia governada** do estado AGIR:
   31e94f2f-…" → bloqueio de entrada + `guardrail_bloqueio`.
 - **Vazamento na saída:** resposta do modelo contendo `SELECT … FROM` →
   bloqueio de saída.
+- **Produto fora do catálogo:** `simular_contratacao("emprestimo_pessoal")`
+  com consentimento aceito → `PRODUTO_FORA_DO_CATALOGO`, sem
+  `acao_executada`.
 
 ## 8. Dependências e gate de merge
 

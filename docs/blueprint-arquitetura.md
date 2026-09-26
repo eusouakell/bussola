@@ -159,7 +159,8 @@ Todas recebem `id_usuario` e `ate_anomes` (corte temporal), e todas devolvem
 **Corpus RAG** (no repositório, sem dataset; Q-17 do 000):
 
 - `data/rag/corpus/<tema>/<doc_id>.md`, com `tema` em `norma_bacen`,
-  `credito` ou `boas_praticas`; cada seção `##` vira um trecho.
+  `credito`, `boas_praticas` ou `produto` (catálogo curado de
+  `docs/catalogo/`, sem taxas); cada seção `##` vira um trecho.
 - Índice em `mcp_server/bussola_mcp/rag/indice/`: `trechos.jsonl`,
   `embeddings.npy` e `manifesto.json`.
 

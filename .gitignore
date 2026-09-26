@@ -25,6 +25,7 @@ build/
 .DS_Store
 .idea/
 .vscode/
+.obsidian/
 
 # ADK / ferramentas locais (ciclo 000)
 .adk/

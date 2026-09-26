@@ -160,7 +160,8 @@ exatas de `contratos.md` §3.
   - As premissas de demo são INFERRED: entrada de R$ 60.000 em 24 meses; a
     pergunta "+R$ 300/mês" soma 300 ao aporte do cenário equilibrado.
   - A 8ª pergunta (produtos Itaú) não é numérica. Fica registrada como
-    tratada genericamente pelo agente (Q3).
+    respondida pelo catálogo curado (`docs/catalogo/`, RAG do 002), sem
+    taxas.
 - [ ] Testes unitários de simulação com casos conhecidos e bordas:
   - sobra ≤ 0 → `viavel = false`, com motivo;
   - objetivo já atingido (saldo inicial ≥ alvo) → prazo 0;

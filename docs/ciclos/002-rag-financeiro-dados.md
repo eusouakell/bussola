@@ -15,6 +15,7 @@
 > - Q-17 em `specs/000-fundacao-contratos/questoes.md` (por que o RAG saiu
 >   do BigQuery).
 > - Contexto mestre [§8, §9, §10 F2, §17](../contexto-spec-master.md).
+> - [Catálogo de produtos](../catalogo/README.md) §1 e §2.
 
 ## 1. Regras de execução (EXPLICIT; prevalecem sobre qualquer inferência)
 
@@ -53,20 +54,22 @@ ferramentas determinísticas.
   (opcional); cada seção `##` vira um trecho `"<doc_id>#<n>"`.
 - **Ponto de partida:** os 13 trechos curados de
   `contracts/fixtures/rag/trechos_exemplo.json` (000).
-- **Cobertura mínima (P0):**
+- **Cobertura mínima (P0, exceto `produto`, que é P1):**
 
 | Tema | Conteúdo |
 |---|---|
 | `norma_bacen` | Rotativo e parcelamento do cartão, teto de juros do rotativo, CET, portabilidade de crédito, Registrato, cheque especial, direitos do consumidor bancário |
 | `credito` | Modalidades (pessoal, consignado, cartão, cheque especial, financiamento), como comparar custo, renegociação, superendividamento |
 | `boas_praticas` | Reserva de emergência, orçamento mensal, ordem de quitação de dívidas, uso consciente do cartão, metas |
+| `produto` | Os 8 produtos do recorte do MVP (`contracts/catalogo_produtos.json`, vindo de [`docs/catalogo/`](../catalogo/README.md) §2), um documento por `produto_id`: nome, categoria, uso, cuidado de elegibilidade e `fonte_url` oficial (obrigatória). Sem taxa, rentabilidade, parcela, prazo ou condição comercial |
 
 - Cada documento tem pelo menos uma `fonte_referencia` verificável (número
   da norma, página institucional). Datas de vigência aparecem no texto
   quando a regra mudou.
 - **Validação (`data/rag/validar_corpus.py`):** cabeçalho completo, tema
   válido, `doc_id` único, nenhuma seção vazia, nenhum UUID ou valor de
-  cliente no texto.
+  cliente no texto. No tema `produto`, exige `fonte_url` e rejeita `%`,
+  `a.a.`, `a.m.` e `R$`.
 
 ### 3.2 Índice (`data/rag/indexar.py`)
 
@@ -110,8 +113,12 @@ ferramentas determinísticas.
   - "quanto guardar de reserva de emergência?".
 - **`rodar_eval.py`:** calcula o acerto no top-3 dos dois backends e grava
   `eval/rag/resultado.md`.
-- **Testes negativos:** perguntas fora do domínio ("previsão do tempo")
-  devolvem lista vazia no `lexico` e score abaixo do limiar no `numpy`.
+- **Testes negativos:**
+  - perguntas fora do domínio ("previsão do tempo") devolvem lista vazia
+    no `lexico` e score abaixo do limiar no `numpy`;
+  - nenhum trecho `produto` contém `%`, `a.a.`, `a.m.` ou `R$`.
+- **Perguntas de produto:** 2 ou mais no `perguntas.yaml`, ex.: "onde guardo
+  o dinheiro da entrada?" espera `cofrinhos`.
 
 ## 4. Propriedade (escreve só aqui)
 
@@ -128,6 +135,7 @@ ferramentas determinísticas.
 - **Consome:**
   - `interfaces.BuscadorContexto` e os modelos `Trecho`, `TrechoCorpus` e
     `TemaConhecimento`;
+  - `contracts/catalogo_produtos.json` (000), fonte do tema `produto`;
   - env `EMBEDDING_MODEL` e `RAG_BACKEND`.
 - **Provê:**
   - corpus em `data/rag/corpus/` e índice em `bussola_mcp/rag/indice/`;
@@ -137,7 +145,8 @@ ferramentas determinísticas.
 ## 6. Critérios de aceite
 
 - [ ] O corpus cobre os três temas, com pelo menos 30 trechos, todos com
-      `fonte_referencia`. `validar_corpus.py` passa.
+      `fonte_referencia`, mais o tema `produto` com os 8 produtos (P1).
+      `validar_corpus.py` passa.
 - [ ] `indexar.py` é idempotente: uma segunda execução sem mudança no
       corpus não chama o modelo nem altera o índice.
 - [ ] O índice versionado corresponde ao corpus (`hash_corpus`).
@@ -174,7 +183,8 @@ ferramentas determinísticas.
 
 ## 9. Fora de escopo
 
-- Catálogo de produtos Itaú e ofertas.
+- Taxas, condições, ofertas e as APIs públicas de dados abertos do
+  catálogo ([`docs/catalogo/`](../catalogo/README.md) §3).
 - Dado do cliente no corpus (fichas mensais, perfil anual, coorte): o
   agente obtém esses números das ferramentas do 003 (Q-17 do 000).
 - `VECTOR_SEARCH`, dataset no BigQuery e RAG Engine do Agent Platform
@@ -183,6 +193,8 @@ ferramentas determinísticas.
 
 ## 10. Questões em aberto
 
+- ~~**Q3 do mestre**~~ **Respondida:** o catálogo entra como tema
+  `produto` (P1).
 - O limiar de score do `numpy` para "nada relevante" é INFERRED; calibrar
   no eval.
 - Revisão jurídica do corpus antes da demo: quem faz? (Pessoa B confirma.)
@@ -197,3 +209,4 @@ ferramentas determinísticas.
 | Embeddings em Python, eval top-3 ≥ 80% | Mestre §9, §10 F2 e §17 | EXPLICIT |
 | `BuscadorLexico` como padrão sem GCP | Este ciclo | INFERRED |
 | Limiar de score do `numpy` | Este ciclo | INFERRED |
+| Tema `produto` a partir do catálogo curado | Mestre §20 Q3; `docs/catalogo/` | EXPLICIT |

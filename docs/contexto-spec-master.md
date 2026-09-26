@@ -134,7 +134,7 @@ Somente estes serviços são permitidos:
 | Cloud Scheduler, Tasks, Workflows, Eventarc | Sem agendamento ou orquestração gerenciada | ACOMPANHAR via replay temporal disparado na demo (F6); Pub/Sub e Functions se precisar de evento |
 | Compute Engine, GKE | Sem VM ou cluster | Cloud Run |
 | Cloud Trace / Telemetry | Sem tracing distribuído | Logs estruturados no Cloud Logging |
-| BigQuery Connection API | `ML.GENERATE_EMBEDDING` / modelos remotos provavelmente indisponíveis | Embeddings gerados em Python (Agent Platform ou Gemini API) e gravados em tabela (F2) |
+| BigQuery Connection API | `ML.GENERATE_EMBEDDING` / modelos remotos provavelmente indisponíveis | Embeddings gerados em Python (Agent Platform ou Gemini API) e versionados com o índice no repositório (F2) |
 | BigQuery Data Transfer | Sem scheduled queries | Pipeline de carga executado manualmente/script |
 | Agent Registry (MCP gerenciado) | Página de MCP Servers gerenciados bloqueada | **MCP server próprio** em Cloud Run (F3) |
 | Dataplex, Dataform | — | Não usados |
@@ -152,7 +152,7 @@ Somente estes serviços são permitidos:
                                                  ▼
                                [MCP server "dados e conhecimento" — Cloud Run, read-only]
                                         ├─ Ferramentas determinísticas ──► BigQuery (views/tabelas bussola_*)
-                                        └─ Recuperação RAG financeiro  ──► índice vetorial construído a partir da base (F2)
+                                        └─ Recuperação RAG financeiro  ──► corpus de conhecimento no repositório (F2)
 Persistência: BigQuery `bussola_app` (planos, consentimentos, auditoria) + Cloud Logging
 Segredos: Secret Manager (`gemini-api-key` e futuros)   Imagens: Artifact Registry `agentes`
 ```
@@ -226,7 +226,7 @@ Tabela `batalha-time-07-lkbv.hackathon_dados.extrato_sintetico` (`us-central1`,
 > geral.
 
 **Decisão do time:** o RAG traz **conhecimento de apoio**, não dados do
-cliente. Três temas:
+cliente. Quatro temas:
 
 1. **Normas do BACEN e do CMN** (`norma_bacen`): rotativo e parcelamento do
    cartão, teto de juros, CET, portabilidade, Registrato, cheque especial.
@@ -235,6 +235,9 @@ cliente. Três temas:
    cliente vêm da ferramenta `dividas_e_parcelas`.
 3. **Boas práticas** (`boas_praticas`): reserva de emergência, orçamento,
    ordem de quitação, uso consciente do cartão.
+4. **Produtos** (`produto`): o catálogo curado de
+   [`docs/catalogo/`](./catalogo/README.md), com os 8 produtos do recorte do
+   MVP (§20, Q3).
 
 Diretrizes:
 
@@ -246,8 +249,11 @@ Diretrizes:
   para explicabilidade.
 - O RAG explica conceitos e regras; os valores apresentados ao cliente
   continuam vindo das ferramentas determinísticas.
-- Produtos e taxas comerciais do Itaú seguem fora do corpus: o agente fala de
-  produtos apenas em termos genéricos.
+- **Produtos (Q3):** os produtos do catálogo curado de
+  [`docs/catalogo/`](./catalogo/README.md) entram no tema `produto`, com uso,
+  cuidado de elegibilidade e link da fonte oficial, **sem taxas nem
+  condições comerciais**. Produto fora do catálogo é citado só de forma
+  genérica.
 
 **Implementação (contratos §4):**
 
@@ -305,8 +311,9 @@ funções de simulação testadas.
 
 **Critérios de aceite:**
 
-- [ ] Corpus curado nos três temas de §9, com fonte em cada documento, e
-      índice gerado por script idempotente.
+- [ ] Corpus curado nos três temas de §9 (P0) e no tema `produto` com os 8
+      produtos do catálogo (P1), com fonte em cada documento, e índice
+      gerado por script idempotente.
 - [ ] Busca retorna top-k trechos, com filtro opcional por tema, sem receber
       dado de cliente.
 - [ ] Cada trecho retornado inclui título e fonte (nome, referência, URL).
@@ -580,7 +587,9 @@ papéis atuais do time:
 - promessa de aprovação de crédito;
 - substituição de assessoria humana em casos regulados;
 - integração com o app ia.i real (a PoC simula o canal);
-- catálogo real de produtos Itaú com taxas/condições;
+- catálogo real de produtos Itaú com taxas/condições (o catálogo curado de
+  `docs/catalogo/` só descreve produtos e aponta a fonte oficial; as APIs
+  públicas de dados abertos ficam fora);
 - banco transacional, agendamento gerenciado, tracing distribuído (todos
   bloqueados por política);
 - uso de modelos não-Gemini.
@@ -608,10 +617,11 @@ Não avançar para Open Finance, contratação real ou canais além da demo: iss
 - **Q2.** Confirmar o usuário-âncora (`36a21505…` recomendado) e se os
   cenários usam percentuais da capacidade real (recomendado) ou os valores
   ilustrativos R$ 600/R$ 900.
-- **Q3.** ~~Haverá conteúdo curto escrito pelo time?~~ **Respondida
-  (Q-17 do 000):** sim. O corpus do RAG passa a ser só conteúdo escrito pelo
-  time (normas do BACEN, crédito, boas práticas). Produtos seguem citados só
-  genericamente.
+- **Q3.** ~~Haverá conteúdo curto de produtos escrito pelo time?~~
+  **Respondida (Q-17 do 000 e catálogo):** sim. O corpus do RAG é só
+  conteúdo escrito pelo time: normas do BACEN, crédito, boas práticas e o
+  catálogo PF de [`docs/catalogo/`](./catalogo/README.md) (recorte de 8
+  produtos no MVP, sem taxas), no tema `produto` (§9).
 - **Q4.** Canal da demo: ADK Web UI publicada no Cloud Run (mais rápido) ou
   front de chat próprio no estilo ia.i.
 - **Q5.** ~~Papel exato do Antigravity~~ **Respondida em parte:** o

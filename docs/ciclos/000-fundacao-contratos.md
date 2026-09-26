@@ -101,6 +101,7 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
 |---|---|
 | `contracts/bigquery/{bussola_dados,bussola_app}.sql` | DDL de §3; `bussola_app_dev` reutiliza o DDL de `bussola_app`. Sem `bussola_rag` (Q-17) |
 | `contracts/env.example` | Variáveis de §7, **sem valores secretos** |
+| `contracts/catalogo_produtos.json` | Recorte do MVP de `docs/catalogo/` §2 (8 produtos), no formato de §3, com teste de contrato "sem taxas" |
 | `mcp_server/bussola_mcp/contratos.py` | Modelos Pydantic: linhas de §3, entrada e `dados` de cada ferramenta de §5, envelopes `Resposta`/`Fonte`/`Periodo`/`Erro`, enum de códigos |
 | `mcp_server/bussola_mcp/dominio/interfaces.py` | `RepositorioFinanceiro` e `BuscadorContexto` (§4) |
 | `mcp_server/bussola_mcp/dominio/fakes.py` | `RepositorioFake` e `BuscadorFake` sobre `contracts/fixtures/` |
@@ -122,9 +123,9 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
     `resumo_mes__AAAAMM` são calculados por uma implementação de
     referência simples dentro do próprio script. São **provisórios**: o 001
     os substitui.
-- **`contracts/fixtures/rag/trechos_exemplo.json`:** trechos determinísticos
-  no formato de `buscar_contexto_financeiro`, cobrindo o âncora e um trecho
-  de `coorte`.
+- **`contracts/fixtures/rag/trechos_exemplo.json`:** trechos curados do
+  corpus de conhecimento (lista de `TrechoCorpus`), nos temas `norma_bacen`,
+  `credito`, `boas_praticas` e `produto` (`cofrinhos`, com `fonte.url`).
 - **`mcp_server/bussola_mcp/server.py` (mock):**
   - FastMCP em streamable HTTP, `/mcp`, `0.0.0.0:$PORT`;
   - registra as 7 ferramentas P0 e `resumo_mes`, com as assinaturas exatas
@@ -197,7 +198,7 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
       nulo interrompe, as 4 fases funcionam.
 - [ ] `extensoes.carregar_extensoes()` tolera pacotes ausentes (teste).
 - [ ] `RegistroEmMemoria` implementa `RegistroApp` (teste).
-- [ ] `aplicar_ddl.py` cria os 4 datasets e as tabelas. Uma segunda execução
+- [ ] `aplicar_ddl.py` cria os 3 datasets e as tabelas. Uma segunda execução
       não altera nada.
 - [ ] IDs de Gemini Flash e de embedding validados e gravados em
       `contracts/env.example`.

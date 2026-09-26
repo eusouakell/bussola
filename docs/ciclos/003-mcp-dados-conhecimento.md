@@ -151,6 +151,8 @@ números **e** a origem.
 - `buscar_contexto_financeiro` com `pergunta` de 501 caracteres:
   `ENTRADA_INVALIDA`.
 - `buscar_contexto_financeiro` com `tema="politica"`: `ENTRADA_INVALIDA`.
+- `buscar_contexto_financeiro` com `tema="produto"`: aceito; os trechos
+  devolvidos são todos do tema `produto` e trazem `fonte.url`.
 - `buscar_contexto_financeiro` sem trecho relevante: `trechos = []` e
   `AVISO_SEM_TRECHOS`.
 - BigQuery indisponível (mock que lança exceção): `INDISPONIVEL`, e o log

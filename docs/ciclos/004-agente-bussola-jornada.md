@@ -12,6 +12,7 @@
 > - [contratos.md](./contratos.md) §5–§9.
 > - Contexto mestre [§2–§4, §7, §10 F4, §11–§13](../contexto-spec-master.md).
 > - [jornada-agentic.md](../jornada-agentic.md).
+> - [Catálogo de produtos](../catalogo/README.md) §1 e §2.
 
 ## 1. Regras de execução (EXPLICIT; prevalecem sobre qualquer inferência)
 
@@ -72,7 +73,9 @@ consentimento.
   - perguntar só o que falta (valor-alvo, prazo, prioridade);
   - "outro caminho" em linguagem natural vira nova chamada a
     `simular_objetivo` ou `comparar_cenarios`;
-  - produtos só de forma genérica, sem taxas (Q3);
+  - produtos só do catálogo curado (`docs/catalogo/` §1): nome, uso,
+    cuidado e link da fonte oficial, **sem taxas nem condições**. Produto
+    fora do catálogo é citado só genericamente;
   - recusar promessa de aprovação de crédito e contratação real;
   - nunca pedir nem aceitar outro `id_usuario`.
 
@@ -209,8 +212,8 @@ consentimento.
 
 ## 10. Questões em aberto
 
-- **Q3 do mestre:** sem conteúdo de produtos, o agente fala de produtos só
-  genericamente.
+- ~~**Q3 do mestre**~~ **Respondida:** o catálogo curado chega pelo RAG
+  (tema `produto`, 002) e pela ação `simular_contratacao` (005).
 - **Q4 do mestre (canal):** não afeta este ciclo; o ADK Web consome o
   `root_agent`.
 - A tolerância do verificador de números (`after_model` 50) é INFERRED.
@@ -224,4 +227,4 @@ consentimento.
 | Safety settings como parte do fallback de guardrail | Mestre §10 F5 | EXPLICIT |
 | Transições disparadas por ferramentas | Este ciclo | INFERRED |
 | Eval "número bate com a ferramenta" | Mestre §12 | EXPLICIT |
-| Conteúdo de produtos | Mestre §20, Q3 | UNRESOLVED |
+| Produtos só do catálogo curado, com fonte e cuidado | Mestre §20, Q3; `docs/catalogo/` §1 | EXPLICIT |
