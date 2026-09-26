@@ -132,9 +132,13 @@ def test_constituicao_tem_os_10_principios_e_nenhum_placeholder():
     assert not re.findall(r"\[[A-Z][A-Z_]{2,}\]", texto)  # [PLACEHOLDER] do template
 
 
-def test_mapa_de_contratos_1_nao_cita_web():
+def test_mapa_de_contratos_1_cita_web_so_como_front_do_008():
     mapa = _secao(CONTRATOS.read_text(encoding="utf-8"), "§1", "§2")
-    assert "web/" not in mapa  # canal = ADK Web, sem front próprio
+    linhas = [linha for linha in mapa.splitlines() if "web/" in linha]
+    # front React do 008: consome §5 e §6 sem alterá-los (T058)
+    assert len(linhas) == 1
+    assert "008" in linhas[0]
+    assert "§5" in linhas[0] and "§6" in linhas[0]
 
 
 def test_env_example_tem_exatamente_as_variaveis_de_contratos_7():
