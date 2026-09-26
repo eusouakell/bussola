@@ -1,0 +1,62 @@
+{
+  "avisos": [],
+  "dados": {
+    "anomes": 202511,
+    "gasto": 4833.75,
+    "gastos_macro": [
+      {
+        "macro": "Casa",
+        "total": 1729.17
+      },
+      {
+        "macro": "Cuidados pessoais",
+        "total": 1214.09
+      },
+      {
+        "macro": "Produtos financeiros",
+        "total": 855.92
+      },
+      {
+        "macro": "Restaurantes",
+        "total": 393.79
+      },
+      {
+        "macro": "Lojas e sites",
+        "total": 247.33
+      },
+      {
+        "macro": "Transferencias diversas",
+        "total": 241.93
+      },
+      {
+        "macro": "Assinaturas",
+        "total": 87.37
+      },
+      {
+        "macro": "Mercado",
+        "total": 40.54
+      },
+      {
+        "macro": "Lazer",
+        "total": 20.08
+      },
+      {
+        "macro": "Outros gastos",
+        "total": 3.53
+      }
+    ],
+    "renda": 11317.95,
+    "sobra": 6484.2
+  },
+  "fonte": {
+    "ferramenta": "resumo_mes",
+    "periodo": {
+      "fim": 202511,
+      "inicio": 202511
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.gastos_categoria"
+    ]
+  }
+}

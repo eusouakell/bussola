@@ -67,7 +67,7 @@ partir daqui, os subagentes podem começar.
 
 - [x] T030 [US4] [A:dados] `data/scripts/gerar_fixtures.py`: SQL de referência parametrizado, funções puras de referência para os golden P0, `resumo_mes` e trechos RAG, validação com `bussola_mcp.contratos`, `--saida` (FR-015, FR-016)
 - [x] T031 [US4] [A:dados] Teste `mcp_server/tests/contrato/test_gerar_fixtures.py`: funções puras com linhas sintéticas (métricas, golden válidos, determinismo, sem rede)
-- [ ] T032 [US4] [CRED] Rodar `make fixtures` e versionar `contracts/fixtures/` (AC-04)
+- [x] T032 [US4] [CRED] Rodar `make fixtures` e versionar `contracts/fixtures/` (AC-04)
 
 ## Phase 7: US5: plataforma (P2)
 

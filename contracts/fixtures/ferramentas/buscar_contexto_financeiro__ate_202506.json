@@ -1,0 +1,125 @@
+{
+  "avisos": [],
+  "dados": {
+    "trechos": [
+      {
+        "anomes": null,
+        "doc_id": "coorte:6k_10k:emprestimos_e_financiamentos",
+        "origem": {
+          "anomes": null,
+          "categoria": "Emprestimos e financiamentos",
+          "id_usuario": null
+        },
+        "score": 0.7,
+        "texto": "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 2.540/mês com Emprestimos e financiamentos (mediana R$ 2.682, 466 clientes).",
+        "tipo": "coorte"
+      },
+      {
+        "anomes": null,
+        "doc_id": "coorte:6k_10k:produtos_financeiros",
+        "origem": {
+          "anomes": null,
+          "categoria": "Produtos financeiros",
+          "id_usuario": null
+        },
+        "score": 0.69,
+        "texto": "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 1.544/mês com Produtos financeiros (mediana R$ 1.507, 493 clientes).",
+        "tipo": "coorte"
+      },
+      {
+        "anomes": null,
+        "doc_id": "coorte:6k_10k:casa",
+        "origem": {
+          "anomes": null,
+          "categoria": "Casa",
+          "id_usuario": null
+        },
+        "score": 0.68,
+        "texto": "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 1.343/mês com Casa (mediana R$ 1.231, 493 clientes).",
+        "tipo": "coorte"
+      },
+      {
+        "anomes": 202506,
+        "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202506",
+        "origem": {
+          "anomes": 202506,
+          "categoria": null,
+          "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+        },
+        "score": 0.68,
+        "texto": "Ficha de 06/2025: renda R$ 6.959, gasto R$ 6.432 e sobra R$ 527. Maiores gastos: Casa R$ 4.093, Produtos financeiros R$ 955, Transporte publico R$ 525. Saldo inicial R$ 16.106, final R$ 17.652 e mínimo R$ 13.931. Parcelas no mês: 6, somando R$ 2.365.",
+        "tipo": "ficha_mensal"
+      },
+      {
+        "anomes": 202505,
+        "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202505",
+        "origem": {
+          "anomes": 202505,
+          "categoria": null,
+          "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+        },
+        "score": 0.65,
+        "texto": "Ficha de 05/2025: renda R$ 5.818, gasto R$ 4.827 e sobra R$ 991. Maiores gastos: Casa R$ 2.330, Produtos financeiros R$ 1.103, Restaurantes R$ 375. Saldo inicial R$ 14.263, final R$ 16.085 e mínimo R$ 16.085. Parcelas no mês: 5, somando R$ 285.",
+        "tipo": "ficha_mensal"
+      },
+      {
+        "anomes": 202504,
+        "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202504",
+        "origem": {
+          "anomes": 202504,
+          "categoria": null,
+          "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+        },
+        "score": 0.62,
+        "texto": "Ficha de 04/2025: renda R$ 8.409, gasto R$ 3.417 e sobra R$ 4.993. Maiores gastos: Casa R$ 1.969, Lojas e sites R$ 433, Produtos financeiros R$ 366. Saldo inicial R$ 8.312, final R$ 14.263 e mínimo R$ 7.943. Juros pagos: R$ 148. Parcelas no mês: 5, somando R$ 269.",
+        "tipo": "ficha_mensal"
+      },
+      {
+        "anomes": 202503,
+        "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202503",
+        "origem": {
+          "anomes": 202503,
+          "categoria": null,
+          "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+        },
+        "score": 0.59,
+        "texto": "Ficha de 03/2025: renda R$ 7.398, gasto R$ 4.931 e sobra R$ 2.467. Maiores gastos: Casa R$ 1.919, Produtos financeiros R$ 1.003, Restaurantes R$ 621. Saldo inicial R$ 4.790, final R$ 8.291 e mínimo R$ 4.520. Parcelas no mês: 4, somando R$ 253.",
+        "tipo": "ficha_mensal"
+      },
+      {
+        "anomes": 202502,
+        "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202502",
+        "origem": {
+          "anomes": 202502,
+          "categoria": null,
+          "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+        },
+        "score": 0.56,
+        "texto": "Ficha de 02/2025: renda R$ 5.550, gasto R$ 3.038 e sobra R$ 2.512. Maiores gastos: Casa R$ 1.688, Restaurantes R$ 324, Lazer R$ 268. Saldo inicial R$ 1.289, final R$ 4.783 e mínimo -R$ 517. Juros pagos: R$ 88. Parcelas no mês: 4, somando R$ 173. O saldo ficou negativo no mês.",
+        "tipo": "ficha_mensal"
+      },
+      {
+        "anomes": 202501,
+        "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202501",
+        "origem": {
+          "anomes": 202501,
+          "categoria": null,
+          "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+        },
+        "score": 0.53,
+        "texto": "Ficha de 01/2025: renda R$ 6.014, gasto R$ 6.094 e sobra -R$ 81. Maiores gastos: Casa R$ 3.721, Produtos financeiros R$ 927, Outros gastos R$ 285. Saldo inicial R$ 559, final R$ 1.220 e mínimo -R$ 2.072. Juros pagos: R$ 101. Parcelas no mês: 3, somando R$ 2.039. O saldo ficou negativo no mês.",
+        "tipo": "ficha_mensal"
+      }
+    ]
+  },
+  "fonte": {
+    "ferramenta": "buscar_contexto_financeiro",
+    "periodo": {
+      "fim": 202506,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_rag.documentos"
+    ]
+  }
+}

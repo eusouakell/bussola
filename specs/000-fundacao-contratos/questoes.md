@@ -20,7 +20,7 @@ entram neste mesmo PR, que cria `contratos-v1`.
 | Q-10 | Nulidade e validação de entrada | `NOT NULL` explícito; erro como envelope, sem eco | contratos §3 e §5 |
 | Q-11 | Formato JSON das fixtures | Lista JSON por arquivo; golden = envelope | contratos §8 |
 | Q-12 | Mensagem de `INDISPONIVEL` no mock | "Dados de exemplo indisponíveis." explícita | só registro |
-| Q-13 | Premissas do AC-04 | Categorias por palavra-chave; saldo mín./máx. do ano | conferir no T032 |
+| Q-13 | Premissas do AC-04 | Categorias por palavra-chave; saldo mín./máx. do ano | confirmado no T032 |
 | Q-14 | Regras de métrica das fixtures | Regras provisórias em `gerar_fixtures.py` | confirmar no 001 |
 
 ## Q-01 Usuário de controle no mock
@@ -159,8 +159,9 @@ entram neste mesmo PR, que cria `contratos-v1`.
   - categorias casadas por palavra-chave em `gastos_categoria` ("aluguel";
     "restaurante"/"comer fora"; "assinatura"/"streaming");
   - saldo mínimo e máximo = mínimo e máximo do ano, não média.
-- **Pendente:** conferir contra as fixtures reais no T032. Se as premissas
-  não baterem, corrigir o teste ou §8 (aditivo) no mesmo PR.
+- **Confirmado no T032** (fixtures reais, âncora, `ate_anomes = 202512`): os
+  9 valores ficam dentro de 1%. Maior desvio: juros, −0,80% (60,51 × 61);
+  assinaturas −0,46% (100,54 × 101); os demais abaixo de 0,2%.
 
 ## Q-14 Regras de métrica das fixtures provisórias
 

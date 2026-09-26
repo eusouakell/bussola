@@ -1,0 +1,98 @@
+{
+  "avisos": [],
+  "dados": {
+    "categorias": [
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 96.61,
+        "macro": "Restaurantes",
+        "media_mensal": 322.04,
+        "micro": "Restaurantes"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 85.5,
+        "macro": "Lojas e sites",
+        "media_mensal": 285.0,
+        "micro": "Compras"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 50% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 54.01,
+        "macro": "Assinaturas",
+        "media_mensal": 108.02,
+        "micro": "Assinaturas"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 20.3,
+        "macro": "Transporte publico",
+        "media_mensal": 101.5,
+        "micro": "Passagem de onibus"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 13.39,
+        "macro": "Lazer",
+        "media_mensal": 44.65,
+        "micro": "Eletronicos"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 11.14,
+        "macro": "Lazer",
+        "media_mensal": 37.14,
+        "micro": "Outros entretenimentos"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 7.43,
+        "macro": "Restaurantes",
+        "media_mensal": 24.77,
+        "micro": "Outras comidas e bebidas"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 6.41,
+        "macro": "Lazer",
+        "media_mensal": 21.36,
+        "micro": "Cinema"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 1.86,
+        "macro": "Lazer",
+        "media_mensal": 6.2,
+        "micro": "Videogames"
+      },
+      {
+        "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
+        "discricionaria": true,
+        "economia_potencial_mensal": 1.3,
+        "macro": "Viagens",
+        "media_mensal": 6.5,
+        "micro": "Outros gastos de viagem"
+      }
+    ]
+  },
+  "fonte": {
+    "ferramenta": "oportunidades_corte",
+    "periodo": {
+      "fim": 202506,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.gastos_categoria",
+      "bussola_dados.categorias"
+    ]
+  }
+}

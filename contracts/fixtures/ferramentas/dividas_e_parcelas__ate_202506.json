@@ -1,0 +1,62 @@
+{
+  "avisos": [],
+  "dados": {
+    "comprometimento_renda_pct": 35.35,
+    "juros_pagos_media": 56.07,
+    "parcelas_ativas": [
+      {
+        "descr": "iptu parc",
+        "meses_restantes": 4,
+        "parcela_atual": 6,
+        "parcela_total": 10,
+        "valor": 2256.42
+      },
+      {
+        "descr": "cart credito compra mktplace parc 5/6",
+        "meses_restantes": 1,
+        "parcela_atual": 5,
+        "parcela_total": 6,
+        "valor": 44.9
+      },
+      {
+        "descr": "pix qrs compra onl parc 6/10",
+        "meses_restantes": 4,
+        "parcela_atual": 6,
+        "parcela_total": 10,
+        "valor": 25.66
+      },
+      {
+        "descr": "pix qrs compra onl parc 6/12",
+        "meses_restantes": 6,
+        "parcela_atual": 6,
+        "parcela_total": 12,
+        "valor": 21.05
+      },
+      {
+        "descr": "pix qrs compra onl parc 1/10",
+        "meses_restantes": 9,
+        "parcela_atual": 1,
+        "parcela_total": 10,
+        "valor": 9.83
+      },
+      {
+        "descr": "cart credito compra mktplace parc 3/12",
+        "meses_restantes": 9,
+        "parcela_atual": 3,
+        "parcela_total": 12,
+        "valor": 7.28
+      }
+    ]
+  },
+  "fonte": {
+    "ferramenta": "dividas_e_parcelas",
+    "periodo": {
+      "fim": 202506,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.parcelas",
+      "bussola_dados.perfil_mensal"
+    ]
+  }
+}

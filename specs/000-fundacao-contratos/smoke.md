@@ -8,7 +8,7 @@ pendente (T038, T039).
 | Verificação | Resultado |
 |---|---|
 | `make lint` | verde (mcp_server, agent, data/scripts, deploy) |
-| `make test` | mcp_server: 301 passaram, 45 pulados (fixtures oficiais ausentes); agent: 161 passaram |
+| `make test` | mcp_server: 346 passaram (com as fixtures oficiais); agent: 161 passaram |
 | AC-06 contra o mock real | `McpToolset` lista as 8 ferramentas; escopo do state prevalece |
 | `aplicar_ddl.py --dry-run` | 20 `CREATE ... IF NOT EXISTS` nos 4 datasets |
 | Build local das imagens (arm64, sem push) | MCP responde `initialize` em `/mcp` com 200; agente lista `bussola_agent` em `/list-apps` |
@@ -19,7 +19,7 @@ pendente (T038, T039).
 | Item | AC | Comando | Resultado |
 |---|---|---|---|
 | DDL aplicado 2 vezes | AC-11 | `uv run --project mcp_server python data/scripts/aplicar_ddl.py` | pendente |
-| Fixtures oficiais | AC-04 | `make fixtures` e `make test` | pendente |
+| Fixtures oficiais | AC-04 | `make fixtures` e `make test` | ok: 35 arquivos (942 lançamentos lidos); 9 valores de referência dentro de 1% |
 | Smoke de modelos | AC-12 | ver [`modelos.md`](./modelos.md) | pendente |
 | Build/push das imagens | AC-13 | `deploy/build_push.sh mcp && deploy/build_push.sh agent` | pendente |
 | Deploy hello | AC-13 | `deploy/deploy.sh mcp --tag c000 && deploy/deploy.sh agent --tag c000` | pendente |

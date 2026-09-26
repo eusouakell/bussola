@@ -1,0 +1,3594 @@
+[
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 133.06
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 85.46
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.39
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 168.65
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 117.82
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 2049.19
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1624.54
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 75.61
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 4,
+    "total": 211.62
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 36.38
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 38.07
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 52.01
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 1141.65
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 7,
+    "total": 273.92
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "qtd": 1,
+    "total": 815.23
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 82.13
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 114.64
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 81.93
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.89
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 172.76
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 113.97
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 182.47
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1648.15
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 75.11
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 1,
+    "total": 25.08
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 3,
+    "total": 271.51
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "qtd": 1,
+    "total": 4.83
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Frete e correios",
+    "qtd": 1,
+    "total": 19.97
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 39.11
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 521.92
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 7,
+    "total": 324.94
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 4,
+    "total": 163.11
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 147.81
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 84.5
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 58.5
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 172.88
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 112.7
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 78.11
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1676.41
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 73.98
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 4,
+    "total": 147.54
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Educacao",
+    "micro": "Curso de idiomas",
+    "qtd": 1,
+    "total": 392.84
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lazer",
+    "micro": "Ingresso de shows",
+    "qtd": 1,
+    "total": 95.35
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Casa de Carnes",
+    "qtd": 1,
+    "total": 171.28
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 4,
+    "total": 92.15
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 40.31
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 29.02
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 1,
+    "total": 26.0
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 414.28
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 4,
+    "total": 59.75
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "qtd": 1,
+    "total": 268.55
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 72.95
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 84.52
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 58.54
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 169.71
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 113.21
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 91.36
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1664.78
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 73.16
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 4,
+    "total": 229.88
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 1,
+    "total": 146.58
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 39.77
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "qtd": 1,
+    "total": 28.32
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 39.99
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 394.79
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 5,
+    "total": 125.85
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "qtd": 1,
+    "total": 243.88
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Veiculos",
+    "micro": "Manutencao e reparo",
+    "qtd": 1,
+    "total": 48.76
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 152.76
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 85.21
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 59.03
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 169.14
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 116.88
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 179.09
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1677.31
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 73.57
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 5,
+    "total": 393.27
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lazer",
+    "micro": "Associacoes e clubes",
+    "qtd": 1,
+    "total": 25.84
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 2,
+    "total": 358.32
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 2,
+    "total": 179.86
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Frete e correios",
+    "qtd": 2,
+    "total": 91.25
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 38.65
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 29.63
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 2,
+    "total": 120.34
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 330.44
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Seguros",
+    "qtd": 1,
+    "total": 9.97
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 6,
+    "total": 254.69
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 135.42
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 103.91
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 82.42
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 58.58
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 172.52
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 111.8
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 417.49
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1607.59
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 73.89
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 5,
+    "total": 363.52
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 1,
+    "total": 146.58
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 2,
+    "total": 46.05
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "qtd": 1,
+    "total": 13.17
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Frete e correios",
+    "qtd": 1,
+    "total": 32.49
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 38.86
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 70.15
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 1,
+    "total": 61.97
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 685.04
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 3,
+    "total": 250.71
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "qtd": 1,
+    "total": 254.92
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 83.38
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 67.96
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 85.46
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 56.81
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 173.79
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 114.14
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 451.49
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1624.85
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 73.92
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 4,
+    "total": 545.02
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lazer",
+    "micro": "Associacoes e clubes",
+    "qtd": 1,
+    "total": 84.78
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 1,
+    "total": 146.58
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 3,
+    "total": 123.42
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Outras despesas com impostos",
+    "qtd": 2,
+    "total": 394.16
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 38.97
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 39.44
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 525.13
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 7,
+    "total": 234.69
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 269.7
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 122.23
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 80.8
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.62
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 167.99
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 115.04
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 163.03
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1684.84
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 75.59
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 11,
+    "total": 820.43
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 2,
+    "total": 217.17
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 33.89
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 39.0
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 58.71
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 1,
+    "total": 0.81
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 630.38
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 8,
+    "total": 427.2
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 1,
+    "total": 60.5
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 99.65
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 85.35
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.83
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 175.24
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 113.49
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 177.63
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1642.68
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 76.16
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 12,
+    "total": 667.04
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 3,
+    "total": 366.54
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "qtd": 2,
+    "total": 190.51
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 38.64
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 51.49
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 1130.92
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 4,
+    "total": 306.15
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 3,
+    "total": 267.55
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 106.0
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 85.4
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.46
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 175.18
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 112.43
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 454.8
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1649.98
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 76.73
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 6,
+    "total": 455.6
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Educacao",
+    "micro": "Outras despesas de educacao",
+    "qtd": 1,
+    "total": 519.84
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lazer",
+    "micro": "Associacoes e clubes",
+    "qtd": 1,
+    "total": 25.86
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 2,
+    "total": 219.96
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Casa de Carnes",
+    "qtd": 1,
+    "total": 66.47
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 2,
+    "total": 75.96
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Frete e correios",
+    "qtd": 1,
+    "total": 66.62
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 40.18
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 159.43
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 200.96
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 6,
+    "total": 246.12
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 1,
+    "total": 20.56
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 82.3
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 81.08
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.52
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 167.17
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 115.4
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1678.45
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 75.72
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 8,
+    "total": 406.03
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lazer",
+    "micro": "Associacoes e clubes",
+    "qtd": 1,
+    "total": 27.33
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 2,
+    "total": 219.96
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 3,
+    "total": 150.27
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "qtd": 1,
+    "total": 32.26
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 38.6
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 29.24
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 788.81
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 3,
+    "total": 98.78
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 3,
+    "total": 2014.65
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 149.51
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 81.02
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 57.2
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 168.37
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 114.06
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1614.01
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 72.75
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "qtd": 4,
+    "total": 183.8
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Educacao",
+    "micro": "Outras despesas de educacao",
+    "qtd": 1,
+    "total": 15.11
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "qtd": 2,
+    "total": 219.96
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 2,
+    "total": 410.82
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "qtd": 1,
+    "total": 31.04
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Outras despesas com impostos",
+    "qtd": 1,
+    "total": 14.98
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 39.35
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 104.13
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 131.26
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Seguros",
+    "qtd": 1,
+    "total": 10.57
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 6,
+    "total": 256.91
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "qtd": 2,
+    "total": 312.03
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 69.54
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 136.4
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 128.15
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 28.09
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Empregados domesticos",
+    "qtd": 1,
+    "total": 132.36
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 170.01
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 93.87
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 1991.93
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1056.16
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 37.06
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 83.26
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Videogames",
+    "qtd": 1,
+    "total": 37.17
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 4,
+    "total": 237.29
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 3,
+    "total": 223.3
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos",
+    "qtd": 1,
+    "total": 284.6
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 30.34
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 100.57
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 795.84
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 2,
+    "total": 35.21
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 6,
+    "total": 208.67
+  },
+  {
+    "anomes": 202501,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 284.0
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 82.88
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 123.2
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 28.69
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 164.13
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 94.45
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 81.11
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1074.12
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 35.8
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 86.08
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Emprestimos e financiamentos",
+    "micro": "Outros emprestimos",
+    "qtd": 1,
+    "total": 117.27
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Eletronicos",
+    "qtd": 1,
+    "total": 267.9
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 6,
+    "total": 258.92
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos",
+    "qtd": 1,
+    "total": 69.46
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 30.83
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 88.25
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 111.25
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 1,
+    "total": 62.16
+  },
+  {
+    "anomes": 202502,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 7,
+    "total": 262.0
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 88.71
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 128.15
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 29.38
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Empregados domesticos",
+    "qtd": 1,
+    "total": 116.74
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 165.38
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 95.67
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 161.6
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1100.43
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 37.5
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 83.93
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Outros entretenimentos",
+    "qtd": 1,
+    "total": 47.93
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 5,
+    "total": 431.76
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Casa de Carnes",
+    "qtd": 1,
+    "total": 62.75
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 2,
+    "total": 139.74
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Outros mercados",
+    "qtd": 1,
+    "total": 81.0
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 30.05
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 2,
+    "total": 121.88
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 850.98
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 1,
+    "total": 22.54
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 6,
+    "total": 598.49
+  },
+  {
+    "anomes": 202503,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 4,
+    "total": 536.67
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 103.11
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 123.27
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 28.06
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Empregados domesticos",
+    "qtd": 1,
+    "total": 188.94
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 165.72
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 92.62
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 169.91
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1078.22
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 36.91
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 85.21
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Cinema",
+    "qtd": 1,
+    "total": 95.91
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 6,
+    "total": 433.36
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 31.05
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 147.61
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 1,
+    "total": 0.77
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 186.07
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 6,
+    "total": 326.77
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transporte publico",
+    "micro": "Passagem de onibus",
+    "qtd": 1,
+    "total": 84.36
+  },
+  {
+    "anomes": 202504,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Viagens",
+    "micro": "Outros gastos de viagem",
+    "qtd": 1,
+    "total": 39.03
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 106.36
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 124.31
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 28.88
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 165.31
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 92.03
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 185.97
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Jardinagem",
+    "qtd": 1,
+    "total": 550.33
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1060.2
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 37.34
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 85.42
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Cuidados pessoais",
+    "micro": "Produtos de beleza",
+    "qtd": 1,
+    "total": 140.86
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Emprestimos e financiamentos",
+    "micro": "Outros emprestimos",
+    "qtd": 1,
+    "total": 300.05
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Cinema",
+    "qtd": 1,
+    "total": 32.27
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Outros entretenimentos",
+    "qtd": 1,
+    "total": 174.89
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 5,
+    "total": 108.93
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 31.09
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 2,
+    "total": 92.4
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 979.43
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 2,
+    "total": 16.29
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 5,
+    "total": 358.44
+  },
+  {
+    "anomes": 202505,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 3,
+    "total": 156.04
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 130.66
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 127.1
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 27.85
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 170.7
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 93.1
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 2256.42
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Outras contas",
+    "qtd": 2,
+    "total": 190.11
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1107.45
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 36.2
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 83.61
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 7,
+    "total": 239.72
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 85.11
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Outros mercados",
+    "qtd": 1,
+    "total": 87.26
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 31.11
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 831.68
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Titulo de capitalizacao",
+    "qtd": 1,
+    "total": 91.8
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 1,
+    "total": 12.41
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 5,
+    "total": 177.87
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 2,
+    "total": 126.96
+  },
+  {
+    "anomes": 202506,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transporte publico",
+    "micro": "Passagem de onibus",
+    "qtd": 1,
+    "total": 524.65
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 108.55
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 128.19
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 28.49
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 172.85
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 97.09
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 179.4
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1093.53
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 35.68
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 82.9
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Educacao",
+    "micro": "Curso de idiomas",
+    "qtd": 1,
+    "total": 238.57
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Educacao",
+    "micro": "Entidades de classe",
+    "qtd": 1,
+    "total": 634.77
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 7,
+    "total": 446.98
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 2,
+    "total": 54.15
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Multa por atraso",
+    "qtd": 1,
+    "total": 0.89
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 29.79
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 123.73
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 155.96
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 7,
+    "total": 429.88
+  },
+  {
+    "anomes": 202507,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Viagens",
+    "micro": "Outros gastos de viagem",
+    "qtd": 1,
+    "total": 935.14
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 79.61
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 126.28
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 27.85
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 168.21
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 92.38
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 79.16
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Outras contas",
+    "qtd": 1,
+    "total": 422.86
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1072.65
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 36.53
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 85.47
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Outros entretenimentos",
+    "qtd": 1,
+    "total": 53.21
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Videogames",
+    "qtd": 1,
+    "total": 33.69
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 5,
+    "total": 73.29
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Casa de Carnes",
+    "qtd": 1,
+    "total": 26.87
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 6,
+    "total": 193.38
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 31.43
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 113.4
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 1056.12
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 7,
+    "total": 253.3
+  },
+  {
+    "anomes": 202508,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 3,
+    "total": 157.51
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 87.29
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 126.01
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 29.33
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 164.04
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 96.75
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 155.31
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1057.92
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 37.18
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 83.81
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Cinema",
+    "qtd": 1,
+    "total": 95.36
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 6,
+    "total": 115.3
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Casa de Carnes",
+    "qtd": 1,
+    "total": 192.36
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 3,
+    "total": 66.8
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 30.0
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 18.69
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 473.36
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 2,
+    "total": 15.93
+  },
+  {
+    "anomes": 202509,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 8,
+    "total": 328.37
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 101.71
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 121.13
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 28.61
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 170.2
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 93.05
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "qtd": 1,
+    "total": 93.17
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1059.41
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 37.42
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 83.85
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Cuidados pessoais",
+    "micro": "Produtos de beleza",
+    "qtd": 1,
+    "total": 56.7
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 7,
+    "total": 150.13
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 38.93
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 31.04
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "qtd": 1,
+    "total": 25.38
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 621.76
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 4,
+    "total": 388.71
+  },
+  {
+    "anomes": 202510,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 1,
+    "total": 271.93
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 87.37
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 125.32
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 29.22
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 164.7
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 93.46
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Outras contas",
+    "qtd": 1,
+    "total": 115.03
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1082.63
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 35.5
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 83.31
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Cuidados pessoais",
+    "micro": "Produtos de beleza",
+    "qtd": 1,
+    "total": 1214.09
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lazer",
+    "micro": "Outros entretenimentos",
+    "qtd": 1,
+    "total": 20.08
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 9,
+    "total": 247.33
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 40.54
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Multa por atraso",
+    "qtd": 1,
+    "total": 3.53
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 30.29
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Consorcio",
+    "qtd": 1,
+    "total": 302.5
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 18.13
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 505.0
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 8,
+    "total": 393.79
+  },
+  {
+    "anomes": 202511,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 1,
+    "total": 241.93
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "qtd": 4,
+    "total": 93.81
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "qtd": 1,
+    "total": 124.19
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "qtd": 1,
+    "total": 27.91
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "qtd": 1,
+    "total": 168.48
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "qtd": 1,
+    "total": 94.63
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "qtd": 1,
+    "total": 1081.14
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "qtd": 1,
+    "total": 36.04
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "qtd": 1,
+    "total": 85.67
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Cuidados pessoais",
+    "micro": "Produtos de beleza",
+    "qtd": 1,
+    "total": 297.58
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Educacao",
+    "micro": "Curso de idiomas",
+    "qtd": 1,
+    "total": 247.04
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "qtd": 10,
+    "total": 785.64
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Casa de Carnes",
+    "qtd": 1,
+    "total": 56.81
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "qtd": 1,
+    "total": 102.66
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos",
+    "qtd": 1,
+    "total": 634.71
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "qtd": 1,
+    "total": 31.06
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "qtd": 1,
+    "total": 115.79
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "qtd": 1,
+    "total": 1088.75
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas",
+    "qtd": 1,
+    "total": 64.46
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "qtd": 10,
+    "total": 417.9
+  },
+  {
+    "anomes": 202512,
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "qtd": 3,
+    "total": 540.02
+  }
+]

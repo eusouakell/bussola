@@ -1,0 +1,109 @@
+{
+  "avisos": [
+    "Saldo ficou negativo em 2 meses do período."
+  ],
+  "dados": {
+    "fontes_renda": [
+      {
+        "macro": "Recebimentos diversos",
+        "media": 7451.27,
+        "micro": "Recebimentos diversos"
+      }
+    ],
+    "gasto_medio": 4614.52,
+    "meses_considerados": 12,
+    "renda_media": 7451.27,
+    "saldo": {
+      "atual": 47597.68,
+      "maximo": 49320.95,
+      "minimo": -2072.31
+    },
+    "serie_mensal": [
+      {
+        "anomes": 202501,
+        "gasto": 6094.28,
+        "renda": 6013.61,
+        "sobra": -80.67
+      },
+      {
+        "anomes": 202502,
+        "gasto": 3038.5,
+        "renda": 5550.27,
+        "sobra": 2511.77
+      },
+      {
+        "anomes": 202503,
+        "gasto": 4931.28,
+        "renda": 7398.4,
+        "sobra": 2467.12
+      },
+      {
+        "anomes": 202504,
+        "gasto": 3416.9,
+        "renda": 8409.42,
+        "sobra": 4992.52
+      },
+      {
+        "anomes": 202505,
+        "gasto": 4826.84,
+        "renda": 5817.72,
+        "sobra": 990.88
+      },
+      {
+        "anomes": 202506,
+        "gasto": 6431.77,
+        "renda": 6958.94,
+        "sobra": 527.17
+      },
+      {
+        "anomes": 202507,
+        "gasto": 4976.54,
+        "renda": 5861.07,
+        "sobra": 884.53
+      },
+      {
+        "anomes": 202508,
+        "gasto": 4183.2,
+        "renda": 8401.94,
+        "sobra": 4218.74
+      },
+      {
+        "anomes": 202509,
+        "gasto": 3173.81,
+        "renda": 6897.28,
+        "sobra": 3723.47
+      },
+      {
+        "anomes": 202510,
+        "gasto": 3373.13,
+        "renda": 9185.15,
+        "sobra": 5812.02
+      },
+      {
+        "anomes": 202511,
+        "gasto": 4833.75,
+        "renda": 11317.95,
+        "sobra": 6484.2
+      },
+      {
+        "anomes": 202512,
+        "gasto": 6094.29,
+        "renda": 7603.54,
+        "sobra": 1509.25
+      }
+    ],
+    "sobra_media": 2836.75,
+    "sobra_mediana": 2489.44
+  },
+  "fonte": {
+    "ferramenta": "perfil_financeiro",
+    "periodo": {
+      "fim": 202512,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.entradas_categoria"
+    ]
+  }
+}

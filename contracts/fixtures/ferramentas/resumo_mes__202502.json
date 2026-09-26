@@ -1,0 +1,56 @@
+{
+  "avisos": [
+    "Saldo ficou negativo neste mês."
+  ],
+  "dados": {
+    "anomes": 202502,
+    "gasto": 3038.5,
+    "gastos_macro": [
+      {
+        "macro": "Casa",
+        "total": 1687.58
+      },
+      {
+        "macro": "Restaurantes",
+        "total": 324.16
+      },
+      {
+        "macro": "Lazer",
+        "total": 267.9
+      },
+      {
+        "macro": "Lojas e sites",
+        "total": 258.92
+      },
+      {
+        "macro": "Produtos financeiros",
+        "total": 230.33
+      },
+      {
+        "macro": "Emprestimos e financiamentos",
+        "total": 117.27
+      },
+      {
+        "macro": "Assinaturas",
+        "total": 82.88
+      },
+      {
+        "macro": "Outros gastos",
+        "total": 69.46
+      }
+    ],
+    "renda": 5550.27,
+    "sobra": 2511.77
+  },
+  "fonte": {
+    "ferramenta": "resumo_mes",
+    "periodo": {
+      "fim": 202502,
+      "inicio": 202502
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.gastos_categoria"
+    ]
+  }
+}
