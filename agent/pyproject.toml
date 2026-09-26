@@ -1,0 +1,39 @@
+[project]
+name = "bussola-agent"
+version = "0.1.0"
+description = "Bússola: agente ADK (Gemini Flash) com ferramentas MCP"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "google-adk[mcp]>=2.10",
+    "mcp>=1.24,<2",
+    "google-genai>=2.25",
+    "google-auth>=2.58",
+    "pydantic>=2.13",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1",
+    "pytest-asyncio>=1.4",
+    "ruff>=0.16",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["bussola_agent"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["bq: depende de BigQuery real (make test-bq)"]

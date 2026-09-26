@@ -120,6 +120,12 @@ DDL em `contracts/bigquery/*.sql`, aplicado de forma idempotente por
 `CREATE TABLE IF NOT EXISTS`). A origem é somente leitura:
 `hackathon_dados.extrato_sintetico`.
 
+**Nulidade:** só as colunas marcadas `NULL` são anuláveis. As demais são
+`NOT NULL` no DDL, exceto `ARRAY`, que o BigQuery não aceita com `NOT NULL`
+(um `embedding` ausente é gravado como lista vazia). Os modelos Pydantic de
+`contratos.py` seguem a mesma nulidade, e um teste de contrato compara os
+dois (Q-10 do 000).
+
 ### `bussola_dados`: métricas determinísticas (escrita pelo 001, leitura por todos)
 
 | Tabela | Colunas | Observação |
@@ -234,6 +240,11 @@ só validam a entrada, chamam métricas/simulação e montam o envelope.
 O agente sobrescreve os dois a partir do `session.state` (§6). Valores
 enviados pelo modelo são ignorados.
 
+**Validação:** faixas, UUID e regras de entrada são verificadas **dentro**
+da ferramenta, pelos modelos `Entrada*` de `contratos.py`, e uma falha
+devolve o envelope `ENTRADA_INVALIDA` (não é erro de protocolo). A mensagem
+cita só os nomes dos campos inválidos, nunca o valor recebido (Q-10 do 000).
+
 **Envelope de sucesso:**
 
 ```json
@@ -279,6 +290,28 @@ Códigos de erro:
   reduzir R$ 250/mês em Restaurantes"). Não são geradas por LLM.
 - Nenhuma ferramenta aceita SQL nem devolve SQL, nomes de projeto ou
   credenciais. `fonte.tabelas` traz só `dataset.tabela`.
+- **`modo` de `simular_objetivo`** indica o que a entrada informou (Q-06 do
+  000):
+  - `"prazo"`: a entrada trouxe `prazo_meses`, e a ferramenta calcula
+    `aporte_mensal`;
+  - `"aporte"`: a entrada trouxe `aporte_mensal`, e a ferramenta calcula
+    `prazo_meses`.
+
+  Nos dois casos, `aporte_mensal` e `prazo_meses` vêm preenchidos.
+- **`fonte.tabelas` por ferramenta** (`contratos.TABELAS_FERRAMENTA`, Q-07
+  do 000):
+
+  | Ferramenta | `fonte.tabelas` |
+  |---|---|
+  | `perfil_financeiro` | `bussola_dados.perfil_mensal`, `bussola_dados.entradas_categoria` |
+  | `capacidade_poupanca` | `bussola_dados.perfil_mensal` |
+  | `oportunidades_corte` | `bussola_dados.gastos_categoria`, `bussola_dados.categorias` |
+  | `dividas_e_parcelas` | `bussola_dados.parcelas`, `bussola_dados.perfil_mensal` |
+  | `simular_objetivo` | `bussola_dados.perfil_mensal` |
+  | `comparar_cenarios` | `bussola_dados.perfil_mensal`, `bussola_dados.gastos_categoria`, `bussola_dados.categorias` |
+  | `buscar_contexto_financeiro` | `bussola_rag.documentos` |
+  | `resumo_mes` | `bussola_dados.perfil_mensal`, `bussola_dados.gastos_categoria` |
+  | `referencia_coorte` | `bussola_dados.referencia_coorte` |
 
 ## §6 Agente (serviço `bussola-agent`)
 
@@ -304,6 +337,10 @@ Códigos de erro:
 - A cadeia roda em ordem crescente, e o primeiro retorno não nulo interrompe
   a execução.
 - O `agent.py` (004) só instala os quatro callbacks agregados.
+- Os agregados são `async` e recebem os argumentos do ADK por palavra-chave.
+  Cada função registrada pode ser sync ou async. Empates de `ordem` seguem a
+  ordem de registro, e uma fase inválida gera `ValueError`.
+- `limpar()` esvazia os registros e existe só para testes (Q-09 do 000).
 
 Ordens reservadas:
 
@@ -352,10 +389,16 @@ def registrar_instrucao(ordem: int, texto: str) -> None: ...   # trecho do promp
 def ferramentas() -> list[Callable]: ...
 def instrucoes() -> str: ...                                    # concatenadas por ordem
 def carregar_extensoes() -> None: ...
+def ferramentas_sensiveis() -> set[str]: ...                    # nomes com sensivel=True (Q-09)
+def limpar() -> None: ...                                       # só testes (Q-09)
 ```
 
 - `carregar_extensoes()` importa `bussola_agent.governanca` e
-  `bussola_agent.acompanhamento` quando existirem e ignora `ImportError`.
+  `bussola_agent.acompanhamento` quando existirem. Um pacote ausente
+  (`importlib.util.find_spec` devolve `None`) é pulado; um pacote presente
+  com erro de import **propaga** o erro, para não esconder falhas do 005/006
+  (Q-04 do 000).
+- Registrar duas ferramentas com o mesmo nome gera `ValueError`.
 - O `__init__.py` de cada pacote registra suas ferramentas, instruções e
   callbacks.
 - O `agent.py` chama `carregar_extensoes()` e depois monta o
@@ -403,6 +446,14 @@ class RegistroApp(Protocol):
   chama uma ferramenta MCP diretamente, sem passar pelo LLM. Aplica o mesmo
   escopo do callback do 004, forçando `id_usuario` e `ate_anomes` a partir
   do `state`. O 006 usa essa chamada para `resumo_mes` e `simular_objetivo`.
+- Acréscimos do 000 (Q-09):
+  - `criar_toolset(url=None, usar_oidc=None, tool_filter=None) -> McpToolset`
+    lê `MCP_URL` e `MCP_USE_OIDC` quando os argumentos são `None`;
+  - `aplicar_escopo(args, state) -> dict` devolve uma cópia de `args` com
+    `id_usuario` e `ate_anomes` do `state`;
+  - `chamar_ferramenta(nome, args, state, url=None, usar_oidc=None)`: uma
+    falha de transporte devolve o envelope `INDISPONIVEL` em vez de levantar
+    exceção.
 
 ## §7 Variáveis de ambiente (`contracts/env.example`)
 
@@ -446,8 +497,23 @@ prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
   - `ate_anomes < 202512` recebe o golden `__ate_202506`, com um aviso de
     mock;
   - `ate_anomes = 202512` recebe o golden `__ate_202512`.
+  - usuário de `usuarios.json` que não é o âncora (o controle) recebe
+    `DADOS_INSUFICIENTES` ("O mock só tem respostas do cliente âncora."). O
+    mock nunca devolve o golden de outro cliente (Q-01 do 000);
+  - `simular_objetivo` e `comparar_cenarios` têm golden só para a entrada
+    canônica `valor_alvo=30000`, `prazo_meses=24`. O mock serve esse golden
+    para qualquer entrada válida, com o aviso "Resposta de exemplo do mock,
+    calculada para valor_alvo=30000 e prazo_meses=24." (Q-03 do 000);
+  - os golden de `oportunidades_corte` e `buscar_contexto_financeiro`
+    guardam até 10 itens, e o mock corta a lista em `top_n` e `k`;
+  - arquivo de fixture ausente devolve `INDISPONIVEL` ("Dados de exemplo
+    indisponíveis.");
+  - `referencia_coorte` (P1) não é servida pelo mock.
 - `rag/trechos_exemplo.json`: trechos no formato de
   `buscar_contexto_financeiro`, usados pelo fake do buscador.
+- Formato: cada arquivo de tabela, `usuarios.json` e `rag/trechos_exemplo.json`
+  é uma **lista JSON** de objetos; cada golden é um envelope JSON (Q-11 do
+  000).
 
 **Valores de referência do âncora** (média de 2025, `ate_anomes = 202512`,
 tolerância de 1%):
@@ -478,3 +544,8 @@ tolerância de 1%):
   - `erro_codigo`
 - **Nunca logar:** prompt completo, texto de lançamentos, chaves ou tokens.
   O `id_usuario` sintético pode ser logado.
+- **Lista de permitidos:** o logger emite só `severity`, `message`,
+  `timestamp`, os campos acima e `id_usuario`. Outros campos extras são
+  descartados.
+- **Exceções:** registradas só no campo `excecao`, com o **nome da classe**,
+  sem traceback nem mensagem (Q-05 do 000).

@@ -1,0 +1,38 @@
+# Contexto de build = raiz do repositório (ver agent/Dockerfile).
+# Lista de permissões: tudo fica de fora, exceto o que a imagem do agente usa.
+*
+!agent/
+
+# Ambiente local, caches e artefatos que não são do runtime.
+**/.venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/.coverage
+**/htmlcov
+**/.adk
+**/*.db
+**/.DS_Store
+agent/tests
+agent/Dockerfile
+agent/Dockerfile.dockerignore
+
+# Segredos e configuração local: nunca entram na imagem.
+**/.env
+**/.env.*
+**/*.pem
+**/*-key.json
+
+# Já cobertos pela lista de permissões; explícitos por segurança.
+.git
+.spec-master
+.specify
+.claude
+docs
+specs
+data
+contracts
+mcp_server
+deploy
