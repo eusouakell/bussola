@@ -22,6 +22,7 @@ mesmo arquivo.
 | Diretórios | `contracts/`, `data/`, `mcp_server/`, `agent/bussola_agent/acompanhamento/`, `eval/rag/`, `eval/acompanhamento/` | `agent/` (exceto `acompanhamento/`), `deploy/`, `web/` (proposta, §5), `eval/agente/`, `eval/seguranca/`, `AGENTS.md`, `docs/operacao.md`, `docs/roteiro-demo.md` |
 | BigQuery (escrita) | `bussola_dados` (001), `bussola_rag` (002) | `bussola_app` / `bussola_app_dev` (005) |
 | Revisa os PRs de | B | A |
+| Contexto do Spec Master | [pessoa-a-dados-ferramentas.md](./pessoa-a-dados-ferramentas.md) | [pessoa-b-agente-plataforma.md](./pessoa-b-agente-plataforma.md) |
 
 **Carga.** A pessoa A concentra o trabalho no começo: fundação, dados e MCP
 estão no caminho crítico. A pessoa B começa desbloqueando a plataforma e o
@@ -169,7 +170,16 @@ cd ../bussola-NNN
 SPECIFY_FEATURE_DIRECTORY=specs/NNN-slug claude
 ```
 
-Depois, no Claude Code: `/spec-master docs/ciclos/NNN-slug.md`.
+Depois, no Claude Code, dentro da worktree, rode o contexto da sua pessoa:
+
+```text
+/spec-master docs/ciclos/pessoa-a-dados-ferramentas.md   # Pessoa A
+/spec-master docs/ciclos/pessoa-b-agente-plataforma.md   # Pessoa B
+```
+
+O contexto da pessoa descobre o ciclo pela branch, checa os marcos da §3 e
+roda **só** aquele ciclo. Rodar direto `/spec-master docs/ciclos/NNN-slug.md`
+continua valendo.
 
 **Regras de bolso:**
 
