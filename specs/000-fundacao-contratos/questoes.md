@@ -23,6 +23,7 @@ entram neste mesmo PR, que cria `contratos-v1`.
 | Q-13 | Premissas do AC-04 | Categorias por palavra-chave; saldo mín./máx. do ano | confirmado no T032 |
 | Q-14 | Regras de métrica das fixtures | Regras provisórias em `gerar_fixtures.py` | confirmar no 001 |
 | Q-15 | Local do Gemini × BigQuery | Agente em `global` via `BUSSOLA_LOCAL_MODELO`; resto em `us-central1` | contratos §7 |
+| Q-16 | Invoker do agente no MCP privado | `roles/run.invoker` no `bussola-mcp` para a SA do agente, com confirmação humana | contratos §6 e `deploy/README.md` |
 
 ## Q-01 Usuário de controle no mock
 
@@ -206,6 +207,28 @@ entram neste mesmo PR, que cria `contratos-v1`.
   `contracts/env.example`, `Makefile` (alvo `agent`) e `deploy/deploy.sh`.
 - **Confirmado no T039:** o agente hello local em `global` chamou
   `perfil_financeiro` no mock ([`smoke.md`](./smoke.md)).
+
+## Q-16 Invoker do agente no MCP privado
+
+- **Divergência:** contratos §6 manda o agente chamar o `bussola-mcp` com ID
+  token (`MCP_USE_OIDC=TRUE`), mas nenhum script nem pedido concede
+  `roles/run.invoker` à SA de runtime do agente. O `deploy.sh` cria o MCP
+  privado sem política IAM, por regra. No deploy hello o agente recebeu 403
+  ([`smoke.md`](./smoke.md)).
+- **Decisão:** conceder `roles/run.invoker` **no nível do serviço**
+  `bussola-mcp`, e não do projeto, à SA de runtime do agente. Plano B: SA
+  default de compute. Plano A: `bussola-runtime`. É mudança de IAM: um
+  integrante aplica, com confirmação humana. Se o time não tiver
+  `run.services.setIamPolicy`, vira pedido ao owner.
+- **Correção:** contratos §6 (Conexão MCP, aditivo) e `deploy/README.md`
+  (ordem de uso). Comando:
+
+  ```bash
+gcloud run services add-iam-policy-binding bussola-mcp \
+  --project batalha-time-07-lkbv --region us-central1 \
+  --member serviceAccount:1061873050224-compute@developer.gserviceaccount.com \
+  --role roles/run.invoker
+  ```
 
 ## Questões ainda abertas (herdadas)
 

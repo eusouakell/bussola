@@ -95,8 +95,16 @@ Tudo abaixo funciona com os papéis atuais do time (mestre §5 e §16):
 identidade da **SA de runtime**, não de quem faz o deploy. A SA default de
 compute não tem `secretAccessor` em `gemini-api-key`, e o time não tem Secret
 Admin para conceder. Sem o item 1 (ou um accessor no segredo), o agente no
-Cloud Run fica sem LLM; o smoke do T038 confirma. A alternativa de injetar a
-chave por valor foi descartada (constituição VII).
+Cloud Run fica sem LLM. O T038 confirmou que a SA default tem só
+`artifactregistry.writer`, `logging.logWriter` e `storage.admin` no projeto
+(sem `aiplatform.user`). A alternativa de injetar a chave por valor foi
+descartada (constituição VII).
+
+**Agente → MCP (Q-16):** nos dois planos, a SA de runtime do agente precisa de
+`roles/run.invoker` no serviço `bussola-mcp`. É concessão no nível do
+serviço, feita pelo time com confirmação humana. Se o time não tiver
+permissão para alterar a política IAM do serviço, entra como item extra do
+pedido 1.
 
 ## Dívidas registradas se o Plano B ficar definitivo
 

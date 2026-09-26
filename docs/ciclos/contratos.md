@@ -442,6 +442,8 @@ class RegistroApp(Protocol):
 - Cria o `MCPToolset` com `StreamableHTTPConnectionParams(url=MCP_URL)`.
 - Com `MCP_USE_OIDC=TRUE`, adiciona o header `Authorization: Bearer <ID token>`
   com `audience` = URL base do `bussola-mcp`.
+- A SA de runtime do agente precisa de `roles/run.invoker` no serviço
+  `bussola-mcp` (nível do serviço, com confirmação humana; Q-16 do 000).
 - `async def chamar_ferramenta(nome: str, args: dict, state: dict) -> dict`
   chama uma ferramenta MCP diretamente, sem passar pelo LLM. Aplica o mesmo
   escopo do callback do 004, forçando `id_usuario` e `ate_anomes` a partir

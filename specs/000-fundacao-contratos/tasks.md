@@ -76,7 +76,7 @@ partir daqui, os subagentes podem começar.
 - [x] T035 [P] [US5] [A:deploy] `deploy/build_push.sh`, `deploy/deploy.sh` (FR-022)
 - [x] T036 [P] [US5] [A:deploy] `deploy/smoke_modelos.py` (FR-021)
 - [x] T037 [P] [US5] [A:deploy] `deploy/iam_datasets.sh`, com simulação por padrão e confirmação digitada (FR-023)
-- [ ] T038 [US5] [CRED] Aplicar o DDL duas vezes, rodar o smoke de modelos, build/push/deploy hello e registrar em `modelos.md` e `smoke.md` (AC-11, AC-12, AC-13)
+- [x] T038 [US5] [CRED] Aplicar o DDL duas vezes, rodar o smoke de modelos, build/push/deploy hello e registrar em `modelos.md` e `smoke.md` (AC-11, AC-12, AC-13)
 - [x] T039 [US5] [CRED] Smoke local do agente hello contra o mock e registro em `smoke.md` (AC-07)
 
 ## Phase 8: US6: governança e pedidos (P2)

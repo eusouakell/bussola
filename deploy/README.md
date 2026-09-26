@@ -19,6 +19,9 @@ uv run --project agent python deploy/smoke_modelos.py --gravar   # gravar
 deploy/build_push.sh mcp && deploy/build_push.sh agent
 deploy/deploy.sh mcp --tag c000
 deploy/deploy.sh agent --tag c000        # depois do mcp (usa a URL dele)
+# Agente → MCP (Q-16): invoker no serviço bussola-mcp. IAM: só com confirmação humana.
+gcloud run services add-iam-policy-binding bussola-mcp --project batalha-time-07-lkbv \
+  --region us-central1 --member serviceAccount:1061873050224-compute@developer.gserviceaccount.com --role roles/run.invoker
 deploy/iam_datasets.sh                   # simulação; revisar
 deploy/iam_datasets.sh --aplicar         # só com confirmação humana
 ```

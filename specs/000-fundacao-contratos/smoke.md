@@ -1,7 +1,9 @@
 # Smoke do ciclo 000 (AC-07, AC-11, AC-13)
 
-**Status geral:** o que roda sem GCP passou; o que depende de credencial está
-pendente (T038, T039).
+**Status geral:** tudo passou, inclusive o que depende de credencial (T038,
+T039). No Cloud Run, o agente ainda não chega ao MCP: falta o invoker da SA
+(Q-16), e depois disso falta o LLM do Plano B. Nenhum dos dois faz parte do
+AC-13.
 
 ## Sem credenciais (feito)
 
@@ -14,16 +16,16 @@ pendente (T038, T039).
 | Build local das imagens (arm64, sem push) | MCP responde `initialize` em `/mcp` com 200; agente lista `bussola_agent` em `/list-apps` |
 | `iam_datasets.sh` em simulação | só imprime os GRANT e os REVOKE; não chama gcloud nem bq |
 
-## Com credenciais (pendente)
+## Com credenciais (feito em 2026-09-26)
 
 | Item | AC | Comando | Resultado |
 |---|---|---|---|
 | DDL aplicado 2 vezes | AC-11 | `uv run --project mcp_server python data/scripts/aplicar_ddl.py` | ok: 20 objetos nos 4 datasets; a 2ª execução não mudou nada |
 | Fixtures oficiais | AC-04 | `make fixtures` e `make test` | ok: 35 arquivos (942 lançamentos lidos); 9 valores de referência dentro de 1% |
 | Smoke de modelos | AC-12 | ver [`modelos.md`](./modelos.md) | ok: `gemini-3.8-flash` em `global`; `gemini-embedding-001` em `us-central1`, dimensão 3072 |
-| Build/push das imagens | AC-13 | `deploy/build_push.sh mcp && deploy/build_push.sh agent` | pendente |
-| Deploy hello | AC-13 | `deploy/deploy.sh mcp --tag c000 && deploy/deploy.sh agent --tag c000` | pendente |
-| MCP privado | AC-13 | `curl` sem token → 403; com `gcloud auth print-identity-token` → 200 | pendente |
+| Build/push das imagens | AC-13 | `deploy/build_push.sh mcp && deploy/build_push.sh agent` | ok: `bussola-mcp:09aaeeb` e `bussola-agent:09aaeeb` (`linux/amd64`) |
+| Deploy hello | AC-13 | `deploy/deploy.sh mcp --tag c000 && deploy/deploy.sh agent --tag c000` | ok: criação privada, revisões `bussola-mcp-00001-cis` e `bussola-agent-00001-mix`, tag `c000` |
+| MCP privado | AC-13 | `curl` sem token → 403; com `gcloud auth print-identity-token` → 200 | ok: 403 sem token, 200 com ID token no `initialize` |
 | Agente hello local contra o mock | AC-07 | `make mcp` e `make agent` | ok: chamou `perfil_financeiro` (ver abaixo) |
 
 ## AC-07: agente hello local contra o mock
@@ -41,6 +43,38 @@ pendente (T038, T039).
   são os do golden `perfil_financeiro__ate_202506`, e a fonte é citada.
 - Em `us-central1` o mesmo teste falha com 404 no modelo, daí a variável
   `BUSSOLA_LOCAL_MODELO=global` (Q-15).
+
+## AC-13: deploy hello no Cloud Run
+
+- Serviços novos e privados em `us-central1`, com a SA default de compute
+  (Plano B):
+  - `bussola-mcp`: `https://bussola-mcp-1061873050224.us-central1.run.app`,
+    `BUSSOLA_FAKES=TRUE`;
+  - `bussola-agent`: `https://bussola-agent-1061873050224.us-central1.run.app`,
+    com `GOOGLE_CLOUD_LOCATION=global` (vindo de `BUSSOLA_LOCAL_MODELO`),
+    `MCP_URL` = URL do `bussola-mcp` + `/mcp` e `MCP_USE_OIDC=TRUE`.
+- Agente: `/list-apps` sem token → 403; com o ID token do integrante → 200
+  (`["bussola_agent"]`). A sessão é criada (200).
+- `/run` com "qual é o meu perfil financeiro?" → **500**. O log do agente
+  mostra `Failed to create MCP session: 403 Forbidden`, e o log do
+  `bussola-mcp` mostra `The IAM principal lacks {run.routes.invoke}
+  permission`. O ID token da SA foi aceito; o que falta é
+  `roles/run.invoker` da SA do agente no `bussola-mcp`, cuja política IAM
+  está vazia (Q-16).
+- Papéis da SA default no projeto (leitura de `get-iam-policy`):
+  `artifactregistry.writer`, `logging.logWriter` e `storage.admin`. Sem
+  `aiplatform.user`, o Gemini via Vertex também deve falhar depois do
+  invoker. Isso confirma o risco de LLM do Plano B
+  ([`pedidos-owner.md`](./pedidos-owner.md)).
+- Correção do invoker (mudança de IAM, feita por um integrante com
+  confirmação humana; o agente não aplica):
+
+  ```bash
+gcloud run services add-iam-policy-binding bussola-mcp \
+  --project batalha-time-07-lkbv --region us-central1 \
+  --member serviceAccount:1061873050224-compute@developer.gserviceaccount.com \
+  --role roles/run.invoker
+  ```
 
 ## Observações
 
