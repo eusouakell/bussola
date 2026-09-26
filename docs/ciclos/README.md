@@ -82,6 +82,8 @@ deploy do 007.
 
 ## 4. Alocação sugerida (4 pessoas)
 
+> Com 2 pessoas, veja [roadmap-2-pessoas.md](./roadmap-2-pessoas.md).
+
 Os nomes ficam a critério do time; a sequência abaixo minimiza conflito,
 porque quem mexe no mesmo diretório é a mesma pessoa.
 
