@@ -1,0 +1,17 @@
+# Requirement Traceability
+
+| Requirement | Source | Feature | Spec | Plan | Task | Test | Status |
+|---|---|---|---|---|---|---|---|
+| AC-01 Simulado F1–F7 sem backend | 008 §6; US1; SC-001 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T019–T036 | web/src/simulado/agente-simulado.test.ts; web/src/sessao/useSessao.test.tsx; manual: navegador (T059) | TESTED |
+| AC-02 Números só de functionResponse, com ChipFonte | 008 §6; FR-007; SC-002; SC-003 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T019, T022, T029–T033 | web/src/componentes/cards/CardDiagnostico.test.tsx; web/src/simulado/agente-simulado.test.ts; web/src/simulado/fixtures.test.ts | TESTED |
+| AC-03 LinhaFerramenta, card e ErroFerramenta com Tentar de novo | 008 §6; US1; US4 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T021, T026, T035, T047, T050 | web/src/componentes/conversa/Conversa.test.tsx; web/src/componentes/conversa/ErroFerramenta.test.tsx; web/src/agente/envelope.test.ts | TESTED |
+| AC-04 Consentimento pendente e recibo | 008 §6; US1 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T020, T034 | web/src/componentes/cards/CardConsentimento.test.tsx; web/src/sessao/reducer.test.ts | TESTED |
+| AC-05 Stepper, Bastidores e barra de demo leem o estado | 008 §6; US2 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T012, T018, T037–T041 | web/src/componentes/jornada/StepperJornada.test.tsx; web/src/componentes/layout/Bastidores.test.tsx; web/src/sessao/auditoria.test.ts | TESTED |
+| AC-06 Avançar um mês: DivisorMes, PlanejadoRealizado, RotaRecalculada | 008 §6; US1 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T022, T024, T032, T037 | web/src/simulado/agente-simulado.test.ts; web/src/sessao/auditoria.test.ts | TESTED |
+| AC-07 Estados de borda E1–E5 | 008 §6; US4; SC-004 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T047–T051 | web/src/simulado/guardrails.test.ts; web/src/componentes/conversa/ErroFerramenta.test.tsx; manual: navegador (T059) | TESTED |
+| AC-08 Modo ao vivo via /run_sse | 008 §6; US3 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T042–T046 | web/src/agente/sse.test.ts; web/src/agente/cliente-adk.test.ts; manual: make agent + make mcp (T059) | TESTED |
+| AC-09 Mobile 390 e modo escuro | 008 §6; SC-007 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T015, T059 | manual: navegador 390×844 e tema escuro (T059) | DONE |
+| AC-10 Testes de componente (envelope, erro, consentimento) | 008 §6 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T019–T021, T047 | web/src/componentes/cards/CardDiagnostico.test.tsx; web/src/componentes/conversa/ErroFerramenta.test.tsx; web/src/componentes/cards/CardConsentimento.test.tsx | TESTED |
+| AC-11 Sem segredo, SQL, projeto ou ID completo | 008 §6; FR-028; SC-006 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T010, T038, T055 | web/scripts/varrer-bundle.test.ts; make web-build (varredura); web/src/formatacao/formatar.test.ts; web/src/componentes/layout/Bastidores.test.tsx | TESTED |
+| AC-12 Selo Dados sintéticos, sem botão de contratação | 008 §6; FR-023 | front-web | specs/008-front-web/spec.md | specs/008-front-web/plan.md | T017, T056 | web/src/simulado/fixtures.test.ts; web/src/vistas/vistas.test.tsx; manual: navegador (T059) | TESTED |
+

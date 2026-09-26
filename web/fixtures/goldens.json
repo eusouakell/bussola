@@ -1,0 +1,1698 @@
+{
+  "ferramentas": {
+    "capacidade_poupanca__ate_202506": {
+      "avisos": [
+        "Gasto superou a renda em 1 mês do período."
+      ],
+      "dados": {
+        "desvio_padrao": 1677.98,
+        "meses_considerados": 6,
+        "meses_negativos": 1,
+        "sobra_media": 1901.47,
+        "sobra_mediana": 1729
+      },
+      "fonte": {
+        "ferramenta": "capacidade_poupanca",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal"
+        ]
+      }
+    },
+    "capacidade_poupanca__ate_202512": {
+      "avisos": [
+        "Gasto superou a renda em 1 mês do período."
+      ],
+      "dados": {
+        "desvio_padrao": 2093,
+        "meses_considerados": 12,
+        "meses_negativos": 1,
+        "sobra_media": 2836.75,
+        "sobra_mediana": 2489.44
+      },
+      "fonte": {
+        "ferramenta": "capacidade_poupanca",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal"
+        ]
+      }
+    },
+    "comparar_cenarios__ate_202506": {
+      "avisos": [],
+      "dados": {
+        "cenarios": [
+          {
+            "aporte_mensal": 691.6,
+            "cortes_sugeridos": [],
+            "nome": "conservador",
+            "pct_capacidade": 0.4,
+            "prazo_meses": 44,
+            "trade_offs": [
+              "Precisa de 44 meses, além do prazo de 24 meses.",
+              "Compromete 40% da sobra mensal mediana (R$ 692/mês)."
+            ],
+            "viavel": false
+          },
+          {
+            "aporte_mensal": 1037.4,
+            "cortes_sugeridos": [],
+            "nome": "equilibrado",
+            "pct_capacidade": 0.6,
+            "prazo_meses": 29,
+            "trade_offs": [
+              "Precisa de 29 meses, além do prazo de 24 meses.",
+              "Compromete 60% da sobra mensal mediana (R$ 1.037/mês)."
+            ],
+            "viavel": false
+          },
+          {
+            "aporte_mensal": 1681.15,
+            "cortes_sugeridos": [
+              {
+                "macro": "Restaurantes",
+                "micro": "Restaurantes",
+                "valor_mensal": 96.61
+              },
+              {
+                "macro": "Lojas e sites",
+                "micro": "Compras",
+                "valor_mensal": 85.5
+              },
+              {
+                "macro": "Assinaturas",
+                "micro": "Assinaturas",
+                "valor_mensal": 54.01
+              },
+              {
+                "macro": "Transporte publico",
+                "micro": "Passagem de onibus",
+                "valor_mensal": 20.3
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Eletronicos",
+                "valor_mensal": 13.39
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Outros entretenimentos",
+                "valor_mensal": 11.14
+              },
+              {
+                "macro": "Restaurantes",
+                "micro": "Outras comidas e bebidas",
+                "valor_mensal": 7.43
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Cinema",
+                "valor_mensal": 6.41
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Videogames",
+                "valor_mensal": 1.86
+              },
+              {
+                "macro": "Viagens",
+                "micro": "Outros gastos de viagem",
+                "valor_mensal": 1.3
+              }
+            ],
+            "nome": "acelerado",
+            "pct_capacidade": 0.8,
+            "prazo_meses": 18,
+            "trade_offs": [
+              "Atinge a meta em 18 meses, dentro do prazo de 24 meses.",
+              "Compromete 80% da sobra mensal mediana (R$ 1.383/mês).",
+              "Exige reduzir R$ 97/mês em Restaurantes.",
+              "Exige reduzir R$ 86/mês em Compras.",
+              "Exige reduzir R$ 54/mês em Assinaturas.",
+              "Exige reduzir R$ 20/mês em Passagem de onibus.",
+              "Exige reduzir R$ 13/mês em Eletronicos.",
+              "Exige reduzir R$ 11/mês em Outros entretenimentos.",
+              "Exige reduzir R$ 7/mês em Outras comidas e bebidas.",
+              "Exige reduzir R$ 6/mês em Cinema.",
+              "Exige reduzir R$ 2/mês em Videogames.",
+              "Exige reduzir R$ 1/mês em Outros gastos de viagem."
+            ],
+            "viavel": true
+          }
+        ],
+        "regras": {
+          "base": "sobra_mediana",
+          "cortes_no_acelerado": true,
+          "pct_capacidade": {
+            "acelerado": 0.8,
+            "conservador": 0.4,
+            "equilibrado": 0.6
+          },
+          "rendimento_mensal": 0,
+          "saldo_inicial": 0
+        }
+      },
+      "fonte": {
+        "ferramenta": "comparar_cenarios",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria",
+          "bussola_dados.categorias"
+        ]
+      }
+    },
+    "comparar_cenarios__ate_202512": {
+      "avisos": [],
+      "dados": {
+        "cenarios": [
+          {
+            "aporte_mensal": 995.78,
+            "cortes_sugeridos": [],
+            "nome": "conservador",
+            "pct_capacidade": 0.4,
+            "prazo_meses": 31,
+            "trade_offs": [
+              "Precisa de 31 meses, além do prazo de 24 meses.",
+              "Compromete 40% da sobra mensal mediana (R$ 996/mês)."
+            ],
+            "viavel": false
+          },
+          {
+            "aporte_mensal": 1493.66,
+            "cortes_sugeridos": [],
+            "nome": "equilibrado",
+            "pct_capacidade": 0.6,
+            "prazo_meses": 21,
+            "trade_offs": [
+              "Atinge a meta em 21 meses, dentro do prazo de 24 meses.",
+              "Compromete 60% da sobra mensal mediana (R$ 1.494/mês)."
+            ],
+            "viavel": true
+          },
+          {
+            "aporte_mensal": 2287.22,
+            "cortes_sugeridos": [
+              {
+                "macro": "Restaurantes",
+                "micro": "Restaurantes",
+                "valor_mensal": 103.61
+              },
+              {
+                "macro": "Lojas e sites",
+                "micro": "Compras",
+                "valor_mensal": 88.22
+              },
+              {
+                "macro": "Assinaturas",
+                "micro": "Assinaturas",
+                "valor_mensal": 50.27
+              },
+              {
+                "macro": "Viagens",
+                "micro": "Outros gastos de viagem",
+                "valor_mensal": 16.24
+              },
+              {
+                "macro": "Transporte publico",
+                "micro": "Passagem de onibus",
+                "valor_mensal": 10.15
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Outros entretenimentos",
+                "valor_mensal": 7.4
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Eletronicos",
+                "valor_mensal": 6.7
+              },
+              {
+                "macro": "Restaurantes",
+                "micro": "Outras comidas e bebidas",
+                "valor_mensal": 5.72
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Cinema",
+                "valor_mensal": 5.59
+              },
+              {
+                "macro": "Lazer",
+                "micro": "Videogames",
+                "valor_mensal": 1.77
+              }
+            ],
+            "nome": "acelerado",
+            "pct_capacidade": 0.8,
+            "prazo_meses": 14,
+            "trade_offs": [
+              "Atinge a meta em 14 meses, dentro do prazo de 24 meses.",
+              "Compromete 80% da sobra mensal mediana (R$ 1.992/mês).",
+              "Exige reduzir R$ 104/mês em Restaurantes.",
+              "Exige reduzir R$ 88/mês em Compras.",
+              "Exige reduzir R$ 50/mês em Assinaturas.",
+              "Exige reduzir R$ 16/mês em Outros gastos de viagem.",
+              "Exige reduzir R$ 10/mês em Passagem de onibus.",
+              "Exige reduzir R$ 7/mês em Outros entretenimentos.",
+              "Exige reduzir R$ 7/mês em Eletronicos.",
+              "Exige reduzir R$ 6/mês em Outras comidas e bebidas.",
+              "Exige reduzir R$ 6/mês em Cinema.",
+              "Exige reduzir R$ 2/mês em Videogames."
+            ],
+            "viavel": true
+          }
+        ],
+        "regras": {
+          "base": "sobra_mediana",
+          "cortes_no_acelerado": true,
+          "pct_capacidade": {
+            "acelerado": 0.8,
+            "conservador": 0.4,
+            "equilibrado": 0.6
+          },
+          "rendimento_mensal": 0,
+          "saldo_inicial": 0
+        }
+      },
+      "fonte": {
+        "ferramenta": "comparar_cenarios",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria",
+          "bussola_dados.categorias"
+        ]
+      }
+    },
+    "dividas_e_parcelas__ate_202506": {
+      "avisos": [],
+      "dados": {
+        "comprometimento_renda_pct": 35.35,
+        "juros_pagos_media": 56.07,
+        "parcelas_ativas": [
+          {
+            "descr": "iptu parc",
+            "meses_restantes": 4,
+            "parcela_atual": 6,
+            "parcela_total": 10,
+            "valor": 2256.42
+          },
+          {
+            "descr": "cart credito compra mktplace parc 5/6",
+            "meses_restantes": 1,
+            "parcela_atual": 5,
+            "parcela_total": 6,
+            "valor": 44.9
+          },
+          {
+            "descr": "pix qrs compra onl parc 6/10",
+            "meses_restantes": 4,
+            "parcela_atual": 6,
+            "parcela_total": 10,
+            "valor": 25.66
+          },
+          {
+            "descr": "pix qrs compra onl parc 6/12",
+            "meses_restantes": 6,
+            "parcela_atual": 6,
+            "parcela_total": 12,
+            "valor": 21.05
+          },
+          {
+            "descr": "pix qrs compra onl parc 1/10",
+            "meses_restantes": 9,
+            "parcela_atual": 1,
+            "parcela_total": 10,
+            "valor": 9.83
+          },
+          {
+            "descr": "cart credito compra mktplace parc 3/12",
+            "meses_restantes": 9,
+            "parcela_atual": 3,
+            "parcela_total": 12,
+            "valor": 7.28
+          }
+        ]
+      },
+      "fonte": {
+        "ferramenta": "dividas_e_parcelas",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.parcelas",
+          "bussola_dados.perfil_mensal"
+        ]
+      }
+    },
+    "dividas_e_parcelas__ate_202512": {
+      "avisos": [],
+      "dados": {
+        "comprometimento_renda_pct": 1.47,
+        "juros_pagos_media": 60.51,
+        "parcelas_ativas": [
+          {
+            "descr": "cart credito compra mktplace parc 4/6",
+            "meses_restantes": 2,
+            "parcela_atual": 4,
+            "parcela_total": 6,
+            "valor": 42.01
+          },
+          {
+            "descr": "pix qrs compra onl parc 12/12",
+            "meses_restantes": 0,
+            "parcela_atual": 12,
+            "parcela_total": 12,
+            "valor": 21.05
+          },
+          {
+            "descr": "cart credito compra mktplace parc 2/12",
+            "meses_restantes": 10,
+            "parcela_atual": 2,
+            "parcela_total": 12,
+            "valor": 19.98
+          },
+          {
+            "descr": "pix qrs compra onl parc 7/10",
+            "meses_restantes": 3,
+            "parcela_atual": 7,
+            "parcela_total": 10,
+            "valor": 9.83
+          },
+          {
+            "descr": "pix qrs compra onl parc 5/10",
+            "meses_restantes": 5,
+            "parcela_atual": 5,
+            "parcela_total": 10,
+            "valor": 9.47
+          },
+          {
+            "descr": "cart credito compra mktplace parc 9/12",
+            "meses_restantes": 3,
+            "parcela_atual": 9,
+            "parcela_total": 12,
+            "valor": 7.28
+          }
+        ]
+      },
+      "fonte": {
+        "ferramenta": "dividas_e_parcelas",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.parcelas",
+          "bussola_dados.perfil_mensal"
+        ]
+      }
+    },
+    "oportunidades_corte__ate_202506": {
+      "avisos": [],
+      "dados": {
+        "categorias": [
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 96.61,
+            "macro": "Restaurantes",
+            "media_mensal": 322.04,
+            "micro": "Restaurantes"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 85.5,
+            "macro": "Lojas e sites",
+            "media_mensal": 285,
+            "micro": "Compras"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 50% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 54.01,
+            "macro": "Assinaturas",
+            "media_mensal": 108.02,
+            "micro": "Assinaturas"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 20.3,
+            "macro": "Transporte publico",
+            "media_mensal": 101.5,
+            "micro": "Passagem de onibus"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 13.39,
+            "macro": "Lazer",
+            "media_mensal": 44.65,
+            "micro": "Eletronicos"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 11.14,
+            "macro": "Lazer",
+            "media_mensal": 37.14,
+            "micro": "Outros entretenimentos"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 7.43,
+            "macro": "Restaurantes",
+            "media_mensal": 24.77,
+            "micro": "Outras comidas e bebidas"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 6.41,
+            "macro": "Lazer",
+            "media_mensal": 21.36,
+            "micro": "Cinema"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 1.86,
+            "macro": "Lazer",
+            "media_mensal": 6.2,
+            "micro": "Videogames"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 1.3,
+            "macro": "Viagens",
+            "media_mensal": 6.5,
+            "micro": "Outros gastos de viagem"
+          }
+        ]
+      },
+      "fonte": {
+        "ferramenta": "oportunidades_corte",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.gastos_categoria",
+          "bussola_dados.categorias"
+        ]
+      }
+    },
+    "oportunidades_corte__ate_202512": {
+      "avisos": [],
+      "dados": {
+        "categorias": [
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 103.61,
+            "macro": "Restaurantes",
+            "media_mensal": 345.35,
+            "micro": "Restaurantes"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 88.22,
+            "macro": "Lojas e sites",
+            "media_mensal": 294.05,
+            "micro": "Compras"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 50% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 50.27,
+            "macro": "Assinaturas",
+            "media_mensal": 100.54,
+            "micro": "Assinaturas"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 16.24,
+            "macro": "Viagens",
+            "media_mensal": 81.18,
+            "micro": "Outros gastos de viagem"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 10.15,
+            "macro": "Transporte publico",
+            "media_mensal": 50.75,
+            "micro": "Passagem de onibus"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 7.4,
+            "macro": "Lazer",
+            "media_mensal": 24.68,
+            "micro": "Outros entretenimentos"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 6.7,
+            "macro": "Lazer",
+            "media_mensal": 22.32,
+            "micro": "Eletronicos"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 5.72,
+            "macro": "Restaurantes",
+            "media_mensal": 19.08,
+            "micro": "Outras comidas e bebidas"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 5.59,
+            "macro": "Lazer",
+            "media_mensal": 18.63,
+            "micro": "Cinema"
+          },
+          {
+            "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
+            "discricionaria": true,
+            "economia_potencial_mensal": 1.77,
+            "macro": "Lazer",
+            "media_mensal": 5.91,
+            "micro": "Videogames"
+          }
+        ]
+      },
+      "fonte": {
+        "ferramenta": "oportunidades_corte",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.gastos_categoria",
+          "bussola_dados.categorias"
+        ]
+      }
+    },
+    "perfil_financeiro__ate_202506": {
+      "avisos": [
+        "Saldo ficou negativo em 2 meses do período."
+      ],
+      "dados": {
+        "fontes_renda": [
+          {
+            "macro": "Recebimentos diversos",
+            "media": 6691.39,
+            "micro": "Recebimentos diversos"
+          }
+        ],
+        "gasto_medio": 4789.93,
+        "meses_considerados": 6,
+        "renda_media": 6691.39,
+        "saldo": {
+          "atual": 17652.15,
+          "maximo": 19023.89,
+          "minimo": -2072.31
+        },
+        "serie_mensal": [
+          {
+            "anomes": 202501,
+            "gasto": 6094.28,
+            "renda": 6013.61,
+            "sobra": -80.67
+          },
+          {
+            "anomes": 202502,
+            "gasto": 3038.5,
+            "renda": 5550.27,
+            "sobra": 2511.77
+          },
+          {
+            "anomes": 202503,
+            "gasto": 4931.28,
+            "renda": 7398.4,
+            "sobra": 2467.12
+          },
+          {
+            "anomes": 202504,
+            "gasto": 3416.9,
+            "renda": 8409.42,
+            "sobra": 4992.52
+          },
+          {
+            "anomes": 202505,
+            "gasto": 4826.84,
+            "renda": 5817.72,
+            "sobra": 990.88
+          },
+          {
+            "anomes": 202506,
+            "gasto": 6431.77,
+            "renda": 6958.94,
+            "sobra": 527.17
+          }
+        ],
+        "sobra_media": 1901.47,
+        "sobra_mediana": 1729
+      },
+      "fonte": {
+        "ferramenta": "perfil_financeiro",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.entradas_categoria"
+        ]
+      }
+    },
+    "perfil_financeiro__ate_202512": {
+      "avisos": [
+        "Saldo ficou negativo em 2 meses do período."
+      ],
+      "dados": {
+        "fontes_renda": [
+          {
+            "macro": "Recebimentos diversos",
+            "media": 7451.27,
+            "micro": "Recebimentos diversos"
+          }
+        ],
+        "gasto_medio": 4614.52,
+        "meses_considerados": 12,
+        "renda_media": 7451.27,
+        "saldo": {
+          "atual": 47597.68,
+          "maximo": 49320.95,
+          "minimo": -2072.31
+        },
+        "serie_mensal": [
+          {
+            "anomes": 202501,
+            "gasto": 6094.28,
+            "renda": 6013.61,
+            "sobra": -80.67
+          },
+          {
+            "anomes": 202502,
+            "gasto": 3038.5,
+            "renda": 5550.27,
+            "sobra": 2511.77
+          },
+          {
+            "anomes": 202503,
+            "gasto": 4931.28,
+            "renda": 7398.4,
+            "sobra": 2467.12
+          },
+          {
+            "anomes": 202504,
+            "gasto": 3416.9,
+            "renda": 8409.42,
+            "sobra": 4992.52
+          },
+          {
+            "anomes": 202505,
+            "gasto": 4826.84,
+            "renda": 5817.72,
+            "sobra": 990.88
+          },
+          {
+            "anomes": 202506,
+            "gasto": 6431.77,
+            "renda": 6958.94,
+            "sobra": 527.17
+          },
+          {
+            "anomes": 202507,
+            "gasto": 4976.54,
+            "renda": 5861.07,
+            "sobra": 884.53
+          },
+          {
+            "anomes": 202508,
+            "gasto": 4183.2,
+            "renda": 8401.94,
+            "sobra": 4218.74
+          },
+          {
+            "anomes": 202509,
+            "gasto": 3173.81,
+            "renda": 6897.28,
+            "sobra": 3723.47
+          },
+          {
+            "anomes": 202510,
+            "gasto": 3373.13,
+            "renda": 9185.15,
+            "sobra": 5812.02
+          },
+          {
+            "anomes": 202511,
+            "gasto": 4833.75,
+            "renda": 11317.95,
+            "sobra": 6484.2
+          },
+          {
+            "anomes": 202512,
+            "gasto": 6094.29,
+            "renda": 7603.54,
+            "sobra": 1509.25
+          }
+        ],
+        "sobra_media": 2836.75,
+        "sobra_mediana": 2489.44
+      },
+      "fonte": {
+        "ferramenta": "perfil_financeiro",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.entradas_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202501": {
+      "avisos": [
+        "Saldo ficou negativo neste mês.",
+        "Gasto superou a renda neste mês."
+      ],
+      "dados": {
+        "anomes": 202501,
+        "gasto": 6094.28,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 3720.89
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 926.75
+          },
+          {
+            "macro": "Outros gastos",
+            "total": 284.6
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 284
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 243.88
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 237.29
+          },
+          {
+            "macro": "Mercado",
+            "total": 223.3
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 136.4
+          },
+          {
+            "macro": "Lazer",
+            "total": 37.17
+          }
+        ],
+        "renda": 6013.61,
+        "sobra": -80.67
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202501,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202502": {
+      "avisos": [
+        "Saldo ficou negativo neste mês."
+      ],
+      "dados": {
+        "anomes": 202502,
+        "gasto": 3038.5,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1687.58
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 324.16
+          },
+          {
+            "macro": "Lazer",
+            "total": 267.9
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 258.92
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 230.33
+          },
+          {
+            "macro": "Emprestimos e financiamentos",
+            "total": 117.27
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 82.88
+          },
+          {
+            "macro": "Outros gastos",
+            "total": 69.46
+          }
+        ],
+        "renda": 5550.27,
+        "sobra": 2511.77
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202502,
+          "inicio": 202502
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202503": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202503,
+        "gasto": 4931.28,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1918.78
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 1002.91
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 621.03
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 536.67
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 431.76
+          },
+          {
+            "macro": "Mercado",
+            "total": 283.49
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 88.71
+          },
+          {
+            "macro": "Lazer",
+            "total": 47.93
+          }
+        ],
+        "renda": 7398.4,
+        "sobra": 2467.12
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202503,
+          "inicio": 202503
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202504": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202504,
+        "gasto": 3416.9,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1968.86
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 433.36
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 365.5
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 326.77
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 103.11
+          },
+          {
+            "macro": "Lazer",
+            "total": 95.91
+          },
+          {
+            "macro": "Transporte publico",
+            "total": 84.36
+          },
+          {
+            "macro": "Viagens",
+            "total": 39.03
+          }
+        ],
+        "renda": 8409.42,
+        "sobra": 4992.52
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202504,
+          "inicio": 202504
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202505": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202505,
+        "gasto": 4826.84,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 2329.79
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 1102.92
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 374.73
+          },
+          {
+            "macro": "Emprestimos e financiamentos",
+            "total": 300.05
+          },
+          {
+            "macro": "Lazer",
+            "total": 207.16
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 156.04
+          },
+          {
+            "macro": "Cuidados pessoais",
+            "total": 140.86
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 108.93
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 106.36
+          }
+        ],
+        "renda": 5817.72,
+        "sobra": 990.88
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202505,
+          "inicio": 202505
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202506": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202506,
+        "gasto": 6431.77,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 4092.54
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 954.59
+          },
+          {
+            "macro": "Transporte publico",
+            "total": 524.65
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 239.72
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 190.28
+          },
+          {
+            "macro": "Mercado",
+            "total": 172.37
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 130.66
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 126.96
+          }
+        ],
+        "renda": 6958.94,
+        "sobra": 527.17
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202506
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202507": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202507,
+        "gasto": 4976.54,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1818.13
+          },
+          {
+            "macro": "Viagens",
+            "total": 935.14
+          },
+          {
+            "macro": "Educacao",
+            "total": 873.34
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 446.98
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 429.88
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 309.48
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 108.55
+          },
+          {
+            "macro": "Mercado",
+            "total": 54.15
+          },
+          {
+            "macro": "Outros gastos",
+            "total": 0.89
+          }
+        ],
+        "renda": 5861.07,
+        "sobra": 884.53
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202507,
+          "inicio": 202507
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202508": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202508,
+        "gasto": 4183.2,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 2111.39
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 1200.95
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 253.3
+          },
+          {
+            "macro": "Mercado",
+            "total": 220.25
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 157.51
+          },
+          {
+            "macro": "Lazer",
+            "total": 86.9
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 79.61
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 73.29
+          }
+        ],
+        "renda": 8401.94,
+        "sobra": 4218.74
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202508,
+          "inicio": 202508
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202509": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202509,
+        "gasto": 3173.81,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1750.35
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 522.05
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 344.3
+          },
+          {
+            "macro": "Mercado",
+            "total": 259.16
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 115.3
+          },
+          {
+            "macro": "Lazer",
+            "total": 95.36
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 87.29
+          }
+        ],
+        "renda": 6897.28,
+        "sobra": 3723.47
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202509,
+          "inicio": 202509
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202510": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202510,
+        "gasto": 3373.13,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1686.84
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 678.18
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 388.71
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 271.93
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 150.13
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 101.71
+          },
+          {
+            "macro": "Cuidados pessoais",
+            "total": 56.7
+          },
+          {
+            "macro": "Mercado",
+            "total": 38.93
+          }
+        ],
+        "renda": 9185.15,
+        "sobra": 5812.02
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202510,
+          "inicio": 202510
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202511": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202511,
+        "gasto": 4833.75,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1729.17
+          },
+          {
+            "macro": "Cuidados pessoais",
+            "total": 1214.09
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 855.92
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 393.79
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 247.33
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 241.93
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 87.37
+          },
+          {
+            "macro": "Mercado",
+            "total": 40.54
+          },
+          {
+            "macro": "Lazer",
+            "total": 20.08
+          },
+          {
+            "macro": "Outros gastos",
+            "total": 3.53
+          }
+        ],
+        "renda": 11317.95,
+        "sobra": 6484.2
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202511,
+          "inicio": 202511
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "resumo_mes__202512": {
+      "avisos": [],
+      "dados": {
+        "anomes": 202512,
+        "gasto": 6094.29,
+        "gastos_macro": [
+          {
+            "macro": "Casa",
+            "total": 1618.06
+          },
+          {
+            "macro": "Produtos financeiros",
+            "total": 1235.6
+          },
+          {
+            "macro": "Lojas e sites",
+            "total": 785.64
+          },
+          {
+            "macro": "Outros gastos",
+            "total": 634.71
+          },
+          {
+            "macro": "Transferencias diversas",
+            "total": 540.02
+          },
+          {
+            "macro": "Restaurantes",
+            "total": 482.36
+          },
+          {
+            "macro": "Cuidados pessoais",
+            "total": 297.58
+          },
+          {
+            "macro": "Educacao",
+            "total": 247.04
+          },
+          {
+            "macro": "Mercado",
+            "total": 159.47
+          },
+          {
+            "macro": "Assinaturas",
+            "total": 93.81
+          }
+        ],
+        "renda": 7603.54,
+        "sobra": 1509.25
+      },
+      "fonte": {
+        "ferramenta": "resumo_mes",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202512
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal",
+          "bussola_dados.gastos_categoria"
+        ]
+      }
+    },
+    "simular_objetivo__ate_202506": {
+      "avisos": [],
+      "dados": {
+        "aporte_mensal": 1250,
+        "folga_mensal": 479,
+        "modo": "prazo",
+        "prazo_meses": 24,
+        "premissas": {
+          "base_capacidade": "sobra_mediana",
+          "capacidade_mensal": 1729,
+          "meses_considerados": 6,
+          "rendimento_mensal": 0,
+          "saldo_inicial": 0,
+          "usar_saldo_atual": false
+        },
+        "valor_alvo": 30000,
+        "viavel": true
+      },
+      "fonte": {
+        "ferramenta": "simular_objetivo",
+        "periodo": {
+          "fim": 202506,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal"
+        ]
+      }
+    },
+    "simular_objetivo__ate_202512": {
+      "avisos": [],
+      "dados": {
+        "aporte_mensal": 1250,
+        "folga_mensal": 1239.44,
+        "modo": "prazo",
+        "prazo_meses": 24,
+        "premissas": {
+          "base_capacidade": "sobra_mediana",
+          "capacidade_mensal": 2489.44,
+          "meses_considerados": 12,
+          "rendimento_mensal": 0,
+          "saldo_inicial": 0,
+          "usar_saldo_atual": false
+        },
+        "valor_alvo": 30000,
+        "viavel": true
+      },
+      "fonte": {
+        "ferramenta": "simular_objetivo",
+        "periodo": {
+          "fim": 202512,
+          "inicio": 202501
+        },
+        "tabelas": [
+          "bussola_dados.perfil_mensal"
+        ]
+      }
+    }
+  },
+  "fonte": "contracts/fixtures",
+  "rag_trechos": [
+    {
+      "doc_id": "cartao-rotativo",
+      "fonte": {
+        "nome": "Conselho Monetário Nacional",
+        "referencia": "Resolução CMN nº 4.549/2017",
+        "url": null
+      },
+      "tema": "norma_bacen",
+      "texto": "Quando a fatura do cartão de crédito não é paga integralmente, o saldo restante pode ficar no rotativo só até o vencimento da fatura seguinte. Depois disso, o banco precisa oferecer um parcelamento do saldo em condições mais vantajosas que as do rotativo.",
+      "titulo": "Rotativo do cartão de crédito",
+      "trecho_id": "cartao-rotativo#1"
+    },
+    {
+      "doc_id": "cartao-rotativo",
+      "fonte": {
+        "nome": "Presidência da República",
+        "referencia": "Lei nº 14.690/2023 e Resolução CMN nº 5.112/2023",
+        "url": null
+      },
+      "tema": "norma_bacen",
+      "texto": "Desde janeiro de 2024, os juros e encargos cobrados no rotativo e no parcelamento da fatura do cartão não podem somar mais que 100% do valor original da dívida. Uma dívida de R$ 1.000, por exemplo, não pode passar de R$ 2.000 no total.",
+      "titulo": "Teto de juros do rotativo e do parcelamento da fatura",
+      "trecho_id": "cartao-rotativo#2"
+    },
+    {
+      "doc_id": "custo-efetivo-total",
+      "fonte": {
+        "nome": "Conselho Monetário Nacional",
+        "referencia": "Resolução CMN nº 3.517/2007",
+        "url": null
+      },
+      "tema": "norma_bacen",
+      "texto": "Antes de contratar um empréstimo ou financiamento, a instituição deve informar o Custo Efetivo Total (CET), em taxa anual. O CET soma juros, tarifas, tributos, seguros e outras despesas da operação. Para comparar propostas de crédito, compare o CET, e não só a taxa de juros.",
+      "titulo": "Custo Efetivo Total (CET)",
+      "trecho_id": "custo-efetivo-total#1"
+    },
+    {
+      "doc_id": "cheque-especial",
+      "fonte": {
+        "nome": "Conselho Monetário Nacional",
+        "referencia": "Resolução CMN nº 4.765/2019",
+        "url": null
+      },
+      "tema": "norma_bacen",
+      "texto": "Os juros do cheque especial para pessoas físicas e microempreendedores individuais são limitados a 8% ao mês desde janeiro de 2020. Mesmo com o limite, é uma das linhas de crédito mais caras e deve ser usada só por poucos dias.",
+      "titulo": "Limite de juros do cheque especial",
+      "trecho_id": "cheque-especial#1"
+    },
+    {
+      "doc_id": "portabilidade-credito",
+      "fonte": {
+        "nome": "Conselho Monetário Nacional",
+        "referencia": "Resolução CMN nº 4.292/2013",
+        "url": null
+      },
+      "tema": "norma_bacen",
+      "texto": "O cliente pode transferir um empréstimo ou financiamento para outra instituição que ofereça condições melhores, sem pagar tarifa pela transferência. A instituição de origem pode fazer uma contraproposta, mas não pode dificultar o pedido.",
+      "titulo": "Portabilidade de crédito",
+      "trecho_id": "portabilidade-credito#1"
+    },
+    {
+      "doc_id": "servicos-essenciais",
+      "fonte": {
+        "nome": "Conselho Monetário Nacional",
+        "referencia": "Resolução CMN nº 3.919/2010",
+        "url": null
+      },
+      "tema": "norma_bacen",
+      "texto": "Na conta corrente de pessoa física, alguns serviços essenciais não podem ser cobrados, entre eles: cartão de débito, até quatro saques por mês, até dois extratos por mês, até duas transferências por mês entre contas da mesma instituição e consultas pela internet.",
+      "titulo": "Serviços bancários essenciais gratuitos",
+      "trecho_id": "servicos-essenciais#1"
+    },
+    {
+      "doc_id": "superendividamento",
+      "fonte": {
+        "nome": "Presidência da República",
+        "referencia": "Lei nº 14.181/2021 e Decreto nº 11.567/2023",
+        "url": null
+      },
+      "tema": "credito",
+      "texto": "Quem não consegue pagar as dívidas de consumo sem comprometer o próprio sustento pode pedir a repactuação com todos os credores ao mesmo tempo, em um plano de pagamento de até cinco anos. O plano deve preservar o mínimo existencial, hoje fixado em R$ 600 por mês.",
+      "titulo": "Superendividamento e mínimo existencial",
+      "trecho_id": "superendividamento#1"
+    },
+    {
+      "doc_id": "registrato",
+      "fonte": {
+        "nome": "Banco Central do Brasil",
+        "referencia": "Registrato",
+        "url": null
+      },
+      "tema": "credito",
+      "texto": "O Registrato é um sistema gratuito do Banco Central, acessado com a conta gov.br. Ele mostra os empréstimos e financiamentos em seu nome (SCR), as contas e relacionamentos com instituições financeiras e as chaves Pix cadastradas. Serve para conferir dívidas e detectar contratos que você não reconhece.",
+      "titulo": "Registrato: consulta gratuita das suas dívidas",
+      "trecho_id": "registrato#1"
+    },
+    {
+      "doc_id": "cadastro-positivo",
+      "fonte": {
+        "nome": "Presidência da República",
+        "referencia": "Lei nº 12.414/2011, alterada pela Lei Complementar nº 166/2019",
+        "url": null
+      },
+      "tema": "credito",
+      "texto": "O cadastro positivo reúne o histórico de pagamentos em dia do consumidor e pode melhorar a nota de crédito. A inclusão é automática, e a exclusão pode ser pedida a qualquer momento, sem custo.",
+      "titulo": "Cadastro positivo",
+      "trecho_id": "cadastro-positivo#1"
+    },
+    {
+      "doc_id": "liquidacao-antecipada",
+      "fonte": {
+        "nome": "Presidência da República",
+        "referencia": "Código de Defesa do Consumidor, art. 52, § 2º; Resolução CMN nº 3.516/2007",
+        "url": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
+      },
+      "tema": "credito",
+      "texto": "O consumidor tem direito de quitar uma dívida antes do prazo, total ou parcialmente, com redução proporcional dos juros e demais acréscimos. Nos contratos firmados a partir de dezembro de 2007, não pode haver tarifa pela liquidação antecipada.",
+      "titulo": "Quitação antecipada com desconto de juros",
+      "trecho_id": "liquidacao-antecipada#1"
+    },
+    {
+      "doc_id": "reserva-emergencia",
+      "fonte": {
+        "nome": "Equipe Bússola",
+        "referencia": "Conteúdo educativo da equipe (não é norma)",
+        "url": null
+      },
+      "tema": "boas_praticas",
+      "texto": "Uma reserva de emergência cobre imprevistos sem recorrer a crédito caro. Uma referência comum é guardar de três a seis meses do custo de vida em uma aplicação de baixo risco e resgate imediato, antes de investir em produtos mais arriscados.",
+      "titulo": "Reserva de emergência",
+      "trecho_id": "reserva-emergencia#1"
+    },
+    {
+      "doc_id": "ordem-quitacao",
+      "fonte": {
+        "nome": "Equipe Bússola",
+        "referencia": "Conteúdo educativo da equipe (não é norma)",
+        "url": null
+      },
+      "tema": "boas_praticas",
+      "texto": "Com dinheiro sobrando, costuma valer mais a pena quitar primeiro as dívidas de juros mais altos, como rotativo do cartão e cheque especial. Trocar uma dívida cara por uma mais barata, pela portabilidade ou por uma linha com CET menor, também reduz o custo total.",
+      "titulo": "Qual dívida quitar primeiro",
+      "trecho_id": "ordem-quitacao#1"
+    },
+    {
+      "doc_id": "comprometimento-renda",
+      "fonte": {
+        "nome": "Equipe Bússola",
+        "referencia": "Conteúdo educativo da equipe (não é norma)",
+        "url": null
+      },
+      "tema": "boas_praticas",
+      "texto": "Uma referência comum é manter a soma das parcelas de dívidas abaixo de cerca de 30% da renda líquida mensal. Acima disso, qualquer imprevisto aumenta o risco de atrasar pagamentos e entrar no rotativo.",
+      "titulo": "Quanto da renda comprometer com parcelas",
+      "trecho_id": "comprometimento-renda#1"
+    }
+  ]
+}

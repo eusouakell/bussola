@@ -85,6 +85,7 @@ merge se resolve pela união das linhas.
 │   ├── seguranca/                     005
 │   └── acompanhamento/                006
 ├── deploy/                            000 (hello) → 007
+├── web/                               008  (front React; consome §5 e §6 sem alterá-los)
 ├── docs/
 │   ├── operacao.md, roteiro-demo.md   007
 │   └── ciclos/                        só por PR de planejamento
