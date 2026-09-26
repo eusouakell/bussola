@@ -53,6 +53,9 @@ A Bússola deve:
 
 - [Ficha de submissão](./docs/ficha-submissao.md)
 - [Arquitetura](./docs/arquitetura.md)
+- [Dados e tecnologia](./docs/dados-tecnologia.md)
 - [Jornada agentic](./docs/jornada-agentic.md)
 - [Escopo e decisões](./docs/escopo-decisoes.md)
+- [Contexto de implementação (Spec Master)](./docs/contexto-spec-master.md)
+- [Blueprint de arquitetura](./docs/blueprint-arquitetura.md)
 

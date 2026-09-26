@@ -1,0 +1,27 @@
+# Estado local do Spec Master: cada worktree/ciclo tem o seu (ver docs/ciclos/README.md §5)
+.spec-master/
+
+# Segredos e configuração local
+.env
+.env.*
+!.env.example
+*.pem
+*-key.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Editor / SO
+.DS_Store
+.idea/
+.vscode/
