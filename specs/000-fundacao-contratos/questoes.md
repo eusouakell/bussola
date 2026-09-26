@@ -22,6 +22,7 @@ entram neste mesmo PR, que cria `contratos-v1`.
 | Q-12 | Mensagem de `INDISPONIVEL` no mock | "Dados de exemplo indisponíveis." explícita | só registro |
 | Q-13 | Premissas do AC-04 | Categorias por palavra-chave; saldo mín./máx. do ano | confirmado no T032 |
 | Q-14 | Regras de métrica das fixtures | Regras provisórias em `gerar_fixtures.py` | confirmar no 001 |
+| Q-15 | Local do Gemini × BigQuery | Agente em `global` via `BUSSOLA_LOCAL_MODELO`; resto em `us-central1` | contratos §7 |
 
 ## Q-01 Usuário de controle no mock
 
@@ -188,6 +189,24 @@ entram neste mesmo PR, que cria `contratos-v1`.
 - **Observação:** `contratos.py` não tem campo "provisório". A marcação fica
   na docstring e na mensagem da CLI do gerador.
 
+## Q-15 Local do Gemini × BigQuery
+
+- **Divergência:** contratos §7 define um único `GOOGLE_CLOUD_LOCATION`
+  (`us-central1`) para os dois serviços. O smoke de modelos (AC-12,
+  [`modelos.md`](./modelos.md)) mostrou que, neste projeto, os Flash
+  (`gemini-3.8-flash`, `3.7`, `3.5`) dão 404 em `us-central1` e só
+  respondem em `global`. O embedding `gemini-embedding-001` responde em
+  `us-central1`.
+- **Decisão:** variável nova `BUSSOLA_LOCAL_MODELO` (agent, padrão `global`),
+  que vira o `GOOGLE_CLOUD_LOCATION` do agente em `make agent` e em
+  `deploy/deploy.sh agent`. MCP, embedding e BigQuery continuam em
+  `us-central1`. A mudança é aditiva: sem a variável, o agente volta a usar
+  `GOOGLE_CLOUD_LOCATION`.
+- **Correção:** contratos §7 (linha nova e nota em `GOOGLE_CLOUD_LOCATION`),
+  `contracts/env.example`, `Makefile` (alvo `agent`) e `deploy/deploy.sh`.
+- **Confirmado no T039:** o agente hello local em `global` chamou
+  `perfil_financeiro` no mock ([`smoke.md`](./smoke.md)).
+
 ## Questões ainda abertas (herdadas)
 
 - **Q2 do mestre (regras de cenário):** `RegrasCenario` usa os percentuais
@@ -195,6 +214,6 @@ entram neste mesmo PR, que cria `contratos-v1`.
 - **Q4 do mestre (canal da demo):** decide se o agente fica público no 007.
 - **Q7 do mestre (pedidos ao owner):** ver
   [`pedidos-owner.md`](./pedidos-owner.md).
-- **Modelo Gemini e embedding:** IDs definitivos dependem do smoke com
-  credenciais (T038). Até lá, `env.example` usa `gemini-3.5-flash` e
-  `gemini-embedding-001` como provisórios.
+- **Modelo Gemini e embedding:** resolvido no smoke de modelos (AC-12):
+  `gemini-3.8-flash` em `global` e `gemini-embedding-001` (dimensão 3072) em
+  `us-central1`, gravados em `env.example` e em [`modelos.md`](./modelos.md).

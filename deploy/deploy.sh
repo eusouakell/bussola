@@ -56,8 +56,8 @@ Variáveis (com padrão):
                           Plano A (mestre §16): BUSSOLA_SA_RUNTIME=bussola-runtime
                           (nome curto vira bussola-runtime@<projeto>.iam...).
   BUSSOLA_SA_MCP / BUSSOLA_SA_AGENTE  SA específica de um serviço (opcional).
-  BUSSOLA_LOCAL_MODELO    GOOGLE_CLOUD_LOCATION do agente (padrão: env.example;
-                          use global se o smoke só validou o modelo em global).
+  BUSSOLA_LOCAL_MODELO    GOOGLE_CLOUD_LOCATION do agente (padrão: env.example,
+                          global; Q-15 do 000). Sem valor, usa GOOGLE_CLOUD_LOCATION.
   BUSSOLA_MCP_URL         MCP_URL explícita (padrão: consulta o bussola-mcp).
   BUSSOLA_FAKES           TRUE no ciclo 000.
   BUSSOLA_MAX_INSTANCIAS  máximo de instâncias (1; mestre §13).
@@ -271,8 +271,11 @@ else
     USA_VERTEX="TRUE"
   fi
 
+  LOCAL_MODELO="$(valor BUSSOLA_LOCAL_MODELO)"
+  LOCAL_MODELO="${LOCAL_MODELO:-${LOCAL_GCP}}"
+
   ENVS+=(
-    "GOOGLE_CLOUD_LOCATION=${BUSSOLA_LOCAL_MODELO:-${LOCAL_GCP}}"
+    "GOOGLE_CLOUD_LOCATION=${LOCAL_MODELO}"
     "GOOGLE_GENAI_USE_VERTEXAI=${USA_VERTEX}"
     "BUSSOLA_MODEL=$(valor BUSSOLA_MODEL)"
     "MCP_URL=${MCP_URL}"

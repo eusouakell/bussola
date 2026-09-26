@@ -24,7 +24,7 @@ from bussola_agent.logging_json import configurar_logging, obter_logger
 from bussola_agent.mcp_conexao import criar_toolset
 
 NOME_AGENTE = "bussola_hello"
-MODELO_PADRAO = "gemini-3.5-flash"
+MODELO_PADRAO = "gemini-3.8-flash"
 ANCHOR_PADRAO = "36a21505-d6d4-42d3-b319-d51a133c7269"
 REPLAY_START_PADRAO = 202506
 _CHAVES_ESCOPO = (CHAVE_ID_USUARIO, CHAVE_ATE_ANOMES)

@@ -1,27 +1,45 @@
-# Modelos Gemini e embedding (AC-12)
+# Modelos validados no ciclo 000
 
-**Status:** pendente de credencial (T038). Este arquivo é substituído pelo
-relatório de `deploy/smoke_modelos.py --gravar` quando um integrante com ADC
-rodar o smoke.
+Gerado por `deploy/smoke_modelos.py` (FR-021, research R-17) com as
+credenciais ADC de um integrante.
 
-## Valores provisórios (`contracts/env.example`)
+- Data: 2026-09-26 19:11 UTC
+- Projeto: `batalha-time-07-lkbv`
+- Locais do Vertex testados: `us-central1`, `global`
 
-| Variável | Valor provisório | Origem |
-|---|---|---|
-| `BUSSOLA_MODEL` | `gemini-3.5-flash` | mestre §5, não validado |
-| `EMBEDDING_MODEL` | `gemini-embedding-001` | mestre §5, não validado |
-| `GOOGLE_CLOUD_LOCATION` | `us-central1` | mestre §5 |
+## Resultado
 
-## Como validar
+| Variável | Modelo | Via | Local | Latência (ms) | Dimensão |
+|---|---|---|---|---|---|
+| `BUSSOLA_MODEL` | `gemini-3.8-flash` | vertex | global | 2416 | - |
+| `EMBEDDING_MODEL` | `gemini-embedding-001` | vertex | us-central1 | 1153 | 3072 |
 
-```bash
-uv run --project agent python deploy/smoke_modelos.py            # só relatório
-uv run --project agent python deploy/smoke_modelos.py --gravar   # grava este arquivo e env.example
-```
+## Implicações
 
-- O smoke tenta cada candidato em `us-central1` e em `global`, e escolhe o
-  primeiro que responde, com preferência por `us-central1`.
-- Se o Flash só responder em `global`, faça o deploy do agente com
-  `BUSSOLA_LOCAL_MODELO=global`. O `--gravar` não altera a localização.
-- Sem `aiplatform.user` (Plano B), o smoke testa o fallback pela Gemini API.
-  A chave vem do Secret Manager e nunca é impressa.
+- O Flash só respondeu em `global`: no deploy do agente use `BUSSOLA_LOCAL_MODELO=global`.
+- Dimensão do embedding `gemini-embedding-001`: 3072. Compatível com o DDL: `bussola_rag.documentos.embedding` é `ARRAY<FLOAT64>` sem dimensão fixa, e `modelo_embedding` registra o modelo de cada linha.
+- O local do agente virou a variável `BUSSOLA_LOCAL_MODELO=global` (contratos §7, Q-15 em [`questoes.md`](./questoes.md)).
+- Este teste usa as credenciais do integrante. A SA de runtime do Cloud Run pode não ter o mesmo acesso (ver o deploy hello).
+
+## Listagem de modelos
+
+- vertex / `us-central1`: 133 modelos. Flash listados: `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.7-flash`, `gemini-3.8-flash`. Embeddings: `gemini-embedding-001`, `gemini-embedding-2`, `text-embedding-005`, `text-embedding-large-exp-03-07`, `text-multilingual-embedding-002`.
+- vertex / `global`: 27 modelos. Flash listados: `gemini-3.5-flash`, `gemini-3.5-flash-lite`, `gemini-3.7-flash`, `gemini-3.8-flash`. Embeddings: `gemini-embedding-2`.
+
+## Tentativas
+
+| Tipo | Modelo | Via | Local | Resultado | Latência (ms) | Dimensão | Detalhe |
+|---|---|---|---|---|---|---|---|
+| flash | `gemini-3.8-flash` | vertex | us-central1 | falha | - | - | 404 NOT_FOUND: Publisher model `projects/batalha-time-07-lkbv/locations/us-central1/publishers/google/models/gemini-3.8-flash` was not found or your project doe |
+| flash | `gemini-3.7-flash` | vertex | us-central1 | falha | - | - | 404 NOT_FOUND: Publisher model `projects/batalha-time-07-lkbv/locations/us-central1/publishers/google/models/gemini-3.7-flash` was not found or your project doe |
+| flash | `gemini-3.5-flash` | vertex | us-central1 | falha | - | - | 404 NOT_FOUND: Publisher model `projects/batalha-time-07-lkbv/locations/us-central1/publishers/google/models/gemini-3.5-flash` was not found or your project doe |
+| embedding | `gemini-embedding-001` | vertex | us-central1 | ok | 1153 | 3072 | - |
+| embedding | `gemini-embedding-2` | vertex | us-central1 | falha | - | - | 404 NOT_FOUND: Publisher model `projects/batalha-time-07-lkbv/locations/us-central1/publishers/google/models/gemini-embedding-2` was not found or your project d |
+| embedding | `text-embedding-005` | vertex | us-central1 | ok | 1003 | 768 | - |
+| embedding | `text-embedding-large-exp-03-07` | vertex | us-central1 | ok | 1280 | 3072 | - |
+| embedding | `text-multilingual-embedding-002` | vertex | us-central1 | ok | 1039 | 768 | - |
+| flash | `gemini-3.8-flash` | vertex | global | ok | 2416 | - | ok |
+| flash | `gemini-3.7-flash` | vertex | global | ok | 1856 | - | ok |
+| flash | `gemini-3.5-flash` | vertex | global | ok | 1815 | - | ok |
+| embedding | `gemini-embedding-001` | vertex | global | ok | 11198 | 3072 | - |
+| embedding | `gemini-embedding-2` | vertex | global | ok | 753 | 3072 | - |

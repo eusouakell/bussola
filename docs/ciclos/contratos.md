@@ -460,10 +460,11 @@ class RegistroApp(Protocol):
 | Variável | Serviço | Valor padrão / exemplo |
 |---|---|---|
 | `GOOGLE_CLOUD_PROJECT` | ambos | `batalha-time-07-lkbv` |
-| `GOOGLE_CLOUD_LOCATION` | ambos | `us-central1` |
+| `GOOGLE_CLOUD_LOCATION` | ambos | `us-central1` (BigQuery, embedding); no agente, vem de `BUSSOLA_LOCAL_MODELO` |
 | `GOOGLE_GENAI_USE_VERTEXAI` | agent, rag | `TRUE`; `FALSE` no Plano B |
 | `GOOGLE_API_KEY` | agent, rag | só no Plano B; **nunca** versionar |
 | `BUSSOLA_MODEL` | agent | ID do Gemini Flash validado no 000 |
+| `BUSSOLA_LOCAL_MODELO` | agent | `global`: `GOOGLE_CLOUD_LOCATION` do agente (local e deploy); o Flash validado só responde em `global` (Q-15 do 000) |
 | `EMBEDDING_MODEL` | mcp, rag | ID validado no 000 |
 | `MCP_URL` | agent | `http://localhost:8080/mcp` |
 | `MCP_USE_OIDC` | agent | `FALSE` local, `TRUE` no Cloud Run |

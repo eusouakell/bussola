@@ -26,7 +26,7 @@ mcp:
 	cd mcp_server && BUSSOLA_FAKES=$${BUSSOLA_FAKES:-TRUE} PORT=$(MCP_PORT) uv run python -m bussola_mcp.server
 
 agent:
-	cd agent && GOOGLE_API_USE_CLIENT_CERTIFICATE=$${GOOGLE_API_USE_CLIENT_CERTIFICATE:-false} uv run adk web --port $(AGENT_PORT) .
+	cd agent && GOOGLE_CLOUD_LOCATION=$${BUSSOLA_LOCAL_MODELO:-global} GOOGLE_API_USE_CLIENT_CERTIFICATE=$${GOOGLE_API_USE_CLIENT_CERTIFICATE:-false} uv run adk web --port $(AGENT_PORT) .
 
 fixtures:
 	cd mcp_server && uv run python ../data/scripts/gerar_fixtures.py --saida ../contracts/fixtures

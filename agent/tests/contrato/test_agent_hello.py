@@ -46,7 +46,7 @@ def test_root_agent_padrao(importar_de_novo: Callable[[], ModuleType]) -> None:
     agente = modulo.root_agent
     assert isinstance(agente, Agent)
     assert agente.name == "bussola_hello"
-    assert agente.model == "gemini-3.5-flash"
+    assert agente.model == "gemini-3.8-flash"
     [toolset] = agente.tools
     assert isinstance(toolset, McpToolset)
     assert toolset.connection_params.url == URL_PADRAO
