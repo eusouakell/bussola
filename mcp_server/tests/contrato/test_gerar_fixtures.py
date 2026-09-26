@@ -29,13 +29,13 @@ import pytest
 from bussola_mcp.contratos import (
     CORTES_GOLDEN,
     FERRAMENTAS,
-    FERRAMENTAS_P0,
+    FERRAMENTAS_GOLDEN,
     ID_ANCORA,
     ID_CONTROLE,
     MODELOS_TABELA,
     TABELAS_FERRAMENTA,
     Resposta,
-    Trecho,
+    TrechoCorpus,
     UsuarioFixture,
     arquivo_golden,
     arquivo_resumo_mes,
@@ -403,14 +403,14 @@ def test_usuarios(conjunto: dict[str, Any]) -> None:
 
 
 def _layout_esperado() -> set[str]:
-    caminhos = {"usuarios.json", "rag/trechos_exemplo.json"}
+    caminhos = {"usuarios.json"}
     caminhos |= {
         f"bussola_dados/{t.split('.')[1]}.json"
         for t in MODELOS_TABELA
         if t.startswith("bussola_dados.")
     }
     caminhos |= {
-        f"ferramentas/{arquivo_golden(f, c)}" for f in FERRAMENTAS_P0 for c in CORTES_GOLDEN
+        f"ferramentas/{arquivo_golden(f, c)}" for f in FERRAMENTAS_GOLDEN for c in CORTES_GOLDEN
     }
     caminhos |= {f"ferramentas/{arquivo_resumo_mes(202500 + m)}" for m in range(1, 13)}
     return caminhos
@@ -418,7 +418,7 @@ def _layout_esperado() -> set[str]:
 
 def test_layout_do_conjunto(conjunto: dict[str, Any]) -> None:
     assert set(conjunto) == _layout_esperado()
-    assert len(conjunto) == 35
+    assert len(conjunto) == 32
     gf.validar_conjunto(conjunto)
 
 
@@ -437,8 +437,6 @@ def test_golden_validos_pelos_modelos(conjunto: dict[str, Any]) -> None:
             assert resposta.fonte.periodo.fim == int(caminho[-11:-5])
     for linha in conjunto["usuarios.json"]:
         UsuarioFixture.model_validate(linha)
-    for linha in conjunto["rag/trechos_exemplo.json"]:
-        Trecho.model_validate(linha)
 
 
 def test_validar_conjunto_rejeita_golden_invalido(conjunto: dict[str, Any]) -> None:
@@ -604,38 +602,29 @@ def test_golden_comparar_cenarios(conjunto: dict[str, Any]) -> None:
     }
 
 
-def test_golden_buscar_contexto(conjunto: dict[str, Any]) -> None:
-    ate_junho = _dados(conjunto, "buscar_contexto_financeiro", 202506)["trechos"]
-    assert [t["doc_id"] for t in ate_junho] == [
-        "coorte:6k_10k:alimentacao",
-        *[f"ficha_mensal:{ID_ANCORA}:{m}" for m in range(202506, 202500, -1)],
-    ]
-    ate_dezembro = _dados(conjunto, "buscar_contexto_financeiro", 202512)["trechos"]
-    assert len(ate_dezembro) == 10
-    assert ate_dezembro[0]["doc_id"] == f"perfil_anual:{ID_ANCORA}:2025"
-    scores = [t["score"] for t in ate_dezembro]
-    assert scores == sorted(scores, reverse=True)
-    assert all(t["origem"]["id_usuario"] in (ID_ANCORA, None) for t in ate_dezembro)
+def test_conjunto_nao_gera_corpus_nem_golden_de_busca(conjunto: dict[str, Any]) -> None:
+    """O corpus do RAG é curado à mão e a busca não tem golden (Q-17)."""
+    assert "rag/trechos_exemplo.json" not in conjunto
+    assert not [c for c in conjunto if "buscar_contexto_financeiro" in c]
 
 
-def test_trechos_rag(conjunto: dict[str, Any]) -> None:
-    trechos = conjunto["rag/trechos_exemplo.json"]
-    tipos = {t["tipo"] for t in trechos}
-    assert tipos == {"ficha_mensal", "perfil_anual", "coorte"}
-    assert len(trechos) == 12 + 12 + 1 + 1
-    assert any(t["origem"]["id_usuario"] == ID_CONTROLE for t in trechos)
-    (coorte_,) = [t for t in trechos if t["tipo"] == "coorte"]
-    assert (coorte_["anomes"], coorte_["origem"]) == (
-        None,
-        {"id_usuario": None, "anomes": None, "categoria": "Alimentação"},
+def test_validar_conjunto_aceita_o_corpus_curado() -> None:
+    corpus = json.loads(
+        (RAIZ_REPO / "contracts" / "fixtures" / "rag" / "trechos_exemplo.json").read_text("utf-8")
     )
-    assert coorte_["texto"] == (
-        "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 300/mês com "
-        "Alimentação (mediana R$ 300, 5 clientes)."
-    )
-    descrs = {linha["descr"] for linha in linhas_extrato()}
-    for trecho in trechos:
-        assert not any(descr in trecho["texto"] for descr in descrs)
+    gf.validar_conjunto({"rag/trechos_exemplo.json": corpus})
+    assert all(TrechoCorpus.model_validate(t) for t in corpus)
+    sem_tema = [{k: v for k, v in corpus[0].items() if k != "tema"}]
+    with pytest.raises(ValueError):
+        gf.validar_conjunto({"rag/trechos_exemplo.json": sem_tema})
+
+
+def test_gravar_preserva_o_corpus_curado(conjunto: dict[str, Any], tmp_path: Path) -> None:
+    corpus = tmp_path / "fixtures" / "rag" / "trechos_exemplo.json"
+    corpus.parent.mkdir(parents=True)
+    corpus.write_text("[]\n", encoding="utf-8")
+    gf.gravar(tmp_path / "fixtures", conjunto)
+    assert corpus.read_text(encoding="utf-8") == "[]\n"
 
 
 def test_resumo_mes(conjunto: dict[str, Any]) -> None:
@@ -691,9 +680,10 @@ def test_id_em_maiusculas_e_normalizado() -> None:
     assert conjunto["usuarios.json"][0]["id_usuario"] == ID_ANCORA
 
 
-def test_sem_coorte_da_faixa_do_ancora_aborta() -> None:
-    with pytest.raises(gf.ErroDados, match="coorte"):
-        gf.gerar_conjunto(lancamentos(), [], [])
+def test_sem_coorte_gera_referencia_vazia() -> None:
+    """Sem trecho de coorte no RAG (Q-17), a falta de coorte não aborta a geração."""
+    conjunto = gf.gerar_conjunto(lancamentos(), [], [])
+    assert conjunto["bussola_dados/referencia_coorte.json"] == []
 
 
 # ---------------------------------------------------------------------------
@@ -750,7 +740,7 @@ def test_main_grava_fixtures_com_cliente_falso(
     assert (saida / "usuarios.json").read_text(encoding="utf-8") == gf.serializar(
         gerar()["usuarios.json"]
     )
-    assert "35 arquivos gravados" in capsys.readouterr().out
+    assert "32 arquivos gravados" in capsys.readouterr().out
 
 
 def test_main_usa_google_cloud_project(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

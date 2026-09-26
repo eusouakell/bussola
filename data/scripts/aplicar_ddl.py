@@ -1,7 +1,8 @@
 """Aplica o DDL de ``contracts/bigquery/*.sql`` no BigQuery (FR-020, contratos §3).
 
 Cria, de forma idempotente e em ``us-central1``, os datasets ``bussola_dados``,
-``bussola_rag``, ``bussola_app`` e ``bussola_app_dev`` com as tabelas deles:
+``bussola_app`` e ``bussola_app_dev`` com as tabelas deles (o RAG não usa BigQuery;
+Q-17):
 
 - só aceita ``CREATE SCHEMA IF NOT EXISTS`` e ``CREATE TABLE IF NOT EXISTS``
   (qualquer outra instrução aborta antes de executar), então rodar de novo não
@@ -35,13 +36,11 @@ DIR_DDL = RAIZ_REPO / "contracts" / "bigquery"
 LOCALIZACAO = "us-central1"
 
 DATASET_DADOS = "bussola_dados"
-DATASET_RAG = "bussola_rag"
 DATASET_APP = "bussola_app"
 DATASET_APP_DEV = "bussola_app_dev"
 # Arquivo de DDL → dataset que ele declara.
 ARQUIVOS_DDL: dict[str, str] = {
     "bussola_dados.sql": DATASET_DADOS,
-    "bussola_rag.sql": DATASET_RAG,
     "bussola_app.sql": DATASET_APP,
 }
 DATASETS_CONTRATO = frozenset(ARQUIVOS_DDL.values())
@@ -266,7 +265,7 @@ def _instrucoes_do_arquivo(texto: str, dataset: str, arquivo: str) -> list[Instr
 def montar_plano(
     dir_ddl: Path | str = DIR_DDL, dataset_app_dev: str = DATASET_APP_DEV
 ) -> list[Instrucao]:
-    """Instruções na ordem de aplicação: dados, rag, app e a cópia de app em ``dataset_app_dev``."""
+    """Instruções na ordem de aplicação: dados, app e a cópia de app em ``dataset_app_dev``."""
     base = Path(dir_ddl)
     plano: list[Instrucao] = []
     for arquivo, dataset in ARQUIVOS_DDL.items():
@@ -371,8 +370,8 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="aplicar_ddl.py",
         description=(
-            "Aplica contracts/bigquery/*.sql de forma idempotente (bussola_dados, bussola_rag, "
-            "bussola_app e a cópia de desenvolvimento) e compara o schema real com o DDL."
+            "Aplica contracts/bigquery/*.sql de forma idempotente (bussola_dados, bussola_app "
+            "e a cópia de desenvolvimento) e compara o schema real com o DDL."
         ),
     )
     parser.add_argument(

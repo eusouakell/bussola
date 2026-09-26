@@ -99,7 +99,7 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
 
 | Artefato | Conteúdo |
 |---|---|
-| `contracts/bigquery/{bussola_dados,bussola_rag,bussola_app}.sql` | DDL de §3; `bussola_app_dev` reutiliza o DDL de `bussola_app` |
+| `contracts/bigquery/{bussola_dados,bussola_app}.sql` | DDL de §3; `bussola_app_dev` reutiliza o DDL de `bussola_app`. Sem `bussola_rag` (Q-17) |
 | `contracts/env.example` | Variáveis de §7, **sem valores secretos** |
 | `mcp_server/bussola_mcp/contratos.py` | Modelos Pydantic: linhas de §3, entrada e `dados` de cada ferramenta de §5, envelopes `Resposta`/`Fonte`/`Periodo`/`Erro`, enum de códigos |
 | `mcp_server/bussola_mcp/dominio/interfaces.py` | `RepositorioFinanceiro` e `BuscadorContexto` (§4) |
@@ -143,7 +143,7 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
 ### 3.5 Plataforma GCP (`batalha-time-07-lkbv`, `us-central1`)
 
 - **`data/scripts/aplicar_ddl.py`:** cria de forma idempotente
-  `bussola_dados`, `bussola_rag`, `bussola_app` e `bussola_app_dev`, com
+  `bussola_dados`, `bussola_app` e `bussola_app_dev`, com
   suas tabelas, em `us-central1`.
 - **`deploy/smoke_modelos.py`:** valida o ID do Gemini Flash (§5 do mestre:
   3.8 → 3.7 → 3.5 Flash, o primeiro que responder) e do modelo de
@@ -164,7 +164,7 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
     Plano A/B.
 - **`deploy/iam_datasets.sh`:** Plano B de IAM em nível de dataset para a
   SA default:
-  - `dataViewer` em `bussola_dados` e `bussola_rag`;
+  - `dataViewer` em `bussola_dados`;
   - `dataEditor` em `bussola_app` e `bussola_app_dev`.
 
   Deve ser executado por um integrante **com confirmação humana**.
@@ -239,7 +239,8 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
 ## 7. Fora de escopo
 
 - Métricas e simulação reais (001).
-- Corpus e embeddings do RAG (002).
+- Corpus completo e embeddings do RAG (002). O 000 entrega só o corpus
+  curado de exemplo em `contracts/fixtures/rag/` (Q-17).
 - Ferramentas reais do MCP (003).
 - Prompts e jornada (004).
 - Gate de consentimento e guardrails (005).

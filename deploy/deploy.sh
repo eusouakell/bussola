@@ -249,7 +249,6 @@ if [ "${ALVO}" = "mcp" ]; then
     "GOOGLE_CLOUD_LOCATION=${LOCAL_GCP}"
     "EMBEDDING_MODEL=$(valor EMBEDDING_MODEL)"
     "BQ_DATASET_DADOS=$(valor_contrato BQ_DATASET_DADOS)"
-    "BQ_DATASET_RAG=$(valor_contrato BQ_DATASET_RAG)"
     "BQ_MODO_LEITURA=$(valor_contrato BQ_MODO_LEITURA)"
     "RAG_BACKEND=$(valor_contrato RAG_BACKEND)"
   )

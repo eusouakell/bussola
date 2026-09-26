@@ -1,338 +1,158 @@
 [
   {
-    "anomes": 202512,
-    "doc_id": "perfil_anual:36a21505-d6d4-42d3-b319-d51a133c7269:2025",
-    "origem": {
-      "anomes": 202512,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "cartao-rotativo",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 4.549/2017",
+      "url": null
     },
-    "score": 0.95,
-    "texto": "Perfil de 2025: renda média R$ 7.451, gasto médio R$ 4.615 e sobra média R$ 2.837 em 12 meses. Gastos recorrentes: Pagamento de aluguel R$ 1.077/mês, Pagamento de fatura R$ 638/mês, IPTU R$ 446/mês, Compras R$ 198/mês, Outras transferencias R$ 180/mês. O saldo ficou negativo em 2 meses.",
-    "tipo": "perfil_anual"
+    "tema": "norma_bacen",
+    "texto": "Quando a fatura do cartão de crédito não é paga integralmente, o saldo restante pode ficar no rotativo só até o vencimento da fatura seguinte. Depois disso, o banco precisa oferecer um parcelamento do saldo em condições mais vantajosas que as do rotativo.",
+    "titulo": "Rotativo do cartão de crédito",
+    "trecho_id": "cartao-rotativo#1"
   },
   {
-    "anomes": 202512,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202512",
-    "origem": {
-      "anomes": 202512,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
+    "doc_id": "cartao-rotativo",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Lei nº 14.690/2023 e Resolução CMN nº 5.112/2023",
+      "url": null
     },
-    "score": 0.86,
-    "texto": "Ficha de 12/2025: renda R$ 5.725, gasto R$ 4.056 e sobra R$ 1.668. Maiores gastos: Casa R$ 2.107, Mercado R$ 411, Saque R$ 312. Saldo inicial R$ 40.586, final R$ 43.457 e mínimo R$ 38.853. Juros pagos: R$ 104. Parcelas no mês: 2, somando R$ 220.",
-    "tipo": "ficha_mensal"
+    "tema": "norma_bacen",
+    "texto": "Desde janeiro de 2024, os juros e encargos cobrados no rotativo e no parcelamento da fatura do cartão não podem somar mais que 100% do valor original da dívida. Uma dívida de R$ 1.000, por exemplo, não pode passar de R$ 2.000 no total.",
+    "titulo": "Teto de juros do rotativo e do parcelamento da fatura",
+    "trecho_id": "cartao-rotativo#2"
   },
   {
-    "anomes": 202512,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202512",
-    "origem": {
-      "anomes": 202512,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "custo-efetivo-total",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 3.517/2007",
+      "url": null
     },
-    "score": 0.86,
-    "texto": "Ficha de 12/2025: renda R$ 7.604, gasto R$ 6.094 e sobra R$ 1.509. Maiores gastos: Casa R$ 1.618, Produtos financeiros R$ 1.236, Lojas e sites R$ 786. Saldo inicial R$ 44.441, final R$ 47.598 e mínimo R$ 43.745. Juros pagos: R$ 116. Parcelas no mês: 6, somando R$ 110.",
-    "tipo": "ficha_mensal"
+    "tema": "norma_bacen",
+    "texto": "Antes de contratar um empréstimo ou financiamento, a instituição deve informar o Custo Efetivo Total (CET), em taxa anual. O CET soma juros, tarifas, tributos, seguros e outras despesas da operação. Para comparar propostas de crédito, compare o CET, e não só a taxa de juros.",
+    "titulo": "Custo Efetivo Total (CET)",
+    "trecho_id": "custo-efetivo-total#1"
   },
   {
-    "anomes": 202511,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202511",
-    "origem": {
-      "anomes": 202511,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
+    "doc_id": "cheque-especial",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 4.765/2019",
+      "url": null
     },
-    "score": 0.83,
-    "texto": "Ficha de 11/2025: renda R$ 10.812, gasto R$ 6.064 e sobra R$ 4.749. Maiores gastos: Casa R$ 2.175, Transferencias diversas R$ 2.015, Produtos financeiros R$ 857. Saldo inicial R$ 34.996, final R$ 40.586 e mínimo R$ 34.910. Juros pagos: R$ 29. Parcelas no mês: 2, somando R$ 220.",
-    "tipo": "ficha_mensal"
+    "tema": "norma_bacen",
+    "texto": "Os juros do cheque especial para pessoas físicas e microempreendedores individuais são limitados a 8% ao mês desde janeiro de 2020. Mesmo com o limite, é uma das linhas de crédito mais caras e deve ser usada só por poucos dias.",
+    "titulo": "Limite de juros do cheque especial",
+    "trecho_id": "cheque-especial#1"
   },
   {
-    "anomes": 202511,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202511",
-    "origem": {
-      "anomes": 202511,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "portabilidade-credito",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 4.292/2013",
+      "url": null
     },
-    "score": 0.83,
-    "texto": "Ficha de 11/2025: renda R$ 11.318, gasto R$ 4.834 e sobra R$ 6.484. Maiores gastos: Casa R$ 1.729, Cuidados pessoais R$ 1.214, Produtos financeiros R$ 856. Saldo inicial R$ 36.020, final R$ 44.420 e mínimo R$ 37.413. Juros pagos: R$ 18. Parcelas no mês: 6, somando R$ 110.",
-    "tipo": "ficha_mensal"
+    "tema": "norma_bacen",
+    "texto": "O cliente pode transferir um empréstimo ou financiamento para outra instituição que ofereça condições melhores, sem pagar tarifa pela transferência. A instituição de origem pode fazer uma contraproposta, mas não pode dificultar o pedido.",
+    "titulo": "Portabilidade de crédito",
+    "trecho_id": "portabilidade-credito#1"
   },
   {
-    "anomes": 202510,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202510",
-    "origem": {
-      "anomes": 202510,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
+    "doc_id": "servicos-essenciais",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 3.919/2010",
+      "url": null
     },
-    "score": 0.8,
-    "texto": "Ficha de 10/2025: renda R$ 10.643, gasto R$ 4.816 e sobra R$ 5.828. Maiores gastos: Casa R$ 2.612, Educacao R$ 520, Delivery R$ 456. Saldo inicial R$ 28.218, final R$ 34.962 e mínimo R$ 28.137. Juros pagos: R$ 159. Parcelas no mês: 3, somando R$ 675.",
-    "tipo": "ficha_mensal"
+    "tema": "norma_bacen",
+    "texto": "Na conta corrente de pessoa física, alguns serviços essenciais não podem ser cobrados, entre eles: cartão de débito, até quatro saques por mês, até dois extratos por mês, até duas transferências por mês entre contas da mesma instituição e consultas pela internet.",
+    "titulo": "Serviços bancários essenciais gratuitos",
+    "trecho_id": "servicos-essenciais#1"
   },
   {
-    "anomes": 202510,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202510",
-    "origem": {
-      "anomes": 202510,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "superendividamento",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Lei nº 14.181/2021 e Decreto nº 11.567/2023",
+      "url": null
     },
-    "score": 0.8,
-    "texto": "Ficha de 10/2025: renda R$ 9.185, gasto R$ 3.373 e sobra R$ 5.812. Maiores gastos: Casa R$ 1.687, Produtos financeiros R$ 678, Restaurantes R$ 389. Saldo inicial R$ 29.613, final R$ 36.020 e mínimo R$ 29.574. Parcelas no mês: 7, somando R$ 208.",
-    "tipo": "ficha_mensal"
+    "tema": "credito",
+    "texto": "Quem não consegue pagar as dívidas de consumo sem comprometer o próprio sustento pode pedir a repactuação com todos os credores ao mesmo tempo, em um plano de pagamento de até cinco anos. O plano deve preservar o mínimo existencial, hoje fixado em R$ 600 por mês.",
+    "titulo": "Superendividamento e mínimo existencial",
+    "trecho_id": "superendividamento#1"
   },
   {
-    "anomes": 202509,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202509",
-    "origem": {
-      "anomes": 202509,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
+    "doc_id": "registrato",
+    "fonte": {
+      "nome": "Banco Central do Brasil",
+      "referencia": "Registrato",
+      "url": null
     },
-    "score": 0.77,
-    "texto": "Ficha de 09/2025: renda R$ 10.416, gasto R$ 5.447 e sobra R$ 4.969. Maiores gastos: Casa R$ 2.328, Produtos financeiros R$ 1.221, Delivery R$ 667. Saldo inicial R$ 21.834, final R$ 28.137 e mínimo R$ 21.828. Juros pagos: R$ 51. Parcelas no mês: 4, somando R$ 544.",
-    "tipo": "ficha_mensal"
+    "tema": "credito",
+    "texto": "O Registrato é um sistema gratuito do Banco Central, acessado com a conta gov.br. Ele mostra os empréstimos e financiamentos em seu nome (SCR), as contas e relacionamentos com instituições financeiras e as chaves Pix cadastradas. Serve para conferir dívidas e detectar contratos que você não reconhece.",
+    "titulo": "Registrato: consulta gratuita das suas dívidas",
+    "trecho_id": "registrato#1"
   },
   {
-    "anomes": 202509,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202509",
-    "origem": {
-      "anomes": 202509,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "cadastro-positivo",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Lei nº 12.414/2011, alterada pela Lei Complementar nº 166/2019",
+      "url": null
     },
-    "score": 0.77,
-    "texto": "Ficha de 09/2025: renda R$ 6.897, gasto R$ 3.174 e sobra R$ 3.723. Maiores gastos: Casa R$ 1.750, Produtos financeiros R$ 522, Restaurantes R$ 344. Saldo inicial R$ 25.228, final R$ 29.574 e mínimo R$ 27.401. Juros pagos: R$ 19. Parcelas no mês: 7, somando R$ 271.",
-    "tipo": "ficha_mensal"
+    "tema": "credito",
+    "texto": "O cadastro positivo reúne o histórico de pagamentos em dia do consumidor e pode melhorar a nota de crédito. A inclusão é automática, e a exclusão pode ser pedida a qualquer momento, sem custo.",
+    "titulo": "Cadastro positivo",
+    "trecho_id": "cadastro-positivo#1"
   },
   {
-    "anomes": 202508,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202508",
-    "origem": {
-      "anomes": 202508,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
+    "doc_id": "liquidacao-antecipada",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Código de Defesa do Consumidor, art. 52, § 2º; Resolução CMN nº 3.516/2007",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
     },
-    "score": 0.74,
-    "texto": "Ficha de 08/2025: renda R$ 8.037, gasto R$ 4.755 e sobra R$ 3.281. Maiores gastos: Casa R$ 2.345, Delivery R$ 820, Produtos financeiros R$ 729. Saldo inicial R$ 17.081, final R$ 22.459 e mínimo R$ 17.048. Juros pagos: R$ 59. Parcelas no mês: 3, somando R$ 380.",
-    "tipo": "ficha_mensal"
+    "tema": "credito",
+    "texto": "O consumidor tem direito de quitar uma dívida antes do prazo, total ou parcialmente, com redução proporcional dos juros e demais acréscimos. Nos contratos firmados a partir de dezembro de 2007, não pode haver tarifa pela liquidação antecipada.",
+    "titulo": "Quitação antecipada com desconto de juros",
+    "trecho_id": "liquidacao-antecipada#1"
   },
   {
-    "anomes": 202508,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202508",
-    "origem": {
-      "anomes": 202508,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "reserva-emergencia",
+    "fonte": {
+      "nome": "Equipe Bússola",
+      "referencia": "Conteúdo educativo da equipe (não é norma)",
+      "url": null
     },
-    "score": 0.74,
-    "texto": "Ficha de 08/2025: renda R$ 8.402, gasto R$ 4.183 e sobra R$ 4.219. Maiores gastos: Casa R$ 2.111, Produtos financeiros R$ 1.201, Restaurantes R$ 253. Saldo inicial R$ 20.420, final R$ 25.228 e mínimo R$ 20.325. Juros pagos: R$ 113. Parcelas no mês: 6, somando R$ 152.",
-    "tipo": "ficha_mensal"
+    "tema": "boas_praticas",
+    "texto": "Uma reserva de emergência cobre imprevistos sem recorrer a crédito caro. Uma referência comum é guardar de três a seis meses do custo de vida em uma aplicação de baixo risco e resgate imediato, antes de investir em produtos mais arriscados.",
+    "titulo": "Reserva de emergência",
+    "trecho_id": "reserva-emergencia#1"
   },
   {
-    "anomes": 202507,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202507",
-    "origem": {
-      "anomes": 202507,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
+    "doc_id": "ordem-quitacao",
+    "fonte": {
+      "nome": "Equipe Bússola",
+      "referencia": "Conteúdo educativo da equipe (não é norma)",
+      "url": null
     },
-    "score": 0.71,
-    "texto": "Ficha de 07/2025: renda R$ 5.195, gasto R$ 5.050 e sobra R$ 144. Maiores gastos: Casa R$ 2.580, Produtos financeiros R$ 604, Delivery R$ 545. Saldo inicial R$ 15.948, final R$ 17.048 e mínimo R$ 15.256. Juros pagos: R$ 39. Parcelas no mês: 2, somando R$ 598.",
-    "tipo": "ficha_mensal"
+    "tema": "boas_praticas",
+    "texto": "Com dinheiro sobrando, costuma valer mais a pena quitar primeiro as dívidas de juros mais altos, como rotativo do cartão e cheque especial. Trocar uma dívida cara por uma mais barata, pela portabilidade ou por uma linha com CET menor, também reduz o custo total.",
+    "titulo": "Qual dívida quitar primeiro",
+    "trecho_id": "ordem-quitacao#1"
   },
   {
-    "anomes": 202507,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202507",
-    "origem": {
-      "anomes": 202507,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
+    "doc_id": "comprometimento-renda",
+    "fonte": {
+      "nome": "Equipe Bússola",
+      "referencia": "Conteúdo educativo da equipe (não é norma)",
+      "url": null
     },
-    "score": 0.71,
-    "texto": "Ficha de 07/2025: renda R$ 5.861, gasto R$ 4.977 e sobra R$ 885. Maiores gastos: Casa R$ 1.818, Viagens R$ 935, Educacao R$ 873. Saldo inicial R$ 17.652, final R$ 20.403 e mínimo R$ 17.306. Juros pagos: R$ 124. Parcelas no mês: 6, somando R$ 288.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": null,
-    "doc_id": "coorte:6k_10k:emprestimos_e_financiamentos",
-    "origem": {
-      "anomes": null,
-      "categoria": "Emprestimos e financiamentos",
-      "id_usuario": null
-    },
-    "score": 0.7,
-    "texto": "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 2.540/mês com Emprestimos e financiamentos (mediana R$ 2.682, 466 clientes).",
-    "tipo": "coorte"
-  },
-  {
-    "anomes": null,
-    "doc_id": "coorte:6k_10k:produtos_financeiros",
-    "origem": {
-      "anomes": null,
-      "categoria": "Produtos financeiros",
-      "id_usuario": null
-    },
-    "score": 0.69,
-    "texto": "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 1.544/mês com Produtos financeiros (mediana R$ 1.507, 493 clientes).",
-    "tipo": "coorte"
-  },
-  {
-    "anomes": null,
-    "doc_id": "coorte:6k_10k:casa",
-    "origem": {
-      "anomes": null,
-      "categoria": "Casa",
-      "id_usuario": null
-    },
-    "score": 0.68,
-    "texto": "Clientes com renda entre R$ 6 mil e R$ 10 mil gastam em média R$ 1.343/mês com Casa (mediana R$ 1.231, 493 clientes).",
-    "tipo": "coorte"
-  },
-  {
-    "anomes": 202506,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202506",
-    "origem": {
-      "anomes": 202506,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
-    },
-    "score": 0.68,
-    "texto": "Ficha de 06/2025: renda R$ 7.865, gasto R$ 4.675 e sobra R$ 3.190. Maiores gastos: Casa R$ 2.524, Produtos financeiros R$ 856, Delivery R$ 364. Saldo inicial R$ 11.858, final R$ 16.539 e mínimo R$ 9.880. Juros pagos: R$ 70. Parcelas no mês: 2, somando R$ 564.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202506,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202506",
-    "origem": {
-      "anomes": 202506,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
-    },
-    "score": 0.68,
-    "texto": "Ficha de 06/2025: renda R$ 6.959, gasto R$ 6.432 e sobra R$ 527. Maiores gastos: Casa R$ 4.093, Produtos financeiros R$ 955, Transporte publico R$ 525. Saldo inicial R$ 16.106, final R$ 17.652 e mínimo R$ 13.931. Parcelas no mês: 6, somando R$ 2.365.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202505,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202505",
-    "origem": {
-      "anomes": 202505,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
-    },
-    "score": 0.65,
-    "texto": "Ficha de 05/2025: renda R$ 5.960, gasto R$ 4.481 e sobra R$ 1.480. Maiores gastos: Casa R$ 2.360, Produtos financeiros R$ 529, Delivery R$ 393. Saldo inicial R$ 9.192, final R$ 11.858 e mínimo R$ 9.761. Juros pagos: R$ 30. Parcelas no mês: 2, somando R$ 326.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202505,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202505",
-    "origem": {
-      "anomes": 202505,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
-    },
-    "score": 0.65,
-    "texto": "Ficha de 05/2025: renda R$ 5.818, gasto R$ 4.827 e sobra R$ 991. Maiores gastos: Casa R$ 2.330, Produtos financeiros R$ 1.103, Restaurantes R$ 375. Saldo inicial R$ 14.263, final R$ 16.085 e mínimo R$ 16.085. Parcelas no mês: 5, somando R$ 285.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202504,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202504",
-    "origem": {
-      "anomes": 202504,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
-    },
-    "score": 0.62,
-    "texto": "Ficha de 04/2025: renda R$ 6.187, gasto R$ 3.626 e sobra R$ 2.561. Maiores gastos: Casa R$ 2.255, Produtos financeiros R$ 435, Saque R$ 244. Saldo inicial R$ 6.089, final R$ 9.192 e mínimo R$ 4.070. Parcelas no mês: 2, somando R$ 238.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202504,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202504",
-    "origem": {
-      "anomes": 202504,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
-    },
-    "score": 0.62,
-    "texto": "Ficha de 04/2025: renda R$ 8.409, gasto R$ 3.417 e sobra R$ 4.993. Maiores gastos: Casa R$ 1.969, Lojas e sites R$ 433, Produtos financeiros R$ 366. Saldo inicial R$ 8.312, final R$ 14.263 e mínimo R$ 7.943. Juros pagos: R$ 148. Parcelas no mês: 5, somando R$ 269.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202503,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202503",
-    "origem": {
-      "anomes": 202503,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
-    },
-    "score": 0.59,
-    "texto": "Ficha de 03/2025: renda R$ 5.998, gasto R$ 4.142 e sobra R$ 1.856. Maiores gastos: Casa R$ 2.257, Produtos financeiros R$ 510, Educacao R$ 393. Saldo inicial R$ 3.838, final R$ 6.089 e mínimo R$ 1.666. Juros pagos: R$ 29. Parcelas no mês: 1, somando R$ 78.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202503,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202503",
-    "origem": {
-      "anomes": 202503,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
-    },
-    "score": 0.59,
-    "texto": "Ficha de 03/2025: renda R$ 7.398, gasto R$ 4.931 e sobra R$ 2.467. Maiores gastos: Casa R$ 1.919, Produtos financeiros R$ 1.003, Restaurantes R$ 621. Saldo inicial R$ 4.790, final R$ 8.291 e mínimo R$ 4.520. Parcelas no mês: 4, somando R$ 253.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202502,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202502",
-    "origem": {
-      "anomes": 202502,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
-    },
-    "score": 0.56,
-    "texto": "Ficha de 02/2025: renda R$ 6.905, gasto R$ 3.817 e sobra R$ 3.087. Maiores gastos: Casa R$ 2.332, Produtos financeiros R$ 561, Restaurantes R$ 325. Saldo inicial R$ 129, final R$ 3.838 e mínimo -R$ 922. Parcelas no mês: 1, somando R$ 182. O saldo ficou negativo no mês.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202502,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202502",
-    "origem": {
-      "anomes": 202502,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
-    },
-    "score": 0.56,
-    "texto": "Ficha de 02/2025: renda R$ 5.550, gasto R$ 3.038 e sobra R$ 2.512. Maiores gastos: Casa R$ 1.688, Restaurantes R$ 324, Lazer R$ 268. Saldo inicial R$ 1.289, final R$ 4.783 e mínimo -R$ 517. Juros pagos: R$ 88. Parcelas no mês: 4, somando R$ 173. O saldo ficou negativo no mês.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202501,
-    "doc_id": "ficha_mensal:31e94f2f-1463-49f9-a41a-b3f220ed976a:202501",
-    "origem": {
-      "anomes": 202501,
-      "categoria": null,
-      "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a"
-    },
-    "score": 0.53,
-    "texto": "Ficha de 01/2025: renda R$ 5.187, gasto R$ 6.963 e sobra -R$ 1.775. Maiores gastos: Casa R$ 4.179, Produtos financeiros R$ 1.232, Saque R$ 815. Saldo inicial R$ 1.400, final R$ 129 e mínimo -R$ 952. Juros pagos: R$ 52. Parcelas no mês: 1, somando R$ 2.049. O saldo ficou negativo no mês.",
-    "tipo": "ficha_mensal"
-  },
-  {
-    "anomes": 202501,
-    "doc_id": "ficha_mensal:36a21505-d6d4-42d3-b319-d51a133c7269:202501",
-    "origem": {
-      "anomes": 202501,
-      "categoria": null,
-      "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269"
-    },
-    "score": 0.53,
-    "texto": "Ficha de 01/2025: renda R$ 6.014, gasto R$ 6.094 e sobra -R$ 81. Maiores gastos: Casa R$ 3.721, Produtos financeiros R$ 927, Outros gastos R$ 285. Saldo inicial R$ 559, final R$ 1.220 e mínimo -R$ 2.072. Juros pagos: R$ 101. Parcelas no mês: 3, somando R$ 2.039. O saldo ficou negativo no mês.",
-    "tipo": "ficha_mensal"
+    "tema": "boas_praticas",
+    "texto": "Uma referência comum é manter a soma das parcelas de dívidas abaixo de cerca de 30% da renda líquida mensal. Acima disso, qualquer imprevisto aumenta o risco de atrasar pagamentos e entrar no rotativo.",
+    "titulo": "Quanto da renda comprometer com parcelas",
+    "trecho_id": "comprometimento-renda#1"
   }
 ]

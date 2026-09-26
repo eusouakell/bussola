@@ -88,3 +88,14 @@ gcloud run services add-iam-policy-binding bussola-mcp \
 - Esperado no Plano B: a chamada ao Gemini do agente no Cloud Run falha com a
   SA default (sem `aiplatform.user` nem `secretAccessor`). O resultado
   alimenta a decisão de [`pedidos-owner.md`](./pedidos-owner.md).
+
+## Depois da Q-17 (RAG sem `bussola_rag`)
+
+Os resultados acima são do DDL com 4 datasets. Com a Q-17:
+
+- `aplicar_ddl.py --dry-run` lista 18 `CREATE ... IF NOT EXISTS` em 3
+  datasets (`bussola_dados`, `bussola_app`, `bussola_app_dev`);
+- `make test`: mcp_server com 433 testes e agent com 161, todos passando;
+- o dataset `bussola_rag` criado no T038 continua no projeto, vazio. Remover
+  é destrutivo e fica com um integrante (ver Q-17 em
+  [`questoes.md`](./questoes.md)).

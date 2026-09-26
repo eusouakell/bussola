@@ -22,14 +22,13 @@ os.environ.setdefault("BUSSOLA_FAKES", "TRUE")
 from bussola_mcp.contratos import (  # noqa: E402
     CORTES_GOLDEN,
     ENTRADA_CANONICA_SIMULACAO,
-    FERRAMENTAS_P0,
+    FERRAMENTAS_GOLDEN,
     ID_ANCORA,
     ID_CONTROLE,
     TABELAS_FERRAMENTA,
     Categoria,
     Cenario,
     CorteSugerido,
-    DadosBuscarContexto,
     DadosCapacidadePoupanca,
     DadosCompararCenarios,
     DadosDividasParcelas,
@@ -40,10 +39,10 @@ from bussola_mcp.contratos import (  # noqa: E402
     EntradaCategoria,
     Fonte,
     FonteRenda,
+    FonteTrecho,
     GastoCategoria,
     GastoMacro,
     Oportunidade,
-    Origem,
     Parcela,
     ParcelaAtiva,
     PerfilMes,
@@ -54,7 +53,8 @@ from bussola_mcp.contratos import (  # noqa: E402
     RegrasCenario,
     Resposta,
     Saldo,
-    Trecho,
+    TemaConhecimento,
+    TrechoCorpus,
     UsuarioFixture,
     arquivo_golden,
     arquivo_resumo_mes,
@@ -135,7 +135,7 @@ def _guarda_de_rede(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPa
 MESES = tuple(range(202501, 202513))
 MESES_RESUMO_SINTETICO = tuple(range(202501, 202507))  # 202507+ ausente de propósito
 FAIXAS = {ID_ANCORA: "6k_10k", ID_CONTROLE: "3k_6k"}
-QTD_ITENS_GOLDEN = 10  # máximo de itens dos golden de oportunidades e busca (research R-10)
+QTD_ITENS_GOLDEN = 10  # máximo de itens do golden de oportunidades (research R-10)
 
 
 def _dump(item: BaseModel | list[BaseModel]) -> Any:
@@ -238,30 +238,50 @@ def _tabelas() -> dict[str, list[BaseModel]]:
     return tabelas
 
 
-def _trecho(
-    doc_id: str, tipo: str, id_usuario: str | None, anomes: int | None, texto: str
-) -> Trecho:
-    return Trecho(
+def _trecho(doc_id: str, tema: TemaConhecimento, titulo: str, texto: str) -> TrechoCorpus:
+    return TrechoCorpus(
         doc_id=doc_id,
-        tipo=tipo,
-        anomes=anomes,
+        trecho_id=f"{doc_id}#1",
+        titulo=titulo,
+        tema=tema,
         texto=texto,
-        score=0.0,
-        origem=Origem(id_usuario=id_usuario, anomes=anomes, categoria=None),
+        fonte=FonteTrecho(nome="Fonte sintética", referencia=f"Norma {doc_id}"),
     )
 
 
-def trechos_sinteticos() -> list[Trecho]:
-    """Trechos de RAG sintéticos: âncora, controle e coorte (com e sem ``anomes``)."""
+def trechos_sinteticos() -> list[TrechoCorpus]:
+    """Corpus de conhecimento sintético: um ou dois trechos por tema (Q-17)."""
     return [
-        _trecho("anc-202503", "ficha_mensal", ID_ANCORA, 202503, "Em março o aluguel pesou."),
         _trecho(
-            "anc-202509", "ficha_mensal", ID_ANCORA, 202509, "Em setembro gastou com restaurantes."
+            "rotativo",
+            TemaConhecimento.NORMA_BACEN,
+            "Rotativo do cartão",
+            "O rotativo do cartão vale só até a fatura seguinte.",
         ),
-        _trecho("anc-anual", "perfil_anual", ID_ANCORA, None, "Resumo anual do cliente exemplo."),
-        _trecho("ctl-202503", "ficha_mensal", ID_CONTROLE, 202503, "Controle: aluguel e mercado."),
-        _trecho("coo-geral", "coorte", None, None, "Na coorte o aluguel é a maior despesa."),
-        _trecho("coo-202510", "coorte", None, 202510, "Coorte em outubro: restaurantes subiram."),
+        _trecho(
+            "teto-juros",
+            TemaConhecimento.NORMA_BACEN,
+            "Teto de juros",
+            "Juros do rotativo do cartão limitados ao valor da dívida.",
+        ),
+        _trecho(
+            "cet",
+            TemaConhecimento.NORMA_BACEN,
+            "Custo Efetivo Total",
+            "O CET soma juros, tarifas e seguros.",
+        ),
+        _trecho(
+            "registrato",
+            TemaConhecimento.CREDITO,
+            "Registrato",
+            "Consulte as dívidas em seu nome no Registrato.",
+        ),
+        _trecho(
+            "reserva",
+            TemaConhecimento.BOAS_PRATICAS,
+            "Reserva de emergência",
+            "Guarde de três a seis meses do custo de vida.",
+        ),
     ]
 
 
@@ -361,13 +381,6 @@ def _golden(ferramenta: str, corte: int) -> BaseModel:
             ],
             regras=regras,
         )
-    if ferramenta == "buscar_contexto_financeiro":
-        return DadosBuscarContexto(
-            trechos=[
-                _trecho(f"golden-{i:02d}", "ficha_mensal", ID_ANCORA, meses[-1], f"Trecho {i}.")
-                for i in range(QTD_ITENS_GOLDEN)
-            ]
-        )
     raise ValueError(ferramenta)
 
 
@@ -387,7 +400,7 @@ def gerar_fixtures_sinteticas(destino: Path) -> Path:
     for nome, linhas in _tabelas().items():
         _gravar(destino / "bussola_dados" / f"{nome}.json", _dump(linhas))
     _gravar(destino / "rag" / "trechos_exemplo.json", _dump(trechos_sinteticos()))
-    for ferramenta in FERRAMENTAS_P0:
+    for ferramenta in FERRAMENTAS_GOLDEN:
         for corte in CORTES_GOLDEN:
             _gravar(
                 destino / "ferramentas" / arquivo_golden(ferramenta, corte),

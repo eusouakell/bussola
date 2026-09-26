@@ -5,10 +5,12 @@ from pydantic import ValidationError
 
 from bussola_mcp.contratos import (
     FERRAMENTAS,
+    FERRAMENTAS_GOLDEN,
     FERRAMENTAS_MOCK,
     FERRAMENTAS_P0,
     ID_ANCORA,
     MENSAGENS_ERRO,
+    TABELAS_FERRAMENTA,
     CodigoErro,
     EntradaBuscarContexto,
     EntradaCompararCenarios,
@@ -17,6 +19,7 @@ from bussola_mcp.contratos import (
     EntradaReferenciaCoorte,
     EntradaResumoMes,
     EntradaSimularObjetivo,
+    TemaConhecimento,
     envelope_erro,
     mensagem_entrada_invalida,
 )
@@ -182,6 +185,21 @@ def test_k_faixa(k, valido):
         )
 
 
+def test_tema_opcional_e_restrito_aos_temas_do_corpus():
+    assert EntradaBuscarContexto(**COMUM, pergunta="CET").tema is None
+    entrada = EntradaBuscarContexto(**COMUM, pergunta="CET", tema="norma_bacen")
+    assert entrada.tema is TemaConhecimento.NORMA_BACEN
+    assert {t.value for t in TemaConhecimento} == {"norma_bacen", "credito", "boas_praticas"}
+    assert _mensagem(EntradaBuscarContexto, **COMUM, pergunta="CET", tema="politica") == (
+        "Entrada inválida: tema."
+    )
+
+
+def test_busca_nao_le_tabela():
+    """Corpus no repositório, sem ``bussola_rag`` (Q-17)."""
+    assert TABELAS_FERRAMENTA["buscar_contexto_financeiro"] == []
+
+
 # -- resumo_mes / referencia_coorte ------------------------------------------------
 
 
@@ -225,3 +243,4 @@ def test_catalogo_do_mock():
     assert FERRAMENTAS_MOCK == (*FERRAMENTAS_P0, "resumo_mes")
     assert set(FERRAMENTAS_MOCK) <= set(FERRAMENTAS)
     assert "referencia_coorte" not in FERRAMENTAS_MOCK
+    assert set(FERRAMENTAS_P0) - set(FERRAMENTAS_GOLDEN) == {"buscar_contexto_financeiro"}

@@ -20,7 +20,7 @@
 | **003** | F3 MCP de dados e conhecimento | P0 | 1 | 000 | fakes (`BUSSOLA_FAKES`) | [003-mcp-dados-conhecimento.md](./003-mcp-dados-conhecimento.md) |
 | **004** | F4 Agente Bússola e jornada | P0 | 1 | 000 | MCP mock do 000 | [004-agente-bussola-jornada.md](./004-agente-bussola-jornada.md) |
 | **007** | F7 Canal, deploy e operação | P0 | 1 | 000 | serviços hello do 000 | [007-canal-deploy-demo.md](./007-canal-deploy-demo.md) |
-| **002** | F2 RAG financeiro a partir da base | P0/P1 | 2 | 000 + marco "tabelas v1" do 001 | fixtures do 000 | [002-rag-financeiro-dados.md](./002-rag-financeiro-dados.md) |
+| **002** | F2 RAG de conhecimento (BACEN, crédito, boas práticas) | P0/P1 | 2 | 000 | corpus curado do 000 | [002-rag-financeiro-dados.md](./002-rag-financeiro-dados.md) |
 | **005** | F5 Consentimento, governança e auditoria | P0/P1 | 2 | 000 | hooks e `RegistroEmMemoria` do 000 | [005-consentimento-governanca.md](./005-consentimento-governanca.md) |
 | **006** | F6 Acompanhamento com replay | P1 | 3 | 000 (dev) · 001+003+004+005 (merge) | fakes + `RegistroEmMemoria` | [006-acompanhamento-replay.md](./006-acompanhamento-replay.md) |
 
@@ -45,7 +45,6 @@ flowchart LR
     INT(["Integração final + demo"])
 
     C000 --> C001 & C003 & C004 & C007 & C002 & C005 & C006
-    C001 -. "marco tabelas v1 (BigQuery)" .-> C002
     C001 == "merge: fake → real" ==> C003
     C002 == "merge: buscador real" ==> C003
     C003 == "merge: MCP real" ==> C004
@@ -67,12 +66,12 @@ flowchart LR
 |---|---|---|
 | **0** | 000 | Sequencial. Congela os contratos (`contratos-v1`) e bloqueia todo o resto. Deve ser **curta**: é esqueleto, não produto. |
 | **1** | 001 ∥ 003 ∥ 004 ∥ 007 | Caminho crítico da fatia vertical. São 4 sessões Claude Code em paralelo. |
-| **2** | 002 ∥ 005 | Podem começar **junto com a Onda 1** se houver capacidade (uma pessoa pode tocar 2 sessões). O 002 só precisa das tabelas v1 do 001 para gerar o corpus real. |
+| **2** | 002 ∥ 005 | Podem começar **junto com a Onda 1** se houver capacidade (uma pessoa pode tocar 2 sessões). O 002 não depende do 001: o corpus é conhecimento geral no repositório (Q-17 do 000). |
 | **3** | 006 → integração final | O 006 pode ser desenvolvido com fakes desde o início, mas só fecha depois do merge de 001, 003, 004 e 005. A integração final não é ciclo do Spec Master (§8). |
 
 **Linha de corte**, igual ao contexto mestre §15, se faltar tempo:
 
-1. P2 do 002 (recategorização);
+1. backend `numpy` do 002 (fica o léxico);
 2. `referencia_coorte`;
 3. Model Armor (fica o fallback);
 4. replay de mais de um mês.
@@ -123,7 +122,7 @@ porque quem mexe no mesmo diretório é a mesma pessoa.
 9. **GCP compartilhado:**
    - **Testes:** gravam só em `bussola_app_dev`.
    - **`bussola_dados`:** só o 001 escreve.
-   - **`bussola_rag`:** só o 002 escreve.
+   - **RAG:** sem dataset. Corpus e índice ficam no repositório, nos caminhos do 002.
    - **Cloud Run:** cada ciclo publica revisões com
      `--tag cNNN --no-traffic`. Só o 007 move tráfego.
 10. **Rebase em `main` antes do PR.** O PR precisa de `make test` e
@@ -226,7 +225,7 @@ ordem abaixo minimiza retrabalho:
 | 3 | 003 | Testes de contrato sobre fakes **e** `make test-bq` contra as tabelas do 001 |
 | 4 | 004 | Jornada OBJETIVO → ORIENTAR contra o MCP real (local); eval de números |
 | 5 | 007 | Os dois serviços reais em Cloud Run com OIDC; canal acessível; runbook testado no Antigravity |
-| 6 | 002 | Corpus real + eval top-3 ≥ 80%; buscador plugado na ferramenta do 003 |
+| 6 | 002 | Corpus nos três temas + eval top-3 ≥ 80%; buscador plugado na ferramenta do 003 |
 | 7 | 005 | Gate + auditoria em `bussola_app_dev`; guardrail com testes de injection |
 | 8 | 006 | Avanço de mês com desvio, recálculo e auditoria |
 

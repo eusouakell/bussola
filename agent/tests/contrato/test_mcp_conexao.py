@@ -59,7 +59,7 @@ ARGS_MINIMOS: dict[str, dict[str, Any]] = {
     "dividas_e_parcelas": {},
     "simular_objetivo": {"valor_alvo": 30000.0, "prazo_meses": 24},
     "comparar_cenarios": {"valor_alvo": 30000.0, "prazo_meses": 24},
-    "buscar_contexto_financeiro": {"pergunta": "Quanto gasto com restaurantes?"},
+    "buscar_contexto_financeiro": {"pergunta": "O que é o CET?"},
     "resumo_mes": {"anomes": 202506},
 }
 

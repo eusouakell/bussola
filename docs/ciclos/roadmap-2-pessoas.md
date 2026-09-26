@@ -20,7 +20,7 @@ mesmo arquivo.
 | Ciclos | **000** (lidera) → **001** ∥ **003** → **002** ∥ **006** | Bloco 0 → **004** ∥ **007** → **005** → integração final (lidera) |
 | Serviço Cloud Run | `bussola-mcp` | `bussola-agent` + canal da demo |
 | Diretórios | `contracts/`, `data/`, `mcp_server/`, `agent/bussola_agent/acompanhamento/`, `eval/rag/`, `eval/acompanhamento/` | `agent/` (exceto `acompanhamento/`), `deploy/`, `web/` (proposta, §5), `eval/agente/`, `eval/seguranca/`, `AGENTS.md`, `docs/operacao.md`, `docs/roteiro-demo.md` |
-| BigQuery (escrita) | `bussola_dados` (001), `bussola_rag` (002) | `bussola_app` / `bussola_app_dev` (005) |
+| BigQuery (escrita) | `bussola_dados` (001); o RAG (002) não tem dataset (Q-17 do 000) | `bussola_app` / `bussola_app_dev` (005) |
 | Revisa os PRs de | B | A |
 | Contexto do Spec Master | [pessoa-a-dados-ferramentas.md](./pessoa-a-dados-ferramentas.md) | [pessoa-b-agente-plataforma.md](./pessoa-b-agente-plataforma.md) |
 
@@ -77,7 +77,7 @@ Cada ponto é um aviso curto entre A e B. Nenhum deles exige reunião.
 | # | Marco | Quem entrega | O que destrava |
 |---|---|---|---|
 | **S0** | PR do 000 revisado por B, merge e tag `contratos-v1` | A | Todos os ciclos. **Antes do merge**, B confirma a Q4. Se o canal for front próprio, `web/` entra no mapa de contratos §1 como dono 007. |
-| **S1** | Tabelas v1 publicadas em `bussola_dados` | A | Corpus real do 002 |
+| **S1** | Tabelas v1 publicadas em `bussola_dados` | A | `make test-bq` do 003 contra dados reais |
 | **S2** | Merge do 001 | A | 003 troca fake por repositório real |
 | **S3** | Merge do 003 | A | B valida o 004 contra o MCP real e mergeia |
 | **S4** | Merge do 004 | B | 005 instala hooks; 006 se registra via `extensoes.py` |

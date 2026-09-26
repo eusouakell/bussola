@@ -16,7 +16,7 @@ Todas têm `id_usuario: str` e `ate_anomes: int` como obrigatórios.
 | `dividas_e_parcelas` | — |
 | `simular_objetivo` | `valor_alvo: float`, `prazo_meses: int \| None = None`, `aporte_mensal: float \| None = None`, `usar_saldo_atual: bool = False` |
 | `comparar_cenarios` | `valor_alvo: float`, `prazo_meses: int` |
-| `buscar_contexto_financeiro` | `pergunta: str`, `k: int = 5` |
+| `buscar_contexto_financeiro` | `pergunta: str`, `k: int = 5`, `tema: str \| None = None` |
 | `resumo_mes` | `anomes: int` |
 
 `referencia_coorte` (P1) tem modelos em `contratos.py`, mas não é servida pelo
@@ -38,7 +38,8 @@ mock. Ela entra no 003.
 2. Se o `id_usuario` (normalizado) não estiver em `usuarios.json`, devolve
    `USUARIO_INEXISTENTE` ("Cliente não encontrado.").
 3. Se o usuário não for o âncora, devolve `DADOS_INSUFICIENTES` ("O mock só
-   tem respostas do cliente âncora.").
+   tem respostas do cliente âncora."), exceto em `buscar_contexto_financeiro`,
+   que não depende do cliente (Q-17).
 4. Escolha do golden:
    - P0 com `ate_anomes < 202512`: `<ferramenta>__ate_202506.json`, com o
      aviso "Resposta de exemplo do mock (corte 202506)." acrescentado a
@@ -47,7 +48,9 @@ mock. Ela entra no 003.
      alteração;
    - `resumo_mes`: `resumo_mes__<anomes>.json`, sem alteração;
    - `oportunidades_corte`: `dados.categorias[:top_n]`;
-   - `buscar_contexto_financeiro`: `dados.trechos[:k]`;
+   - `buscar_contexto_financeiro`: sem golden; responde pelo `BuscadorFake`
+     sobre `rag/trechos_exemplo.json`, com `AVISO_CONHECIMENTO` (e
+     `AVISO_SEM_TRECHOS` se a lista vier vazia) e `fonte.tabelas = []`;
    - `simular_objetivo` e `comparar_cenarios`: o golden da entrada canônica
      (`valor_alvo=30000`, `prazo_meses=24`), com o aviso "Resposta de
      exemplo do mock, calculada para valor_alvo=30000 e prazo_meses=24.".

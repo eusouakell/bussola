@@ -6,12 +6,15 @@ Fluxo:
    o extrato de 2025 dos 2 usuários de fixture, os pares macro/micro do catálogo e um
    agregado anônimo por usuário para ``referencia_coorte``;
 2. funções **puras** de referência (sem I/O) montam as linhas das 7 tabelas de
-   ``bussola_dados``, os golden P0 dos dois cortes, ``resumo_mes__AAAAMM`` e os trechos RAG;
+   ``bussola_dados``, os golden P0 dos dois cortes e ``resumo_mes__AAAAMM``;
 3. tudo é validado com os modelos de ``bussola_mcp.contratos`` e gravado em JSON
    determinístico (chaves ordenadas, indentação 2, UTF-8, ``ensure_ascii=False``).
 
 As fixtures são **provisórias** (contratos §8): o 001 as regenera a partir das tabelas
 oficiais. O contrato não tem campo para essa marca; ela fica registrada aqui e no PR.
+
+``rag/trechos_exemplo.json`` não sai daqui: é conhecimento geral curado à mão (Q-17), e
+:func:`gravar` não apaga arquivos que não gerou.
 
 Uso, com ADC (``gcloud auth application-default login``)::
 
@@ -56,7 +59,7 @@ from bussola_mcp.contratos import (
     CORTES_GOLDEN,
     ENTRADA_CANONICA_SIMULACAO,
     FERRAMENTAS,
-    FERRAMENTAS_P0,
+    FERRAMENTAS_GOLDEN,
     ID_ANCORA,
     ID_CONTROLE,
     MODELOS_TABELA,
@@ -64,7 +67,6 @@ from bussola_mcp.contratos import (
     Categoria,
     Cenario,
     CorteSugerido,
-    DadosBuscarContexto,
     DadosCapacidadePoupanca,
     DadosCompararCenarios,
     DadosDividasParcelas,
@@ -79,7 +81,6 @@ from bussola_mcp.contratos import (
     GastoCategoria,
     GastoMacro,
     Oportunidade,
-    Origem,
     Parcela,
     ParcelaAtiva,
     PerfilMes,
@@ -90,8 +91,7 @@ from bussola_mcp.contratos import (
     RegrasCenario,
     Resposta,
     Saldo,
-    TipoDocumento,
-    Trecho,
+    TrechoCorpus,
     UsuarioFixture,
     anomes_valido,
     arquivo_golden,
@@ -106,10 +106,11 @@ SAIDA_PADRAO = RAIZ_REPO / "contracts" / "fixtures"
 TABELA_ORIGEM = "hackathon_dados.extrato_sintetico"
 IDS_FIXTURE: tuple[str, str] = (ID_ANCORA, ID_CONTROLE)
 
-TOP_MAX = 10  # golden de oportunidades_corte e buscar_contexto_financeiro (R-10)
+TOP_MAX = 10  # golden de oportunidades_corte (R-10)
+# Golden aceitos em ``ferramentas/`` (buscar_contexto_financeiro não tem golden; Q-17).
+FERRAMENTAS_FIXTURE: tuple[str, ...] = (*FERRAMENTAS_GOLDEN, "resumo_mes")
 MESES_MIN_RECORRENCIA = 3
 QTD_MIN_COORTE = 5  # grupos menores não são publicados (nunca dado individual)
-TRECHOS_COORTE = 3
 TOLERANCIA_SALDO = 0.005
 
 TABELAS_DADOS: tuple[str, ...] = (
@@ -303,10 +304,6 @@ def _contem_palavra(texto_normalizado: str, palavra: str) -> bool:
 def eh_juros(micro: str) -> bool:
     """Microcategoria de juros: o nome normalizado contém ``juros``."""
     return _contem_palavra(normalizar_texto(micro), "juros")
-
-
-def _mes_texto(anomes: int) -> str:
-    return f"{anomes % 100:02d}/{anomes // 100}"
 
 
 def _meses_texto(qtd: int) -> str:
@@ -629,13 +626,6 @@ def calcular_categorias(
 
 LIMITES_FAIXA: tuple[float, ...] = (3000.0, 6000.0, 10000.0, 20000.0)
 _ORDEM_FAIXA = {faixa.value: indice for indice, faixa in enumerate(FaixaRenda)}
-ROTULO_FAIXA = {
-    FaixaRenda.ATE_3K.value: "até R$ 3 mil",
-    FaixaRenda.DE_3K_A_6K.value: "entre R$ 3 mil e R$ 6 mil",
-    FaixaRenda.DE_6K_A_10K.value: "entre R$ 6 mil e R$ 10 mil",
-    FaixaRenda.DE_10K_A_20K.value: "entre R$ 10 mil e R$ 20 mil",
-    FaixaRenda.ACIMA_20K.value: "acima de R$ 20 mil",
-}
 
 
 def faixa_renda(renda_media: float) -> str:
@@ -1079,37 +1069,6 @@ def golden_comparar_cenarios(
     return _envelope("comparar_cenarios", resultado, meses[0].anomes, corte, avisos)
 
 
-def filtrar_trechos(trechos: Iterable[Trecho], id_usuario: str, corte: int) -> list[Trecho]:
-    """Escopo e tempo do buscador: trechos do cliente ou de coorte, com ``anomes`` nulo ou
-    ``≤ corte``; ordem por ``score`` decrescente e ``doc_id``."""
-    visiveis = [
-        t
-        for t in trechos
-        if (t.origem.id_usuario == id_usuario or t.tipo == TipoDocumento.COORTE.value)
-        and (t.anomes is None or t.anomes <= corte)
-    ]
-    return sorted(visiveis, key=lambda t: (-t.score, t.doc_id))
-
-
-def golden_buscar_contexto(
-    dados: DadosUsuario, trechos: Sequence[Trecho], corte: int
-) -> dict[str, Any]:
-    """``buscar_contexto_financeiro`` até ``corte`` com até 10 trechos (o mock corta em ``k``).
-
-    Independe da pergunta: é o ranking fixo de :func:`gerar_trechos` após o filtro.
-    """
-    meses = dados.meses_ate(corte)
-    visiveis = filtrar_trechos(trechos, dados.id_usuario, corte)[:TOP_MAX]
-    avisos = [] if visiveis else ["Nenhum trecho encontrado para o período."]
-    return _envelope(
-        "buscar_contexto_financeiro",
-        DadosBuscarContexto(trechos=visiveis),
-        meses[0].anomes,
-        corte,
-        avisos,
-    )
-
-
 def _gastos_macro(gastos: Iterable[GastoCategoria]) -> list[GastoMacro]:
     por_macro = _agrupar(gastos, attrgetter("macro"))
     return sorted(
@@ -1139,140 +1098,6 @@ def golden_resumo_mes(dados: DadosUsuario, anomes: int) -> dict[str, Any]:
         gastos_macro=_gastos_macro(g for g in dados.gastos if g.anomes == anomes),
     )
     return _envelope("resumo_mes", resultado, anomes, anomes, avisos)
-
-
-# ---------------------------------------------------------------------------
-# Trechos RAG de exemplo (FR-016)
-# ---------------------------------------------------------------------------
-
-
-def _texto_ficha(
-    perfil: PerfilMes, gastos: Sequence[GastoCategoria], parcelas: Sequence[Parcela]
-) -> str:
-    partes = [
-        f"Ficha de {_mes_texto(perfil.anomes)}: renda {_reais(perfil.renda)}, "
-        f"gasto {_reais(perfil.gasto)} e sobra {_reais(perfil.sobra)}."
-    ]
-    maiores = _gastos_macro(gastos)[:3]
-    if maiores:
-        partes.append(
-            "Maiores gastos: " + ", ".join(f"{g.macro} {_reais(g.total)}" for g in maiores) + "."
-        )
-    partes.append(
-        f"Saldo inicial {_reais(perfil.saldo_inicial)}, final {_reais(perfil.saldo_final)} "
-        f"e mínimo {_reais(perfil.saldo_minimo)}."
-    )
-    if perfil.juros > 0:
-        partes.append(f"Juros pagos: {_reais(perfil.juros)}.")
-    if parcelas:
-        total = math.fsum(p.vlr for p in parcelas)
-        partes.append(f"Parcelas no mês: {len(parcelas)}, somando {_reais(total)}.")
-    if perfil.saldo_minimo < 0:
-        partes.append("O saldo ficou negativo no mês.")
-    return " ".join(partes)
-
-
-def _texto_perfil_anual(meses: Sequence[PerfilMes], recorrentes: Sequence[Recorrente]) -> str:
-    qtd = len(meses)
-    renda = _reais(_media(p.renda for p in meses))
-    gasto = _reais(_media(p.gasto for p in meses))
-    sobra = _reais(_media(p.sobra for p in meses))
-    partes = [
-        f"Perfil de {meses[-1].anomes // 100}: renda média {renda}, gasto médio {gasto} "
-        f"e sobra média {sobra} em {_meses_texto(qtd)}."
-    ]
-    por_micro = _agrupar(recorrentes, attrgetter("micro"))
-    medias = sorted(
-        ((micro, math.fsum(r.valor for r in itens) / qtd) for micro, itens in por_micro.items()),
-        key=lambda item: (-item[1], item[0]),
-    )[:5]
-    if medias:
-        partes.append(
-            "Gastos recorrentes: "
-            + ", ".join(f"{micro} {_reais(media)}/mês" for micro, media in medias)
-            + "."
-        )
-    negativos = sum(1 for p in meses if p.saldo_minimo < 0)
-    if negativos:
-        partes.append(f"O saldo ficou negativo em {_meses_texto(negativos)}.")
-    return " ".join(partes)
-
-
-def _slug(texto: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "_", normalizar_texto(texto)).strip("_")
-
-
-def gerar_trechos(
-    usuarios: Sequence[DadosUsuario],
-    referencia_coorte: Sequence[RefCoorte],
-    id_ancora: str,
-    faixa_ancora: str,
-) -> list[Trecho]:
-    """Trechos determinísticos no formato de ``buscar_contexto_financeiro``.
-
-    - ``ficha_mensal`` de cada usuário (âncora e controle), ``score = 0,50 + 0,03 × mês``;
-    - ``perfil_anual`` do âncora (``anomes`` = último mês, ``score = 0,95``);
-    - ``coorte`` das 3 maiores macros da faixa do âncora (``score`` 0,70, 0,69, 0,68), sem
-      ``id_usuario`` nem ``anomes``.
-
-    Os textos usam só valores agregados e nomes de categoria, nunca ``descr``.
-    """
-    trechos: list[Trecho] = []
-    for dados in usuarios:
-        for perfil in dados.perfil:
-            trechos.append(
-                Trecho(
-                    doc_id=f"{TipoDocumento.FICHA_MENSAL.value}:{dados.id_usuario}:{perfil.anomes}",
-                    tipo=TipoDocumento.FICHA_MENSAL.value,
-                    anomes=perfil.anomes,
-                    texto=_texto_ficha(
-                        perfil,
-                        [g for g in dados.gastos if g.anomes == perfil.anomes],
-                        [p for p in dados.parcelas if p.anomes == perfil.anomes],
-                    ),
-                    score=round(0.50 + 0.03 * (perfil.anomes % 100), 4),
-                    origem=Origem(
-                        id_usuario=dados.id_usuario, anomes=perfil.anomes, categoria=None
-                    ),
-                )
-            )
-        if dados.id_usuario == id_ancora and dados.perfil:
-            ultimo = dados.perfil[-1].anomes
-            trechos.append(
-                Trecho(
-                    doc_id=f"{TipoDocumento.PERFIL_ANUAL.value}:{dados.id_usuario}:{ultimo // 100}",
-                    tipo=TipoDocumento.PERFIL_ANUAL.value,
-                    anomes=ultimo,
-                    texto=_texto_perfil_anual(dados.perfil, dados.recorrentes),
-                    score=0.95,
-                    origem=Origem(id_usuario=dados.id_usuario, anomes=ultimo, categoria=None),
-                )
-            )
-    da_faixa = sorted(
-        (r for r in referencia_coorte if r.faixa_renda == faixa_ancora),
-        key=lambda r: (-r.media, r.macro),
-    )[:TRECHOS_COORTE]
-    if not da_faixa:
-        raise ErroDados(
-            "Sem referência de coorte para a faixa do âncora; FR-016 exige ao menos um "
-            "trecho de coorte."
-        )
-    for indice, ref in enumerate(da_faixa):
-        trechos.append(
-            Trecho(
-                doc_id=f"{TipoDocumento.COORTE.value}:{ref.faixa_renda}:{_slug(ref.macro)}",
-                tipo=TipoDocumento.COORTE.value,
-                anomes=None,
-                texto=(
-                    f"Clientes com renda {ROTULO_FAIXA[ref.faixa_renda]} gastam em média "
-                    f"{_reais(ref.media)}/mês com {ref.macro} (mediana {_reais(ref.mediana)}, "
-                    f"{ref.qtd_usuarios} clientes)."
-                ),
-                score=round(0.70 - 0.01 * indice, 4),
-                origem=Origem(id_usuario=None, anomes=None, categoria=ref.macro),
-            )
-        )
-    return sorted(trechos, key=lambda t: (-t.score, t.doc_id))
 
 
 # ---------------------------------------------------------------------------
@@ -1314,19 +1139,15 @@ def gerar_conjunto(
     """Todas as fixtures (caminho relativo → objeto JSON), sem I/O.
 
     Layout de contratos §8: ``usuarios.json``, ``bussola_dados/<tabela>.json``,
-    ``ferramentas/<ferramenta>__ate_<corte>.json``, ``ferramentas/resumo_mes__<AAAAMM>.json``
-    e ``rag/trechos_exemplo.json``.
+    ``ferramentas/<ferramenta>__ate_<corte>.json`` e ``ferramentas/resumo_mes__<AAAAMM>.json``.
+    ``rag/trechos_exemplo.json`` é curado à mão (Q-17).
     """
     id_ancora, id_controle = id_ancora.lower(), id_controle.lower()
     validos = validar_lancamentos(lancamentos, (id_ancora, id_controle))
     tabelas = calcular_tabelas(validos, pares_categorias, linhas_coorte)
     usuarios = calcular_usuarios(tabelas["perfil_mensal"], id_ancora, id_controle)
     ancora = DadosUsuario.de_tabelas(tabelas, id_ancora)
-    controle = DadosUsuario.de_tabelas(tabelas, id_controle)
     categorias = tabelas["categorias"]
-    trechos = gerar_trechos(
-        [ancora, controle], tabelas["referencia_coorte"], id_ancora, usuarios[0].faixa_renda
-    )
 
     conjunto: dict[str, Any] = {"usuarios.json": _json_linhas(usuarios)}
     for nome in TABELAS_DADOS:
@@ -1339,14 +1160,12 @@ def gerar_conjunto(
             "dividas_e_parcelas": golden_dividas_e_parcelas(ancora, corte),
             "simular_objetivo": golden_simular_objetivo(ancora, corte),
             "comparar_cenarios": golden_comparar_cenarios(ancora, categorias, corte),
-            "buscar_contexto_financeiro": golden_buscar_contexto(ancora, trechos, corte),
         }
-        for ferramenta in FERRAMENTAS_P0:
+        for ferramenta in FERRAMENTAS_GOLDEN:
             conjunto[f"ferramentas/{arquivo_golden(ferramenta, corte)}"] = golden[ferramenta]
     for mes in range(1, 13):
         anomes = (ANOMES_MIN // 100) * 100 + mes
         conjunto[f"ferramentas/{arquivo_resumo_mes(anomes)}"] = golden_resumo_mes(ancora, anomes)
-    conjunto["rag/trechos_exemplo.json"] = _json_linhas(trechos)
     return dict(sorted(conjunto.items()))
 
 
@@ -1369,17 +1188,15 @@ def validar_conjunto(conjunto: Mapping[str, Any]) -> None:
         if caminho == "usuarios.json":
             _validar_lista(UsuarioFixture, obj, caminho)
         elif caminho == "rag/trechos_exemplo.json":
-            _validar_lista(Trecho, obj, caminho)
+            _validar_lista(TrechoCorpus, obj, caminho)
         elif pasta == "bussola_dados" and f"bussola_dados.{nome}" in MODELOS_TABELA:
             _validar_lista(MODELOS_TABELA[f"bussola_dados.{nome}"], obj, caminho)
-        elif pasta == "ferramentas" and nome.partition("__")[0] in FERRAMENTAS:
+        elif pasta == "ferramentas" and nome.partition("__")[0] in FERRAMENTAS_FIXTURE:
             ferramenta = nome.partition("__")[0]
             resposta = Resposta[FERRAMENTAS[ferramenta][1]].model_validate(obj)
             if resposta.fonte.ferramenta != ferramenta:
                 raise ErroDados(f"{caminho}: fonte.ferramenta não confere com o arquivo.")
-            itens = getattr(resposta.dados, "categorias", None) or getattr(
-                resposta.dados, "trechos", None
-            )
+            itens = getattr(resposta.dados, "categorias", None)
             if itens is not None and len(itens) > TOP_MAX:
                 raise ErroDados(f"{caminho}: mais de {TOP_MAX} itens.")
         else:

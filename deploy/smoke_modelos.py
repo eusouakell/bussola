@@ -359,7 +359,7 @@ def montar_relatorio(
     if embedding is not None:
         linhas.append(
             f"- Dimensão do embedding `{embedding.modelo}`: {embedding.dimensao} "
-            "(conferir com o DDL de `bussola_rag`)."
+            "(conferir com `dimensao` no `manifesto.json` do índice do RAG)."
         )
     linhas.append(
         "- Este teste usa as credenciais do integrante. A SA de runtime do Cloud Run "

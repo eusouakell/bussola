@@ -11,7 +11,6 @@ sempre aditivas.
 """
 
 import re
-from datetime import datetime
 from enum import StrEnum
 from typing import Annotated, Any, Literal
 
@@ -89,11 +88,12 @@ class FaixaRenda(StrEnum):
     ACIMA_20K = "acima_20k"
 
 
-class TipoDocumento(StrEnum):
-    FICHA_MENSAL = "ficha_mensal"
-    PERFIL_ANUAL = "perfil_anual"
-    COORTE = "coorte"
-    LANCAMENTO = "lancamento"
+class TemaConhecimento(StrEnum):
+    """Temas do corpus de conhecimento do RAG (contratos §3, Q-17)."""
+
+    NORMA_BACEN = "norma_bacen"
+    CREDITO = "credito"
+    BOAS_PRATICAS = "boas_praticas"
 
 
 class _Modelo(BaseModel):
@@ -170,19 +170,29 @@ class RefCoorte(_Modelo):
     qtd_usuarios: int
 
 
-# §3 bussola_rag
+# §3 corpus de conhecimento (RAG no repositório, sem BigQuery; Q-17)
 
 
-class Documento(_Modelo):
+class FonteTrecho(_Modelo):
+    """De onde vem o conteúdo: norma, lei ou material de referência."""
+
+    nome: str
+    referencia: str
+    url: str | None = None
+
+
+class TrechoCorpus(_Modelo):
+    """Linha de ``trechos.jsonl`` do índice e de ``contracts/fixtures/rag/trechos_exemplo.json``.
+
+    Conteúdo geral, sem dado de cliente. ``trecho_id`` = ``<doc_id>#<n>``.
+    """
+
     doc_id: str
-    id_usuario: str | None
-    tipo: str
-    anomes: int | None
+    trecho_id: str
+    titulo: str
+    tema: TemaConhecimento
     texto: str
-    fonte: dict[str, Any]
-    embedding: list[float]
-    modelo_embedding: str
-    gerado_em: datetime
+    fonte: FonteTrecho
 
 
 # Tabela (dataset.tabela) → modelo de linha. Base do teste DDL ↔ Pydantic.
@@ -194,7 +204,6 @@ MODELOS_TABELA: dict[str, type[_Modelo]] = {
     "bussola_dados.parcelas": Parcela,
     "bussola_dados.categorias": Categoria,
     "bussola_dados.referencia_coorte": RefCoorte,
-    "bussola_rag.documentos": Documento,
 }
 
 # ---------------------------------------------------------------------------
@@ -331,6 +340,7 @@ class EntradaCompararCenarios(EntradaComum):
 class EntradaBuscarContexto(EntradaComum):
     pergunta: TextoPergunta
     k: int = Field(default=5, ge=1, le=10)
+    tema: TemaConhecimento | None = None
 
 
 class EntradaResumoMes(EntradaComum):
@@ -472,23 +482,22 @@ class DadosCompararCenarios(_Modelo):
     regras: RegrasCenario
 
 
-class Origem(_Modelo):
-    id_usuario: str | None
-    anomes: int | None
-    categoria: str | None
+class Trecho(TrechoCorpus):
+    """Trecho do corpus com a relevância para a pergunta (``score`` > 0)."""
 
-
-class Trecho(_Modelo):
-    doc_id: str
-    tipo: str
-    anomes: int | None
-    texto: str
     score: float
-    origem: Origem
 
 
 class DadosBuscarContexto(_Modelo):
     trechos: list[Trecho]
+
+
+# Avisos fixos de buscar_contexto_financeiro (o LLM repassa, não reescreve).
+AVISO_CONHECIMENTO = (
+    "Conteúdo educativo e geral, não é recomendação individual. "
+    "Confira a norma em vigor no site do Banco Central."
+)
+AVISO_SEM_TRECHOS = "Nenhum trecho da base de conhecimento responde a esta pergunta."
 
 
 class GastoMacro(_Modelo):
@@ -541,6 +550,12 @@ FERRAMENTAS_P0: tuple[str, ...] = (
 # Ferramentas servidas pelo MCP mock do 000 (7 P0 + resumo_mes).
 FERRAMENTAS_MOCK: tuple[str, ...] = (*FERRAMENTAS_P0, "resumo_mes")
 
+# P0 com golden por corte em ``ferramentas/``. ``buscar_contexto_financeiro`` busca
+# no corpus de ``rag/trechos_exemplo.json`` (Q-17).
+FERRAMENTAS_GOLDEN: tuple[str, ...] = tuple(
+    f for f in FERRAMENTAS_P0 if f != "buscar_contexto_financeiro"
+)
+
 # Tabelas citadas em ``fonte.tabelas`` por ferramenta (sugestão do 000; o 003 pode refinar).
 TABELAS_FERRAMENTA: dict[str, list[str]] = {
     "perfil_financeiro": ["bussola_dados.perfil_mensal", "bussola_dados.entradas_categoria"],
@@ -553,7 +568,8 @@ TABELAS_FERRAMENTA: dict[str, list[str]] = {
         "bussola_dados.gastos_categoria",
         "bussola_dados.categorias",
     ],
-    "buscar_contexto_financeiro": ["bussola_rag.documentos"],
+    # Corpus no repositório, sem tabela (Q-17).
+    "buscar_contexto_financeiro": [],
     "resumo_mes": ["bussola_dados.perfil_mensal", "bussola_dados.gastos_categoria"],
     "referencia_coorte": ["bussola_dados.referencia_coorte"],
 }

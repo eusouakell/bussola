@@ -11,7 +11,6 @@ APLICAR=0
 
 # dataset:papel (ciclo 000 §3.5 e mestre §16, Plano B).
 CONCESSOES="bussola_dados:roles/bigquery.dataViewer
-bussola_rag:roles/bigquery.dataViewer
 bussola_app:roles/bigquery.dataEditor
 bussola_app_dev:roles/bigquery.dataEditor"
 
@@ -22,7 +21,7 @@ Uso: deploy/iam_datasets.sh [--sa EMAIL] [--numero-projeto N] [--aplicar]
 Concede papéis do BigQuery em nível de DATASET (nunca no projeto) para a SA de
 runtime do Cloud Run. Plano B do mestre §16: a SA default de compute.
 
-  bussola_dados, bussola_rag      roles/bigquery.dataViewer
+  bussola_dados                   roles/bigquery.dataViewer
   bussola_app, bussola_app_dev    roles/bigquery.dataEditor
 
 As concessões usam DCL do BigQuery (GRANT ... ON SCHEMA), que é idempotente e

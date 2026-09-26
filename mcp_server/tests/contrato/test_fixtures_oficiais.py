@@ -17,14 +17,15 @@ from pydantic import BaseModel
 from bussola_mcp.contratos import (
     CORTES_GOLDEN,
     FERRAMENTAS,
-    FERRAMENTAS_P0,
+    FERRAMENTAS_GOLDEN,
     ID_ANCORA,
     ID_CONTROLE,
     MODELOS_TABELA,
     GastoCategoria,
     PerfilMes,
     Resposta,
-    Trecho,
+    TemaConhecimento,
+    TrechoCorpus,
     UsuarioFixture,
     arquivo_golden,
     arquivo_resumo_mes,
@@ -163,7 +164,7 @@ def test_tabelas_oficiais_validam_nos_modelos(tabela):
 
 @sem_fixtures_oficiais
 @pytest.mark.parametrize("corte", CORTES_GOLDEN)
-@pytest.mark.parametrize("ferramenta", FERRAMENTAS_P0)
+@pytest.mark.parametrize("ferramenta", FERRAMENTAS_GOLDEN)
 def test_golden_p0_valida_no_modelo(ferramenta, corte):
     _, dados = FERRAMENTAS[ferramenta]
     envelope = Resposta[dados].model_validate(
@@ -173,11 +174,6 @@ def test_golden_p0_valida_no_modelo(ferramenta, corte):
     assert envelope.fonte.periodo.fim <= corte
     if ferramenta == "oportunidades_corte":
         assert len(envelope.dados.categorias) <= MAX_ITENS_GOLDEN
-    if ferramenta == "buscar_contexto_financeiro":
-        trechos = envelope.dados.trechos
-        assert len(trechos) <= MAX_ITENS_GOLDEN
-        assert all(t.origem.id_usuario in (ID_ANCORA, None) for t in trechos)
-        assert all(t.anomes is None or t.anomes <= corte for t in trechos)
 
 
 @sem_fixtures_oficiais
@@ -190,11 +186,21 @@ def test_resumo_mes_valida_no_modelo(anomes):
     assert envelope.dados.anomes == anomes
 
 
-@sem_fixtures_oficiais
-def test_trechos_oficiais_validam_no_modelo():
-    trechos = [Trecho.model_validate(t) for t in ler(DIR_OFICIAL, "rag/trechos_exemplo.json")]
-    assert trechos
-    assert {t.origem.id_usuario for t in trechos} <= {ID_ANCORA, ID_CONTROLE, None}
+def test_corpus_oficial_cobre_os_temas_com_fonte():
+    """Corpus curado à mão (Q-17): não depende de ``make fixtures``."""
+    trechos = [TrechoCorpus.model_validate(t) for t in ler(DIR_OFICIAL, "rag/trechos_exemplo.json")]
+    assert {t.tema for t in trechos} == set(TemaConhecimento)
+    ids = [t.trecho_id for t in trechos]
+    assert len(ids) == len(set(ids))
+    for trecho in trechos:
+        doc_id, _, numero = trecho.trecho_id.partition("#")
+        assert doc_id == trecho.doc_id and numero.isdigit()
+        assert trecho.fonte.nome.strip() and trecho.fonte.referencia.strip()
+        assert ID_ANCORA not in trecho.texto and ID_CONTROLE not in trecho.texto
+
+
+def test_corpus_oficial_nao_tem_golden_de_busca():
+    assert not list((DIR_OFICIAL / "ferramentas").glob("buscar_contexto_financeiro__*"))
 
 
 @sem_fixtures_oficiais

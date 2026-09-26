@@ -84,7 +84,7 @@ Também entrega o runbook que permite **operar o produto pelo Antigravity**:
   volta para a revisão anterior registrada.
 - **`plano_b.sh`:** alterna, por variáveis, para:
   - `BQ_MODO_LEITURA=memoria`;
-  - `RAG_BACKEND=numpy`;
+  - `RAG_BACKEND=lexico` (sem embedding em tempo de execução);
   - `GOOGLE_GENAI_USE_VERTEXAI=FALSE` + `GOOGLE_API_KEY` vinda do Secret
     Manager, sem imprimir.
 

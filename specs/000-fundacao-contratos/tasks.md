@@ -26,7 +26,7 @@ worktree e com arquivos disjuntos, depois da Phase 2.
 
 ## Phase 2: Foundational (bloqueia os subagentes)
 
-- [x] T006 [P] DDL `contracts/bigquery/bussola_dados.sql`, `bussola_rag.sql`, `bussola_app.sql` idêntico a contratos §3 (FR-006)
+- [x] T006 [P] DDL `contracts/bigquery/bussola_dados.sql`, `bussola_app.sql` idêntico a contratos §3 (FR-006). `bussola_rag.sql` removido na Q-17
 - [x] T007 [P] `contracts/env.example` com as variáveis de §7, sem segredos (FR-007)
 - [x] T008 `mcp_server/bussola_mcp/contratos.py`: linhas §3, entradas com validação, `dados` §5, envelopes, `CodigoErro`, `RegrasCenario`, `FERRAMENTAS` (FR-008)
 - [x] T009 `mcp_server/bussola_mcp/__init__.py` e `agent/bussola_agent/__init__.py` (pacotes vazios)
@@ -38,10 +38,10 @@ partir daqui, os subagentes podem começar.
 
 - [x] T010 [P] [US1] [A:mcp] `mcp_server/tests/conftest.py`: `BUSSOLA_FAKES=TRUE`, guarda de rede só para loopback, fixture `fixtures_sinteticas(tmp_path)`
 - [x] T011 [P] [US1] [A:mcp] Teste `mcp_server/tests/contrato/test_contratos.py`: validação das entradas (UUID, faixas, exatamente um de prazo/aporte, `pergunta` ≤ 500, `resumo_mes` com `anomes ≤ ate_anomes`)
-- [x] T012 [P] [US1] [A:mcp] Teste `mcp_server/tests/contrato/test_ddl_modelos.py`: DDL `bussola_dados` e `bussola_rag` ↔ modelos (nome, tipo, nulidade) (AC-03, TS-01)
+- [x] T012 [P] [US1] [A:mcp] Teste `mcp_server/tests/contrato/test_ddl_modelos.py`: DDL `bussola_dados` ↔ modelos (nome, tipo, nulidade) e ausência de `bussola_rag` (AC-03, TS-01, Q-17)
 - [x] T013 [P] [US1] [A:mcp] `mcp_server/bussola_mcp/dominio/interfaces.py` (Protocols §4, `runtime_checkable`) (FR-009)
 - [x] T014 [US1] [A:mcp] `mcp_server/bussola_mcp/dominio/fakes.py`: `RepositorioFake` e `BuscadorFake` sobre o diretório de fixtures, com escopo e tempo (FR-009, FR-010)
-- [x] T015 [US1] [A:mcp] Teste `mcp_server/tests/contrato/test_fakes.py`: TS-05, `desde_anomes`, filtro do buscador (coorte, `anomes` nulo, ordenação), `isinstance` com os Protocols
+- [x] T015 [US1] [A:mcp] Teste `mcp_server/tests/contrato/test_fakes.py`: TS-05, `desde_anomes`, buscador (relevância, ordenação por score e `trecho_id`, `tema`, `k`, acentos; Q-17), `isinstance` com os Protocols
 - [x] T016 [P] [US1] [A:mcp] `mcp_server/bussola_mcp/logging_json.py` + teste `test_logging_json.py` (FR-011)
 - [x] T017 [P] [US1] [A:agente] `agent/bussola_agent/logging_json.py` + teste (FR-011)
 - [x] T018 [P] [US1] [A:agente] `agent/tests/conftest.py` (guarda de rede, `limpar()` dos registros)
@@ -65,7 +65,7 @@ partir daqui, os subagentes podem começar.
 
 ## Phase 6: US4: fixtures (P2)
 
-- [x] T030 [US4] [A:dados] `data/scripts/gerar_fixtures.py`: SQL de referência parametrizado, funções puras de referência para os golden P0, `resumo_mes` e trechos RAG, validação com `bussola_mcp.contratos`, `--saida` (FR-015, FR-016)
+- [x] T030 [US4] [A:dados] `data/scripts/gerar_fixtures.py`: SQL de referência parametrizado, funções puras de referência para os golden P0 e `resumo_mes`, preservando o corpus curado de RAG (Q-17), validação com `bussola_mcp.contratos`, `--saida` (FR-015, FR-016)
 - [x] T031 [US4] [A:dados] Teste `mcp_server/tests/contrato/test_gerar_fixtures.py`: funções puras com linhas sintéticas (métricas, golden válidos, determinismo, sem rede)
 - [x] T032 [US4] [CRED] Rodar `make fixtures` e versionar `contracts/fixtures/` (AC-04)
 

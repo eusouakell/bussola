@@ -57,6 +57,13 @@ parênteses.
   `ate_anomes`? → A: `ENTRADA_INVALIDA`. (RESOLVABLE_FROM_CONTEXT)
 - Q: Q4 (canal da demo) bloqueia o 000? → A: não; é decisão da Pessoa B antes
   do merge e só pode acrescentar `web/` ao mapa §1. (UNRESOLVED, externa)
+- Q: O RAG continua sobre `bussola_rag` com dados do cliente? → A: não
+  (Q-17, decisão do usuário). O RAG é conhecimento geral (normas do BACEN,
+  crédito, boas práticas) num corpus curado no repositório, com busca em
+  memória. `bussola_rag` sai do DDL; o buscador não recebe `id_usuario` nem
+  `ate_anomes`; `buscar_contexto_financeiro` não tem golden. Mudança
+  incompatível em `Trecho` (sai `origem`, `tipo`, `anomes`), feita antes da
+  tag `contratos-v1`, sem consumidor afetado. (EXPLICIT)
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -162,7 +169,7 @@ contratos §8 (tolerância de 1%).
 1. **Given** credenciais de leitura na base sintética, **When** `make fixtures`
    roda, **Then** são gerados `usuarios.json`, as tabelas de `bussola_dados` para
    os 2 usuários, os golden P0 `__ate_202506`/`__ate_202512`, os 12
-   `resumo_mes__AAAAMM` e os trechos de RAG de exemplo (AC-04).
+   `resumo_mes__AAAAMM`, preservando o corpus curado de RAG (AC-04).
 2. **Given** as fixtures geradas, **When** o teste de referência roda, **Then**
    renda, gasto, sobra, aluguel, comer fora, assinaturas, juros, saldo mínimo e
    saldo máximo do âncora ficam a até 1% dos valores de contratos §8 (AC-04).
@@ -265,9 +272,9 @@ lead time externo.
 
 **Contratos em código (000 §3.3; contratos §3–§7, §9)**
 
-- **FR-006**: MUST existir DDL dos datasets `bussola_dados`, `bussola_rag` e
-  `bussola_app` idêntico a contratos §3; `bussola_app_dev` reutiliza o DDL de
-  `bussola_app`.
+- **FR-006**: MUST existir DDL dos datasets `bussola_dados` e `bussola_app`
+  idêntico a contratos §3; `bussola_app_dev` reutiliza o DDL de `bussola_app`.
+  Não há dataset de RAG (Q-17).
 - **FR-007**: MUST existir `contracts/env.example` com todas as variáveis de
   contratos §7 e nenhum valor secreto.
 - **FR-008**: MUST existir modelos de dados para cada linha de tabela de §3, para
@@ -279,8 +286,9 @@ lead time externo.
   sobre `contracts/fixtures/`.
 - **FR-010**: Os fakes MUST respeitar escopo e tempo: só linhas do `id_usuario`
   pedido e com `anomes ≤ ate_anomes` (e `≥ desde_anomes`, quando informado); o
-  buscador fake aplica o filtro obrigatório de contratos §3 (`id_usuario` ou
-  `coorte`, e `anomes` nulo ou `≤ ate_anomes`).
+  buscador fake não recebe cliente nem corte (corpus geral, Q-17) e devolve até
+  `k` trechos com `score > 0`, ordenados por score e `trecho_id`, com filtro
+  opcional por `tema`.
 - **FR-011**: Cada serviço MUST ter um logger JSON em stdout com `severity`,
   `message` e os campos de contratos §9, sem prompt, texto de lançamentos,
   chaves ou tokens.
@@ -306,13 +314,16 @@ lead time externo.
   golden P0 (`__ate_202506`, `__ate_202512`) e `resumo_mes__AAAAMM`
   (202501–202512) calculados por uma implementação de referência simples,
   marcados como provisórios.
-- **FR-016**: `contracts/fixtures/rag/trechos_exemplo.json` MUST conter trechos
-  determinísticos no formato de `buscar_contexto_financeiro`, cobrindo o âncora
-  e ao menos um trecho de `coorte`.
+- **FR-016**: `contracts/fixtures/rag/trechos_exemplo.json` MUST conter um
+  corpus curado de `TrechoCorpus` (texto original em pt-BR), cobrindo os três
+  temas (`norma_bacen`, `credito`, `boas_praticas`), todos com `fonte`;
+  `make fixtures` MUST preservá-lo (Q-17).
 - **FR-017**: O mock MUST servir, em streamable HTTP no caminho `/mcp` em
   `0.0.0.0:$PORT`, as 7 ferramentas P0 e `resumo_mes` com as assinaturas de
   §5, respondendo pela regra de §8 (`< 202512` → golden `__ate_202506` + aviso
-  de mock; `= 202512` → golden `__ate_202512`).
+  de mock; `= 202512` → golden `__ate_202512`); `buscar_contexto_financeiro`
+  responde pelo buscador fake sobre o corpus curado, para qualquer cliente
+  conhecido (Q-17).
 - **FR-018**: O mock MUST validar as entradas (UUID por regex, faixas de §5) e
   devolver `ENTRADA_INVALIDA` para entrada inválida e `USUARIO_INEXISTENTE` para
   UUID fora de `usuarios.json`, como envelope de erro (não exceção).
@@ -323,8 +334,8 @@ lead time externo.
 **Plataforma (000 §3.5)**
 
 - **FR-020**: `data/scripts/aplicar_ddl.py` MUST criar de forma idempotente os
-  datasets `bussola_dados`, `bussola_rag`, `bussola_app` e `bussola_app_dev` e
-  suas tabelas em `us-central1`.
+  datasets `bussola_dados`, `bussola_app` e `bussola_app_dev` e suas tabelas em
+  `us-central1`.
 - **FR-021**: `deploy/smoke_modelos.py` MUST testar Gemini Flash na ordem 3.8 →
   3.7 → 3.5 e o modelo de embedding via Vertex, gravar os IDs validados em
   `contracts/env.example` e o relatório (modelos testados, latência, dimensão do
@@ -335,7 +346,7 @@ lead time externo.
   `deploy/deploy.sh <servico> [--tag cNNN --no-traffic]` MUST implantar no Cloud
   Run, com `bussola-mcp` privado (`--no-allow-unauthenticated`).
 - **FR-023**: `deploy/iam_datasets.sh` MUST aplicar o Plano B (dataViewer em
-  `bussola_dados`/`bussola_rag`, dataEditor em `bussola_app`/`bussola_app_dev`
+  `bussola_dados`, dataEditor em `bussola_app`/`bussola_app_dev`
   para a SA default) somente após confirmação humana explícita.
 - **FR-024**: `specs/000-fundacao-contratos/pedidos-owner.md` MUST conter os 4
   itens de mestre §16 prontos para envio pela Pessoa B, com campos de status e
@@ -350,8 +361,9 @@ lead time externo.
   identificados por UUID v4.
 - **Linhas de `bussola_dados`**: `PerfilMes`, `GastoCategoria`,
   `EntradaCategoria`, `Recorrente`, `Parcela`, `Categoria`, `RefCoorte`.
-- **Documento/Trecho de RAG**: `doc_id`, `tipo`, `anomes`, `texto`, `score`,
-  `origem`.
+- **Trecho de RAG** (`TrechoCorpus`/`Trecho`): `doc_id`, `trecho_id`,
+  `titulo`, `tema`, `texto`, `fonte{nome, referencia, url}` e, na busca,
+  `score`.
 - **Registros de aplicação**: `Plano`, `Consentimento`, `EventoAuditoria`,
   `Acompanhamento`.
 - **Envelope de ferramenta**: sucesso (`dados`, `fonte`, `avisos`) ou erro

@@ -29,15 +29,15 @@ flowchart TB
     subgraph L4["Camada 4 — Ferramentas · Cloud Run bussola-mcp (read-only)"]
         tools["Ferramentas MCP<br/>streamable HTTP"]
         sim["Simulação<br/>Python determinístico"]
-        rag["Busca RAG<br/>filtro id_usuario"]
+        rag["Busca RAG<br/>conhecimento geral"]
         cut["Replay temporal<br/>corte ate_anomes"]
     end
 
-    subgraph L5["Camada 5 — Dados e conhecimento · BigQuery us-central1"]
+    subgraph L5["Camada 5 — Dados e conhecimento"]
         raw[("hackathon_dados<br/>extrato_sintetico (leitura)")]
         dados[("bussola_dados<br/>métricas e views")]
-        ragdb[("bussola_rag<br/>fichas + embeddings")]
         app[("bussola_app<br/>planos, consentimentos, auditoria")]
+        corpus[("Corpus + índice no repo<br/>normas BACEN, crédito, boas práticas")]
     end
 
     subgraph L6["Camada 6 — Plataforma transversal"]
@@ -57,9 +57,8 @@ flowchart TB
     tools --> rag
     tools --> cut
     sim --> dados
-    rag --> ragdb
+    rag --> corpus
     dados -.derivado de.-> raw
-    ragdb -.derivado de.-> dados
     consent --> app
     agent --> gemini
     rag --> gemini
@@ -82,11 +81,11 @@ flowchart TB
 | 3 | Gate de consentimento | Bloqueia ação sensível até "sim" explícito; registra decisão | Ferramenta ADK `solicitar_consentimento` + checagem em callback | Grava em `bussola_app` |
 | 4 | Ferramentas MCP | Interface semântica (sem SQL exposto) | SDK MCP Python (FastMCP), streamable HTTP | Cloud Run `bussola-mcp` |
 | 4 | Simulação | Prazo × aporte, cenários, cortes, dívidas | Python puro com testes | — |
-| 4 | Busca RAG | Top-k por similaridade, sempre filtrado por cliente | `VECTOR_SEARCH` (BigQuery) ou numpy (Plano B) | `bussola_rag` |
+| 4 | Busca RAG | Top-k de conhecimento geral (normas do BACEN, crédito, boas práticas), sem dado de cliente | Léxico (padrão) ou cosseno numpy em memória | Índice no repositório (Q-17) |
 | 4 | Replay temporal | Aplica `ate_anomes` a toda consulta, e o agente não vê o futuro | Parâmetro obrigatório nas ferramentas | — |
 | 5 | Dados brutos | Fonte única do extrato sintético | BigQuery | `hackathon_dados.extrato_sintetico` |
 | 5 | Métricas | Agregados determinísticos por usuário/mês | Views/tabelas SQL | `bussola_dados` |
-| 5 | Corpus RAG | Fichas textuais + embeddings | Tabela com `ARRAY<FLOAT64>` | `bussola_rag` |
+| 5 | Corpus RAG | Textos curados + embeddings gerados offline | Markdown + `embeddings.npy` versionados | `data/rag/corpus/`, `bussola_mcp/rag/indice/` |
 | 5 | Estado de aplicação | Planos, consentimentos, auditoria, acompanhamento | Tabelas (streaming insert) | `bussola_app` |
 | 6 | Gemini | Raciocínio do agente e embeddings do corpus | Agent Platform (padrão) ou Gemini API (Plano B) | Model Garden |
 | 6 | Secret Manager | Chaves fora do código | — | `gemini-api-key` |
@@ -111,8 +110,8 @@ sequenceDiagram
     G->>A: prompt sanitizado
     A->>M: comparar_cenarios(id_usuario, valor_alvo, prazo, ate_anomes)
     M->>BQ: SQL parametrizado (bussola_dados)
-    M->>BQ: VECTOR_SEARCH filtrado (bussola_rag)
-    BQ-->>M: métricas + trechos com origem
+    BQ-->>M: métricas
+    M->>M: buscar_contexto_financeiro (índice em memória)
     M-->>A: cenários (números + fonte)
     A->>G: resposta redigida com fontes
     G-->>UI: resposta sanitizada
@@ -157,10 +156,12 @@ Todas recebem `id_usuario` e `ate_anomes` (corte temporal), e todas devolvem
 - `parcelas(id_usuario, anomes, descr, parcela_atual, parcela_total, vlr)`
 - `referencia_coorte(faixa_renda, macro, media, mediana, qtd_usuarios)`
 
-**`bussola_rag`**:
+**Corpus RAG** (no repositório, sem dataset; Q-17 do 000):
 
-- `documentos(doc_id, id_usuario NULL, tipo, anomes, texto, fonte JSON, embedding ARRAY<FLOAT64>)`
-- Valores de `tipo`: `ficha_mensal`, `perfil_anual`, `coorte`, `lancamento`.
+- `data/rag/corpus/<tema>/<doc_id>.md`, com `tema` em `norma_bacen`,
+  `credito` ou `boas_praticas`; cada seção `##` vira um trecho.
+- Índice em `mcp_server/bussola_mcp/rag/indice/`: `trechos.jsonl`,
+  `embeddings.npy` e `manifesto.json`.
 
 **`bussola_app`**:
 
@@ -176,12 +177,11 @@ hackathon_dados.extrato_sintetico
       │  SQL (credencial do integrante, BigQuery Job User)
       ▼
 bussola_dados.*  ── métricas determinísticas (F1)
-      │  Python: gera texto determinístico por usuário/mês
+
+data/rag/corpus/<tema>/*.md  ── textos curados pelo time (F2)
+      │  data/rag/indexar.py: embeddings (Agent Platform ou Gemini API)
       ▼
-fichas (texto + fonte)
-      │  embeddings (Agent Platform ou Gemini API)
-      ▼
-bussola_rag.documentos  ── VECTOR_SEARCH / numpy (F2)
+bussola_mcp/rag/indice/  ── versionado; o MCP carrega em memória (lexico / numpy)
 ```
 
 ## 7. Build e deploy
@@ -222,7 +222,8 @@ caminho padrão porque exigem bucket de staging (o time não tem Storage Admin).
 | agent | `MODEL_ARMOR_TEMPLATE` | `projects/…/locations/us-central1/templates/bussola-guard` (opcional) |
 | agent | `ANCHOR_USER_ID` | `36a21505-d6d4-42d3-b319-d51a133c7269` |
 | agent | `REPLAY_START_ANOMES` | ex. `202506` |
-| mcp | `BQ_DATASET_DADOS` / `BQ_DATASET_RAG` | `bussola_dados` / `bussola_rag` |
+| mcp | `BQ_DATASET_DADOS` | `bussola_dados` |
+| mcp | `RAG_BACKEND` | `lexico` (padrão, sem GCP) / `numpy` |
 | mcp | `EMBEDDING_MODEL` | ID validado no Bloco 0 |
 
 ## 10. Estrutura de repositório sugerida
@@ -231,7 +232,7 @@ caminho padrão porque exigem bucket de staging (o time não tem Storage Admin).
 bussola/
 ├── agent/            # ADK: agente, prompts, callbacks, consentimento
 ├── mcp_server/       # FastMCP: ferramentas, simulação, RAG
-├── data/             # SQL de bussola_dados, gerador de fichas, carga de embeddings
+├── data/             # SQL de bussola_dados, corpus do RAG e indexador
 ├── eval/             # perguntas de avaliação e casos de prompt injection
 ├── deploy/           # Dockerfiles e scripts de build/push/deploy
 └── docs/

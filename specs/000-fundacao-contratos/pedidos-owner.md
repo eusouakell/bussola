@@ -85,7 +85,7 @@ Tudo abaixo funciona com os papéis atuais do time (mestre §5 e §16):
 
 | Área | Plano A (com pedidos) | Plano B (sem pedidos) | Custo do Plano B |
 |---|---|---|---|
-| BigQuery | SA de runtime com `jobUser` + `dataViewer` | O time concede `dataViewer` em `bussola_dados`/`bussola_rag` e `dataEditor` em `bussola_app`/`bussola_app_dev` à SA default, no nível de dataset (`deploy/iam_datasets.sh`). Leitura por `list_rows`/Storage Read e escrita por streaming insert, sem `jobUser` | Sem SQL ad hoc no runtime: tabelas pré-agregadas pelo 001 e busca vetorial em memória (§9) |
+| BigQuery | SA de runtime com `jobUser` + `dataViewer` | O time concede `dataViewer` em `bussola_dados` e `dataEditor` em `bussola_app`/`bussola_app_dev` à SA default, no nível de dataset (`deploy/iam_datasets.sh`). Leitura por `list_rows`/Storage Read e escrita por streaming insert, sem `jobUser` | Sem SQL ad hoc no runtime: tabelas pré-agregadas pelo 001; o RAG já roda em memória, sem BigQuery (Q-17) |
 | LLM | Gemini via Vertex (`aiplatform.user`) | Gemini API (`generativelanguage`) com `gemini-api-key` injetada por `--set-secrets` por quem tem accessor | Chave de API em runtime: aceitável só na PoC; registrar como dívida |
 | Guardrails | Model Armor (`bussola-guard`) + callbacks | Callbacks do ADK + safety settings do Gemini | Sem filtro gerenciado de prompt injection |
 | Build | `--source` / Cloud Build com bucket | `docker buildx` local + push para `agentes` (Artifact Registry Writer) | Build depende da máquina do integrante |

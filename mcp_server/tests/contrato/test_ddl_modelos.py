@@ -1,4 +1,4 @@
-"""DDL de ``bussola_dados`` e ``bussola_rag`` ↔ modelos de ``contratos.py`` (AC-03, TS-01).
+"""DDL de ``bussola_dados`` ↔ modelos de ``contratos.py`` (AC-03, TS-01, Q-17).
 
 Compara nome, tipo e nulidade de cada coluna. ``ARRAY`` é exceção na nulidade:
 o BigQuery não aceita ``NOT NULL`` em ``ARRAY`` (research R-16).
@@ -16,7 +16,7 @@ from pydantic import BaseModel
 from bussola_mcp.contratos import MODELOS_TABELA
 
 DIR_BIGQUERY = Path(__file__).resolve().parents[3] / "contracts" / "bigquery"
-ARQUIVOS_DDL = ("bussola_dados.sql", "bussola_rag.sql")
+ARQUIVOS_DDL = ("bussola_dados.sql",)
 DATASETS = tuple(arquivo.removesuffix(".sql") for arquivo in ARQUIVOS_DDL)
 
 TIPOS_ESCALARES: dict[Any, str] = {
@@ -118,9 +118,14 @@ def test_colunas_tipos_e_nulidade(ddl, tabela):
         assert anulavel_ddl == anulavel_modelo, f"{tabela}.{coluna}: nulidade"
 
 
-def test_colunas_anulaveis_do_rag(ddl):
-    anulaveis = {c for c, (_, anulavel) in ddl["bussola_rag.documentos"].items() if anulavel}
-    assert anulaveis == {"id_usuario", "anomes", "embedding"}
+def test_colunas_de_bussola_dados_sao_obrigatorias(ddl):
+    assert not [(t, c) for t, colunas in ddl.items() for c, (_, nulo) in colunas.items() if nulo]
+
+
+def test_rag_nao_tem_tabela_no_bigquery():
+    """O corpus de conhecimento fica no repositório (Q-17)."""
+    assert not (DIR_BIGQUERY / "bussola_rag.sql").exists()
+    assert not [t for t in MODELOS_TABELA if t.startswith("bussola_rag.")]
 
 
 def test_parser_do_ddl(tmp_path):

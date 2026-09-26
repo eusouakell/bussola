@@ -31,13 +31,14 @@ Uma coluna marcada `NULL` em §3 vira `X | None` no modelo. As demais têm
 
 `faixa_renda` ∈ `ate_3k`, `3k_6k`, `6k_10k`, `10k_20k`, `acima_20k` (`FaixaRenda`).
 
-## Linha de `bussola_rag`
+## Corpus de conhecimento (sem tabela; Q-17)
 
-| Modelo | Tabela | Campos |
+| Modelo | Onde | Campos |
 |---|---|---|
-| `Documento` | `documentos` | `doc_id, id_usuario: str\|None, tipo, anomes: int\|None, texto, fonte: dict, embedding: list[float], modelo_embedding, gerado_em: datetime` |
+| `TrechoCorpus` | `contracts/fixtures/rag/trechos_exemplo.json`; `bussola_mcp/rag/indice/trechos.jsonl` (002) | `doc_id, trecho_id, titulo, tema, texto, fonte: FonteTrecho{nome, referencia, url: str\|None}` |
 
-`tipo` ∈ `ficha_mensal`, `perfil_anual`, `coorte`, `lancamento` (`TipoDocumento`).
+`tema` ∈ `norma_bacen`, `credito`, `boas_praticas` (`TemaConhecimento`).
+`trecho_id` = `<doc_id>#<n>`. Sem dado de cliente.
 
 ## Linhas de `bussola_app` (`agent/bussola_agent/persistencia.py`)
 
@@ -63,7 +64,7 @@ Base `EntradaComum` (`extra="forbid"`):
 | `EntradaOportunidadesCorte` | `top_n: int = 5`, entre 1 e 10 |
 | `EntradaSimularObjetivo` | `valor_alvo > 0`; **exatamente um** entre `prazo_meses` (1–360) e `aporte_mensal > 0`; `usar_saldo_atual: bool = False` |
 | `EntradaCompararCenarios` | `valor_alvo > 0`; `prazo_meses` entre 1 e 360 |
-| `EntradaBuscarContexto` | `pergunta` com 1 a 500 caracteres (depois de `strip`); `k: int = 5`, entre 1 e 10 |
+| `EntradaBuscarContexto` | `pergunta` com 1 a 500 caracteres (depois de `strip`); `k: int = 5`, entre 1 e 10; `tema: TemaConhecimento \| None = None` |
 | `EntradaResumoMes` | `anomes` entre 202501 e 202512 e `anomes ≤ ate_anomes` |
 | `EntradaReferenciaCoorte` | `categoria` (macro) com 1 a 100 caracteres |
 
@@ -95,7 +96,7 @@ CodigoErro     = USUARIO_INEXISTENTE | ENTRADA_INVALIDA | PRAZO_IMPLAUSIVEL
 | `DadosDividasParcelas` | `parcelas_ativas: list[ParcelaAtiva{descr, parcela_atual, parcela_total, valor, meses_restantes}], juros_pagos_media, comprometimento_renda_pct` |
 | `DadosSimularObjetivo` | `modo: Literal["prazo","aporte"], valor_alvo, aporte_mensal, prazo_meses, viavel, folga_mensal, premissas: dict` |
 | `DadosCompararCenarios` | `cenarios: list[Cenario{nome, pct_capacidade, aporte_mensal, prazo_meses, viavel, cortes_sugeridos: list[CorteSugerido{macro, micro, valor_mensal}], trade_offs: list[str]}], regras: RegrasCenario` |
-| `DadosBuscarContexto` | `trechos: list[Trecho{doc_id, tipo, anomes: int\|None, texto, score, origem: Origem{id_usuario: str\|None, anomes: int\|None, categoria: str\|None}}]` |
+| `DadosBuscarContexto` | `trechos: list[Trecho]`, com `Trecho` = `TrechoCorpus` + `score: float` (> 0). Avisos fixos `AVISO_CONHECIMENTO` e `AVISO_SEM_TRECHOS`; `fonte.tabelas = []` |
 | `DadosResumoMes` | `anomes, renda, gasto, sobra, gastos_macro: list[GastoMacro{macro, total}]` |
 | `DadosReferenciaCoorte` | `faixa_renda, macro, media, mediana, qtd_usuarios` |
 

@@ -16,8 +16,10 @@ import pytest
 from mcp.shared.memory import create_connected_server_and_client_session
 
 from bussola_mcp.contratos import (
+    AVISO_CONHECIMENTO,
+    AVISO_SEM_TRECHOS,
+    FERRAMENTAS_GOLDEN,
     FERRAMENTAS_MOCK,
-    FERRAMENTAS_P0,
     ID_ANCORA,
     ID_CONTROLE,
     arquivo_golden,
@@ -28,6 +30,8 @@ from bussola_mcp.server import AVISO_CORTE, AVISO_SIMULACAO, criar_servidor
 
 UUID_DESCONHECIDO = str(uuid.UUID(int=0xB0550, version=4))
 OBRIGATORIO = object()
+# Ferramentas que leem dados do cliente (a busca lê o corpus de conhecimento, Q-17).
+FERRAMENTAS_CLIENTE = tuple(f for f in FERRAMENTAS_MOCK if f != "buscar_contexto_financeiro")
 
 # Parâmetros adicionais de §5: nome → (tipos JSON, padrão ou OBRIGATORIO).
 PARAMETROS_ESPERADOS: dict[str, dict[str, tuple[set[str], Any]]] = {
@@ -48,6 +52,7 @@ PARAMETROS_ESPERADOS: dict[str, dict[str, tuple[set[str], Any]]] = {
     "buscar_contexto_financeiro": {
         "pergunta": ({"string"}, OBRIGATORIO),
         "k": ({"integer"}, 5),
+        "tema": ({"string", "null"}, None),
     },
     "resumo_mes": {"anomes": ({"integer"}, OBRIGATORIO)},
 }
@@ -56,7 +61,7 @@ PARAMETROS_ESPERADOS: dict[str, dict[str, tuple[set[str], Any]]] = {
 ARGUMENTOS_MINIMOS: dict[str, dict[str, Any]] = {
     "simular_objetivo": {"valor_alvo": 5000.0, "aporte_mensal": 250.0},
     "comparar_cenarios": {"valor_alvo": 5000.0, "prazo_meses": 12},
-    "buscar_contexto_financeiro": {"pergunta": "Quanto gasto com aluguel?"},
+    "buscar_contexto_financeiro": {"pergunta": "Como funciona o rotativo do cartão?"},
     "resumo_mes": {"anomes": 202503},
 }
 
@@ -159,9 +164,9 @@ async def test_ts02_corte_final_usa_golden_202512_sem_alteracao(fixtures_sinteti
     assert envelope == golden(fixtures_sinteticas, arquivo_golden("perfil_financeiro", 202512))
 
 
-@pytest.mark.parametrize("ferramenta", FERRAMENTAS_P0)
+@pytest.mark.parametrize("ferramenta", FERRAMENTAS_GOLDEN)
 @pytest.mark.parametrize("corte", [202506, 202512])
-async def test_toda_p0_serve_o_golden_do_corte(fixtures_sinteticas, ferramenta, corte):
+async def test_toda_p0_com_golden_serve_o_golden_do_corte(fixtures_sinteticas, ferramenta, corte):
     esperado = golden(fixtures_sinteticas, arquivo_golden(ferramenta, corte))
     if corte == 202506:
         esperado["avisos"].append(AVISO_CORTE)
@@ -169,8 +174,6 @@ async def test_toda_p0_serve_o_golden_do_corte(fixtures_sinteticas, ferramenta, 
         esperado["avisos"].append(AVISO_SIMULACAO)
     if ferramenta == "oportunidades_corte":
         esperado["dados"]["categorias"] = esperado["dados"]["categorias"][:5]
-    if ferramenta == "buscar_contexto_financeiro":
-        esperado["dados"]["trechos"] = esperado["dados"]["trechos"][:5]
     async with sessao_mock(fixtures_sinteticas) as sessao:
         envelope = await chamar(sessao, ferramenta, **argumentos(ferramenta, ate_anomes=corte))
     assert envelope == esperado
@@ -216,21 +219,77 @@ async def test_oportunidades_trunca_em_top_n(fixtures_sinteticas, top_n):
     assert envelope["dados"]["categorias"] == categorias[:top_n]
 
 
-@pytest.mark.parametrize("k", [1, 2, 5, 10])
-async def test_busca_trunca_em_k(fixtures_sinteticas, k):
-    trechos = golden(fixtures_sinteticas, arquivo_golden("buscar_contexto_financeiro", 202512))[
-        "dados"
-    ]["trechos"]
+# -- buscar_contexto_financeiro: corpus de conhecimento (Q-17) -------------------
+
+
+async def _buscar(sessao, id_usuario: str = ID_ANCORA, ate_anomes: int = 202512, **extras: Any):
+    return await chamar(
+        sessao,
+        "buscar_contexto_financeiro",
+        id_usuario=id_usuario,
+        ate_anomes=ate_anomes,
+        **extras,
+    )
+
+
+def _ids(envelope: dict[str, Any]) -> list[str]:
+    return [t["trecho_id"] for t in envelope["dados"]["trechos"]]
+
+
+@pytest.mark.parametrize("k", [1, 2, 3, 10])
+async def test_busca_devolve_trechos_do_corpus_ate_k(fixtures_sinteticas, k):
     async with sessao_mock(fixtures_sinteticas) as sessao:
-        envelope = await chamar(
-            sessao,
-            "buscar_contexto_financeiro",
-            id_usuario=ID_ANCORA,
-            ate_anomes=202512,
-            pergunta="aluguel",
-            k=k,
-        )
-    assert envelope["dados"]["trechos"] == trechos[:k]
+        envelope = await _buscar(sessao, pergunta="juros do rotativo do cartão", k=k)
+    assert _ids(envelope) == ["teto-juros#1", "rotativo#1", "cet#1"][:k]
+    assert envelope["avisos"] == [AVISO_CONHECIMENTO]
+    assert envelope["fonte"] == {
+        "ferramenta": "buscar_contexto_financeiro",
+        "tabelas": [],
+        "periodo": {"inicio": 202501, "fim": 202512},
+    }
+    (primeiro, *_) = envelope["dados"]["trechos"]
+    assert primeiro["tema"] == "norma_bacen"
+    assert primeiro["score"] == 1.0
+    assert set(primeiro["fonte"]) == {"nome", "referencia", "url"}
+
+
+async def test_busca_sem_trecho_relevante_avisa(fixtures_sinteticas):
+    assert AVISO_SEM_TRECHOS == "Nenhum trecho da base de conhecimento responde a esta pergunta."
+    async with sessao_mock(fixtures_sinteticas) as sessao:
+        envelope = await _buscar(sessao, pergunta="Quanto gasto com restaurantes?")
+    assert envelope["dados"] == {"trechos": []}
+    assert envelope["avisos"] == [AVISO_CONHECIMENTO, AVISO_SEM_TRECHOS]
+
+
+async def test_busca_filtra_por_tema(fixtures_sinteticas):
+    async with sessao_mock(fixtures_sinteticas) as sessao:
+        credito = await _buscar(sessao, pergunta="minhas dívidas", tema="credito")
+        normas = await _buscar(sessao, pergunta="minhas dívidas", tema="norma_bacen")
+    assert _ids(credito) == ["registrato#1"]
+    assert normas["dados"]["trechos"] == []
+
+
+async def test_busca_vale_para_qualquer_cliente_e_corte(fixtures_sinteticas):
+    """Conhecimento geral: o controle também recebe, e o corte não muda os trechos."""
+    async with sessao_mock(fixtures_sinteticas) as sessao:
+        ancora = await _buscar(sessao, pergunta="O que é o CET?")
+        controle = await _buscar(sessao, ID_CONTROLE, 202506, pergunta="O que é o CET?")
+    assert _ids(ancora) == _ids(controle) == ["cet#1"]
+    assert controle["dados"] == ancora["dados"]
+    assert controle["fonte"]["periodo"] == {"inicio": 202501, "fim": 202506}
+    assert AVISO_CORTE not in controle["avisos"]
+
+
+async def test_busca_com_corpus_invalido_e_indisponivel(fixtures_sinteticas):
+    corpus = fixtures_sinteticas / "rag" / "trechos_exemplo.json"
+    corpus.write_text('[{"doc_id": "x"}]', encoding="utf-8")
+    async with sessao_mock(fixtures_sinteticas) as sessao:
+        envelope = await _buscar(sessao, pergunta="O que é o CET?")
+        ainda_ok = await chamar(sessao, "perfil_financeiro", **argumentos("perfil_financeiro"))
+    assert envelope == {
+        "erro": {"codigo": "INDISPONIVEL", "mensagem": "Dados de exemplo indisponíveis."}
+    }
+    assert "dados" in ainda_ok
 
 
 # -- resumo_mes ------------------------------------------------------------------
@@ -315,6 +374,7 @@ async def test_ts03_simular_com_prazo_e_aporte(fixtures_sinteticas):
         ("oportunidades_corte", {"top_n": 0}, "top_n"),
         ("buscar_contexto_financeiro", {"pergunta": "a" * 501}, "pergunta"),
         ("buscar_contexto_financeiro", {"pergunta": "aluguel", "k": 0}, "k"),
+        ("buscar_contexto_financeiro", {"pergunta": "CET", "tema": "politica"}, "tema"),
         ("comparar_cenarios", {"valor_alvo": 1000.0, "prazo_meses": 361}, "prazo_meses"),
         ("simular_objetivo", {"valor_alvo": -1.0, "prazo_meses": 12}, "valor_alvo"),
         ("resumo_mes", {"anomes": 202507}, "anomes"),
@@ -329,7 +389,7 @@ async def test_faixas_viram_entrada_invalida(fixtures_sinteticas, ferramenta, ex
     assert campo in envelope["erro"]["mensagem"]
 
 
-@pytest.mark.parametrize("ferramenta", FERRAMENTAS_MOCK)
+@pytest.mark.parametrize("ferramenta", FERRAMENTAS_CLIENTE)
 async def test_controle_recebe_dados_insuficientes(fixtures_sinteticas, ferramenta):
     async with sessao_mock(fixtures_sinteticas) as sessao:
         envelope = await chamar(sessao, ferramenta, **argumentos(ferramenta, ID_CONTROLE))

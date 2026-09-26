@@ -6,11 +6,14 @@ Serve respostas determinísticas a partir de ``contracts/fixtures/`` para o agen
 
 1. valida a entrada com ``Entrada*`` → ``ENTRADA_INVALIDA`` citando só nomes de campos;
 2. ``id_usuario`` fora de ``usuarios.json`` → ``USUARIO_INEXISTENTE``;
-3. usuário que não é o âncora → ``DADOS_INSUFICIENTES`` (nunca o golden de outro cliente);
-4. golden por ferramenta e corte (``< 202512`` → ``__ate_202506`` com aviso de mock),
-   ``resumo_mes__<anomes>``, truncamento em ``top_n``/``k`` e aviso da entrada
+3. ``buscar_contexto_financeiro`` busca no corpus de exemplo com o
+   :class:`BuscadorFake` para qualquer cliente conhecido (conhecimento geral, Q-17);
+4. nas demais, usuário que não é o âncora → ``DADOS_INSUFICIENTES`` (nunca o
+   golden de outro cliente);
+5. golden por ferramenta e corte (``< 202512`` → ``__ate_202506`` com aviso de mock),
+   ``resumo_mes__<anomes>``, truncamento em ``top_n`` e aviso da entrada
    canônica nas simulações;
-5. fixture ausente ou inválida → ``INDISPONIVEL`` ("Dados de exemplo indisponíveis.").
+6. fixture ausente ou inválida → ``INDISPONIVEL`` ("Dados de exemplo indisponíveis.").
 
 Todo resultado é um envelope JSON (``structuredContent`` + ``TextContent``). Erro de
 negócio é resultado, não ``isError``. Cada chamada gera uma linha de log JSON com
@@ -35,15 +38,21 @@ from mcp.types import ToolAnnotations
 from pydantic import BaseModel, ValidationError
 
 from bussola_mcp.contratos import (
+    ANOMES_MIN,
+    AVISO_CONHECIMENTO,
+    AVISO_SEM_TRECHOS,
     CORTES_GOLDEN,
     ENTRADA_CANONICA_SIMULACAO,
     FERRAMENTAS,
-    FERRAMENTAS_P0,
+    FERRAMENTAS_GOLDEN,
     CodigoErro,
+    DadosBuscarContexto,
     EntradaBuscarContexto,
     EntradaComum,
     EntradaOportunidadesCorte,
     EntradaResumoMes,
+    Fonte,
+    Periodo,
     Resposta,
     UsuarioFixture,
     arquivo_golden,
@@ -51,7 +60,13 @@ from bussola_mcp.contratos import (
     envelope_erro,
     mensagem_entrada_invalida,
 )
-from bussola_mcp.dominio.fakes import carregar_usuarios, ler_json, resolver_dir_fixtures
+from bussola_mcp.dominio.fakes import (
+    ARQUIVO_TRECHOS,
+    BuscadorFake,
+    carregar_usuarios,
+    ler_json,
+    resolver_dir_fixtures,
+)
 from bussola_mcp.logging_json import configurar_logging
 
 logger = logging.getLogger("bussola_mcp.server")
@@ -80,7 +95,8 @@ MENSAGEM_SEM_FIXTURES = "Dados de exemplo indisponíveis."
 
 INSTRUCOES = (
     "MCP mock da Bússola (ciclo 000). Ferramentas financeiras determinísticas com "
-    "respostas de exemplo do cliente âncora. Todas exigem id_usuario e ate_anomes."
+    "respostas de exemplo do cliente âncora e uma base de conhecimento geral "
+    "(normas do BACEN, crédito e boas práticas). Todas exigem id_usuario e ate_anomes."
 )
 
 _ANOTACOES = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
@@ -101,6 +117,7 @@ class MockBussola:
         self.dir_fixtures = resolver_dir_fixtures(dir_fixtures)
         self._usuarios: dict[str, UsuarioFixture] | None = None
         self._golden: dict[str, dict[str, Any]] = {}
+        self._buscador = BuscadorFake(self.dir_fixtures)
 
     # -- fixtures ------------------------------------------------------------
 
@@ -126,6 +143,24 @@ class MockBussola:
                 raise _FixtureIndisponivel from exc
             self._golden[nome_arquivo] = envelope.model_dump(mode="json")
         return copy.deepcopy(self._golden[nome_arquivo])
+
+    def _buscar_conhecimento(self, entrada: EntradaBuscarContexto) -> dict[str, Any]:
+        if not (self.dir_fixtures / ARQUIVO_TRECHOS).is_file():
+            raise _FixtureIndisponivel
+        try:
+            trechos = self._buscador.buscar(entrada.pergunta, entrada.k, entrada.tema)
+        except (OSError, ValueError) as exc:
+            raise _FixtureIndisponivel from exc
+        avisos = [AVISO_CONHECIMENTO] if trechos else [AVISO_CONHECIMENTO, AVISO_SEM_TRECHOS]
+        fonte = Fonte(
+            ferramenta="buscar_contexto_financeiro",
+            tabelas=[],
+            periodo=Periodo(inicio=ANOMES_MIN, fim=entrada.ate_anomes),
+        )
+        resposta = Resposta[DadosBuscarContexto](
+            dados=DadosBuscarContexto(trechos=trechos), fonte=fonte, avisos=avisos
+        )
+        return resposta.model_dump(mode="json")
 
     # -- regras ---------------------------------------------------------------
 
@@ -172,6 +207,8 @@ class MockBussola:
         usuario = self._carregar_usuarios().get(entrada.id_usuario)
         if usuario is None:
             return envelope_erro(CodigoErro.USUARIO_INEXISTENTE)
+        if isinstance(entrada, EntradaBuscarContexto):
+            return self._buscar_conhecimento(entrada)
         if usuario.papel != "ancora":
             return envelope_erro(CodigoErro.DADOS_INSUFICIENTES, MENSAGEM_SO_ANCORA)
 
@@ -180,8 +217,6 @@ class MockBussola:
 
         if isinstance(entrada, EntradaOportunidadesCorte):
             envelope["dados"]["categorias"] = envelope["dados"]["categorias"][: entrada.top_n]
-        elif isinstance(entrada, EntradaBuscarContexto):
-            envelope["dados"]["trechos"] = envelope["dados"]["trechos"][: entrada.k]
 
         for aviso in avisos:
             if aviso not in envelope["avisos"]:
@@ -192,7 +227,7 @@ class MockBussola:
     def _escolher_golden(ferramenta: str, entrada: EntradaComum) -> tuple[str, list[str]]:
         if isinstance(entrada, EntradaResumoMes):
             return arquivo_resumo_mes(entrada.anomes), []
-        if ferramenta not in FERRAMENTAS_P0:
+        if ferramenta not in FERRAMENTAS_GOLDEN:
             raise _FixtureIndisponivel
         avisos: list[str] = []
         if entrada.ate_anomes < CORTE_FINAL:
@@ -295,12 +330,26 @@ def criar_servidor(
 
     @ferramenta
     def buscar_contexto_financeiro(
-        id_usuario: str, ate_anomes: int, pergunta: str, k: int = 5
+        id_usuario: str,
+        ate_anomes: int,
+        pergunta: str,
+        k: int = 5,
+        tema: str | None = None,
     ) -> dict[str, Any]:
-        """Trechos do histórico do cliente e da coorte relevantes para a pergunta."""
+        """Trechos da base de conhecimento: normas do BACEN, crédito e boas práticas.
+
+        Conteúdo geral, não é dado do cliente. ``tema`` opcional: ``norma_bacen``,
+        ``credito`` ou ``boas_praticas``. Até ``k`` trechos (de 1 a 10), com a fonte.
+        """
         return mock.responder(
             "buscar_contexto_financeiro",
-            {"id_usuario": id_usuario, "ate_anomes": ate_anomes, "pergunta": pergunta, "k": k},
+            {
+                "id_usuario": id_usuario,
+                "ate_anomes": ate_anomes,
+                "pergunta": pergunta,
+                "k": k,
+                "tema": tema,
+            },
         )
 
     @ferramenta

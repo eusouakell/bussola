@@ -17,14 +17,18 @@ class RepositorioFinanceiro(Protocol):          # @runtime_checkable
     def referencia_coorte(self, faixa_renda: str, macro: str | None = None) -> list[RefCoorte]: ...
 
 class BuscadorContexto(Protocol):               # @runtime_checkable
-    def buscar(self, id_usuario: str, pergunta: str, k: int,
-               ate_anomes: int) -> list[Trecho]: ...
+    def buscar(self, pergunta: str, k: int,
+               tema: TemaConhecimento | None = None) -> list[Trecho]: ...
+    # Sem id_usuario nem ate_anomes: corpus geral (Q-17). Até k trechos com
+    # score > 0, por score decrescente e trecho_id.
 ```
 
 `bussola_mcp.dominio.fakes`:
 
 - `RepositorioFake(dir_fixtures: Path | str | None = None)`.
-- `BuscadorFake(dir_fixtures: Path | str | None = None)`.
+- `BuscadorFake(dir_fixtures: Path | str | None = None)`: lê
+  `rag/trechos_exemplo.json`; score = fração dos termos da pergunta (sem
+  acento e sem caixa) presentes no título e no texto.
 - `None` resolve para `<raiz do repo>/contracts/fixtures`.
 - `faixa_renda_de(id_usuario) -> str | None` (acréscimo ao fake) lê
   `usuarios.json`.

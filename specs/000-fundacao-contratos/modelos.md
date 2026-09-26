@@ -17,7 +17,7 @@ credenciais ADC de um integrante.
 ## Implicações
 
 - O Flash só respondeu em `global`: no deploy do agente use `BUSSOLA_LOCAL_MODELO=global`.
-- Dimensão do embedding `gemini-embedding-001`: 3072. Compatível com o DDL: `bussola_rag.documentos.embedding` é `ARRAY<FLOAT64>` sem dimensão fixa, e `modelo_embedding` registra o modelo de cada linha.
+- Dimensão do embedding `gemini-embedding-001`: 3072. O índice do RAG (002) grava `embeddings.npy` com essa dimensão e registra `modelo_embedding` e `dimensao` no `manifesto.json` (Q-17).
 - O local do agente virou a variável `BUSSOLA_LOCAL_MODELO=global` (contratos §7, Q-15 em [`questoes.md`](./questoes.md)).
 - Este teste usa as credenciais do integrante. A SA de runtime do Cloud Run pode não ter o mesmo acesso (ver o deploy hello).
 

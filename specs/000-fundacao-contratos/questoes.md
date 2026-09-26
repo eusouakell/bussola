@@ -24,6 +24,7 @@ entram neste mesmo PR, que cria `contratos-v1`.
 | Q-14 | Regras de métrica das fixtures | Regras provisórias em `gerar_fixtures.py` | confirmar no 001 |
 | Q-15 | Local do Gemini × BigQuery | Agente em `global` via `BUSSOLA_LOCAL_MODELO`; resto em `us-central1` | contratos §7 |
 | Q-16 | Invoker do agente no MCP privado | `roles/run.invoker` no `bussola-mcp` para a SA do agente, com confirmação humana | contratos §6 e `deploy/README.md` |
+| Q-17 | RAG sobre `bussola_rag` com dados do cliente | RAG de conhecimento geral (normas do BACEN, crédito, boas práticas) com corpus no repositório e busca em memória; sem `bussola_rag` | contratos §1, §3, §4, §5, §7, §8; ciclo 002; constituição 1.0.1 |
 
 ## Q-01 Usuário de controle no mock
 
@@ -185,8 +186,8 @@ entram neste mesmo PR, que cria `contratos-v1`.
   - cenário "acelerado" usa os cortes do top 10 de oportunidades;
   - `usar_saldo_atual`: `saldo_inicial = max(0, saldo)`; desvio por
     `pstdev`;
-  - golden de `buscar_contexto_financeiro` com ranking fixo (coorte,
-    perfil anual e fichas mensais da mais recente para a mais antiga).
+  - ~~golden de `buscar_contexto_financeiro` com ranking fixo~~: removido
+    na Q-17 (a busca não tem golden).
 - **Observação:** `contratos.py` não tem campo "provisório". A marcação fica
   na docstring e na mensagem da CLI do gerador.
 
@@ -229,6 +230,56 @@ gcloud run services add-iam-policy-binding bussola-mcp \
   --member serviceAccount:1061873050224-compute@developer.gserviceaccount.com \
   --role roles/run.invoker
   ```
+
+## Q-17 RAG de conhecimento no repositório, sem `bussola_rag`
+
+- **Divergência:** contratos §3 e o mestre §9 previam um corpus derivado da
+  base (fichas mensais, perfil anual, coorte, lançamentos) em
+  `bussola_rag.documentos`, buscado com `VECTOR_SEARCH` e filtrado por
+  `id_usuario`. Esses números já saem das ferramentas determinísticas sobre
+  `bussola_dados`: o RAG duplicava dado do cliente sem acrescentar
+  conhecimento.
+- **Decisão (usuário, 26/09/2026):**
+  - o RAG passa a ser **conhecimento geral** em três temas: normas do BACEN
+    e do CMN (`norma_bacen`), crédito (`credito`, conteúdo geral; as dívidas
+    do cliente continuam em `dividas_e_parcelas`) e boas práticas
+    (`boas_praticas`);
+  - corpus curado em Markdown no repositório
+    (`data/rag/corpus/<tema>/<doc_id>.md`), texto original que cita a norma
+    pelo número;
+  - índice versionado em `mcp_server/bussola_mcp/rag/indice/`, com
+    embeddings gerados offline; busca em memória no MCP (`RAG_BACKEND`
+    `lexico`, padrão sem GCP, ou `numpy`);
+  - sem dataset no BigQuery, sem `VECTOR_SEARCH` e sem RAG Engine (resolve
+    Q3 e Q6 do mestre).
+- **Mudança de contrato:**
+  - `BuscadorContexto.buscar(pergunta, k, tema=None)`: sai `id_usuario` e
+    `ate_anomes`, porque o corpus não tem dado de cliente;
+  - `Trecho` = `TrechoCorpus{doc_id, trecho_id, titulo, tema, texto,
+    fonte{nome, referencia, url}}` + `score`. Saem `tipo`, `anomes` e
+    `origem`, e sai `Documento`/`TipoDocumento`;
+  - `buscar_contexto_financeiro` ganha `tema` opcional, devolve
+    `fonte.tabelas = []` e avisos fixos (`AVISO_CONHECIMENTO`,
+    `AVISO_SEM_TRECHOS`). A ferramenta continua validando `id_usuario` e
+    `ate_anomes` da sessão;
+  - a busca não tem golden: o mock responde pelo `BuscadorFake` sobre o
+    corpus curado, para qualquer cliente conhecido (`FERRAMENTAS_GOLDEN` =
+    P0 sem a busca);
+  - sai `BQ_DATASET_RAG`; `RAG_BACKEND` passa a `lexico | numpy`.
+- **Compatibilidade:** a mudança não é aditiva, mas acontece **antes** da tag
+  `contratos-v1`. Nenhum ciclo consumidor tem código sobre o contrato antigo.
+- **Correção:**
+  - contratos §1, §3, §4, §5, §7 e §8;
+  - `contratos.py`, `interfaces.py`, `fakes.py`, `server.py`;
+  - `contracts/bigquery/bussola_rag.sql` e os golden da busca removidos;
+    `contracts/fixtures/rag/trechos_exemplo.json` com 13 trechos curados;
+  - `aplicar_ddl.py`, `gerar_fixtures.py`, `iam_datasets.sh`, `deploy.sh`,
+    `smoke_modelos.py`, `env.example`;
+  - ciclos 000, 001, 002, 003 e 007, README, roadmap, blueprint, mestre §9
+    e constituição (1.0.1).
+- **Pendente (humano):** o dataset `bussola_rag` criado no T038 continua no
+  projeto, vazio. Removê-lo é destrutivo e pede confirmação:
+  `bq rm -r -d batalha-time-07-lkbv:bussola_rag`.
 
 ## Questões ainda abertas (herdadas)
 

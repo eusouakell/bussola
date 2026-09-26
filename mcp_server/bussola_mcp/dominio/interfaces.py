@@ -5,7 +5,9 @@ Protocols ``runtime_checkable`` implementados pelos fakes do 000
 buscadores do 002. As ferramentas dependem só destas assinaturas.
 
 Toda leitura por cliente recebe ``id_usuario`` e ``ate_anomes``: o escopo por
-cliente e o corte temporal são obrigatórios (constituição III e IV).
+cliente e o corte temporal são obrigatórios (constituição III e IV). O buscador
+não recebe nenhum dos dois: o corpus é conhecimento geral, sem dado de cliente
+(Q-17).
 """
 
 from typing import Protocol, runtime_checkable
@@ -18,6 +20,7 @@ from bussola_mcp.contratos import (
     PerfilMes,
     Recorrente,
     RefCoorte,
+    TemaConhecimento,
     Trecho,
 )
 
@@ -47,6 +50,12 @@ class RepositorioFinanceiro(Protocol):
 
 @runtime_checkable
 class BuscadorContexto(Protocol):
-    """Busca de trechos do corpus (``bussola_rag``) do cliente e da coorte, até o corte."""
+    """Busca no corpus de conhecimento (normas do BACEN, crédito e boas práticas).
 
-    def buscar(self, id_usuario: str, pergunta: str, k: int, ate_anomes: int) -> list[Trecho]: ...
+    Devolve até ``k`` trechos com ``score > 0``, do mais relevante ao menos
+    relevante (empate por ``trecho_id``). ``tema`` restringe a busca a um tema.
+    """
+
+    def buscar(
+        self, pergunta: str, k: int, tema: TemaConhecimento | None = None
+    ) -> list[Trecho]: ...

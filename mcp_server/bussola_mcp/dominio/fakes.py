@@ -1,22 +1,20 @@
 """Fakes dos Protocols de domínio sobre ``contracts/fixtures/`` (contratos §4 e §8).
 
 - :class:`RepositorioFake` lê ``bussola_dados/<tabela>.json`` e ``usuarios.json``.
-- :class:`BuscadorFake` lê ``rag/trechos_exemplo.json``.
+- :class:`BuscadorFake` lê ``rag/trechos_exemplo.json`` (corpus de conhecimento).
 
 Os dois recebem o diretório de fixtures por parâmetro. ``None`` resolve para
 ``<raiz do repositório>/contracts/fixtures``. Os arquivos são lidos sob demanda,
 na primeira consulta, e validados com os modelos de :mod:`bussola_mcp.contratos`.
 
-Escopo e tempo (FR-010, constituição III e IV):
-
-- leituras por cliente só devolvem linhas do ``id_usuario`` pedido, com
-  ``anomes <= ate_anomes`` (e ``>= desde_anomes`` quando informado);
-- o buscador aplica o filtro obrigatório de contratos §3: ``id_usuario`` do
-  cliente **ou** ``tipo = "coorte"``, e ``anomes`` nulo **ou** ``<= ate_anomes``.
+Escopo e tempo (FR-010, constituição III e IV): leituras por cliente só
+devolvem linhas do ``id_usuario`` pedido, com ``anomes <= ate_anomes`` (e
+``>= desde_anomes`` quando informado). O buscador não tem escopo por cliente:
+o corpus é conhecimento geral, sem dado de cliente (Q-17).
 
 Formato aceito dos arquivos: uma lista JSON de linhas ou um objeto com a lista
-numa chave conhecida (``usuarios``, ``linhas``, ``trechos`` ou
-``dados.trechos``). Tabela ausente equivale a tabela vazia.
+numa chave conhecida (``usuarios``, ``linhas`` ou ``trechos``). Tabela ausente
+equivale a tabela vazia.
 """
 
 import json
@@ -35,8 +33,9 @@ from bussola_mcp.contratos import (
     PerfilMes,
     Recorrente,
     RefCoorte,
-    TipoDocumento,
+    TemaConhecimento,
     Trecho,
+    TrechoCorpus,
     UsuarioFixture,
 )
 
@@ -73,12 +72,6 @@ def _extrair_linhas(conteudo: Any, chaves: tuple[str, ...]) -> list[Any]:
             valor = conteudo.get(chave)
             if isinstance(valor, list):
                 return valor
-            if isinstance(valor, dict):
-                # Envelope ``{"dados": {"trechos": [...]}}`` de buscar_contexto_financeiro.
-                try:
-                    return _extrair_linhas(valor, chaves)
-                except ValueError:
-                    continue
     raise ValueError("formato de fixture não reconhecido")
 
 
@@ -223,6 +216,11 @@ _PALAVRAS_VAZIAS = frozenset(
         "tem",
         "sao",
         "foi",
+        "pode",
+        "posso",
+        "devo",
+        "ser",
+        "ter",
     }
 )
 _RE_PALAVRA = re.compile(r"\w+")
@@ -241,40 +239,35 @@ def tokens(texto: str) -> set[str]:
 class BuscadorFake:
     """Implementa ``BuscadorContexto`` sobre ``rag/trechos_exemplo.json``.
 
-    A ordenação é determinística: sobreposição de palavras com a pergunta
-    (decrescente) e, no empate, ``doc_id``. O ``score`` devolvido é a fração das
-    palavras da pergunta presentes no trecho, com 4 casas.
+    Busca léxica determinística: ``score`` é a fração das palavras da pergunta
+    presentes no título ou no texto do trecho, com 4 casas. Trechos sem nenhuma
+    palavra em comum ficam de fora. Ordem: ``score`` decrescente e, no empate,
+    ``trecho_id``.
     """
 
     def __init__(self, dir_fixtures: Path | str | None = None) -> None:
         self.dir_fixtures = resolver_dir_fixtures(dir_fixtures)
-        self._trechos: list[Trecho] | None = None
+        self._trechos: list[tuple[TrechoCorpus, set[str]]] | None = None
 
-    def _todos(self) -> list[Trecho]:
+    def _todos(self) -> list[tuple[TrechoCorpus, set[str]]]:
         if self._trechos is None:
             conteudo = ler_json(self.dir_fixtures / ARQUIVO_TRECHOS)
-            linhas = [] if conteudo is None else _extrair_linhas(conteudo, ("trechos", "dados"))
-            self._trechos = [Trecho.model_validate(linha) for linha in linhas]
+            linhas = [] if conteudo is None else _extrair_linhas(conteudo, ("trechos",))
+            trechos = [TrechoCorpus.model_validate(linha) for linha in linhas]
+            self._trechos = [(t, tokens(f"{t.titulo} {t.texto}")) for t in trechos]
         return self._trechos
 
-    def buscar(self, id_usuario: str, pergunta: str, k: int, ate_anomes: int) -> list[Trecho]:
-        alvo = _normalizar_id(id_usuario)
-        permitidos = [
-            trecho
-            for trecho in self._todos()
-            if (
-                (trecho.origem.id_usuario is not None and trecho.origem.id_usuario.lower() == alvo)
-                or trecho.tipo == TipoDocumento.COORTE
-            )
-            and (trecho.anomes is None or trecho.anomes <= ate_anomes)
-        ]
+    def buscar(self, pergunta: str, k: int, tema: TemaConhecimento | None = None) -> list[Trecho]:
         palavras = tokens(pergunta)
-        pontuados: list[tuple[int, Trecho]] = [
-            (len(palavras & tokens(trecho.texto)), trecho) for trecho in permitidos
+        pontuados = [
+            (len(palavras & vocabulario), trecho)
+            for trecho, vocabulario in self._todos()
+            if tema is None or trecho.tema == tema
         ]
-        pontuados.sort(key=lambda item: (-item[0], item[1].doc_id))
+        pontuados = [(n, trecho) for n, trecho in pontuados if n > 0]
+        pontuados.sort(key=lambda item: (-item[0], item[1].trecho_id))
         total = len(palavras) or 1
         return [
-            trecho.model_copy(update={"score": round(sobreposicao / total, 4)})
+            Trecho(**trecho.model_dump(), score=round(sobreposicao / total, 4))
             for sobreposicao, trecho in pontuados[: max(k, 0)]
         ]

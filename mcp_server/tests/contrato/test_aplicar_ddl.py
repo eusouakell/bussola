@@ -30,7 +30,7 @@ def _carregar_script(nome: str) -> ModuleType:
 
 ddl = _carregar_script("aplicar_ddl")
 
-DATASETS = ["bussola_dados", "bussola_rag", "bussola_app", "bussola_app_dev"]
+DATASETS = ["bussola_dados", "bussola_app", "bussola_app_dev"]
 
 
 def _ler(arquivo: str) -> str:
@@ -69,12 +69,25 @@ def test_parse_bussola_dados() -> None:
     assert [c.tipo for c in categorias] == ["STRING", "STRING", "BOOL", "FLOAT64"]
 
 
-def test_parse_bussola_rag_nulidade_e_array() -> None:
-    (schema, documentos) = ddl.parse_ddl(_ler("bussola_rag.sql"))
-    assert schema.dataset == "bussola_rag"
-    colunas = {c.nome: c for c in documentos.colunas}
-    assert len(colunas) == 9
-    assert not colunas["id_usuario"].obrigatoria and not colunas["anomes"].obrigatoria
+def test_sem_dataset_de_rag() -> None:
+    """O RAG lê o corpus do repositório, não o BigQuery (Q-17)."""
+    assert not (ddl.DIR_DDL / "bussola_rag.sql").exists()
+    assert "bussola_rag" not in ddl.DATASETS_CONTRATO
+
+
+def test_parse_nulidade_e_array() -> None:
+    texto = """
+    CREATE TABLE IF NOT EXISTS d.t (
+      doc_id STRING NOT NULL,
+      anomes INT64,
+      fonte JSON NOT NULL,
+      embedding ARRAY<FLOAT64>,
+      gerado_em TIMESTAMP NOT NULL
+    );
+    """
+    (tabela,) = ddl.parse_ddl(texto)
+    colunas = {c.nome: c for c in tabela.colunas}
+    assert not colunas["anomes"].obrigatoria
     assert colunas["doc_id"].obrigatoria and colunas["fonte"].tipo == "JSON"
     assert (colunas["embedding"].tipo, colunas["embedding"].obrigatoria) == (
         "ARRAY<FLOAT64>",
@@ -177,11 +190,11 @@ def test_nome_de_dataset_invalido(nome: str) -> None:
         ddl.trocar_dataset("CREATE SCHEMA IF NOT EXISTS bussola_app;", nome)
 
 
-def test_plano_cria_os_quatro_datasets() -> None:
+def test_plano_cria_os_tres_datasets() -> None:
     plano = ddl.montar_plano()
     assert list(dict.fromkeys(i.dataset for i in plano)) == DATASETS
     assert [i.alvo for i in plano if i.tipo == "schema"] == DATASETS
-    assert len(plano) == 4 + 7 + 1 + 4 + 4
+    assert len(plano) == 3 + 7 + 4 + 4
     app = {i.tabela: i.colunas for i in plano if i.dataset == "bussola_app" and i.tabela}
     dev = {i.tabela: i.colunas for i in plano if i.dataset == "bussola_app_dev" and i.tabela}
     assert dev == app
@@ -199,11 +212,11 @@ def test_plano_com_outro_dataset_dev() -> None:
 def test_plano_rejeita_tabela_fora_do_dataset_do_arquivo(tmp_path: Path) -> None:
     for arquivo in ddl.ARQUIVOS_DDL:
         (tmp_path / arquivo).write_text(_ler(arquivo), encoding="utf-8")
-    (tmp_path / "bussola_rag.sql").write_text(
-        _ler("bussola_rag.sql") + "\nCREATE TABLE IF NOT EXISTS bussola_app.x (a STRING);\n",
+    (tmp_path / "bussola_dados.sql").write_text(
+        _ler("bussola_dados.sql") + "\nCREATE TABLE IF NOT EXISTS bussola_app.x (a STRING);\n",
         encoding="utf-8",
     )
-    with pytest.raises(ddl.ErroDDL, match="fora do dataset bussola_rag"):
+    with pytest.raises(ddl.ErroDDL, match="fora do dataset bussola_dados"):
         ddl.montar_plano(tmp_path)
 
 
@@ -266,9 +279,9 @@ def _fabrica_proibida(projeto: str) -> Any:
 def test_dry_run_nao_cria_cliente(capsys: pytest.CaptureFixture[str]) -> None:
     assert ddl.main(["--dry-run"], criar_cliente=_fabrica_proibida) == 0
     saida = capsys.readouterr().out
-    assert "datasets: bussola_dados, bussola_rag, bussola_app, bussola_app_dev" in saida
+    assert "datasets: bussola_dados, bussola_app, bussola_app_dev" in saida
     assert "CREATE TABLE IF NOT EXISTS bussola_app_dev.planos (" in saida
-    assert saida.count("CREATE SCHEMA IF NOT EXISTS") == 4
+    assert saida.count("CREATE SCHEMA IF NOT EXISTS") == 3
 
 
 def test_dry_run_com_dataset_app(capsys: pytest.CaptureFixture[str]) -> None:
@@ -336,7 +349,7 @@ def test_aplica_com_cliente_falso(
     assert ddl.main([], criar_cliente=fabrica) == 0
     ((projeto, cliente),) = clientes
     assert projeto == "projeto-teste"
-    assert len(cliente.queries) == 20
+    assert len(cliente.queries) == 18
     assert all(loc == "us-central1" for _, loc in cliente.queries)
     assert all(re.match(r"CREATE (SCHEMA|TABLE) IF NOT EXISTS ", sql) for sql, _ in cliente.queries)
     assert "sem divergência" in capsys.readouterr().out
@@ -345,13 +358,13 @@ def test_aplica_com_cliente_falso(
 def test_schema_divergente_e_reportado_sem_alterar(capsys: pytest.CaptureFixture[str]) -> None:
     divergentes = {
         "bussola_app_dev.planos": [SchemaField("plano_id", "STRING", "NULLABLE")],
-        "bussola_rag.documentos": None,
+        "bussola_dados.categorias": None,
     }
     cliente = ClienteFalso(divergentes)
     assert ddl.main(["--projeto", "p"], criar_cliente=lambda _: cliente) == 3
     erro = capsys.readouterr().err
     assert "bussola_app_dev.planos: coluna plano_id: modo NULLABLE, DDL REQUIRED" in erro
     assert "bussola_app_dev.planos: coluna session_id ausente na tabela" in erro
-    assert "bussola_rag.documentos: não encontrado após aplicar o DDL" in erro
+    assert "bussola_dados.categorias: não encontrado após aplicar o DDL" in erro
     assert "nada foi alterado" in erro
-    assert len(cliente.queries) == 20  # só os CREATE ... IF NOT EXISTS do plano
+    assert len(cliente.queries) == 18  # só os CREATE ... IF NOT EXISTS do plano

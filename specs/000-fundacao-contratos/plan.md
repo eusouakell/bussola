@@ -44,8 +44,10 @@ o DDL.
 
 **Storage**:
 
-- BigQuery `bussola_dados`, `bussola_rag`, `bussola_app` e
-  `bussola_app_dev`. Só DDL neste ciclo.
+- BigQuery `bussola_dados`, `bussola_app` e `bussola_app_dev`. Só DDL
+  neste ciclo. Sem dataset de RAG (Q-17).
+- Corpus curado de RAG em `contracts/fixtures/rag/` (002 amplia no
+  repositório).
 - Arquivos JSON em `contracts/fixtures/`.
 
 **Testing**: pytest nos dois projetos, com `asyncio_mode=auto` e o marcador
@@ -122,14 +124,14 @@ CLAUDE.md                     # FR-002
 Makefile                      # FR-004
 .gitignore                    # FR-003 (acréscimos)
 contracts/
-├── bigquery/{bussola_dados,bussola_rag,bussola_app}.sql   # FR-006
+├── bigquery/{bussola_dados,bussola_app}.sql   # FR-006
 ├── env.example               # FR-007
 └── fixtures/                 # FR-015/016 (gerado por make fixtures)
     ├── usuarios.json
     ├── bussola_dados/<tabela>.json
     ├── ferramentas/<ferramenta>__ate_{202506,202512}.json
     ├── ferramentas/resumo_mes__AAAAMM.json
-    └── rag/trechos_exemplo.json
+    └── rag/trechos_exemplo.json   # corpus curado (Q-17), preservado pelo make fixtures
 data/scripts/
 ├── aplicar_ddl.py            # FR-020
 └── gerar_fixtures.py         # FR-015/016 (SQL de referência + golden)
@@ -208,7 +210,7 @@ riscos e os requisitos atendidos.
 
 - **Unit/contrato (`make test`)**:
   - modelos e validação de entrada;
-  - DDL ↔ Pydantic (`bussola_dados`, `bussola_rag` no MCP; `bussola_app` no
+  - DDL ↔ Pydantic (`bussola_dados` no MCP; `bussola_app` no
     agente);
   - fakes, com o conjunto sintético gerado nos testes;
   - mock em memória (`create_connected_server_and_client_session`) e via

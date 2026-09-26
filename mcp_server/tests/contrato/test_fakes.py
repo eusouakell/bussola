@@ -1,12 +1,14 @@
-"""Fakes do domínio: escopo, tempo e filtro do buscador (FR-009, FR-010, TS-05, T015)."""
+"""Fakes do domínio: escopo, tempo e busca no corpus de conhecimento (FR-009, FR-010, TS-05,
+T015, Q-17)."""
 
+import inspect
 import json
 import uuid
 from pathlib import Path
 
 import pytest
 
-from bussola_mcp.contratos import ID_ANCORA, ID_CONTROLE, Trecho
+from bussola_mcp.contratos import ID_ANCORA, ID_CONTROLE, TemaConhecimento, Trecho
 from bussola_mcp.dominio.fakes import BuscadorFake, RepositorioFake, dir_fixtures_padrao, tokens
 from bussola_mcp.dominio.interfaces import BuscadorContexto, RepositorioFinanceiro
 
@@ -48,7 +50,7 @@ def test_leitura_sob_demanda(tmp_path):
     assert repo.categorias() == []
     assert repo.usuario_existe(ID_ANCORA) is False
     assert repo.faixa_renda_de(ID_ANCORA) is None
-    assert BuscadorFake(tmp_path / "nao_existe").buscar(ID_ANCORA, "aluguel", 5, 202512) == []
+    assert BuscadorFake(tmp_path / "nao_existe").buscar("rotativo do cartão", 5) == []
 
 
 # -- escopo e tempo ------------------------------------------------------------------
@@ -133,54 +135,52 @@ def test_aceita_objeto_com_lista_de_linhas(tmp_path):
 
 
 def _ids(trechos: list[Trecho]) -> list[str]:
-    return [t.doc_id for t in trechos]
+    return [t.trecho_id for t in trechos]
 
 
-def test_buscador_escopo_e_coorte(buscador):
-    trechos = buscador.buscar(ID_ANCORA, "aluguel", 10, 202512)
-    assert set(_ids(trechos)) == {
-        "anc-202503",
-        "anc-202509",
-        "anc-anual",
-        "coo-geral",
-        "coo-202510",
-    }
-    for trecho in trechos:
-        assert trecho.origem.id_usuario == ID_ANCORA or trecho.tipo == "coorte"
+def test_buscador_nao_recebe_cliente_nem_corte():
+    """Conhecimento geral: sem ``id_usuario`` nem ``ate_anomes`` (Q-17)."""
+    parametros = list(inspect.signature(BuscadorFake.buscar).parameters)
+    assert parametros == ["self", "pergunta", "k", "tema"]
 
 
-def test_buscador_corte_temporal_e_anomes_nulo(buscador):
-    trechos = buscador.buscar(ID_ANCORA, "aluguel", 10, 202506)
-    assert set(_ids(trechos)) == {"anc-202503", "anc-anual", "coo-geral"}
-    assert all(t.anomes is None or t.anomes <= 202506 for t in trechos)
+def test_buscador_devolve_so_trechos_relevantes(buscador):
+    trechos = buscador.buscar("Como funciona o rotativo do cartão?", 10)
+    assert _ids(trechos) == ["rotativo#1", "teto-juros#1"]
+    assert all(t.score > 0 for t in trechos)
+    assert buscador.buscar("Qual a previsão do tempo?", 5) == []
 
 
-def test_buscador_nunca_devolve_outro_cliente(buscador):
-    assert "ctl-202503" not in _ids(buscador.buscar(ID_ANCORA, "aluguel mercado", 10, 202512))
-    do_controle = buscador.buscar(ID_CONTROLE, "aluguel mercado", 10, 202512)
-    assert {t.origem.id_usuario for t in do_controle} <= {ID_CONTROLE, None}
-    assert "ctl-202503" in _ids(do_controle)
+def test_buscador_ordena_por_score_e_trecho_id(buscador):
+    trechos = buscador.buscar("juros do rotativo do cartão", 10)
+    assert _ids(trechos) == ["teto-juros#1", "rotativo#1", "cet#1"]
+    assert [t.score for t in trechos] == [1.0, 0.6667, 0.3333]
 
 
-def test_buscador_ordena_por_relevancia_e_doc_id(buscador):
-    trechos = buscador.buscar(ID_ANCORA, "Quanto gastei com restaurantes?", 10, 202512)
-    assert _ids(trechos)[:2] == ["anc-202509", "coo-202510"]
-    assert trechos[0].score > trechos[-1].score
-    assert all(0.0 <= t.score <= 1.0 for t in trechos)
-    # empates (sem sobreposição) seguem a ordem de doc_id
-    empatados = [t.doc_id for t in trechos if t.score == 0.0]
-    assert empatados == sorted(empatados)
+def test_buscador_filtra_por_tema(buscador):
+    assert buscador.buscar("juros do rotativo do cartão", 10, TemaConhecimento.CREDITO) == []
+    trechos = buscador.buscar("Onde consultar minhas dívidas?", 10, TemaConhecimento.CREDITO)
+    assert _ids(trechos) == ["registrato#1"]
+    assert trechos[0].tema == TemaConhecimento.CREDITO
+
+
+def test_buscador_devolve_titulo_e_fonte(buscador):
+    (trecho,) = buscador.buscar("reserva de emergência", 1)
+    assert trecho.doc_id == "reserva"
+    assert trecho.titulo == "Reserva de emergência"
+    assert trecho.tema == TemaConhecimento.BOAS_PRATICAS
+    assert trecho.fonte.referencia == "Norma reserva"
 
 
 def test_buscador_respeita_k_e_e_deterministico(buscador):
-    primeiro = buscador.buscar(ID_ANCORA, "aluguel", 2, 202512)
+    primeiro = buscador.buscar("juros do rotativo do cartão", 2)
     assert len(primeiro) == 2
-    assert primeiro == buscador.buscar(ID_ANCORA, "aluguel", 2, 202512)
-    assert buscador.buscar(ID_ANCORA, "aluguel", 0, 202512) == []
+    assert primeiro == buscador.buscar("juros do rotativo do cartão", 2)
+    assert buscador.buscar("juros do rotativo do cartão", 0) == []
 
 
 def test_buscador_ignora_acentos_e_caixa(buscador):
-    assert _ids(buscador.buscar(ID_ANCORA, "MARÇO", 1, 202512)) == ["anc-202503"]
+    assert _ids(buscador.buscar("DÍVIDAS", 1)) == ["registrato#1"]
 
 
 def test_tokens():

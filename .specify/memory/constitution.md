@@ -1,6 +1,10 @@
 <!--
 Sync Impact Report
-- Version change: template (não versionado) → 1.0.0
+- Version change: 1.0.0 → 1.0.1 (PATCH, antes do congelamento)
+  - X. Contratos e paralelismo: o RAG não tem dataset (Q-17 do 000). O 002
+    escreve o corpus e o índice no repositório, não em `bussola_rag`.
+  - Templates: sem mudança.
+- Histórico: template (não versionado) → 1.0.0
 - Princípios definidos (todos novos):
   I. Números vêm de ferramentas determinísticas
   II. Agente isolado de SQL e infraestrutura
@@ -134,7 +138,8 @@ Rationale: ciclos paralelos só convergem se cada PR prova o contrato isolado.
   `Makefile` e `pyproject.toml` valem acréscimos, resolvidos por união.
 - Um ciclo MUST NOT depender de código não mergeado: usa fakes e fixtures
   (`BUSSOLA_FAKES=TRUE`) até a dependência chegar em `main`.
-- `bussola_dados` é escrito só pelo 001; `bussola_rag` só pelo 002.
+- `bussola_dados` é escrito só pelo 001. O RAG não tem dataset: o corpus e o
+  índice ficam no repositório, nos caminhos do 002 (Q-17 do 000).
 - Cloud Run: revisões com `--tag cNNN --no-traffic`; só o ciclo 007 move tráfego.
 
 Rationale: 8 ciclos rodam em worktrees paralelas; propriedade clara evita
@@ -178,7 +183,7 @@ conflitos e regressões silenciosas.
   do plano) e justificar qualquer exceção no próprio plano.
 - Orientação de runtime para agentes: `CLAUDE.md` na raiz.
 
-**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): data do merge do ciclo 000 em main (tag contratos-v1) | **Last Amended**: 2026-09-26
+**Version**: 1.0.1 | **Ratified**: TODO(RATIFICATION_DATE): data do merge do ciclo 000 em main (tag contratos-v1) | **Last Amended**: 2026-09-26
 
 <!--
 Rastreabilidade dos princípios
