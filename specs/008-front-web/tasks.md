@@ -186,7 +186,7 @@ estado vazio.
 - [x] T057 [P] Escrever `web/README.md` (comandos, modos, estados de borda, regravação)
 - [x] T058 Commit `contracts:` separado acrescentando `web/` (dono 008) ao mapa de `docs/ciclos/contratos.md` §1
 - [x] T059 Verificar acessibilidade (rótulos com nomes dos componentes, foco visível, alvos de 44 px, status com texto e ícone) e mobile 390 px e modo escuro no navegador
-- [ ] T060 Rodar `make web-lint`, `make web-test`, `make web-build` (conferir JS < 300 kB gzip, SC-005), `make lint`, `make test` e seguir o quickstart
+- [x] T060 Rodar `make web-lint`, `make web-test`, `make web-build` (conferir JS < 300 kB gzip, SC-005), `make lint`, `make test` e seguir o quickstart
 
 ---
 
