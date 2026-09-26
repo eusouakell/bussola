@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>M5 · Orientar — cenários</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="orientar" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<dc-import name="MTopo" atual="{{atual}}" tema="{{tema}}" hint-size="366px,102px"></dc-import>
+
+<section class="convo" aria-label="Conversa" style="align-items: stretch">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 2px">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 0 4px">
+<p class="prose" style="font-size: 16px; font-weight: 700">Montei 3 caminhos a partir da sua sobra média de <span class="num">R$ 2.836/mês</span>.</p>
+<button class="chip-fonte" style="align-self: flex-start"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Comparar cenários · jan–jun/2025</button>
+</div>
+
+<div role="group" aria-label="ComparadorCenarios · carrossel" style="margin: 0 -12px; padding: 18px 0 4px; overflow: hidden">
+<div style="display: flex; gap: 12px; transform: translateX(-264px); width: max-content">
+
+<article class="glass-card cen" aria-label="Cenário Conservador" style="width: 290px; box-sizing: border-box; padding: 18px 16px 16px; gap: 12px">
+<div style="display: flex; flex-direction: column"><span class="t-title">Conservador</span><span class="small">40% da sobra</span></div>
+<div class="meter"><span style="width: 40%"></span></div>
+<span class="kpi num" style="font-size: 26px">R$ 1.134<span style="font-size: 14px; color: var(--ink-2)">/mês</span></span>
+<span class="small num" style="font-weight: 800; color: var(--ink)">53 meses</span>
+<span class="badge badge-warn" style="align-self: flex-start">Não cabe em 36 meses</span>
+<p class="quote">“Prazo 17 meses maior; sobra folga para montar reserva.”</p>
+<button class="btn btn-secondary btn-sm" style="height: 44px">Escolher este caminho</button>
+</article>
+
+<article class="glass-card cen rec cursor-glow" aria-label="Cenário Equilibrado, recomendado" style="width: 290px; box-sizing: border-box; padding: 20px 16px 16px; gap: 12px">
+<span class="rec-flag" style="left: 14px"><svg class="i i-sm i-fill" viewBox="0 0 24 24" style="stroke-width: 1"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"></path></svg>Recomendado</span>
+<div style="display: flex; flex-direction: column"><span class="t-title">Equilibrado</span><span class="small">60% da sobra</span></div>
+<div class="meter accent"><span style="width: 60%"></span></div>
+<span class="kpi num" style="font-size: 26px">R$ 1.702<span style="font-size: 14px; color: var(--ink-2)">/mês</span></span>
+<span class="small num" style="font-weight: 800; color: var(--ink)">36 meses · sem cortes</span>
+<span class="badge badge-ok" style="align-self: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Cabe em 36 meses</span>
+<p class="quote">“Usa 60% da sobra; mantém R$ 1.134/mês livres.”</p>
+<button class="btn btn-primary btn-sm" style="height: 44px">Escolher este caminho</button>
+</article>
+
+<article class="glass-card cen" aria-label="Cenário Acelerado" style="width: 290px; box-sizing: border-box; padding: 18px 16px 16px; gap: 12px">
+<div style="display: flex; flex-direction: column"><span class="t-title">Acelerado</span><span class="small">80% da sobra + cortes</span></div>
+<div class="meter"><span style="width: 80%"></span></div>
+<span class="kpi num" style="font-size: 26px">R$ 2.469<span style="font-size: 14px; color: var(--ink-2)">/mês</span></span>
+<span class="small num" style="font-weight: 800; color: var(--ink)">25 meses</span>
+<span class="badge badge-ok" style="align-self: flex-start">Cabe em 36 meses</span>
+<p class="quote">Cortes: Comer fora −R$ 150 · Assinaturas −R$ 50</p>
+<button class="btn btn-secondary btn-sm" style="height: 44px">Escolher este caminho</button>
+</article>
+</div>
+</div>
+<div style="display: flex; justify-content: center; gap: 6px" aria-label="Cenário 2 de 3">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong)"></span>
+<span style="width: 22px; height: 8px; border-radius: 999px; background: var(--accent)"></span>
+<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong)"></span>
+</div>
+
+<div class="glass-card" style="padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; border-radius: 18px">
+<div class="row-between">
+<span class="tag tag-rec"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3v18"></path><path d="M5 6h11l3 3-3 3H5z"></path></svg>Recomendação</span>
+<button class="link-btn" aria-expanded="false" style="font-size: 14px; min-height: 44px">Por quê?<svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<p class="prose" style="font-size: 15px; line-height: 21px">Recomendo o equilibrado porque cabe no seu prazo sem cortes e ainda deixa margem para imprevistos.</p>
+</div>
+</div>
+</section>
+
+<div class="field glass-chrome" style="height: 54px; border-radius: 22px; padding: 0 6px 0 16px">
+<label class="sr-only" for="m5-outro">Outro caminho</label>
+<input id="m5-outro" type="text" placeholder="Outro caminho: “e se eu guardar R$ 2.000…”" style="font-size: 15px">
+<button class="send" aria-label="Simular outro caminho"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 3 };
+  }
+}
+</script>
+</body>
+</html>

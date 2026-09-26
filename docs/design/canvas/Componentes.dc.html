@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Folha de componentes</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens" data-estado="entender" style="width: 1600px; height: 3000px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 1600px; box-sizing: border-box; padding: 56px 32px; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 0 8px">
+<span class="eyebrow">Bússola · Dynamic Glass</span>
+<h1 style="margin: 0; font-size: 48px; line-height: 54px; font-weight: 900; letter-spacing: -.02em">Folha de componentes</h1>
+<p style="margin: 0; font-size: 18px; line-height: 27px; color: var(--ink-2); max-width: 900px">Nomes iguais aos da §5, porque o front mapeia cada um a um evento do agente. Os estados aparecem lado a lado: padrão, hover, foco, carregando, sucesso, aviso, erro e desabilitado.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start">
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Tags · ChipFonte · SeloSintetico</h2></div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap">
+<span class="tag tag-diag"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg>Diagnóstico</span>
+<span class="tag tag-sim"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>Simulação</span>
+<span class="tag tag-rec"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3v18"></path><path d="M5 6h11l3 3-3 3H5z"></path></svg>Recomendação</span>
+<span class="tag tag-acao"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>Ação · requer sua autorização</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">padrão</span><button class="chip-fonte"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Perfil · jan–jun/2025</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">aberto</span><button class="chip-fonte on"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Perfil · jan–jun/2025</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">foco</span><button class="chip-fonte focus-ring"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Perfil · jan–jun/2025</button></div>
+</div>
+<div class="popover" style="position: relative; width: auto">
+<div class="row-between"><span class="eyebrow">ChipFonte · popover</span></div>
+<div class="pop-row"><span class="k">Ferramenta</span><span style="font-weight: 800">Perfil financeiro</span></div>
+<div class="pop-row"><span class="k">Tabelas</span><span class="mono">bussola_demo.transacoes · bussola_demo.saldos_diarios</span></div>
+<div class="pop-row"><span class="k">Período</span><span class="num" style="font-weight: 700">jan–jun/2025 · 6 meses</span></div>
+<div class="pop-row"><span class="k">Avisos</span><span style="font-weight: 700; color: var(--warn)">1 mês com saldo negativo</span></div>
+</div>
+<div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+<span class="selo"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 0 0 1.3 2h11.4a1.5 1.5 0 0 0 1.3-2L14 9V3"></path></svg>Dados sintéticos · ambiente de demonstração</span>
+<span class="disclaimer"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 0 0 1.3 2h11.4a1.5 1.5 0 0 0 1.3-2L14 9V3"></path></svg>Simulação com dados sintéticos. Não é oferta nem garantia de crédito.</span>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Botões e respostas</h2><span class="small">alvos ≥ 44 px no mobile</span></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; align-items: end">
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">padrão</span><button class="btn btn-primary btn-sm">Escolher</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">hover</span><button class="btn btn-primary btn-sm hover cursor-glow" style="position: relative">Escolher</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">foco</span><button class="btn btn-primary btn-sm focus-ring">Escolher</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">carregando</span><button class="btn btn-primary btn-sm" aria-busy="true"><span class="spin" style="border-color: rgba(255,255,255,.4); border-top-color: #fff; width: 16px; height: 16px"></span>Criando</button></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">desabilitado</span><button class="btn btn-primary btn-sm" disabled>Escolher</button></div>
+</div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+<button class="btn btn-auth btn-sm"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Autorizar</button>
+<button class="btn btn-secondary btn-sm">Agora não</button>
+<button class="link-btn">Por que essa recomendação?<svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></button>
+<button class="btn-presenter" style="background: var(--presenter)">Avançar um mês<svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"></path></svg></button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">RespostasRapidas · sugestões do composer</span>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><button class="qr">R$ 60 mil em 3 anos</button><button class="qr focus-ring">Ainda não sei o valor</button><button class="suggest glass-chrome">Me mostra caminhos</button></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">Composer · padrão / desabilitado durante resposta</span>
+<div class="glass-chrome composer" style="height: 54px"><label class="sr-only" for="c-msg1">Mensagem</label><input id="c-msg1" type="text" placeholder="Conte seu objetivo…"><button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button></div>
+<div class="glass-chrome composer" style="height: 54px; opacity: .7"><label class="sr-only" for="c-msg2">Mensagem</label><input id="c-msg2" type="text" placeholder="Aguarde a análise…" disabled><button class="send" aria-label="Parar resposta" style="background: var(--ink)"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"></rect></svg></button></div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>LinhaFerramenta · ErroFerramenta</h2><span class="small">bloco colapsável · nome legível, nunca o técnico</span></div>
+<div class="tool-block" style="background: var(--row); border: 1px solid var(--line)">
+<button class="tool-head" aria-expanded="true"><span class="spin"></span><span style="flex: 1 1 auto">Analisando sua situação <span style="font-weight: 600; color: var(--ink-3)">· 2 de 4</span></span><svg class="i" viewBox="0 0 24 24" style="transform: rotate(180deg); color: var(--ink-3)"><path d="M6 9l6 6 6-6"></path></svg></button>
+<div class="tool-line"><span class="spin"></span><span class="nm">Capacidade de poupança</span><span class="per">executando · jan–jun/2025</span></div>
+<div class="tool-line"><span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="nm">Perfil financeiro</span><span class="per">ok · jan–jun/2025</span></div>
+<div class="tool-line" style="background: var(--err-soft)"><span class="st st-err"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M6 6l12 12M18 6L6 18"></path></svg></span><span class="nm" style="color: var(--err)">Oportunidades de corte</span><button class="link-btn" style="font-size: 14px"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 5v6h-6"></path></svg>Tentar de novo</button></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">colapsado · concluído</span>
+<div class="tool-block" style="background: var(--row); border: 1px solid var(--line); padding: 4px"><button class="tool-head" aria-expanded="false"><span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span style="flex: 1 1 auto">Analisei sua situação <span style="font-weight: 600; color: var(--ink-3)">· 4 consultas</span></span><svg class="i" viewBox="0 0 24 24" style="color: var(--ink-3)"><path d="M6 9l6 6 6-6"></path></svg></button></div>
+</div>
+<div class="note note-warn"><svg class="i" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17h.01"></path></svg><span>DADOS_INSUFICIENTES: o aviso fica dentro do card, sem erro fatal.</span></div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>StepperJornada</h2><span class="small">desktop fixo · mobile compacto que expande ao toque</span></div>
+<div style="transform: scale(.66); transform-origin: left top; height: 48px; width: 1032px">
+<dc-import name="StepperJornada" atual="{{tres}}" hint-size="1032px,72px"></dc-import>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span class="var-label">compacto · fechado</span>
+<button class="step-compact" style="align-self: flex-start"><span class="n">3/6</span>Antecipar<svg class="i i-sm" viewBox="0 0 24 24" style="color: var(--ink-3)"><path d="M6 9l6 6 6-6"></path></svg></button>
+<span class="var-label" style="margin-top: 8px">recalcular rota (acompanhar com desvio)</span>
+<button class="step-compact" style="align-self: flex-start"><span class="n" style="background: var(--warn-fill); color: #3A2400">6/6</span>Acompanhar · desvio<svg class="i i-sm" viewBox="0 0 24 24" style="color: var(--ink-3)"><path d="M6 9l6 6 6-6"></path></svg></button>
+</div>
+<div class="glass-chrome" style="border-radius: 20px; padding: 14px 16px; display: flex; flex-direction: column">
+<span class="var-label" style="margin-bottom: 8px">compacto · expandido</span>
+<div class="tl-item"><span class="tl-dot done"></span><div class="tl-main"><span class="tl-title">OBJETIVO</span></div></div>
+<div class="tl-item"><span class="tl-dot done"></span><div class="tl-main"><span class="tl-title">ENTENDER</span></div></div>
+<div class="tl-item"><span class="tl-dot now"></span><div class="tl-main"><span class="tl-title" style="color: var(--accent-ink)">ANTECIPAR · agora</span></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><span class="tl-title" style="color: var(--ink-3)">ORIENTAR</span></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><span class="tl-title" style="color: var(--ink-3)">AGIR</span></div></div>
+<div class="tl-item last" style="padding-bottom: 0"><span class="tl-dot next"></span><div class="tl-main"><span class="tl-title" style="color: var(--ink-3)">ACOMPANHAR</span></div></div>
+</div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>CardCenario</h2><span class="small">dentro de ComparadorCenarios</span></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding-top: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">padrão</span>
+<article class="glass-card cen" style="padding: 16px; gap: 8px"><span class="t-title" style="font-size: 17px">Conservador</span><span class="kpi num" style="font-size: 22px; line-height: 28px">R$ 1.134</span><span class="badge badge-warn" style="align-self: flex-start">Não cabe</span></article></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">recomendado + hover</span>
+<article class="glass-card cen rec cursor-glow" style="padding: 20px 16px 16px; gap: 8px"><span class="rec-flag" style="height: 26px; top: -13px; font-size: 12px">Recomendado</span><span class="t-title" style="font-size: 17px">Equilibrado</span><span class="kpi num" style="font-size: 22px; line-height: 28px">R$ 1.702</span><span class="badge badge-ok" style="align-self: flex-start">Cabe</span></article></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">escolhido</span>
+<article class="glass-card cen" style="padding: 16px; gap: 8px; border: 2px solid var(--ok); box-shadow: 0 0 0 5px var(--ok-soft)"><span class="t-title" style="font-size: 17px; display: flex; align-items: center; gap: 6px"><svg class="i" viewBox="0 0 24 24" style="color: var(--ok); stroke-width: 2.6"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Equilibrado</span><span class="kpi num" style="font-size: 22px; line-height: 28px">R$ 1.702</span><span class="small" style="font-weight: 800">Seu caminho</span></article></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="var-label">outro caminho · campo livre</span>
+<div class="field"><label class="sr-only" for="c-outro">Outro caminho</label><input id="c-outro" type="text" placeholder="Descreva do seu jeito, ex.: “e se eu guardar R$ 2.000 e usar meu 13º?”"></div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>CardConsentimento</h2><span class="small">pendente → recibo · nunca modal genérico nem checkbox</span></div>
+<article class="glass-consent" style="padding: 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 12px"><span class="shield-badge" style="width: 40px; height: 40px"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span><span style="font-size: 18px; font-weight: 900">Pendente · Criar seu plano</span></div>
+<span class="small">Faz / não faz / dados usados, e depois Autorizar · Agora não</span>
+</article>
+<div class="receipt ok"><span class="st" style="background: var(--ok); color: #fff"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span>Autorizado · <span class="num">26/09/2026 14:32</span> · <span class="mono">consentimento c-7f3a…</span></span></div>
+<div class="receipt no" style="flex-direction: column; align-items: flex-start; gap: 4px"><span style="display: flex; align-items: center; gap: 10px"><span class="st" style="background: var(--row); border: 1px solid var(--line-strong)"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 12h12"></path></svg></span>Recusado · <span class="num">26/09/2026 14:32</span> · <span class="mono">c-7f3a…</span></span><span style="font-weight: 600; padding-left: 34px">Tudo bem, não criei o plano. Se mudar de ideia, é só pedir.</span></div>
+<div class="check-item" style="border-color: var(--consent-edge); box-shadow: 0 0 0 4px var(--consent-halo); align-items: center"><svg class="i" viewBox="0 0 24 24" style="color: var(--ok)"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg><span style="font-weight: 800; flex: 1 1 auto">Inline pequeno · Ativar lembretes</span><button class="btn btn-auth btn-sm" style="height: 40px">Autorizar</button><button class="btn btn-secondary btn-sm" style="height: 40px">Agora não</button></div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Mensagens e carregamento</h2></div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div class="msg-client">MensagemCliente · pílula de vidro laranja</div>
+<p class="prose">MensagemAgente em streaming, direto no card<span class="caret"></span></p>
+<div style="display: flex; gap: 12px; align-items: center"><span class="typing"><span></span><span></span><span></span></span><span class="small">digitando</span></div>
+<div class="glass-card" style="padding: 16px; display: flex; flex-direction: column; gap: 10px" aria-busy="true"><span class="sk" style="width: 120px; height: 26px; border-radius: 999px"></span><span class="sk" style="height: 60px; border-radius: 14px"></span><span class="sk" style="width: 60%; height: 14px"></span></div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>DivisorMes · AlertaGuardrail · Open Finance</h2></div>
+<div class="month-div"><span class="ln"></span><span class="month-pill glass-chrome"><svg class="i i-sm" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg>Julho de 2025 liberado</span><span class="ln"></span></div>
+<div class="glass-card" role="alert" style="padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start"><svg class="i i-lg" viewBox="0 0 24 24" style="color: var(--ink-2)"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg><span style="font-size: 15px; font-weight: 700">Não posso fazer isso. Só consigo usar os seus dados, e só para o seu objetivo.</span></div>
+<button class="glass-card" disabled style="font: inherit; color: var(--ink-3); padding: 14px 16px; display: flex; gap: 12px; align-items: center; opacity: .7; cursor: not-allowed; text-align: left"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg><span style="font-weight: 800; flex: 1 1 auto">Conectar outros bancos (Open Finance)</span><span class="badge badge-neutral">em breve</span></button>
+</section>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":3000}}'>
+class Component extends DCLogic {
+  renderVals() { return { tres: 3 }; }
+}
+</script>
+</body>
+</html>

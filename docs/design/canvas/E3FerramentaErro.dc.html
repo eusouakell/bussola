@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>E3 · Ferramenta indisponível</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="entender" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<dc-import name="MTopo" atual="{{atual}}" tema="{{tema}}" hint-size="366px,102px"></dc-import>
+<section class="convo" aria-label="Conversa" style="align-items: stretch">
+<div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 2px">
+<div class="msg-client" style="max-width: 290px; font-size: 16px">Uns 60 mil de entrada, em 3 anos.</div>
+<div class="glass-card tool-block" aria-label="Analisando sua situação" style="border-radius: 16px">
+<button class="tool-head" aria-expanded="true" style="font-size: 14.5px">
+<span class="st st-q" style="border-color: var(--warn)"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M12 7v6M12 17h.01"></path></svg></span>
+<span style="flex: 1 1 auto">Analisando <span style="font-weight: 600; color: var(--ink-3)">· 3 de 4 ok</span></span>
+<svg class="i" viewBox="0 0 24 24" style="transform: rotate(180deg); color: var(--ink-3)"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<div class="tool-line" style="font-size: 14.5px"><span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="nm">Perfil financeiro</span></div>
+<div class="tool-line" style="font-size: 14.5px"><span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="nm">Capacidade de poupança</span></div>
+<div class="tool-line" style="font-size: 14.5px"><span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="nm">Dívidas e parcelas</span></div>
+<div aria-label="ErroFerramenta" style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 12px; background: var(--err-soft); border: 1px solid rgba(180,35,24,.25)">
+<div style="display: flex; align-items: center; gap: 12px"><span class="st st-err"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M6 6l12 12M18 6L6 18"></path></svg></span><span style="font-size: 14.5px; font-weight: 800; color: var(--err)">Não consegui consultar oportunidades de corte agora</span></div>
+<button class="btn btn-secondary btn-sm" style="align-self: flex-start; height: 44px; margin-left: 34px"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 5v6h-6"></path></svg>Tentar de novo</button>
+</div>
+</div>
+<article class="glass-card enter" style="padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<div class="row-between">
+<span class="tag tag-diag"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg>Diagnóstico</span>
+<button class="chip-fonte"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Perfil · jan–jun/2025</button>
+</div>
+<span class="kpi" style="font-size: 26px">R$ 2.836<span style="font-size: 14px; color: var(--ink-2)">/mês de sobra média</span></span>
+<div class="note note-info" style="font-size: 14px; line-height: 19px; padding: 9px 12px"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>Sigo com o que tenho. Ainda sem sugestões de corte por categoria.</div>
+</article>
+</div>
+</section>
+<div class="glass-chrome composer" style="height: 54px; border-radius: 22px; padding: 0 6px 0 16px">
+<label class="sr-only" for="e3-msg">Mensagem para a Bússola</label>
+<input id="e3-msg" type="text" placeholder="Escreva uma mensagem…" style="font-size: 16px">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 1 };
+  }
+}
+</script>
+</body>
+</html>

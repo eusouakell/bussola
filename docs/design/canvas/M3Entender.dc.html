@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>M3 · Entender</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="entender" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<dc-import name="MTopo" atual="{{atual}}" tema="{{tema}}" hint-size="366px,102px"></dc-import>
+
+<section class="convo" aria-label="Conversa" style="align-items: stretch">
+<div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 2px">
+<div class="msg-client" style="max-width: 290px; font-size: 16px">Uns 60 mil de entrada, em 3 anos.</div>
+
+<div class="glass-card tool-block" style="padding: 4px; border-radius: 16px">
+<button class="tool-head" aria-expanded="false" style="font-size: 14.5px; min-height: 44px">
+<span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<span style="flex: 1 1 auto">Analisei sua situação <span style="font-weight: 600; color: var(--ink-3)">· 4 consultas · jan–jun/2025</span></span>
+<svg class="i" viewBox="0 0 24 24" style="color: var(--ink-3)"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+</div>
+
+<article class="glass-card enter" aria-label="CardDiagnostico" style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div class="row-between">
+<span class="tag tag-diag"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg>Diagnóstico</span>
+<button class="chip-fonte"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Perfil · jan–jun/2025</button>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 16px; background: var(--tag-diag-bg)">
+<div style="display: flex; flex-direction: column">
+<span class="kpi-label" style="color: var(--tag-diag)">Sobra média</span>
+<span class="kpi" style="font-size: 28px">R$ 2.836<span style="font-size: 14px; font-weight: 800; color: var(--ink-2)">/mês</span></span>
+</div>
+<svg viewBox="0 0 232 62" style="width: 108px; height: 40px" aria-label="Sobra mensal de janeiro a junho de 2025">
+<path d="M4 34H228" style="stroke: var(--tag-diag); stroke-width: 1; stroke-dasharray: 3 4; fill: none; opacity: .6"></path>
+<polyline points="6,27 50,54 94,17 138,44 182,9 226,52" style="fill: none; stroke: var(--tag-diag); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round"></polyline>
+<circle cx="226" cy="52" r="6" style="fill: var(--tag-diag)"></circle>
+</svg>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div style="display: flex; flex-direction: column; padding: 10px 12px; border-radius: 14px; background: var(--row)"><span class="kpi-label">Renda média</span><span class="num" style="font-size: 20px; font-weight: 900">R$ 7.451</span></div>
+<div style="display: flex; flex-direction: column; padding: 10px 12px; border-radius: 14px; background: var(--row)"><span class="kpi-label">Gasto médio</span><span class="num" style="font-size: 20px; font-weight: 900">R$ 4.615</span></div>
+</div>
+<span class="small num" style="font-weight: 700">Saldo mín <strong style="color: var(--err)">−R$ 2.072</strong> · máx <strong style="color: var(--ink)">R$ 49.321</strong></span>
+<div class="note note-warn" style="font-size: 14.5px; line-height: 20px"><svg class="i" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17h.01"></path></svg>Seu saldo ficou negativo em 1 mês do período.</div>
+<div class="hline"></div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span class="kpi-label">Maiores gastos</span>
+<span class="num" style="font-size: 15px; font-weight: 800">Aluguel R$ 1.077 · Comer fora R$ 364 · Assinaturas R$ 101</span>
+</div>
+</article>
+
+<article class="glass-card enter" aria-label="CardDividas" style="padding: 12px 14px; display: flex; align-items: center; gap: 10px; animation-delay: .1s">
+<span class="tag tag-diag" style="padding: 0 9px"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg></span>
+<span style="font-size: 14.5px; font-weight: 800; flex: 1 1 auto">Sem financiamentos ativos · <span class="num" style="font-weight: 700; color: var(--ink-2)">juros ≈ R$ 61/mês</span></span>
+<button class="chip-fonte" aria-label="Fonte: Dívidas e parcelas, jan–jun/2025" style="padding: 0 8px"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg></button>
+</article>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; gap: 8px; overflow: hidden">
+<button class="suggest glass-chrome">Dá pra juntar os 60 mil?</button>
+<button class="suggest glass-chrome">Por que fiquei negativo?</button>
+</div>
+<div class="glass-chrome composer" style="height: 54px; border-radius: 22px; padding: 0 6px 0 16px">
+<label class="sr-only" for="m3-msg">Mensagem para a Bússola</label>
+<input id="m3-msg" type="text" placeholder="Pergunte sobre o diagnóstico…" style="font-size: 16px">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 1 };
+  }
+}
+</script>
+</body>
+</html>

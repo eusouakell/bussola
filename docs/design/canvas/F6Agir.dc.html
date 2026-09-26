@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>F6 · Agir — consentimento</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="agir" style="width: 1440px; height: 1024px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 1440px; height: 1024px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+<dc-import name="HeaderBussola" tema="{{tema}}" hint-size="1408px,60px"></dc-import>
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+
+<main style="width: 1032px; display: flex; flex-direction: column; gap: 14px; min-height: 0">
+<dc-import name="StepperJornada" atual="{{atual}}" tema="{{tema}}" hint-size="1032px,72px"></dc-import>
+
+<section class="convo" aria-label="Conversa">
+<div class="col">
+<article class="glass-card" style="padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-left: 44px">
+<span class="tag tag-rec"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3v18"></path><path d="M5 6h11l3 3-3 3H5z"></path></svg>Recomendação</span>
+<span style="font-size: 16px; font-weight: 700">Recomendo o equilibrado: cabe no prazo sem cortes.</span>
+</article>
+
+<div class="msg-client">Quero o equilibrado. Pode criar o plano.</div>
+
+<div class="agent">
+<span class="brand-mark sm"><svg class="i i-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg></span>
+<div class="agent-body">
+<p class="prose" style="font-weight: 600">Antes de registrar, preciso da sua autorização.</p>
+<article class="glass-consent enter" aria-label="CardConsentimento" style="padding: 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: flex-start; gap: 16px">
+<span class="shield-badge"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="tag tag-acao" style="align-self: flex-start"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>Ação · requer sua autorização</span>
+<h2 style="margin: 0; font-size: 24px; line-height: 30px; font-weight: 900; letter-spacing: -.01em">Criar seu plano “Primeiro apartamento”</h2>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+<div class="c-col">
+<span class="h" style="color: var(--ok)"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>O que vou fazer</span>
+<p>Registrar o plano (<span class="num">R$ 1.702/mês</span> por 36 meses, meta de <span class="num">R$ 60.000</span>) e acompanhar seu progresso mês a mês.</p>
+</div>
+<div class="c-col">
+<span class="h" style="color: var(--err)"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.6"><path d="M6 6l12 12M18 6L6 18"></path></svg>O que não vou fazer</span>
+<p>Mover dinheiro, contratar produtos ou compartilhar seus dados.</p>
+</div>
+<div class="c-col">
+<span class="h" style="color: var(--ink-2)"><svg class="i" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Dados usados</span>
+<p>Seu extrato de <span class="num">jan–jun/2025</span>.</p>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<button class="btn btn-auth cursor-glow" style="position: relative"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Autorizar</button>
+<button class="btn btn-secondary">Agora não</button>
+</div>
+<div class="hline"></div>
+<span class="disclaimer" style="font-size: 14px"><svg class="i i-sm" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Você pode revogar quando quiser. Esta decisão fica registrada.</span>
+</article>
+</div>
+</div>
+</div>
+</section>
+
+<div style="width: 760px; align-self: center; display: flex; flex-direction: column; gap: 10px">
+<div class="glass-chrome composer" style="opacity: .7">
+<label class="sr-only" for="msg-f6">Mensagem para a Bússola</label>
+<input id="msg-f6" type="text" placeholder="Decida no cartão acima ou pergunte algo…">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</main>
+
+<aside aria-label="Bastidores" style="width: 360px; display: flex; flex-direction: column; gap: 12px; min-height: 0">
+<div class="presenter">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="pe">Modo demonstração</span>
+<span class="num" style="font-size: 15px; font-weight: 800">Mês de referência: jun/2025</span>
+</div>
+<button class="btn-presenter">Avançar um mês<svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"></path></svg></button>
+</div>
+<section class="glass-chrome panel" style="flex-grow: 1; min-height: 0">
+<div class="row-between" style="padding: 16px 16px 12px 18px">
+<div style="display: flex; flex-direction: column">
+<span class="eyebrow">Bastidores</span>
+<span style="font-size: 16px; font-weight: 900">O agente por dentro</span>
+</div>
+<button class="icon-btn" aria-label="Recolher Bastidores"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg></button>
+</div>
+<nav class="tabs" aria-label="Seções dos Bastidores">
+<button class="tab">Jornada</button>
+<button class="tab">Ferramentas</button>
+<button class="tab on" aria-current="true">Consentimentos</button>
+<button class="tab">Auditoria</button>
+</nav>
+<div class="panel-body">
+<div class="p-card new">
+<div class="row-between"><span class="mono" style="font-weight: 600">criar_plano</span><span class="badge badge-warn" style="height: 24px; font-size: 12px"><svg class="i i-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>pendente</span></div>
+<span class="tl-sub">solicitado 14:31:52 · id c-7f3a…</span>
+<span class="tl-sub">dados: extrato jan–jun/2025 · escopo: registrar e acompanhar</span>
+</div>
+<div class="p-card">
+<span class="eyebrow">Regra de governança</span>
+<span class="tl-sub">Ações sensíveis passam por solicitar_consentimento. Sem decisão, nada é executado.</span>
+</div>
+</div>
+<div class="kv">
+<div><div class="k">Objetivo</div><div class="v">Primeiro apê · R$ 60.000 · 36m</div></div>
+<div><div class="k">Cenário</div><div class="v">Equilibrado</div></div>
+<div><div class="k">Mês de ref.</div><div class="v num">jun/2025</div></div>
+<div><div class="k">Plano</div><div class="v">aguardando autorização</div></div>
+</div>
+</section>
+</aside>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":1440,"height":1024}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 4 };
+  }
+}
+</script>
+</body>
+</html>

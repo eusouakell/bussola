@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>E5 · Streaming e carregando</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="entender" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<dc-import name="MTopo" atual="{{atual}}" tema="{{tema}}" hint-size="366px,102px"></dc-import>
+<section class="convo" aria-label="Conversa" style="align-items: stretch">
+<div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 2px">
+<div class="msg-client" style="max-width: 290px; font-size: 16px">Uns 60 mil de entrada, em 3 anos.</div>
+<div class="glass-card tool-block" aria-live="polite" style="border-radius: 16px">
+<button class="tool-head" aria-expanded="true" style="font-size: 14.5px">
+<span class="spin"></span>
+<span style="flex: 1 1 auto">Analisando sua situação <span style="font-weight: 600; color: var(--ink-3)">· 1 de 4</span></span>
+</button>
+<div class="tool-line" style="font-size: 14.5px"><span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><span class="nm">Perfil financeiro</span><span class="per">jan–jun/2025</span></div>
+<div class="tool-line" style="font-size: 14.5px"><span class="spin"></span><span class="nm">Capacidade de poupança</span><span class="per">jan–jun/2025</span></div>
+<div class="tool-line" style="font-size: 14.5px; opacity: .6"><span class="spin"></span><span class="nm">Dívidas e parcelas</span><span class="per">na fila</span></div>
+<div class="tool-line" style="font-size: 14.5px; opacity: .6"><span class="spin"></span><span class="nm">Oportunidades de corte</span><span class="per">na fila</span></div>
+</div>
+<article class="glass-card" aria-busy="true" aria-label="Carregando diagnóstico" style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div class="row-between"><span class="sk" style="width: 118px; height: 28px; border-radius: 999px"></span><span class="sk" style="width: 150px; height: 28px; border-radius: 999px"></span></div>
+<span class="sk" style="width: 100%; height: 72px; border-radius: 16px"></span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><span class="sk" style="height: 58px; border-radius: 14px"></span><span class="sk" style="height: 58px; border-radius: 14px"></span></div>
+</article>
+<p class="prose" style="font-size: 16px; padding: 0 4px">Estou olhando seus últimos seis meses pra entender quanto sobra<span class="caret"></span></p>
+</div>
+</section>
+<div class="glass-chrome composer" style="height: 54px; border-radius: 22px; padding: 0 6px 0 16px; opacity: .75">
+<label class="sr-only" for="e5-msg">Mensagem para a Bússola</label>
+<input id="e5-msg" type="text" placeholder="Aguarde a análise…" style="font-size: 16px">
+<button class="send" aria-label="Parar resposta" style="background: var(--ink)"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"></rect></svg></button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 1 };
+  }
+}
+</script>
+</body>
+</html>

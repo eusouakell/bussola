@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Anotações de handoff</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens" data-estado="agir" style="width: 1600px; height: 1800px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 1600px; box-sizing: border-box; padding: 56px 32px; display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 0 8px">
+<span class="eyebrow">Bússola · handoff</span>
+<h1 style="margin: 0; font-size: 48px; line-height: 54px; font-weight: 900; letter-spacing: -.02em">De onde vem cada dado</h1>
+<p style="margin: 0; font-size: 18px; line-height: 27px; color: var(--ink-2); max-width: 1000px">Todo número vem de uma ferramenta determinística e é exibido com o <span class="mono" style="font-size: 16px">fonte</span> do envelope MCP. O nome técnico aparece só em Bastidores. As tabelas <span class="mono" style="font-size: 16px">bussola_demo.*</span>, os IDs e os tempos são placeholders da PoC.</p>
+</div>
+
+<section class="glass-card" style="padding: 8px 0; overflow: hidden">
+<div style="display: grid; grid-template-columns: 250px 250px minmax(0, 1fr) 290px; gap: 0 20px; padding: 14px 28px; border-bottom: 1px solid var(--line-strong)">
+<span class="eyebrow">Componente</span><span class="eyebrow">Evento do agente</span><span class="eyebrow">Origem do dado</span><span class="eyebrow">Estados</span>
+</div>
+<sc-for list="{{linhas}}" as="l" hint-placeholder-count="21">
+<div style="display: grid; grid-template-columns: 250px 250px minmax(0, 1fr) 290px; gap: 0 20px; padding: 12px 28px; border-bottom: 1px solid var(--line); align-items: baseline">
+<span class="mono" style="font-size: 14px; font-weight: 600">{{l.c}}</span>
+<span class="mono" style="font-size: 13px; color: var(--accent-ink)">{{l.e}}</span>
+<span style="font-size: 15px; line-height: 21px; font-weight: 600; color: var(--ink-2)">{{l.o}}</span>
+<span class="small" style="font-size: 13.5px">{{l.s}}</span>
+</div>
+</sc-for>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div class="glass-card" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 8px"><span class="t-title">Regras que o front garante</span><p class="small" style="margin: 0">Nenhum número é renderizado sem <span class="mono">fonte</span>. Se ele vier nulo, o card mostra o aviso e esconde o valor. Nenhum botão de contratar, transferir ou investir. IDs sempre mascarados (<span class="mono">36a2…7269</span>).</p></div>
+<div class="glass-card" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 8px"><span class="t-title">Consentimento</span><p class="small" style="margin: 0"><span class="mono">solicitar_consentimento</span> renderiza CardConsentimento pendente. A decisão chega em <span class="mono">consentimento_decidido</span> e troca o card pelo recibo, com status, horário e ID. Sem decisão, nenhuma ação sensível roda.</p></div>
+<div class="glass-card" style="padding: 20px 22px; display: flex; flex-direction: column; gap: 8px"><span class="t-title">App primeiro</span><p class="small" style="margin: 0">A Bússola abre como jornada dentro da ia.i, no app. Abaixo de <span class="mono">lg</span>, os Bastidores viram bottom sheet e o stepper vira indicador compacto. A versão 1440 é para telão e web.</p></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const linhas = [
+      { c: 'StepperJornada', e: 'estado_alterado', o: 'session.state.estado_jornada', s: 'futuro · atual · concluído · desvio' },
+      { c: 'MensagemCliente', e: '—', o: 'Entrada do cliente', s: 'enviada · bloqueada (guardrail)' },
+      { c: 'MensagemAgente', e: 'stream', o: 'Agente, texto com tags semânticas', s: 'streaming · completo' },
+      { c: 'LinhaFerramenta', e: 'ferramenta_chamada', o: 'Chamada MCP + fonte (nome legível, período)', s: 'executando · ok · erro' },
+      { c: 'ChipFonte + popover', e: '—', o: 'fonte do envelope MCP: ferramenta, dataset.tabela, período, avisos', s: 'padrão · aberto · foco' },
+      { c: 'CardObjetivo', e: 'estado_alterado → objetivo', o: 'session.state.objetivo', s: 'inferido ✓ · faltando ?' },
+      { c: 'RespostasRapidas', e: '—', o: 'Agente', s: 'padrão · foco · desabilitado' },
+      { c: 'CardDiagnostico', e: 'ferramenta_chamada', o: 'perfil_financeiro, capacidade_poupanca', s: 'carregando · ok · aviso · dados insuficientes' },
+      { c: 'CardDividas', e: 'ferramenta_chamada', o: 'dividas_e_parcelas', s: 'ok · sem dívidas · erro' },
+      { c: 'CardOportunidadesCorte', e: 'ferramenta_chamada', o: 'oportunidades_corte (categoria, média, economia, critério)', s: 'ok · indisponível' },
+      { c: 'CardSimulacao', e: 'ferramenta_chamada', o: 'simular_objetivo (valor, aporte, prazo, folga, premissas)', s: 'cabe · cabe com pouca margem · não cabe' },
+      { c: 'ComparadorCenarios', e: 'ferramenta_chamada', o: 'comparar_cenarios', s: 'carregando · 3 cenários · outro caminho' },
+      { c: 'CardCenario', e: '—', o: 'cenarios[]', s: 'padrão · recomendado · hover · escolhido · não cabe' },
+      { c: 'ExplicacaoRecomendacao', e: '—', o: 'Agente + buscar_contexto_financeiro', s: 'fechado · aberto' },
+      { c: 'CardConsentimento', e: 'consentimento_solicitado / _decidido', o: 'solicitar_consentimento → consentimentos', s: 'pendente · autorizado · recusado · inline' },
+      { c: 'CardPlano', e: 'plano_criado', o: 'criar_plano → plano_id', s: 'criado · em andamento' },
+      { c: 'DivisorMes', e: 'acompanhamento_mes_avancado', o: 'avancar_mes()', s: 'mês liberado' },
+      { c: 'CardPlanejadoRealizado', e: 'desvio_detectado', o: 'status_plano(), resumo_mes', s: 'no plano · desvio leve · desvio grave · sobra extra' },
+      { c: 'CardRotaRecalculada', e: 'rota_recalculada', o: 'Simulação + gate de consentimento', s: 'opções · escolhida · aguardando autorização' },
+      { c: 'AlertaGuardrail', e: 'guardrail_bloqueio', o: 'Política do agente', s: 'bloqueio · redirecionamento' },
+      { c: 'ErroFerramenta', e: 'ferramenta_chamada (erro)', o: 'Códigos INDISPONIVEL, DADOS_INSUFICIENTES…', s: 'erro · tentar de novo · seguindo sem o dado' },
+      { c: 'SeloSintetico / Disclaimer', e: '—', o: 'Fixo', s: 'header · rodapé de simulação' }
+    ];
+    return { linhas };
+  }
+}
+</script>
+</body>
+</html>

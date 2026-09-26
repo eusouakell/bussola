@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>E4 · Dados insuficientes</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="entender" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<dc-import name="MTopo" atual="{{atual}}" tema="{{tema}}" hint-size="366px,102px"></dc-import>
+<section class="convo" aria-label="Conversa" style="align-items: stretch">
+<div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 2px">
+<article class="glass-card enter" aria-label="CardDiagnostico com aviso" style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div class="row-between">
+<span class="tag tag-diag"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg>Diagnóstico</span>
+<button class="chip-fonte"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Perfil · [período curto]</button>
+</div>
+<div class="note note-warn" style="font-size: 14.5px; line-height: 20px"><svg class="i" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17h.01"></path></svg>Tenho poucos meses de histórico para estimar sua sobra com segurança.</div>
+<div style="display: flex; flex-direction: column; padding: 12px 14px; border-radius: 16px; background: var(--row); border: 1px dashed var(--line-strong)">
+<span class="kpi-label">Sobra média <span class="badge badge-warn" style="height: 22px; font-size: 11.5px; margin-left: 4px">estimativa frágil</span></span>
+<span class="kpi" style="font-size: 26px; color: var(--ink-2)">R$ [valor]<span style="font-size: 14px">/mês</span></span>
+</div>
+<p class="prose" style="font-size: 15px; line-height: 21px; color: var(--ink-2)">Posso seguir com uma simulação de referência, mas vou revisar a conta quando tiver mais meses.</p>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button class="qr">Seguir mesmo assim</button>
+<button class="qr">Informar minha renda</button>
+</div>
+</article>
+</div>
+</section>
+<div class="glass-chrome composer" style="height: 54px; border-radius: 22px; padding: 0 6px 0 16px">
+<label class="sr-only" for="e4-msg">Mensagem para a Bússola</label>
+<input id="e4-msg" type="text" placeholder="Escreva uma mensagem…" style="font-size: 16px">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 1 };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>M9 · Acompanhar — oportunidade</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="agir" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+<dc-import name="MTopo" atual="{{atual}}" tema="{{tema}}" hint-size="366px,102px"></dc-import>
+
+<section class="convo" aria-label="Conversa" style="align-items: stretch">
+<div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 2px">
+<div class="receipt ok" style="padding: 10px 12px; font-size: 14px">
+<span class="st" style="background: var(--ok); color: #fff"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<span>Nova rota A adotada · <span class="mono" style="font-weight: 600">c-a41e…</span></span>
+</div>
+<div class="month-div" role="separator">
+<span class="ln"></span>
+<span class="month-pill glass-chrome" style="font-size: 13px"><svg class="i i-sm" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg>Agosto de 2025 liberado</span>
+<span class="ln"></span>
+</div>
+
+<article class="glass-card enter" aria-label="Oportunidade no mês" style="padding: 16px; display: flex; flex-direction: column; gap: 12px">
+<div class="row-between">
+<span class="tag tag-rec"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3v18"></path><path d="M5 6h11l3 3-3 3H5z"></path></svg>Recomendação</span>
+<button class="chip-fonte"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Resumo do mês · ago</button>
+</div>
+<div style="display: flex; flex-direction: column">
+<span class="kpi-label">Sobrou além do plano</span>
+<span class="kpi" style="font-size: 36px; line-height: 42px; color: var(--ok)">+R$ 748</span>
+</div>
+<p class="prose" style="font-size: 16px">Em agosto sobraram <span class="num">R$ 748</span> além do plano. Se aportar esse extra, você cobre quase todo o desvio de julho.</p>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div class="row-between"><span class="small" style="font-weight: 800; color: var(--ink)">Desvio de julho coberto</span><span class="small num">R$ 748 de R$ 802</span></div>
+<div class="meter lg ok"><span style="width: 93%"></span></div>
+</div>
+<button class="btn btn-primary" style="width: 100%">Registrar o extra no plano</button>
+<span class="small" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; justify-content: center"><svg class="i i-sm" viewBox="0 0 24 24" style="color: var(--ok)"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>Pede sua autorização · não movimenta dinheiro</span>
+</article>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; gap: 8px; overflow: hidden">
+<button class="suggest glass-chrome">Prefiro guardar pra reserva</button>
+<button class="suggest glass-chrome">Como fica meu prazo?</button>
+</div>
+<div class="glass-chrome composer" style="height: 54px; border-radius: 22px; padding: 0 6px 0 16px">
+<label class="sr-only" for="m9-msg">Mensagem para a Bússola</label>
+<input id="m9-msg" type="text" placeholder="Pergunte sobre o seu mês…" style="font-size: 16px">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 5 };
+  }
+}
+</script>
+</body>
+</html>

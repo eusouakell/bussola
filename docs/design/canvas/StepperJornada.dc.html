@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>StepperJornada</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<nav class="tokens {{temaCls}} glass-chrome" aria-label="Jornada: {{atualNome}}" style="width: 1032px; height: 72px; box-sizing: border-box; border-radius: 999px; padding: 0 26px; display: flex; align-items: center; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; flex: {{s.flex}}">
+<div class="wp {{s.cls}}">
+<span class="dot">
+<sc-if value="{{s.done}}" hint-placeholder-val="{{false}}"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if>
+<sc-if value="{{s.notDone}}" hint-placeholder-val="{{true}}">{{s.num}}</sc-if>
+</span>
+<span class="lbl">{{s.nome}}</span>
+</div>
+<sc-if value="{{s.rail}}" hint-placeholder-val="{{true}}"><span class="{{s.railCls}}"></span></sc-if>
+</div>
+</sc-for>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"atual":{"editor":"int","min":-1,"max":5,"default":3},"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":1032,"height":72}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const nomes = ['Objetivo', 'Entender', 'Antecipar', 'Orientar', 'Agir', 'Acompanhar'];
+    const a = (this.props.atual === undefined || this.props.atual === null) ? 3 : Number(this.props.atual);
+    const steps = nomes.map((n, i) => ({
+      nome: n.toUpperCase(),
+      num: String(i + 1),
+      cls: i < a ? 'done' : (i === a ? 'now' : 'next'),
+      done: i < a,
+      notDone: !(i < a),
+      rail: i < 5,
+      railCls: i < a ? 'rail done' : 'rail',
+      flex: i < 5 ? '1 1 0' : '0 0 auto'
+    }));
+    return {
+      steps,
+      atualNome: a >= 0 && a <= 5 ? nomes[a] : 'ainda não iniciada',
+      temaCls: this.props.tema === 'escuro' ? 'dark' : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>HeaderBussola</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<header class="tokens {{temaCls}} glass-chrome" style="width: 1408px; height: 60px; box-sizing: border-box; border-radius: 20px; padding: 0 10px 0 12px; display: flex; align-items: center; gap: 14px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div style="display: flex; align-items: center; gap: 12px">
+<span class="brand-mark"><svg class="i i-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg></span>
+<div style="display: flex; align-items: baseline; gap: 8px">
+<span style="font-size: 20px; font-weight: 900; letter-spacing: -.01em">Bússola</span>
+<span style="font-size: 14px; font-weight: 700; color: var(--ink-3)">na ia.i</span>
+</div>
+</div>
+<div style="flex-grow: 1"></div>
+<span class="selo"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 0 0 1.3 2h11.4a1.5 1.5 0 0 0 1.3-2L14 9V3"></path></svg>Dados sintéticos · ambiente de demonstração</span>
+<button class="toggle" aria-pressed="{{bastPressed}}"><span class="{{switchCls}}"><span class="knob"></span></span>Bastidores</button>
+<span class="vsep"></span>
+<div style="display: flex; align-items: center; gap: 10px; padding-right: 6px">
+<span class="avatar" aria-hidden="true">F</span>
+<div style="display: flex; flex-direction: column; line-height: 1.2">
+<span style="font-size: 15px; font-weight: 800">Fernando</span>
+<span style="font-size: 12.5px; font-weight: 600; color: var(--ink-3)">Cliente demo</span>
+</div>
+</div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"bastidores":{"editor":"boolean","default":true},"$preview":{"width":1408,"height":60}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const on = this.props.bastidores !== false;
+    return {
+      temaCls: this.props.tema === 'escuro' ? 'dark' : '',
+      switchCls: on ? 'switch on' : 'switch',
+      bastPressed: on ? 'true' : 'false'
+    };
+  }
+}
+</script>
+</body>
+</html>

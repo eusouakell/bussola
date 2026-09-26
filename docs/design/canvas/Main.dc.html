@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>F1 · Boas-vindas</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="objetivo" style="width: 1440px; height: 1024px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 1440px; height: 1024px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+<dc-import name="HeaderBussola" tema="{{tema}}" hint-size="1408px,60px"></dc-import>
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+
+<main style="width: 1032px; display: flex; flex-direction: column; gap: 14px; min-height: 0">
+<dc-import name="StepperJornada" atual="{{atual}}" tema="{{tema}}" hint-size="1032px,72px"></dc-import>
+
+<section aria-label="Conversa" style="flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<div class="enter" style="width: 760px; display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center">
+<span class="brand-mark xl"><svg class="i" viewBox="0 0 24 24" style="width: 34px; height: 34px"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h1 style="margin: 0; font-size: 44px; line-height: 50px; font-weight: 900; letter-spacing: -.02em">Oi, Fernando!</h1>
+<p style="margin: 0; font-size: 22px; line-height: 32px; font-weight: 600; color: var(--ink-2)">Eu sou a Bússola, da ia.i. Qual objetivo você quer tirar do papel?</p>
+</div>
+<div style="width: 720px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; text-align: left">
+<button class="glass-card cursor-glow" style="font: inherit; color: var(--ink); cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border-radius: 20px">
+<span style="width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink)"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path><path d="M10 20v-5h4v5"></path></svg></span>
+<span style="font-size: 17px; font-weight: 800; line-height: 23px">Quero comprar meu primeiro apartamento</span>
+</button>
+<button class="glass-card" style="font: inherit; color: var(--ink); cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border-radius: 20px">
+<span style="width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--row); color: var(--ink-2)"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M2 16l20-8-3 9-6-3-3 5-1-5z"></path></svg></span>
+<span style="font-size: 17px; font-weight: 800; line-height: 23px">Quero viajar no ano que vem</span>
+</button>
+<button class="glass-card" style="font: inherit; color: var(--ink); cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border-radius: 20px">
+<span style="width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--row); color: var(--ink-2)"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"></path><path d="M6 11v5c3 2 9 2 12 0v-5"></path></svg></span>
+<span style="font-size: 17px; font-weight: 800; line-height: 23px">Quero fazer uma pós</span>
+</button>
+<button class="glass-card" style="font: inherit; color: var(--ink); cursor: pointer; padding: 18px 20px; display: flex; align-items: center; gap: 14px; border-radius: 20px">
+<span style="width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--row); color: var(--ink-2)"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"></path><path d="M16 16l2 2 4-4"></path></svg></span>
+<span style="font-size: 17px; font-weight: 800; line-height: 23px">Quero organizar minhas dívidas</span>
+</button>
+</div>
+<p class="disclaimer" style="margin: 0; justify-content: center"><svg class="i i-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>Eu analiso, simulo e recomendo. Qualquer ação só acontece com a sua autorização.</p>
+</div>
+</section>
+
+<div style="width: 760px; align-self: center; display: flex; flex-direction: column; gap: 10px">
+<div class="glass-chrome composer">
+<label class="sr-only" for="msg-f1">Mensagem para a Bússola</label>
+<input id="msg-f1" type="text" placeholder="Conte seu objetivo do seu jeito…">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</main>
+
+<aside aria-label="Bastidores" style="width: 360px; display: flex; flex-direction: column; gap: 12px; min-height: 0">
+<div class="presenter">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="pe">Modo demonstração</span>
+<span class="num" style="font-size: 15px; font-weight: 800">Mês de referência: jun/2025</span>
+</div>
+<button class="btn-presenter">Avançar um mês<svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"></path></svg></button>
+</div>
+<section class="glass-chrome panel" style="flex-grow: 1; min-height: 0">
+<div class="row-between" style="padding: 16px 16px 12px 18px">
+<div style="display: flex; flex-direction: column">
+<span class="eyebrow">Bastidores</span>
+<span style="font-size: 16px; font-weight: 900">O agente por dentro</span>
+</div>
+<button class="icon-btn" aria-label="Recolher Bastidores"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg></button>
+</div>
+<nav class="tabs" aria-label="Seções dos Bastidores">
+<button class="tab on" aria-current="true">Jornada</button>
+<button class="tab">Ferramentas</button>
+<button class="tab">Consentimentos</button>
+<button class="tab">Auditoria</button>
+</nav>
+<div class="panel-body">
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title"><span>OBJETIVO</span><span class="mono" style="color: var(--ink-3)">aguardando</span></div><span class="tl-sub">Esperando o cliente contar o objetivo.</span></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ENTENDER</span><span class="mono">—</span></div></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ANTECIPAR</span><span class="mono">—</span></div></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ORIENTAR</span><span class="mono">—</span></div></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>AGIR</span><span class="mono">—</span></div></div></div>
+<div class="tl-item last"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ACOMPANHAR</span><span class="mono">—</span></div></div></div>
+<div class="p-card" style="margin-top: 6px">
+<span class="eyebrow">Último evento</span>
+<div class="row-between"><span class="mono" style="font-weight: 600">sessao_iniciada</span><span class="mono" style="color: var(--ink-3)">14:21:03</span></div>
+<span class="tl-sub">cliente 36a2…7269 · ambiente demo</span>
+</div>
+</div>
+<div class="kv">
+<div><div class="k">Objetivo</div><div class="v">—</div></div>
+<div><div class="k">Cenário</div><div class="v">—</div></div>
+<div><div class="k">Mês de ref.</div><div class="v num">jun/2025</div></div>
+<div><div class="k">Plano</div><div class="v">—</div></div>
+</div>
+</section>
+</aside>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":1440,"height":1024}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: -1 };
+  }
+}
+</script>
+</body>
+</html>

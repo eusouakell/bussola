@@ -11,6 +11,9 @@
 > [contexto mestre](../contexto-spec-master.md) §20 ainda em aberto). Os
 > números são **placeholders coerentes entre si**. Na PoC, eles vêm das
 > ferramentas MCP ([contratos](../ciclos/contratos.md) §5).
+>
+> **Resultado:** frames, tokens e handoff versionados em
+> [docs/design/](./README.md).
 
 ---
 

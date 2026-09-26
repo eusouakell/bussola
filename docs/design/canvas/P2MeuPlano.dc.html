@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>P2 · Meu plano</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="orientar" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+
+<header class="glass-chrome" style="height: 56px; box-sizing: border-box; border-radius: 20px; display: flex; align-items: center; gap: 8px; padding: 0 6px">
+<button class="icon-btn" aria-label="Voltar para a ia.i" style="border: 0"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg></button>
+<div style="display: flex; flex-direction: column; line-height: 1.15; flex: 1 1 auto">
+<span style="font-size: 17px; font-weight: 900">Meu plano</span>
+<span style="font-size: 12.5px; font-weight: 700; color: var(--ink-3)">Bússola · ia.i</span>
+</div>
+<span class="selo" style="height: 30px; font-size: 12px; padding: 0 10px">Dados sintéticos</span>
+</header>
+
+<article class="glass-card enter" aria-label="Progresso do plano" style="padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 14px">
+<div class="row-between">
+<div style="display: flex; flex-direction: column">
+<span class="eyebrow">Objetivo</span>
+<span style="font-size: 20px; line-height: 26px; font-weight: 900">Primeiro apartamento</span>
+</div>
+<span class="badge badge-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Na rota</span>
+</div>
+<div style="display: flex; align-items: center; gap: 16px">
+<svg viewBox="0 0 110 110" style="width: 110px; height: 110px; flex-shrink: 0" aria-label="5,7% da meta">
+<circle cx="55" cy="55" r="46" style="fill: none; stroke: var(--line); stroke-width: 10"></circle>
+<circle cx="55" cy="55" r="46" style="fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 16.6 289; transform: rotate(-90deg); transform-origin: 55px 55px"></circle>
+<text x="55" y="62" style="text-anchor: middle; font-family: 'Nunito Sans', sans-serif; font-size: 20px; font-weight: 900; fill: var(--ink)">5,7%</text>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="kpi-label">Guardado até agora</span>
+<span class="kpi num" style="font-size: 30px">R$ 3.440</span>
+<span class="small num">de R$ 60.000</span>
+<span class="small num" style="font-weight: 800; color: var(--ok)">R$ 36 à frente do plano</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px" aria-label="Trilha até a meta">
+<div style="position: relative; height: 34px">
+<div style="position: absolute; left: 6px; right: 6px; top: 15px; height: 4px; border-radius: 4px; background-image: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 11px)"></div>
+<div style="position: absolute; left: 6px; width: 5.7%; top: 15px; height: 4px; border-radius: 4px; background: var(--accent)"></div>
+<span style="position: absolute; left: 6px; top: 11px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink)"></span>
+<span style="position: absolute; left: 25%; top: 11px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ink-3); background: var(--g-card); box-sizing: border-box"></span>
+<span style="position: absolute; left: 50%; top: 11px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ink-3); background: var(--g-card); box-sizing: border-box"></span>
+<span style="position: absolute; left: 75%; top: 11px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ink-3); background: var(--g-card); box-sizing: border-box"></span>
+<span style="position: absolute; right: 0; top: 5px; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink)"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path></svg></span>
+<span style="position: absolute; left: calc(5.7% + 2px); top: 7px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(236,112,0,.2)"></span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); font-size: 11.5px; font-weight: 800; color: var(--ink-3)" class="num">
+<span>hoje</span><span style="text-align: center">25% · mar/26</span><span style="text-align: center">50% · dez/26</span><span style="text-align: center">75% · set/27</span><span style="text-align: right; color: var(--accent-ink)">jun/2028</span>
+</div>
+</div>
+<div class="row-between">
+<span class="small num" style="font-weight: 700">Chegada prevista: <strong style="color: var(--ink)">jun/2028</strong></span>
+<button class="chip-fonte"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg>Status do plano · ago/2025</button>
+</div>
+</article>
+
+<article class="glass-card enter" style="padding: 14px 16px; display: flex; align-items: center; gap: 12px; animation-delay: .08s">
+<span class="st" style="width: 44px; height: 44px; border-radius: 14px; background: var(--accent-soft); color: var(--accent-ink)"><svg class="i i-lg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M4 10h16M9 3v4M15 3v4"></path></svg></span>
+<div style="display: flex; flex-direction: column; flex: 1 1 auto">
+<span class="kpi-label">Próximo aporte · 05/set</span>
+<span class="num" style="font-size: 22px; font-weight: 900">R$ 1.702</span>
+</div>
+<a href="P5CheckIn.dc.html" class="btn btn-secondary btn-sm" style="height: 44px; text-decoration: none">Check-in</a>
+</article>
+
+<article class="glass-card enter" style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; animation-delay: .16s">
+<div class="row-between"><span class="t-title" style="font-size: 16px">Agosto</span><span class="tag tag-diag" style="height: 24px; font-size: 12px">Diagnóstico</span></div>
+<div class="note" style="background: var(--ok-soft); color: var(--ok); font-size: 14px; line-height: 19px; padding: 9px 12px"><svg class="i" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Desvio de julho recuperado. A rota A foi encerrada antes do previsto.</div>
+</article>
+
+<nav aria-label="Seções do plano" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: auto">
+<a href="P3Trilha.dc.html" class="glass-chrome" style="text-decoration: none; color: var(--ink); border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 800"><svg class="i" viewBox="0 0 24 24"><path d="M4 19c4 0 4-7 8-7s4-7 8-7"></path><circle cx="4" cy="19" r="1.5"></circle><circle cx="20" cy="5" r="1.5"></circle></svg>Trilha</a>
+<a href="P4Resumo.dc.html" class="glass-chrome" style="text-decoration: none; color: var(--ink); border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 800"><svg class="i" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>Resumo</a>
+<a href="M1BoasVindas.dc.html" class="glass-chrome" style="text-decoration: none; color: var(--ink); border-radius: 16px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 800"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg>Conversar</a>
+</nav>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>

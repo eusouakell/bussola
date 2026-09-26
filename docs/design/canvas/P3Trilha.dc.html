@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>P3 · Trilha mês a mês</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="entender" style="width: 390px; height: 844px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px 12px 16px; display: flex; flex-direction: column; gap: 12px">
+
+<header class="glass-chrome" style="height: 56px; box-sizing: border-box; border-radius: 20px; display: flex; align-items: center; gap: 8px; padding: 0 6px">
+<a href="P2MeuPlano.dc.html" class="icon-btn" aria-label="Voltar para Meu plano" style="border: 0; color: var(--ink-2)"><svg class="i i-lg" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<div style="display: flex; flex-direction: column; line-height: 1.15; flex: 1 1 auto">
+<span style="font-size: 17px; font-weight: 900">Trilha</span>
+<span style="font-size: 12.5px; font-weight: 700; color: var(--ink-3)">Planejado × realizado, mês a mês</span>
+</div>
+</header>
+
+<div class="glass-card" style="padding: 16px; display: flex; flex-direction: column; gap: 0; flex: 1 1 auto; min-height: 0; overflow: hidden">
+
+<div class="tl-item" style="padding-bottom: 16px">
+<span class="tl-dot done"></span>
+<div class="tl-main">
+<div class="tl-title" style="font-size: 14px"><span>JUN/2025 · PLANO CRIADO</span></div>
+<span class="tl-sub">Equilibrado · R$ 1.702/mês · autorizado <span class="mono">c-7f3a…</span></span>
+</div>
+</div>
+
+<div class="tl-item" style="padding-bottom: 16px">
+<span class="tl-dot warn"></span>
+<div class="tl-main" style="gap: 6px">
+<div class="tl-title" style="font-size: 14px"><span>JUL/2025</span><span class="num" style="color: var(--warn)">−R$ 802</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 8px"><span class="small" style="width: 74px; font-size: 12.5px">planejado</span><div class="meter" style="flex: 1 1 auto"><span style="width: 100%; background: var(--line-strong)"></span></div><span class="small num" style="width: 64px; text-align: right; font-size: 12.5px">R$ 1.702</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span class="small" style="width: 74px; font-size: 12.5px">realizado</span><div class="meter warn" style="flex: 1 1 auto"><span style="width: 53%"></span></div><span class="small num" style="width: 64px; text-align: right; font-size: 12.5px">R$ 900</span></div>
+</div>
+<span class="tl-sub" style="display: inline-flex; align-items: center; gap: 6px"><svg class="i i-sm" viewBox="0 0 24 24"><path d="M4 19c4 0 4-7 8-7s4-7 8-7"></path></svg>Rota recalculada · A: +R$ 90/mês por 9 meses</span>
+</div>
+</div>
+
+<div class="tl-item" style="padding-bottom: 16px">
+<span class="tl-dot ok"></span>
+<div class="tl-main" style="gap: 6px">
+<div class="tl-title" style="font-size: 14px"><span>AGO/2025</span><span class="num" style="color: var(--ok)">+R$ 748</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 8px"><span class="small" style="width: 74px; font-size: 12.5px">planejado</span><div class="meter" style="flex: 1 1 auto"><span style="width: 70%; background: var(--line-strong)"></span></div><span class="small num" style="width: 64px; text-align: right; font-size: 12.5px">R$ 1.792</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span class="small" style="width: 74px; font-size: 12.5px">realizado</span><div class="meter ok" style="flex: 1 1 auto"><span style="width: 100%"></span></div><span class="small num" style="width: 64px; text-align: right; font-size: 12.5px">R$ 2.540</span></div>
+</div>
+<span class="tl-sub">Extra de R$ 748 registrado. Desvio recuperado, rota A encerrada.</span>
+</div>
+</div>
+
+<div class="tl-item" style="padding-bottom: 16px">
+<span class="tl-dot now"></span>
+<div class="tl-main">
+<div class="tl-title" style="font-size: 14px; color: var(--accent-ink)"><span>SET/2025 · PRÓXIMO</span><span class="num">R$ 1.702</span></div>
+<span class="tl-sub">Check-in no dia 5</span>
+</div>
+</div>
+
+<div class="tl-item" style="padding-bottom: 12px"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="font-size: 14px; color: var(--ink-3)"><span>MAR/2026 · 25%</span><span class="num">R$ 15.000</span></div></div></div>
+<div class="tl-item" style="padding-bottom: 12px"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="font-size: 14px; color: var(--ink-3)"><span>DEZ/2026 · 50%</span><span class="num">R$ 30.000</span></div></div></div>
+<div class="tl-item" style="padding-bottom: 12px"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="font-size: 14px; color: var(--ink-3)"><span>SET/2027 · 75%</span><span class="num">R$ 45.000</span></div></div></div>
+<div class="tl-item last" style="padding-bottom: 0"><span class="tl-dot" style="background: var(--accent-soft); border: 2px solid var(--accent); box-sizing: border-box"></span><div class="tl-main"><div class="tl-title" style="font-size: 14px; color: var(--accent-ink)"><span>JUN/2028 · META</span><span class="num">R$ 60.000</span></div><span class="tl-sub">Entrada do primeiro apartamento</span></div></div>
+</div>
+
+<div class="row-between" style="padding: 0 4px">
+<span class="disclaimer" style="font-size: 12.5px">Marcos projetados com R$ 1.702/mês, sem rendimento.</span>
+<button class="chip-fonte" aria-label="Fonte: Status do plano, ago/2025" style="padding: 0 8px"><svg class="i i-sm" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"></ellipse><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"></path><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"></path></svg></button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '' };
+  }
+}
+</script>
+</body>
+</html>

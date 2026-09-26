@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>F2 · Objetivo</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens {{temaCls}}" data-estado="objetivo" style="width: 1440px; height: 1024px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 1440px; height: 1024px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px">
+<dc-import name="HeaderBussola" tema="{{tema}}" hint-size="1408px,60px"></dc-import>
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+
+<main style="width: 1032px; display: flex; flex-direction: column; gap: 14px; min-height: 0">
+<dc-import name="StepperJornada" atual="{{atual}}" tema="{{tema}}" hint-size="1032px,72px"></dc-import>
+
+<section class="convo" aria-label="Conversa">
+<div class="col">
+<div class="msg-client">Quero comprar meu primeiro apartamento.</div>
+
+<div class="agent">
+<span class="brand-mark sm"><svg class="i i-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg></span>
+<div class="agent-body">
+<article class="glass-card card-pad enter" aria-label="CardObjetivo">
+<div class="row-between">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="eyebrow">Seu objetivo</span>
+<span class="t-title">Primeiro apartamento</span>
+</div>
+<span class="badge badge-neutral">2 de 4 definidos</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div class="check-item" style="align-items: center">
+<span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<div style="display: flex; flex-direction: column"><span class="kpi-label">Tipo</span><span style="font-size: 16px; font-weight: 800">Imóvel · primeiro apartamento</span></div>
+</div>
+<div class="check-item" style="align-items: center">
+<span class="st st-ok"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 3"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<div style="display: flex; flex-direction: column"><span class="kpi-label">Prioridade</span><span style="font-size: 16px; font-weight: 800">Alta <span style="font-weight: 600; color: var(--ink-3)">(inferida)</span></span></div>
+</div>
+<div class="check-item" style="align-items: center; border-style: dashed; border-color: var(--warn-fill)">
+<span class="st st-q"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.6"></path><path d="M12 17h.01"></path></svg></span>
+<div style="display: flex; flex-direction: column"><span class="kpi-label">Valor da entrada</span><span style="font-size: 16px; font-weight: 800; color: var(--warn)">Falta definir</span></div>
+</div>
+<div class="check-item" style="align-items: center; border-style: dashed; border-color: var(--warn-fill)">
+<span class="st st-q"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.6"></path><path d="M12 17h.01"></path></svg></span>
+<div style="display: flex; flex-direction: column"><span class="kpi-label">Prazo</span><span style="font-size: 16px; font-weight: 800; color: var(--warn)">Falta definir</span></div>
+</div>
+</div>
+<div class="hline"></div>
+<p class="prose">Pra eu calcular certinho: quanto você quer juntar de entrada, e em quanto tempo?</p>
+<div style="display: flex; gap: 10px; flex-wrap: wrap">
+<button class="qr focus-ring">R$ 60 mil em 3 anos</button>
+<button class="qr">Ainda não sei o valor</button>
+<button class="qr">Me mostra opções</button>
+</div>
+</article>
+</div>
+</div>
+
+<div class="msg-client enter">Uns 60 mil de entrada, em 3 anos.</div>
+<div class="agent">
+<span class="brand-mark sm"><svg class="i i-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5l-2 5-5 2 2-5z"></path></svg></span>
+<div class="glass-card" style="padding: 12px 16px; border-radius: 16px; display: inline-flex; align-items: center; gap: 10px">
+<span class="typing" aria-label="A Bússola está escrevendo"><span></span><span></span><span></span></span>
+<span class="small" style="font-weight: 700">Anotei: R$ 60.000 em 36 meses.</span>
+</div>
+</div>
+</div>
+</section>
+
+<div style="width: 760px; align-self: center; display: flex; flex-direction: column; gap: 10px">
+<div class="glass-chrome composer">
+<label class="sr-only" for="msg-f2">Mensagem para a Bússola</label>
+<input id="msg-f2" type="text" placeholder="Escreva sua resposta…">
+<button class="send" aria-label="Enviar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</main>
+
+<aside aria-label="Bastidores" style="width: 360px; display: flex; flex-direction: column; gap: 12px; min-height: 0">
+<div class="presenter">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span class="pe">Modo demonstração</span>
+<span class="num" style="font-size: 15px; font-weight: 800">Mês de referência: jun/2025</span>
+</div>
+<button class="btn-presenter">Avançar um mês<svg class="i i-sm" viewBox="0 0 24 24"><path d="M6 6l6 6-6 6M13 6l6 6-6 6"></path></svg></button>
+</div>
+<section class="glass-chrome panel" style="flex-grow: 1; min-height: 0">
+<div class="row-between" style="padding: 16px 16px 12px 18px">
+<div style="display: flex; flex-direction: column">
+<span class="eyebrow">Bastidores</span>
+<span style="font-size: 16px; font-weight: 900">O agente por dentro</span>
+</div>
+<button class="icon-btn" aria-label="Recolher Bastidores"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg></button>
+</div>
+<nav class="tabs" aria-label="Seções dos Bastidores">
+<button class="tab on" aria-current="true">Jornada</button>
+<button class="tab">Ferramentas</button>
+<button class="tab">Consentimentos</button>
+<button class="tab">Auditoria</button>
+</nav>
+<div class="panel-body">
+<div class="tl-item"><span class="tl-dot now"></span><div class="tl-main"><div class="tl-title"><span>OBJETIVO</span><span class="mono" style="color: var(--ink-3)">14:21:08</span></div><span class="tl-sub">Inferido: tipo e prioridade. Perguntando: entrada e prazo.</span></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ENTENDER</span><span class="mono">—</span></div></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ANTECIPAR</span><span class="mono">—</span></div></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ORIENTAR</span><span class="mono">—</span></div></div></div>
+<div class="tl-item"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>AGIR</span><span class="mono">—</span></div></div></div>
+<div class="tl-item last"><span class="tl-dot next"></span><div class="tl-main"><div class="tl-title" style="color: var(--ink-3)"><span>ACOMPANHAR</span><span class="mono">—</span></div></div></div>
+<div class="p-card new" style="margin-top: 6px">
+<span class="eyebrow">session.state.objetivo</span>
+<pre class="mono" style="margin: 0; white-space: pre; line-height: 19px; color: var(--ink-2)">tipo:        "imovel_primeiro"  ✓
+prioridade:  "alta"             ✓
+valor_alvo:  60000              ✓ novo
+prazo_meses: 36                 ✓ novo</pre>
+</div>
+</div>
+<div class="kv">
+<div><div class="k">Objetivo</div><div class="v">Primeiro apê · R$ 60.000 · 36m</div></div>
+<div><div class="k">Cenário</div><div class="v">—</div></div>
+<div><div class="k">Mês de ref.</div><div class="v num">jun/2025</div></div>
+<div><div class="k">Plano</div><div class="v">—</div></div>
+</div>
+</section>
+</aside>
+
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["claro","escuro"],"default":"claro"},"$preview":{"width":1440,"height":1024}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const escuro = this.props.tema === 'escuro';
+    return { tema: escuro ? 'escuro' : 'claro', temaCls: escuro ? 'dark' : '', atual: 0 };
+  }
+}
+</script>
+</body>
+</html>

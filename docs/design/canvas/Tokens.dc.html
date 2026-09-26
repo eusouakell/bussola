@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Folha de tokens</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="./bussola.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app tokens" data-estado="objetivo" style="width: 1600px; height: 3000px; font-family: 'Nunito Sans', system-ui, sans-serif; color: var(--ink)">
+<div class="ambient" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="width: 1600px; box-sizing: border-box; padding: 56px 32px; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 0 8px">
+<span class="eyebrow">Bússola · Dynamic Glass</span>
+<h1 style="margin: 0; font-size: 48px; line-height: 54px; font-weight: 900; letter-spacing: -.02em">Folha de tokens</h1>
+<p style="margin: 0; font-size: 18px; line-height: 27px; color: var(--ink-2); max-width: 900px">Claro e escuro, prontos para um bloco <span class="mono" style="font-size: 16px">@theme</span> do Tailwind v4. O arquivo <span class="mono" style="font-size: 16px">bussola.css</span> deste canvas implementa os mesmos valores. Se o brand kit oficial chegar, ele prevalece sobre acento e tipografia.</p>
+</div>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Ambiente por estado da jornada</h2><span class="small">data-estado no container troca --amb-*; @property anima a troca em 600 ms</span></div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px">
+<div class="swatch"><div class="app tokens" data-estado="objetivo" style="height: 120px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div></div><span class="nm">objetivo</span><span class="hx mono">#EEDCC8 · #F4D3B6 · #E7DED4</span></div>
+<div class="swatch"><div class="app tokens" data-estado="entender" style="height: 120px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div></div><span class="nm">entender</span><span class="hx mono">#E4DCD2 · #EFD6C0 · #DAD7D1</span></div>
+<div class="swatch"><div class="app tokens" data-estado="antecipar" style="height: 120px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div></div><span class="nm">antecipar</span><span class="hx mono">#EBD3C0 · #E3D5EC · #F1DCC6</span></div>
+<div class="swatch"><div class="app tokens" data-estado="orientar" style="height: 120px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div></div><span class="nm">orientar</span><span class="hx mono">#F8BD88 · #F4A566 · #F7D6B2</span></div>
+<div class="swatch"><div class="app tokens" data-estado="agir" style="height: 120px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div></div><span class="nm">agir</span><span class="hx mono">#CFE7D3 · #F5CDA5 · #DCEBD9</span></div>
+<div class="swatch"><div class="app tokens" data-estado="acompanhar" style="height: 120px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div></div><span class="nm">acompanhar (desvio)</span><span class="hx mono">#F4CB7A · #F2B36E · #EEDDB9</span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px">
+<div class="app tokens dark" data-estado="objetivo" style="height: 90px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div><span class="layer" style="display: block; padding: 12px 14px; font-size: 13px; font-weight: 900">objetivo · escuro</span></div>
+<div class="app tokens dark" data-estado="entender" style="height: 90px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div><span class="layer" style="display: block; padding: 12px 14px; font-size: 13px; font-weight: 900">entender · escuro</span></div>
+<div class="app tokens dark" data-estado="antecipar" style="height: 90px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div><span class="layer" style="display: block; padding: 12px 14px; font-size: 13px; font-weight: 900">antecipar · escuro</span></div>
+<div class="app tokens dark" data-estado="orientar" style="height: 90px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div><span class="layer" style="display: block; padding: 12px 14px; font-size: 13px; font-weight: 900">orientar · escuro</span></div>
+<div class="app tokens dark" data-estado="agir" style="height: 90px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div><span class="layer" style="display: block; padding: 12px 14px; font-size: 13px; font-weight: 900">agir · escuro</span></div>
+<div class="app tokens dark" data-estado="acompanhar" style="height: 90px; border-radius: 18px"><div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div><span class="layer" style="display: block; padding: 12px 14px; font-size: 13px; font-weight: 900">acompanhar · escuro</span></div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Vidro em 3 níveis</h2><span class="small">texto e números só nos níveis 2 e 3; contraste AA medido no pior ponto do ambiente</span></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<div class="app tokens" data-estado="orientar" style="height: 250px; border-radius: 20px">
+<div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="padding: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; height: 100%; box-sizing: border-box; align-items: stretch">
+<div class="glass-chrome" style="border-radius: 20px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between"><span style="font-weight: 900">1 · Chrome</span><span class="mono" style="font-size: 11.5px">white/42 · blur 24 · sat 150</span></div>
+<div class="glass-card" style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between"><span style="font-weight: 900">2 · Card</span><span class="mono" style="font-size: 11.5px">sand/80 · blur 20 · sat 140</span></div>
+<div class="glass-consent" style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between"><span style="font-weight: 900; display: flex; gap: 6px; align-items: center"><svg class="i" viewBox="0 0 24 24" style="color: var(--ok)"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>3 · Consent.</span><span class="mono" style="font-size: 11.5px">white/88 · borda verde · halo</span></div>
+</div>
+</div>
+<div class="app tokens dark" data-estado="orientar" style="height: 250px; border-radius: 20px">
+<div class="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="layer" style="padding: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; height: 100%; box-sizing: border-box">
+<div class="glass-chrome" style="border-radius: 20px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between"><span style="font-weight: 900">1 · Chrome</span><span class="mono" style="font-size: 11.5px">black/36 · white/10</span></div>
+<div class="glass-card" style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between"><span style="font-weight: 900">2 · Card</span><span class="mono" style="font-size: 11.5px">fumê/80 · white/10</span></div>
+<div class="glass-consent" style="padding: 16px; display: flex; flex-direction: column; justify-content: space-between"><span style="font-weight: 900; display: flex; gap: 6px; align-items: center"><svg class="i" viewBox="0 0 24 24" style="color: var(--ok)"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>3 · Consent.</span><span class="mono" style="font-size: 11.5px">verde-fumê/88 · halo</span></div>
+</div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+<div class="note note-info" style="font-size: 14px">Detalhes: borda de 1 px, highlight especular no topo (inset 0 1px 0 white/90), sombra difusa tingida pelo ambiente.</div>
+<div class="note note-info" style="font-size: 14px">Cards clicáveis (cenários, CTAs) ganham um brilho radial que segue o cursor via --mx/--my.</div>
+<div class="note note-info" style="font-size: 14px">Com prefers-reduced-transparency ou sem backdrop-filter, o vidro vira sand-50 (claro) ou #1D1713 (escuro).</div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Cores</h2><span class="small">acento com parcimônia: CTA primário, etapa atual do stepper e selo Recomendado</span></div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 14px">
+<div class="swatch"><div class="chip" style="background: #EC7000"></div><span class="nm">accent</span><span class="hx mono">#EC7000 · marca</span></div>
+<div class="swatch"><div class="chip" style="background: #DB6600"></div><span class="nm">accent-cta</span><span class="hx mono">#DB6600 · texto branco 18px bold</span></div>
+<div class="swatch"><div class="chip" style="background: #A84F00"></div><span class="nm">accent-ink</span><span class="hx mono">#A84F00 · 5,5:1</span></div>
+<div class="swatch"><div class="chip" style="background: #1E1A16"></div><span class="nm">ink</span><span class="hx mono">#1E1A16</span></div>
+<div class="swatch"><div class="chip" style="background: #4A423A"></div><span class="nm">ink-2</span><span class="hx mono">#4A423A</span></div>
+<div class="swatch"><div class="chip" style="background: #675D53"></div><span class="nm">ink-3</span><span class="hx mono">#675D53 · legenda</span></div>
+<div class="swatch"><div class="chip" style="background: #FBF7F2"></div><span class="nm">sand-50</span><span class="hx mono">#FBF7F2 · sólido</span></div>
+<div class="swatch"><div class="chip" style="background: #1D1713"></div><span class="nm">smoke-900</span><span class="hx mono">#1D1713 · sólido esc.</span></div>
+<div class="swatch"><div class="chip" style="background: #1E7A45"></div><span class="nm">ok</span><span class="hx mono">#1E7A45 · esc. #5FD394</span></div>
+<div class="swatch"><div class="chip" style="background: #F2A93B"></div><span class="nm">warn</span><span class="hx mono">fill #F2A93B · texto #8A5200</span></div>
+<div class="swatch"><div class="chip" style="background: #B42318"></div><span class="nm">err</span><span class="hx mono">#B42318 · esc. #FF8577</span></div>
+<div class="swatch"><div class="chip" style="background: #0B6B70"></div><span class="nm">tag-diagnostico</span><span class="hx mono">#0B6B70 · esc. #63CFD3</span></div>
+<div class="swatch"><div class="chip" style="background: #6A3FB5"></div><span class="nm">tag-simulacao</span><span class="hx mono">#6A3FB5 · esc. #B99CF2</span></div>
+<div class="swatch"><div class="chip" style="background: #A84F00"></div><span class="nm">tag-recomendacao</span><span class="hx mono">#A84F00 · esc. #FFA552</span></div>
+<div class="swatch"><div class="chip" style="background: #1E7A45"></div><span class="nm">tag-acao</span><span class="hx mono">#1E7A45 + escudo</span></div>
+<div class="swatch"><div class="chip" style="background: rgba(24,19,15,.88)"></div><span class="nm">presenter</span><span class="hx mono">smoke/88 · só modo demo</span></div>
+</div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+<span class="tag tag-diag"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg>Diagnóstico</span>
+<span class="tag tag-sim"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>Simulação</span>
+<span class="tag tag-rec"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3v18"></path><path d="M5 6h11l3 3-3 3H5z"></path></svg>Recomendação</span>
+<span class="tag tag-acao"><svg class="i i-sm" viewBox="0 0 24 24" style="stroke-width: 2.4"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"></path></svg>Ação</span>
+<span class="small" style="margin-left: 8px">cada tag tem cor + ícone + texto: nunca só cor · fundos a 11–13% da cor da tag</span>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Tipografia, raios, blur e espaço</h2><span class="small">Nunito Sans (humanista) + JetBrains Mono só em Bastidores · algarismos tabulares em todo valor</span></div>
+<div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div class="row-between"><span style="font-size: 44px; line-height: 50px; font-weight: 900; letter-spacing: -.02em" class="num">R$ 1.702</span><span class="mono">kpi-xl · 44/50 · 900</span></div>
+<div class="row-between"><span class="kpi num">R$ 2.836/mês</span><span class="mono">kpi · 30/36 · 900 (mobile 26)</span></div>
+<div class="row-between"><span style="font-size: 24px; line-height: 30px; font-weight: 900">Criar seu plano</span><span class="mono">h2 · 24/30 · 900</span></div>
+<div class="row-between"><span class="t-title">Seu mês, em média</span><span class="mono">title · 19/26 · 800</span></div>
+<div class="row-between"><span class="prose">Recomendo o equilibrado.</span><span class="mono">body · 17/26 (mobile 16)</span></div>
+<div class="row-between"><span class="small">Folga de R$ 1.169/mês</span><span class="mono">small · 14/20 · 600–700</span></div>
+<div class="row-between"><span class="eyebrow">Próximos passos</span><span class="mono">eyebrow · 12 · 800 · caps</span></div>
+<div class="row-between"><span class="mono" style="font-size: 13px">desvio_detectado</span><span class="mono">mono · 12.5 · só Bastidores</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; gap: 12px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><span style="width: 72px; height: 72px; border-radius: 24px; background: var(--row); border: 1.5px solid var(--line-strong)"></span><span class="mono">consent 24</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><span style="width: 72px; height: 72px; border-radius: 22px; background: var(--row); border: 1.5px solid var(--line-strong)"></span><span class="mono">card 22</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><span style="width: 72px; height: 72px; border-radius: 16px; background: var(--row); border: 1.5px solid var(--line-strong)"></span><span class="mono">field 16</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><span style="width: 72px; height: 72px; border-radius: 12px; background: var(--row); border: 1.5px solid var(--line-strong)"></span><span class="mono">control 12</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><span style="width: 96px; height: 44px; border-radius: 999px; background: var(--row); border: 1.5px solid var(--line-strong)"></span><span class="mono">pill 999</span></div>
+</div>
+<div class="p-card"><span class="eyebrow">Blur</span><span class="mono">glass-chrome 24 · glass-consent 22 · glass-card 20 · pill 16 · blob 56</span></div>
+<div class="p-card"><span class="eyebrow">Espaço (base 4)</span><div style="display: flex; gap: 10px; align-items: flex-end">
+<span style="width: 4px; height: 4px; background: var(--accent)"></span><span style="width: 8px; height: 8px; background: var(--accent)"></span><span style="width: 12px; height: 12px; background: var(--accent)"></span><span style="width: 16px; height: 16px; background: var(--accent)"></span><span style="width: 20px; height: 20px; background: var(--accent)"></span><span style="width: 24px; height: 24px; background: var(--accent)"></span><span style="width: 32px; height: 32px; background: var(--accent)"></span><span style="width: 40px; height: 40px; background: var(--accent)"></span>
+<span class="mono" style="margin-left: 8px">4 · 8 · 12 · 16 · 20 · 24 · 32 · 40</span></div></div>
+<div class="p-card"><span class="eyebrow">Motion</span><span class="mono">ambiente 22–30 s · tint 600 ms · card enter 550 ms cubic-bezier(.2,.8,.2,1) · stagger 80 ms</span></div>
+</div>
+</div>
+</section>
+
+<section class="glass-card sheet-sec">
+<div class="sec-h"><h2>Handoff Tailwind v4</h2><span class="small">copiar para app.css · nomes de utilitários prontos para o time</span></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<pre class="code"><span class="c">/* app.css */</span>
+@import "tailwindcss";
+
+<span class="k">@custom-variant</span> dark (&amp;:where(.dark, .dark *));
+<span class="k">@custom-variant</span> reduced-transparency
+  (@media (prefers-reduced-transparency: reduce));
+<span class="k">@custom-variant</span> no-glass
+  (@supports not (backdrop-filter: blur(1px)));
+
+<span class="k">@theme</span> {
+  --font-sans: "Nunito Sans", ui-sans-serif, system-ui;
+  --font-mono: "JetBrains Mono", ui-monospace;
+
+  --color-accent: #EC7000;
+  --color-accent-cta: #DB6600;
+  --color-accent-ink: #A84F00;
+  --color-ink: #1E1A16;
+  --color-ink-2: #4A423A;
+  --color-ink-3: #675D53;
+  --color-sand-50: #FBF7F2;
+  --color-smoke-900: #1D1713;
+  --color-ok: #1E7A45;
+  --color-warn: #8A5200;
+  --color-warn-fill: #F2A93B;
+  --color-err: #B42318;
+
+  --color-tag-diagnostico: #0B6B70;
+  --color-tag-simulacao: #6A3FB5;
+  --color-tag-recomendacao: #A84F00;
+  --color-tag-acao: #1E7A45;
+
+  --color-tint-objetivo: #EEDCC8;
+  --color-tint-entender: #E4DCD2;
+  --color-tint-antecipar: #E3D5EC;
+  --color-tint-orientar: #F8BD88;
+  --color-tint-agir: #CFE7D3;
+  --color-tint-acompanhar: #F4CB7A;
+
+  --radius-card: 22px;
+  --radius-consent: 24px;
+  --radius-field: 16px;
+  --radius-control: 12px;
+
+  --blur-glass-chrome: 24px;
+  --blur-glass-card: 20px;
+  --blur-glass-consent: 22px;
+
+  --shadow-glass: inset 0 1px 0 rgb(255 255 255 / .9),
+    0 22px 48px -24px rgb(150 78 20 / .22);
+  --shadow-consent: 0 0 0 6px rgb(46 160 90 / .12),
+    0 0 44px -6px rgb(46 160 90 / .30);
+
+  --animate-drift: drift 26s ease-in-out infinite alternate;
+  --animate-enter: enter .55s cubic-bezier(.2,.8,.2,1) both;
+}</pre>
+<div style="display: flex; flex-direction: column; gap: 16px">
+<pre class="code"><span class="k">@utility</span> glass-chrome {
+  background: rgb(255 255 255 / .42);
+  backdrop-filter: blur(var(--blur-glass-chrome)) saturate(150%);
+  border: 1px solid rgb(255 255 255 / .62);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .9),
+    0 10px 30px -14px rgb(150 78 20 / .22);
+  <span class="k">@variant</span> dark { background: rgb(14 11 9 / .36);
+    border-color: rgb(255 255 255 / .10); }
+}
+<span class="k">@utility</span> glass-card {
+  background: rgb(255 252 248 / .80);
+  backdrop-filter: blur(var(--blur-glass-card)) saturate(140%);
+  border: 1px solid rgb(255 255 255 / .78);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-glass);
+  <span class="k">@variant</span> dark { background: rgb(24 19 15 / .80);
+    border-color: rgb(255 255 255 / .10); }
+}
+<span class="k">@utility</span> glass-consent {
+  background: rgb(255 255 255 / .88);
+  backdrop-filter: blur(var(--blur-glass-consent)) saturate(150%);
+  border: 1.5px solid rgb(30 122 69 / .55);
+  border-radius: var(--radius-consent);
+  box-shadow: var(--shadow-glass), var(--shadow-consent);
+}
+<span class="c">/* fallback sólido para os 3 níveis */</span>
+<span class="k">@layer</span> utilities {
+  .glass-chrome, .glass-card, .glass-consent {
+    <span class="k">@variant</span> reduced-transparency {
+      backdrop-filter: none; background: var(--color-sand-50); }
+    <span class="k">@variant</span> no-glass { background: var(--color-sand-50); }
+  }
+}</pre>
+<pre class="code"><span class="c">/* ambiente dinâmico: CSS puro, sem canvas/WebGL */</span>
+<span class="k">@property</span> --amb-1 { syntax: "&lt;color&gt;"; inherits: true;
+  initial-value: #EEDCC8; }
+[data-estado="orientar"] { --amb-1: var(--color-tint-orientar); }
+.ambient { transition: --amb-1 600ms, --amb-2 600ms, --amb-3 600ms; }
+.blob { animation: var(--animate-drift); }
+
+<span class="c">&lt;!-- equivalente em classes --&gt;</span>
+chrome  bg-white/42 backdrop-blur-glass-chrome backdrop-saturate-150
+        border border-white/60 dark:bg-black/35 dark:border-white/10
+card    bg-sand-50/80 backdrop-blur-glass-card rounded-card
+        shadow-glass dark:bg-smoke-900/80
+blob    motion-reduce:animate-none
+layout  lg:grid-cols-[1fr_360px]  (Bastidores = bottom sheet abaixo de lg)</pre>
+</div>
+</div>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":3000}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

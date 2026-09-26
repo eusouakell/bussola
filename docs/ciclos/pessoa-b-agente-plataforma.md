@@ -78,7 +78,7 @@ Roda em paralelo ao 000 da Pessoa A. São tarefas humanas; não abra
 - [ ] **Invoker:** confirmar se `allUsers` é permitido no `bussola-agent`
       (mestre §16, item 4). Isso define canal por invoker público ou por
       proxy.
-- [ ] **Design:** rodar o [prompt do Claude Design](../design/prompt-claude-design-chat.md)
+- [x] **Design:** rodar o [prompt do Claude Design](../design/prompt-claude-design-chat.md)
       (Dynamic Glass com Tailwind) e versionar frames F1–F7, componentes e
       tokens em `docs/design/`.
 - [ ] **Q4, antes do merge do 000:** fechar com o time entre ADK Web UI e
