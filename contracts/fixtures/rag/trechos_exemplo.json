@@ -1,0 +1,158 @@
+[
+  {
+    "doc_id": "cartao-rotativo",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 4.549/2017",
+      "url": null
+    },
+    "tema": "norma_bacen",
+    "texto": "Quando a fatura do cartão de crédito não é paga integralmente, o saldo restante pode ficar no rotativo só até o vencimento da fatura seguinte. Depois disso, o banco precisa oferecer um parcelamento do saldo em condições mais vantajosas que as do rotativo.",
+    "titulo": "Rotativo do cartão de crédito",
+    "trecho_id": "cartao-rotativo#1"
+  },
+  {
+    "doc_id": "cartao-rotativo",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Lei nº 14.690/2023 e Resolução CMN nº 5.112/2023",
+      "url": null
+    },
+    "tema": "norma_bacen",
+    "texto": "Desde janeiro de 2024, os juros e encargos cobrados no rotativo e no parcelamento da fatura do cartão não podem somar mais que 100% do valor original da dívida. Uma dívida de R$ 1.000, por exemplo, não pode passar de R$ 2.000 no total.",
+    "titulo": "Teto de juros do rotativo e do parcelamento da fatura",
+    "trecho_id": "cartao-rotativo#2"
+  },
+  {
+    "doc_id": "custo-efetivo-total",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 3.517/2007",
+      "url": null
+    },
+    "tema": "norma_bacen",
+    "texto": "Antes de contratar um empréstimo ou financiamento, a instituição deve informar o Custo Efetivo Total (CET), em taxa anual. O CET soma juros, tarifas, tributos, seguros e outras despesas da operação. Para comparar propostas de crédito, compare o CET, e não só a taxa de juros.",
+    "titulo": "Custo Efetivo Total (CET)",
+    "trecho_id": "custo-efetivo-total#1"
+  },
+  {
+    "doc_id": "cheque-especial",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 4.765/2019",
+      "url": null
+    },
+    "tema": "norma_bacen",
+    "texto": "Os juros do cheque especial para pessoas físicas e microempreendedores individuais são limitados a 8% ao mês desde janeiro de 2020. Mesmo com o limite, é uma das linhas de crédito mais caras e deve ser usada só por poucos dias.",
+    "titulo": "Limite de juros do cheque especial",
+    "trecho_id": "cheque-especial#1"
+  },
+  {
+    "doc_id": "portabilidade-credito",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 4.292/2013",
+      "url": null
+    },
+    "tema": "norma_bacen",
+    "texto": "O cliente pode transferir um empréstimo ou financiamento para outra instituição que ofereça condições melhores, sem pagar tarifa pela transferência. A instituição de origem pode fazer uma contraproposta, mas não pode dificultar o pedido.",
+    "titulo": "Portabilidade de crédito",
+    "trecho_id": "portabilidade-credito#1"
+  },
+  {
+    "doc_id": "servicos-essenciais",
+    "fonte": {
+      "nome": "Conselho Monetário Nacional",
+      "referencia": "Resolução CMN nº 3.919/2010",
+      "url": null
+    },
+    "tema": "norma_bacen",
+    "texto": "Na conta corrente de pessoa física, alguns serviços essenciais não podem ser cobrados, entre eles: cartão de débito, até quatro saques por mês, até dois extratos por mês, até duas transferências por mês entre contas da mesma instituição e consultas pela internet.",
+    "titulo": "Serviços bancários essenciais gratuitos",
+    "trecho_id": "servicos-essenciais#1"
+  },
+  {
+    "doc_id": "superendividamento",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Lei nº 14.181/2021 e Decreto nº 11.567/2023",
+      "url": null
+    },
+    "tema": "credito",
+    "texto": "Quem não consegue pagar as dívidas de consumo sem comprometer o próprio sustento pode pedir a repactuação com todos os credores ao mesmo tempo, em um plano de pagamento de até cinco anos. O plano deve preservar o mínimo existencial, hoje fixado em R$ 600 por mês.",
+    "titulo": "Superendividamento e mínimo existencial",
+    "trecho_id": "superendividamento#1"
+  },
+  {
+    "doc_id": "registrato",
+    "fonte": {
+      "nome": "Banco Central do Brasil",
+      "referencia": "Registrato",
+      "url": null
+    },
+    "tema": "credito",
+    "texto": "O Registrato é um sistema gratuito do Banco Central, acessado com a conta gov.br. Ele mostra os empréstimos e financiamentos em seu nome (SCR), as contas e relacionamentos com instituições financeiras e as chaves Pix cadastradas. Serve para conferir dívidas e detectar contratos que você não reconhece.",
+    "titulo": "Registrato: consulta gratuita das suas dívidas",
+    "trecho_id": "registrato#1"
+  },
+  {
+    "doc_id": "cadastro-positivo",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Lei nº 12.414/2011, alterada pela Lei Complementar nº 166/2019",
+      "url": null
+    },
+    "tema": "credito",
+    "texto": "O cadastro positivo reúne o histórico de pagamentos em dia do consumidor e pode melhorar a nota de crédito. A inclusão é automática, e a exclusão pode ser pedida a qualquer momento, sem custo.",
+    "titulo": "Cadastro positivo",
+    "trecho_id": "cadastro-positivo#1"
+  },
+  {
+    "doc_id": "liquidacao-antecipada",
+    "fonte": {
+      "nome": "Presidência da República",
+      "referencia": "Código de Defesa do Consumidor, art. 52, § 2º; Resolução CMN nº 3.516/2007",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm"
+    },
+    "tema": "credito",
+    "texto": "O consumidor tem direito de quitar uma dívida antes do prazo, total ou parcialmente, com redução proporcional dos juros e demais acréscimos. Nos contratos firmados a partir de dezembro de 2007, não pode haver tarifa pela liquidação antecipada.",
+    "titulo": "Quitação antecipada com desconto de juros",
+    "trecho_id": "liquidacao-antecipada#1"
+  },
+  {
+    "doc_id": "reserva-emergencia",
+    "fonte": {
+      "nome": "Equipe Bússola",
+      "referencia": "Conteúdo educativo da equipe (não é norma)",
+      "url": null
+    },
+    "tema": "boas_praticas",
+    "texto": "Uma reserva de emergência cobre imprevistos sem recorrer a crédito caro. Uma referência comum é guardar de três a seis meses do custo de vida em uma aplicação de baixo risco e resgate imediato, antes de investir em produtos mais arriscados.",
+    "titulo": "Reserva de emergência",
+    "trecho_id": "reserva-emergencia#1"
+  },
+  {
+    "doc_id": "ordem-quitacao",
+    "fonte": {
+      "nome": "Equipe Bússola",
+      "referencia": "Conteúdo educativo da equipe (não é norma)",
+      "url": null
+    },
+    "tema": "boas_praticas",
+    "texto": "Com dinheiro sobrando, costuma valer mais a pena quitar primeiro as dívidas de juros mais altos, como rotativo do cartão e cheque especial. Trocar uma dívida cara por uma mais barata, pela portabilidade ou por uma linha com CET menor, também reduz o custo total.",
+    "titulo": "Qual dívida quitar primeiro",
+    "trecho_id": "ordem-quitacao#1"
+  },
+  {
+    "doc_id": "comprometimento-renda",
+    "fonte": {
+      "nome": "Equipe Bússola",
+      "referencia": "Conteúdo educativo da equipe (não é norma)",
+      "url": null
+    },
+    "tema": "boas_praticas",
+    "texto": "Uma referência comum é manter a soma das parcelas de dívidas abaixo de cerca de 30% da renda líquida mensal. Acima disso, qualquer imprevisto aumenta o risco de atrasar pagamentos e entrar no rotativo.",
+    "titulo": "Quanto da renda comprometer com parcelas",
+    "trecho_id": "comprometimento-renda#1"
+  }
+]

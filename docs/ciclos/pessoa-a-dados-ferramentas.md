@@ -69,7 +69,7 @@
 | 1 | **000** Fundação e contratos (lidera) | A1 | 0 | `000-fundacao-contratos` · `../bussola-000` | [000-fundacao-contratos.md](./000-fundacao-contratos.md) | já | revisão de B e Q4 confirmada por B |
 | 2 | **001** Dados financeiros | A1 | 1 | `001-camada-dados-financeiros` · `../bussola-001` | [001-camada-dados-financeiros.md](./001-camada-dados-financeiros.md) | S0 | — |
 | 3 | **003** MCP de dados e conhecimento | A2 | 1 | `003-mcp-dados-conhecimento` · `../bussola-003` | [003-mcp-dados-conhecimento.md](./003-mcp-dados-conhecimento.md) | S0 | S2 |
-| 4 | **002** RAG financeiro | A1 | 2 | `002-rag-financeiro-dados` · `../bussola-002` | [002-rag-financeiro-dados.md](./002-rag-financeiro-dados.md) | S0 (corpus real após S1) | S1, S3 |
+| 4 | **002** RAG de conhecimento | A1 | 2 | `002-rag-financeiro-dados` · `../bussola-002` | [002-rag-financeiro-dados.md](./002-rag-financeiro-dados.md) | S0 | S3 |
 | 5 | **006** Acompanhamento com replay | A2 | 2 | `006-acompanhamento-replay` · `../bussola-006` | [006-acompanhamento-replay.md](./006-acompanhamento-replay.md) | S0 | S2, S3, S4, S6 |
 
 A sessão A1 faz 000 → 001 → 002. A sessão A2 abre com o 003 logo após o S0
@@ -123,7 +123,7 @@ saiu. Não suponha.
 - **Modo:** fixtures provisórias do 000.
 - **S1 no meio do ciclo:** publique as tabelas v1 em `bussola_dados` assim
   que `build_dados.py` rodar para o âncora e o controle. Isso libera o
-  corpus real do 002 na sua própria sessão A1.
+  `make test-bq` do 003.
 - **Fixtures golden:** a troca das provisórias do 000 é PR `contracts:`,
   com aprovação de A e B.
 - **Team Mode:** desligado por padrão, porque a sessão A2 já roda o 003 em
@@ -145,13 +145,13 @@ saiu. Não suponha.
   (`make mcp` sem fakes) e mergeie. Com o 004 em `main`, o 007 já pode
   publicar os dois serviços reais (S5)."
 
-### 4.4 002 — RAG financeiro
+### 4.4 002 — RAG de conhecimento
 
-- **Modo:** templates e buscador sobre `contracts/fixtures/bussola_dados/`
-  até o S1. O corpus real só é gerado depois do S1.
-- **Runtime:** o MCP gera o embedding da pergunta. Isso exige
-  `aiplatform.user` na SA (pedido ao owner, enviado por B) ou o Plano B com
-  chave.
+- **Modo:** corpus de conhecimento no repositório (Q-17 do 000), a partir
+  de `contracts/fixtures/rag/trechos_exemplo.json`. Não depende do 001.
+- **Runtime:** só o backend `numpy` gera o embedding da pergunta. Isso
+  exige `aiplatform.user` na SA (pedido ao owner, enviado por B) ou o
+  Plano B com chave. O `lexico` não usa GCP.
 - **Buscador plugado:** a fábrica do `server.py` (003) já procura
   `rag.criar_buscador` e cai no fake com aviso. O 002 entrega o módulo e
   prova o plug com o MCP rodando, o que exige o S3. Essas tarefas ficam

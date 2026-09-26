@@ -72,7 +72,7 @@ exatas de `contratos.md` §3.
   - nenhuma linha com `anomes` fora de 202501–202512;
   - a soma de `gastos_categoria` bate com `perfil_mensal.gasto`;
   - a soma de `entradas_categoria` bate com `perfil_mensal.renda`.
-- **Marco "tabelas v1" (desbloqueia o 002):** assim que `perfil_mensal`,
+- **Marco "tabelas v1" (desbloqueia o `make test-bq` do 003):** assim que `perfil_mensal`,
   `gastos_categoria`, `entradas_categoria`, `recorrentes`, `parcelas` e
   `categorias` estiverem publicadas e validadas:
   1. registrar o marco em `specs/001-*/marcos.md`;

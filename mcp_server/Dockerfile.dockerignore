@@ -1,0 +1,40 @@
+# Contexto de build = raiz do repositório (ver mcp_server/Dockerfile).
+# Lista de permissões: tudo fica de fora, exceto o que a imagem do MCP usa.
+*
+!mcp_server/
+!contracts/
+
+# Ambiente local, caches e artefatos que não são do runtime.
+**/.venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/.coverage
+**/htmlcov
+**/.adk
+**/*.db
+**/.DS_Store
+mcp_server/tests
+mcp_server/Dockerfile
+mcp_server/Dockerfile.dockerignore
+
+# Segredos e configuração local: nunca entram na imagem.
+**/.env
+**/.env.*
+**/*.pem
+**/*-key.json
+# O modelo de variáveis não tem segredos e pode entrar.
+!contracts/env.example
+
+# Já cobertos pela lista de permissões; explícitos por segurança.
+.git
+.spec-master
+.specify
+.claude
+docs
+specs
+data
+agent
+deploy

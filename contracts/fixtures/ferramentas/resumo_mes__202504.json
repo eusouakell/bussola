@@ -1,0 +1,54 @@
+{
+  "avisos": [],
+  "dados": {
+    "anomes": 202504,
+    "gasto": 3416.9,
+    "gastos_macro": [
+      {
+        "macro": "Casa",
+        "total": 1968.86
+      },
+      {
+        "macro": "Lojas e sites",
+        "total": 433.36
+      },
+      {
+        "macro": "Produtos financeiros",
+        "total": 365.5
+      },
+      {
+        "macro": "Restaurantes",
+        "total": 326.77
+      },
+      {
+        "macro": "Assinaturas",
+        "total": 103.11
+      },
+      {
+        "macro": "Lazer",
+        "total": 95.91
+      },
+      {
+        "macro": "Transporte publico",
+        "total": 84.36
+      },
+      {
+        "macro": "Viagens",
+        "total": 39.03
+      }
+    ],
+    "renda": 8409.42,
+    "sobra": 4992.52
+  },
+  "fonte": {
+    "ferramenta": "resumo_mes",
+    "periodo": {
+      "fim": 202504,
+      "inicio": 202504
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.gastos_categoria"
+    ]
+  }
+}

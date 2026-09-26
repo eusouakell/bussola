@@ -1,0 +1,812 @@
+[
+  {
+    "anomes": 202501,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 1,
+    "parcela_total": 10,
+    "vlr": 2049.19
+  },
+  {
+    "anomes": 202502,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 2,
+    "parcela_total": 10,
+    "vlr": 182.47
+  },
+  {
+    "anomes": 202503,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 3,
+    "parcela_total": 10,
+    "vlr": 78.11
+  },
+  {
+    "anomes": 202504,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 4,
+    "parcela_total": 10,
+    "vlr": 91.36
+  },
+  {
+    "anomes": 202504,
+    "descr": "pix transf decor casa parc 1/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 6,
+    "vlr": 146.58
+  },
+  {
+    "anomes": 202505,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 5,
+    "parcela_total": 10,
+    "vlr": 179.09
+  },
+  {
+    "anomes": 202505,
+    "descr": "pix transf decor casa parc 2/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 6,
+    "vlr": 146.58
+  },
+  {
+    "anomes": 202506,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 6,
+    "parcela_total": 10,
+    "vlr": 417.49
+  },
+  {
+    "anomes": 202506,
+    "descr": "pix transf decor casa parc 3/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 6,
+    "vlr": 146.58
+  },
+  {
+    "anomes": 202507,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 7,
+    "parcela_total": 10,
+    "vlr": 451.49
+  },
+  {
+    "anomes": 202507,
+    "descr": "pix transf decor casa parc 4/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 6,
+    "vlr": 146.58
+  },
+  {
+    "anomes": 202508,
+    "descr": "cart credito loja mov parc 1/12",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 12,
+    "vlr": 70.59
+  },
+  {
+    "anomes": 202508,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 8,
+    "parcela_total": 10,
+    "vlr": 163.03
+  },
+  {
+    "anomes": 202508,
+    "descr": "pix transf decor casa parc 5/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 6,
+    "vlr": 146.58
+  },
+  {
+    "anomes": 202509,
+    "descr": "cart credito loja mov parc 2/12",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 12,
+    "vlr": 70.59
+  },
+  {
+    "anomes": 202509,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 9,
+    "parcela_total": 10,
+    "vlr": 177.63
+  },
+  {
+    "anomes": 202509,
+    "descr": "pix transf decor casa parc 1/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 6,
+    "vlr": 149.37
+  },
+  {
+    "anomes": 202509,
+    "descr": "pix transf decor casa parc 6/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 6,
+    "parcela_total": 6,
+    "vlr": 146.58
+  },
+  {
+    "anomes": 202510,
+    "descr": "cart credito loja mov parc 3/12",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 12,
+    "vlr": 70.59
+  },
+  {
+    "anomes": 202510,
+    "descr": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "parcela_atual": 10,
+    "parcela_total": 10,
+    "vlr": 454.8
+  },
+  {
+    "anomes": 202510,
+    "descr": "pix transf decor casa parc 2/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 6,
+    "vlr": 149.37
+  },
+  {
+    "anomes": 202511,
+    "descr": "cart credito loja mov parc 4/12",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 12,
+    "vlr": 70.59
+  },
+  {
+    "anomes": 202511,
+    "descr": "pix transf decor casa parc 3/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 6,
+    "vlr": 149.37
+  },
+  {
+    "anomes": 202512,
+    "descr": "cart credito loja mov parc 5/12",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 12,
+    "vlr": 70.59
+  },
+  {
+    "anomes": 202512,
+    "descr": "pix transf decor casa parc 4/6",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 6,
+    "vlr": 149.37
+  },
+  {
+    "anomes": 202501,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 1,
+    "parcela_total": 10,
+    "vlr": 1991.93
+  },
+  {
+    "anomes": 202501,
+    "descr": "pix qrs compra onl parc 1/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202501,
+    "descr": "pix qrs compra onl parc 1/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202502,
+    "descr": "cart credito compra mktplace parc 1/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 6,
+    "vlr": 44.9
+  },
+  {
+    "anomes": 202502,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 2,
+    "parcela_total": 10,
+    "vlr": 81.11
+  },
+  {
+    "anomes": 202502,
+    "descr": "pix qrs compra onl parc 2/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202502,
+    "descr": "pix qrs compra onl parc 2/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202503,
+    "descr": "cart credito compra mktplace parc 2/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 6,
+    "vlr": 44.9
+  },
+  {
+    "anomes": 202503,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 3,
+    "parcela_total": 10,
+    "vlr": 161.6
+  },
+  {
+    "anomes": 202503,
+    "descr": "pix qrs compra onl parc 3/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202503,
+    "descr": "pix qrs compra onl parc 3/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202504,
+    "descr": "cart credito compra mktplace parc 1/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202504,
+    "descr": "cart credito compra mktplace parc 3/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 6,
+    "vlr": 44.9
+  },
+  {
+    "anomes": 202504,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 4,
+    "parcela_total": 10,
+    "vlr": 169.91
+  },
+  {
+    "anomes": 202504,
+    "descr": "pix qrs compra onl parc 4/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202504,
+    "descr": "pix qrs compra onl parc 4/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202505,
+    "descr": "cart credito compra mktplace parc 2/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202505,
+    "descr": "cart credito compra mktplace parc 4/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 6,
+    "vlr": 44.9
+  },
+  {
+    "anomes": 202505,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 5,
+    "parcela_total": 10,
+    "vlr": 185.97
+  },
+  {
+    "anomes": 202505,
+    "descr": "pix qrs compra onl parc 5/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202505,
+    "descr": "pix qrs compra onl parc 5/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202506,
+    "descr": "cart credito compra mktplace parc 3/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202506,
+    "descr": "cart credito compra mktplace parc 5/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 6,
+    "vlr": 44.9
+  },
+  {
+    "anomes": 202506,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 6,
+    "parcela_total": 10,
+    "vlr": 2256.42
+  },
+  {
+    "anomes": 202506,
+    "descr": "pix qrs compra onl parc 1/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 10,
+    "vlr": 9.83
+  },
+  {
+    "anomes": 202506,
+    "descr": "pix qrs compra onl parc 6/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 6,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202506,
+    "descr": "pix qrs compra onl parc 6/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 6,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202507,
+    "descr": "cart credito compra mktplace parc 4/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202507,
+    "descr": "cart credito compra mktplace parc 6/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 6,
+    "parcela_total": 6,
+    "vlr": 44.9
+  },
+  {
+    "anomes": 202507,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 7,
+    "parcela_total": 10,
+    "vlr": 179.4
+  },
+  {
+    "anomes": 202507,
+    "descr": "pix qrs compra onl parc 2/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 10,
+    "vlr": 9.83
+  },
+  {
+    "anomes": 202507,
+    "descr": "pix qrs compra onl parc 7/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 7,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202507,
+    "descr": "pix qrs compra onl parc 7/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 7,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202508,
+    "descr": "cart credito compra mktplace parc 5/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202508,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 8,
+    "parcela_total": 10,
+    "vlr": 79.16
+  },
+  {
+    "anomes": 202508,
+    "descr": "pix qrs compra onl parc 1/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 10,
+    "vlr": 9.47
+  },
+  {
+    "anomes": 202508,
+    "descr": "pix qrs compra onl parc 3/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 10,
+    "vlr": 9.83
+  },
+  {
+    "anomes": 202508,
+    "descr": "pix qrs compra onl parc 8/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 8,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202508,
+    "descr": "pix qrs compra onl parc 8/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 8,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202509,
+    "descr": "cart credito compra mktplace parc 1/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 6,
+    "vlr": 42.01
+  },
+  {
+    "anomes": 202509,
+    "descr": "cart credito compra mktplace parc 6/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 6,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202509,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 9,
+    "parcela_total": 10,
+    "vlr": 155.31
+  },
+  {
+    "anomes": 202509,
+    "descr": "pix qrs compra onl parc 2/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 10,
+    "vlr": 9.47
+  },
+  {
+    "anomes": 202509,
+    "descr": "pix qrs compra onl parc 4/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 10,
+    "vlr": 9.83
+  },
+  {
+    "anomes": 202509,
+    "descr": "pix qrs compra onl parc 9/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 9,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202509,
+    "descr": "pix qrs compra onl parc 9/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 9,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202510,
+    "descr": "cart credito compra mktplace parc 2/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 6,
+    "vlr": 42.01
+  },
+  {
+    "anomes": 202510,
+    "descr": "cart credito compra mktplace parc 7/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 7,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202510,
+    "descr": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "parcela_atual": 10,
+    "parcela_total": 10,
+    "vlr": 93.17
+  },
+  {
+    "anomes": 202510,
+    "descr": "pix qrs compra onl parc 10/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 10,
+    "parcela_total": 10,
+    "vlr": 25.66
+  },
+  {
+    "anomes": 202510,
+    "descr": "pix qrs compra onl parc 10/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 10,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202510,
+    "descr": "pix qrs compra onl parc 3/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 10,
+    "vlr": 9.47
+  },
+  {
+    "anomes": 202510,
+    "descr": "pix qrs compra onl parc 5/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 10,
+    "vlr": 9.83
+  },
+  {
+    "anomes": 202511,
+    "descr": "cart credito compra mktplace parc 1/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 1,
+    "parcela_total": 12,
+    "vlr": 19.98
+  },
+  {
+    "anomes": 202511,
+    "descr": "cart credito compra mktplace parc 3/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 3,
+    "parcela_total": 6,
+    "vlr": 42.01
+  },
+  {
+    "anomes": 202511,
+    "descr": "cart credito compra mktplace parc 8/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 8,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202511,
+    "descr": "pix qrs compra onl parc 11/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 11,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202511,
+    "descr": "pix qrs compra onl parc 4/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 10,
+    "vlr": 9.47
+  },
+  {
+    "anomes": 202511,
+    "descr": "pix qrs compra onl parc 6/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 6,
+    "parcela_total": 10,
+    "vlr": 9.83
+  },
+  {
+    "anomes": 202512,
+    "descr": "cart credito compra mktplace parc 2/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 2,
+    "parcela_total": 12,
+    "vlr": 19.98
+  },
+  {
+    "anomes": 202512,
+    "descr": "cart credito compra mktplace parc 4/6",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 4,
+    "parcela_total": 6,
+    "vlr": 42.01
+  },
+  {
+    "anomes": 202512,
+    "descr": "cart credito compra mktplace parc 9/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 9,
+    "parcela_total": 12,
+    "vlr": 7.28
+  },
+  {
+    "anomes": 202512,
+    "descr": "pix qrs compra onl parc 12/12",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 12,
+    "parcela_total": 12,
+    "vlr": 21.05
+  },
+  {
+    "anomes": 202512,
+    "descr": "pix qrs compra onl parc 5/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 5,
+    "parcela_total": 10,
+    "vlr": 9.47
+  },
+  {
+    "anomes": 202512,
+    "descr": "pix qrs compra onl parc 7/10",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "parcela_atual": 7,
+    "parcela_total": 10,
+    "vlr": 9.83
+  }
+]

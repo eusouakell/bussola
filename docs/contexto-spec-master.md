@@ -216,49 +216,47 @@ Tabela `batalha-time-07-lkbv.hackathon_dados.extrato_sintetico` (`us-central1`,
   Restaurantes; "cart credito posto shell" rotulado como Jardinagem. A
   recategorização assistida é diferencial opcional (F2, P2).
 
-## §9 RAG financeiro — construído a partir dos dados disponibilizados
+## §9 RAG de conhecimento — normas do BACEN, crédito e boas práticas
 
-**Decisão do time:** o RAG financeiro será construído **com base nos dados
-disponibilizados** (a base `extrato_sintetico`), não em um catálogo externo
-de produtos.
+> **Revisão (26/09/2026, Q-17 do ciclo 000):** a versão anterior desta seção
+> previa um corpus derivado da base (fichas mensais, perfil anual, coorte e
+> lançamentos) gravado em `bussola_rag` e buscado com `VECTOR_SEARCH`. O time
+> cortou esse desenho: os dados do cliente já são servidos pelas ferramentas
+> determinísticas sobre `bussola_dados`, e o RAG passa a ser conhecimento
+> geral.
 
-Corpus derivado (gerado por script a partir do BigQuery, com texto
-determinístico, sem LLM inventando fatos):
+**Decisão do time:** o RAG traz **conhecimento de apoio**, não dados do
+cliente. Três temas:
 
-1. **Fichas mensais por usuário** (1.000 × 12). Resumo textual com renda,
-   gasto por macrocategoria, parcelas ativas, juros, saldo inicial/final e
-   eventos (saldo negativo, gasto atípico).
-2. **Perfil anual por usuário.** Padrões recorrentes (assinaturas, aluguel,
-   comer fora, delivery, transporte), tendência e sazonalidade.
-3. **Referências de coorte anonimizadas** ("clientes com renda e perfil
-   parecidos gastam em média X em delivery"). São agregados, nunca dados
-   individuais de outro cliente.
-4. **Lançamentos (`descr`) vetorizados.** Busca semântica ("quanto gasto com
-   corrida de app?") e apoio à recategorização (P2).
+1. **Normas do BACEN e do CMN** (`norma_bacen`): rotativo e parcelamento do
+   cartão, teto de juros, CET, portabilidade, Registrato, cheque especial.
+2. **Crédito** (`credito`): conteúdo geral sobre modalidades, custo,
+   renegociação e superendividamento. As dívidas e parcelas do próprio
+   cliente vêm da ferramenta `dividas_e_parcelas`.
+3. **Boas práticas** (`boas_praticas`): reserva de emergência, orçamento,
+   ordem de quitação, uso consciente do cartão.
 
 Diretrizes:
 
-- **Recuperação sempre filtrada por `id_usuario`** (itens 1, 2 e 4) ou
-  restrita a agregados (item 3).
-- Cada trecho recuperado carrega **referência de origem** (usuário, mês,
-  categoria) para explicabilidade.
-- O RAG dá **contexto e explicação**; os valores apresentados ao cliente
+- **Texto original do time**, em pt-BR, educativo e geral. Cita a norma pelo
+  número e não copia texto legal. Nenhum LLM escreve o corpus.
+- **Sem dado de cliente no corpus.** O buscador não recebe `id_usuario` nem
+  `ate_anomes`.
+- Cada trecho recuperado carrega **título e fonte** (nome, referência e URL)
+  para explicabilidade.
+- O RAG explica conceitos e regras; os valores apresentados ao cliente
   continuam vindo das ferramentas determinísticas.
-- Conteúdo de produtos, regras e educação financeira fica fora do corpus
-  principal (ver §20, Q3). Sem ele, o agente fala de produtos apenas em
-  termos genéricos, sem taxas ou condições comerciais inventadas.
+- Produtos e taxas comerciais do Itaú seguem fora do corpus: o agente fala de
+  produtos apenas em termos genéricos.
 
-**Implementação recomendada (a validar no Bloco 0):**
+**Implementação (contratos §4):**
 
-- embeddings gerados em Python via Agent Platform (modelo de embedding
-  disponível no projeto) ou Gemini API;
-- vetores gravados em tabela BigQuery `bussola_rag.*`;
-- busca com `VECTOR_SEARCH` nativo do BigQuery, que não depende da
-  Connection API;
-- Plano B: índice em memória (numpy) carregado no MCP server a partir da
-  mesma tabela (~12 mil fichas cabem folgadamente);
-- alternativa avaliada: Agent Platform RAG Engine com upload direto de
-  arquivos, sem bucket.
+- corpus em Markdown no repositório (`data/rag/corpus/<tema>/`);
+- embeddings gerados offline em Python via Agent Platform (ou Gemini API) e
+  versionados com o índice (`mcp_server/bussola_mcp/rag/indice/`);
+- busca em memória no MCP server: léxica (padrão, sem GCP) ou por cosseno
+  com numpy (embedding só da pergunta em tempo de execução);
+- sem dataset no BigQuery, sem `VECTOR_SEARCH` e sem RAG Engine.
 
 ## §10 Features
 
@@ -301,20 +299,19 @@ funções de simulação testadas.
 - [ ] Todas as consultas filtram por `id_usuario` parametrizado (sem SQL
       montado por concatenação de texto do usuário).
 
-### F2 — RAG financeiro a partir da base (`002-rag-financeiro-dados`) — P0 (itens 1–2), P1 (item 3), P2 (item 4 / recategorização)
+### F2 — RAG de conhecimento (`002-rag-financeiro-dados`) — P0 (corpus, índice, buscadores), P1 (eval)
 
 **Objetivo:** construir o corpus e a recuperação descritos em §9.
 
 **Critérios de aceite:**
 
-- [ ] Script idempotente gera o corpus (fichas mensais + perfil anual) a
-      partir de F1 e grava textos + embeddings em `bussola_rag`.
-- [ ] Busca retorna top-k trechos **somente** do `id_usuario` da sessão (teste
-      negativo: nunca retorna outro usuário).
-- [ ] Cada trecho retornado inclui referência de origem (usuário, mês,
-      categoria).
-- [ ] Conjunto de ≥ 10 perguntas de avaliação sobre o usuário-âncora, com
-      trecho esperado no top-3 em ≥ 80% dos casos.
+- [ ] Corpus curado nos três temas de §9, com fonte em cada documento, e
+      índice gerado por script idempotente.
+- [ ] Busca retorna top-k trechos, com filtro opcional por tema, sem receber
+      dado de cliente.
+- [ ] Cada trecho retornado inclui título e fonte (nome, referência, URL).
+- [ ] Conjunto de ≥ 10 perguntas de avaliação, com trecho esperado no top-3
+      em ≥ 80% dos casos.
 
 ### F3 — MCP server de dados e conhecimento (`003-mcp-dados-conhecimento`) — P0
 
@@ -508,7 +505,7 @@ linha de corte explícita.
 | **0 — Desbloqueio** | Pedidos ao owner/mentores (§16), validação de modelos (Gemini Flash + embedding), datasets `bussola_*` criados, esqueleto do repo, pipeline build → push → deploy testado com "hello" no Cloud Run | — | 1 pessoa em IAM/infra, 1 em dados, 2 no esqueleto agente/MCP |
 | **1 — Dados** | Views de F1, simulação com testes, números do usuário-âncora validados | F1 | Dados (SQL) ∥ simulação (Python) |
 | **2 — Fatia vertical** | MCP com `perfil_financeiro`, `capacidade_poupanca`, `comparar_cenarios`; agente ADK respondendo OBJETIVO → ORIENTAR local e em Cloud Run | F3 (parcial), F4 (parcial) | MCP ∥ agente/prompt |
-| **3 — RAG** | Corpus de fichas + embeddings + busca filtrada; ferramenta `buscar_contexto_financeiro` | F2, F3 | 1–2 pessoas |
+| **3 — RAG** | Corpus de conhecimento + embeddings + busca em memória; ferramenta `buscar_contexto_financeiro` | F2, F3 | 1–2 pessoas |
 | **4 — Governança** | Gate de consentimento, gravação em `bussola_app`, guardrails (Model Armor ou fallback) | F5 | ∥ Bloco 3 |
 | **5 — Acompanhar** | Replay temporal e recálculo de rota | F6 | — |
 | **6 — Demo** | Canal, roteiro, ensaio, vídeo de backup, README | F7 | Todos |
@@ -548,12 +545,11 @@ Admin:
 papéis atuais do time:
 
 - **BigQuery:**
-  - O time (BigQuery Admin) concede `dataViewer` em `bussola_dados` /
-    `bussola_rag` e `dataEditor` em `bussola_app` para a SA default, no
-    nível de dataset.
+  - O time (BigQuery Admin) concede `dataViewer` em `bussola_dados` e
+    `dataEditor` em `bussola_app` para a SA default, no nível de dataset.
   - O runtime lê tabelas pré-agregadas via `list_rows`/Storage Read e grava
     via streaming insert, sem precisar de `jobUser`.
-  - A busca vetorial roda em memória (§9).
+  - A busca do RAG já roda em memória, sem BigQuery (§9).
 - **LLM:**
   - Gemini via `generativelanguage` com a `gemini-api-key`, injetada como
     variável de ambiente no deploy por quem tem accessor.
@@ -612,15 +608,17 @@ Não avançar para Open Finance, contratação real ou canais além da demo: iss
 - **Q2.** Confirmar o usuário-âncora (`36a21505…` recomendado) e se os
   cenários usam percentuais da capacidade real (recomendado) ou os valores
   ilustrativos R$ 600/R$ 900.
-- **Q3.** Além do corpus derivado da base (§9), haverá um conteúdo curto de
-  produtos/educação financeira escrito pelo time? Se não, produtos são
-  citados só genericamente.
+- **Q3.** ~~Haverá conteúdo curto escrito pelo time?~~ **Respondida
+  (Q-17 do 000):** sim. O corpus do RAG passa a ser só conteúdo escrito pelo
+  time (normas do BACEN, crédito, boas práticas). Produtos seguem citados só
+  genericamente.
 - **Q4.** Canal da demo: ADK Web UI publicada no Cloud Run (mais rápido) ou
   front de chat próprio no estilo ia.i.
 - **Q5.** ~~Papel exato do Antigravity~~ **Respondida em parte:** o
   desenvolvimento é no Claude Code e o Antigravity opera o produto pronto
   (§14). Ainda em aberto: as credenciais GCP no Antigravity são as mesmas
   dos integrantes?
-- **Q6.** Busca vetorial: `VECTOR_SEARCH` no BigQuery (recomendado) ou RAG
-  Engine do Agent Platform.
+- **Q6.** ~~Busca vetorial: `VECTOR_SEARCH` ou RAG Engine~~ **Respondida
+  (Q-17 do 000):** nenhum dos dois. Índice versionado no repositório e busca
+  em memória no MCP (léxica ou numpy).
 - **Q7.** Os pedidos de §16 serão atendidos? Se não, seguir o Plano B.

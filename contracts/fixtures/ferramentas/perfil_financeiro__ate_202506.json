@@ -1,0 +1,73 @@
+{
+  "avisos": [
+    "Saldo ficou negativo em 2 meses do período."
+  ],
+  "dados": {
+    "fontes_renda": [
+      {
+        "macro": "Recebimentos diversos",
+        "media": 6691.39,
+        "micro": "Recebimentos diversos"
+      }
+    ],
+    "gasto_medio": 4789.93,
+    "meses_considerados": 6,
+    "renda_media": 6691.39,
+    "saldo": {
+      "atual": 17652.15,
+      "maximo": 19023.89,
+      "minimo": -2072.31
+    },
+    "serie_mensal": [
+      {
+        "anomes": 202501,
+        "gasto": 6094.28,
+        "renda": 6013.61,
+        "sobra": -80.67
+      },
+      {
+        "anomes": 202502,
+        "gasto": 3038.5,
+        "renda": 5550.27,
+        "sobra": 2511.77
+      },
+      {
+        "anomes": 202503,
+        "gasto": 4931.28,
+        "renda": 7398.4,
+        "sobra": 2467.12
+      },
+      {
+        "anomes": 202504,
+        "gasto": 3416.9,
+        "renda": 8409.42,
+        "sobra": 4992.52
+      },
+      {
+        "anomes": 202505,
+        "gasto": 4826.84,
+        "renda": 5817.72,
+        "sobra": 990.88
+      },
+      {
+        "anomes": 202506,
+        "gasto": 6431.77,
+        "renda": 6958.94,
+        "sobra": 527.17
+      }
+    ],
+    "sobra_media": 1901.47,
+    "sobra_mediana": 1729.0
+  },
+  "fonte": {
+    "ferramenta": "perfil_financeiro",
+    "periodo": {
+      "fim": 202506,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.entradas_categoria"
+    ]
+  }
+}

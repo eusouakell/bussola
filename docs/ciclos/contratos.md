@@ -38,10 +38,10 @@ merge se resolve pela união das linhas.
 ├── AGENTS.md                          007  (operação no Antigravity)
 ├── Makefile                           000  (acréscimo de targets)
 ├── .specify/                          000  (constituição congelada após 000)
+├── .github/workflows/                000 (ci.yml, deploy.yml; Q-18) → 007 (promoção de tráfego)
 ├── specs/NNN-*/                       cada ciclo, só o seu NNN
 ├── contracts/                         000  (mudança só via PR "contracts:")
 │   ├── bigquery/bussola_dados.sql
-│   ├── bigquery/bussola_rag.sql
 │   ├── bigquery/bussola_app.sql
 │   ├── fixtures/…                     (§8)
 │   └── env.example                    (§7)
@@ -50,7 +50,7 @@ merge se resolve pela união das linhas.
 │   ├── scripts/gerar_fixtures.py      000 (001 pode regenerar via PR "contracts:")
 │   ├── sql/                           001
 │   ├── scripts/build_dados.py         001
-│   └── rag/                           002
+│   └── rag/                           002  (corpus/<tema>/<doc_id>.md e indexar.py; Q-17)
 ├── mcp_server/
 │   ├── pyproject.toml, Dockerfile     000  (acréscimo de dependências)
 │   ├── bussola_mcp/
@@ -61,7 +61,7 @@ merge se resolve pela união das linhas.
 │   │   ├── dominio/repositorio_bq.py  001
 │   │   ├── dominio/metricas.py        001
 │   │   ├── dominio/simulacao.py       001
-│   │   ├── rag/                       002
+│   │   ├── rag/                       002  (buscadores e indice/ versionado; Q-17)
 │   │   ├── ferramentas/               003
 │   │   └── server.py                  000 (mock) → 003 (real)
 │   └── tests/{contrato,dados,rag,ferramentas}/   000/001/002/003
@@ -120,6 +120,12 @@ DDL em `contracts/bigquery/*.sql`, aplicado de forma idempotente por
 `CREATE TABLE IF NOT EXISTS`). A origem é somente leitura:
 `hackathon_dados.extrato_sintetico`.
 
+**Nulidade:** só as colunas marcadas `NULL` são anuláveis. As demais são
+`NOT NULL` no DDL, exceto `ARRAY`, que o BigQuery não aceita com `NOT NULL`.
+Os modelos Pydantic de
+`contratos.py` seguem a mesma nulidade, e um teste de contrato compara os
+dois (Q-10 do 000).
+
 ### `bussola_dados`: métricas determinísticas (escrita pelo 001, leitura por todos)
 
 | Tabela | Colunas | Observação |
@@ -135,18 +141,12 @@ DDL em `contracts/bigquery/*.sql`, aplicado de forma idempotente por
 `capacidade_poupanca` **não é tabela**: é calculada em
 `dominio/metricas.py` a partir de `perfil_mensal` filtrado por `ate_anomes`.
 
-### `bussola_rag`: corpus (escrita pelo 002)
+### Sem dataset de RAG (Q-17 do 000)
 
-| Tabela | Colunas |
-|---|---|
-| `documentos` | `doc_id STRING, id_usuario STRING NULL, tipo STRING, anomes INT64 NULL, texto STRING, fonte JSON, embedding ARRAY<FLOAT64>, modelo_embedding STRING, gerado_em TIMESTAMP` |
-
-- **Valores de `tipo`:** `ficha_mensal` (P0), `perfil_anual` (P0), `coorte`
-  (P1, `id_usuario` NULL) e `lancamento` (P2).
-- **`perfil_anual`** é gravado com `anomes = 202512` e, portanto, só aparece
-  quando o corte temporal é `202512`.
-- **Filtro obrigatório na busca:**
-  `(id_usuario = @id_usuario OR tipo = 'coorte') AND (anomes IS NULL OR anomes <= @ate_anomes)`.
+Não há `bussola_rag`. O RAG responde com conhecimento geral (normas do
+BACEN, crédito e boas práticas), a partir de um corpus curado no
+repositório (§4). Dado do cliente vem só das tabelas de `bussola_dados`,
+pelas outras ferramentas.
 
 ### `bussola_app`: estado de aplicação (escrita pelo 005/006 via streaming insert)
 
@@ -177,8 +177,8 @@ class RepositorioFinanceiro(Protocol):
     def referencia_coorte(self, faixa_renda: str, macro: str | None = None) -> list[RefCoorte]: ...
 
 class BuscadorContexto(Protocol):
-    def buscar(self, id_usuario: str, pergunta: str, k: int,
-               ate_anomes: int) -> list[Trecho]: ...
+    def buscar(self, pergunta: str, k: int,
+               tema: TemaConhecimento | None = None) -> list[Trecho]: ...
 ```
 
 - Os modelos (`PerfilMes`, `GastoCategoria`, …) espelham as colunas do §3.
@@ -188,8 +188,14 @@ class BuscadorContexto(Protocol):
   - `query`: jobs parametrizados;
   - `memoria`: carga via `list_rows` no startup e filtro em Python. É o
     Plano B, sem `bigquery.jobUser` na SA de runtime.
-- O 002 entrega `BuscadorBigQuery` (`VECTOR_SEARCH`) e `BuscadorNumpy`
-  (Plano B), escolhidos via `RAG_BACKEND`. O ponto de entrada é
+- O buscador não recebe `id_usuario` nem `ate_anomes`: o corpus é
+  conhecimento geral, sem dado de cliente (Q-17 do 000). Devolve até `k`
+  trechos com `score > 0`, do mais relevante ao menos relevante, com empate
+  por `trecho_id`. `tema` restringe a busca a um tema.
+- O 002 entrega `BuscadorLexico` (padrão, sem GCP) e `BuscadorNumpy`
+  (similaridade de cosseno sobre embeddings; só a pergunta é embutida em
+  tempo de execução, com `EMBEDDING_MODEL`), escolhidos via `RAG_BACKEND`. O
+  ponto de entrada é
   `bussola_mcp.rag.criar_buscador(backend: str) -> BuscadorContexto`.
 - O `server.py` (003) monta as dependências numa fábrica única:
   - com `BUSSOLA_FAKES=TRUE`, usa os fakes;
@@ -197,6 +203,26 @@ class BuscadorContexto(Protocol):
     `criar_buscador(RAG_BACKEND)`;
   - enquanto `bussola_mcp.rag` não existir em `main`, cai no buscador fake
     com aviso.
+
+**Corpus de conhecimento** (002, Q-17 do 000):
+
+- **Fonte:** `data/rag/corpus/<tema>/<doc_id>.md`, um documento por
+  arquivo, com cabeçalho (front matter) `titulo`, `tema`, `fonte_nome`,
+  `fonte_referencia` e `fonte_url` (opcional). `doc_id` é o nome do arquivo.
+  Cada seção `##` vira um trecho, com `trecho_id = "<doc_id>#<n>"` (n a
+  partir de 1).
+- **Temas** (`TemaConhecimento`): `norma_bacen`, `credito` e
+  `boas_praticas`. Crédito é conteúdo geral (modalidades, custo, direitos,
+  renegociação). As dívidas do cliente vêm de `dividas_e_parcelas`.
+- **Conteúdo:** texto original em pt-BR, educativo e geral. Cita a norma
+  pelo número (ex.: Resolução CMN 4.549/2017) e não copia o texto legal.
+  Sem dado de cliente, sem recomendação individual.
+- **Índice:** `mcp_server/bussola_mcp/rag/indice/` (versionado, gerado
+  offline por `data/rag/indexar.py`): `trechos.jsonl` (um `TrechoCorpus` por
+  linha), `embeddings.npy` (float32, uma linha por trecho, na mesma ordem) e
+  `manifesto.json` (`modelo_embedding`, `dimensao`, `qtd_trechos`,
+  `hash_corpus`, `gerado_em`). O MCP carrega o índice em memória no
+  startup, sem BigQuery.
 
 **Simulação** (`dominio/simulacao.py`, 001). Funções puras, sem I/O:
 
@@ -233,6 +259,11 @@ só validam a entrada, chamam métricas/simulação e montam o envelope.
 
 O agente sobrescreve os dois a partir do `session.state` (§6). Valores
 enviados pelo modelo são ignorados.
+
+**Validação:** faixas, UUID e regras de entrada são verificadas **dentro**
+da ferramenta, pelos modelos `Entrada*` de `contratos.py`, e uma falha
+devolve o envelope `ENTRADA_INVALIDA` (não é erro de protocolo). A mensagem
+cita só os nomes dos campos inválidos, nunca o valor recebido (Q-10 do 000).
 
 **Envelope de sucesso:**
 
@@ -271,14 +302,44 @@ Códigos de erro:
 | `dividas_e_parcelas` | P0 | — | `parcelas_ativas[{descr, parcela_atual, parcela_total, valor, meses_restantes}], juros_pagos_media, comprometimento_renda_pct` |
 | `simular_objetivo` | P0 | `valor_alvo > 0` e **um** entre `prazo_meses` (1–360) ou `aporte_mensal > 0`; `usar_saldo_atual: bool = false` | `modo ("prazo" \| "aporte"), valor_alvo, aporte_mensal, prazo_meses, viavel, folga_mensal, premissas{…}` |
 | `comparar_cenarios` | P0 | `valor_alvo > 0`, `prazo_meses` (1–360) | `cenarios[{nome, pct_capacidade, aporte_mensal, prazo_meses, viavel, cortes_sugeridos[{macro, micro, valor_mensal}], trade_offs[str]}], regras{…}` |
-| `buscar_contexto_financeiro` | P0 | `pergunta: str` (≤ 500 caracteres), `k: int = 5` (1–10) | `trechos[{doc_id, tipo, anomes, texto, score, origem{id_usuario, anomes, categoria}}]` |
+| `buscar_contexto_financeiro` | P0 | `pergunta: str` (≤ 500 caracteres), `k: int = 5` (1–10), `tema: str \| None = None` (`norma_bacen` \| `credito` \| `boas_praticas`) | `trechos[{doc_id, trecho_id, titulo, tema, texto, fonte{nome, referencia, url}, score}]` |
 | `resumo_mes` | P1 | `anomes` (≤ `ate_anomes`) | `anomes, renda, gasto, sobra, gastos_macro[{macro, total}]` (usado pelo 006) |
 | `referencia_coorte` | P1 | `categoria` (macro) | `faixa_renda, macro, media, mediana, qtd_usuarios` |
 
 - `trade_offs` são frases geradas por regra determinística (ex.: "exige
   reduzir R$ 250/mês em Restaurantes"). Não são geradas por LLM.
+- **`buscar_contexto_financeiro`** responde com o corpus de conhecimento
+  (§4), igual para qualquer cliente (Q-17 do 000). `id_usuario` e
+  `ate_anomes` seguem obrigatórios e validados, mas não filtram o corpus.
+  Avisos:
+  - sempre `"Conteúdo educativo e geral, não é recomendação individual.
+    Confira a norma em vigor no site do Banco Central."`;
+  - com lista vazia, também `"Nenhum trecho da base de conhecimento
+    responde a esta pergunta."`.
 - Nenhuma ferramenta aceita SQL nem devolve SQL, nomes de projeto ou
   credenciais. `fonte.tabelas` traz só `dataset.tabela`.
+- **`modo` de `simular_objetivo`** indica o que a entrada informou (Q-06 do
+  000):
+  - `"prazo"`: a entrada trouxe `prazo_meses`, e a ferramenta calcula
+    `aporte_mensal`;
+  - `"aporte"`: a entrada trouxe `aporte_mensal`, e a ferramenta calcula
+    `prazo_meses`.
+
+  Nos dois casos, `aporte_mensal` e `prazo_meses` vêm preenchidos.
+- **`fonte.tabelas` por ferramenta** (`contratos.TABELAS_FERRAMENTA`, Q-07
+  do 000):
+
+  | Ferramenta | `fonte.tabelas` |
+  |---|---|
+  | `perfil_financeiro` | `bussola_dados.perfil_mensal`, `bussola_dados.entradas_categoria` |
+  | `capacidade_poupanca` | `bussola_dados.perfil_mensal` |
+  | `oportunidades_corte` | `bussola_dados.gastos_categoria`, `bussola_dados.categorias` |
+  | `dividas_e_parcelas` | `bussola_dados.parcelas`, `bussola_dados.perfil_mensal` |
+  | `simular_objetivo` | `bussola_dados.perfil_mensal` |
+  | `comparar_cenarios` | `bussola_dados.perfil_mensal`, `bussola_dados.gastos_categoria`, `bussola_dados.categorias` |
+  | `buscar_contexto_financeiro` | nenhuma (`[]`): corpus no repositório |
+  | `resumo_mes` | `bussola_dados.perfil_mensal`, `bussola_dados.gastos_categoria` |
+  | `referencia_coorte` | `bussola_dados.referencia_coorte` |
 
 ## §6 Agente (serviço `bussola-agent`)
 
@@ -304,6 +365,10 @@ Códigos de erro:
 - A cadeia roda em ordem crescente, e o primeiro retorno não nulo interrompe
   a execução.
 - O `agent.py` (004) só instala os quatro callbacks agregados.
+- Os agregados são `async` e recebem os argumentos do ADK por palavra-chave.
+  Cada função registrada pode ser sync ou async. Empates de `ordem` seguem a
+  ordem de registro, e uma fase inválida gera `ValueError`.
+- `limpar()` esvazia os registros e existe só para testes (Q-09 do 000).
 
 Ordens reservadas:
 
@@ -352,10 +417,16 @@ def registrar_instrucao(ordem: int, texto: str) -> None: ...   # trecho do promp
 def ferramentas() -> list[Callable]: ...
 def instrucoes() -> str: ...                                    # concatenadas por ordem
 def carregar_extensoes() -> None: ...
+def ferramentas_sensiveis() -> set[str]: ...                    # nomes com sensivel=True (Q-09)
+def limpar() -> None: ...                                       # só testes (Q-09)
 ```
 
 - `carregar_extensoes()` importa `bussola_agent.governanca` e
-  `bussola_agent.acompanhamento` quando existirem e ignora `ImportError`.
+  `bussola_agent.acompanhamento` quando existirem. Um pacote ausente
+  (`importlib.util.find_spec` devolve `None`) é pulado; um pacote presente
+  com erro de import **propaga** o erro, para não esconder falhas do 005/006
+  (Q-04 do 000).
+- Registrar duas ferramentas com o mesmo nome gera `ValueError`.
 - O `__init__.py` de cada pacote registra suas ferramentas, instruções e
   callbacks.
 - O `agent.py` chama `carregar_extensoes()` e depois monta o
@@ -399,29 +470,40 @@ class RegistroApp(Protocol):
 - Cria o `MCPToolset` com `StreamableHTTPConnectionParams(url=MCP_URL)`.
 - Com `MCP_USE_OIDC=TRUE`, adiciona o header `Authorization: Bearer <ID token>`
   com `audience` = URL base do `bussola-mcp`.
+- A SA de runtime do agente precisa de `roles/run.invoker` no serviço
+  `bussola-mcp` (nível do serviço, com confirmação humana; Q-16 do 000).
 - `async def chamar_ferramenta(nome: str, args: dict, state: dict) -> dict`
   chama uma ferramenta MCP diretamente, sem passar pelo LLM. Aplica o mesmo
   escopo do callback do 004, forçando `id_usuario` e `ate_anomes` a partir
   do `state`. O 006 usa essa chamada para `resumo_mes` e `simular_objetivo`.
+- Acréscimos do 000 (Q-09):
+  - `criar_toolset(url=None, usar_oidc=None, tool_filter=None) -> McpToolset`
+    lê `MCP_URL` e `MCP_USE_OIDC` quando os argumentos são `None`;
+  - `aplicar_escopo(args, state) -> dict` devolve uma cópia de `args` com
+    `id_usuario` e `ate_anomes` do `state`;
+  - `chamar_ferramenta(nome, args, state, url=None, usar_oidc=None)`: uma
+    falha de transporte devolve o envelope `INDISPONIVEL` em vez de levantar
+    exceção.
 
 ## §7 Variáveis de ambiente (`contracts/env.example`)
 
 | Variável | Serviço | Valor padrão / exemplo |
 |---|---|---|
 | `GOOGLE_CLOUD_PROJECT` | ambos | `batalha-time-07-lkbv` |
-| `GOOGLE_CLOUD_LOCATION` | ambos | `us-central1` |
+| `GOOGLE_CLOUD_LOCATION` | ambos | `us-central1` (BigQuery, embedding); no agente, vem de `BUSSOLA_LOCAL_MODELO` |
 | `GOOGLE_GENAI_USE_VERTEXAI` | agent, rag | `TRUE`; `FALSE` no Plano B |
 | `GOOGLE_API_KEY` | agent, rag | só no Plano B; **nunca** versionar |
 | `BUSSOLA_MODEL` | agent | ID do Gemini Flash validado no 000 |
+| `BUSSOLA_LOCAL_MODELO` | agent | `global`: `GOOGLE_CLOUD_LOCATION` do agente (local e deploy); o Flash validado só responde em `global` (Q-15 do 000) |
 | `EMBEDDING_MODEL` | mcp, rag | ID validado no 000 |
 | `MCP_URL` | agent | `http://localhost:8080/mcp` |
 | `MCP_USE_OIDC` | agent | `FALSE` local, `TRUE` no Cloud Run |
 | `MODEL_ARMOR_TEMPLATE` | agent | vazio = fallback de callbacks |
 | `ANCHOR_USER_ID` | agent | `36a21505-d6d4-42d3-b319-d51a133c7269` |
 | `REPLAY_START_ANOMES` | agent | `202506` |
-| `BQ_DATASET_DADOS` / `BQ_DATASET_RAG` / `BQ_DATASET_APP` | mcp / mcp / agent | `bussola_dados` / `bussola_rag` / `bussola_app` (testes: `bussola_app_dev`) |
+| `BQ_DATASET_DADOS` / `BQ_DATASET_APP` | mcp / agent | `bussola_dados` / `bussola_app` (testes: `bussola_app_dev`) |
 | `BQ_MODO_LEITURA` | mcp | `query` \| `memoria` |
-| `RAG_BACKEND` | mcp | `bq` \| `numpy` |
+| `RAG_BACKEND` | mcp | `lexico` (padrão, sem GCP) \| `numpy` (embeddings, Plano A) |
 | `BUSSOLA_FAKES` | ambos | `TRUE` em testes e desenvolvimento isolado |
 | `LOG_LEVEL` | ambos | `INFO` |
 | `PORT` | ambos | `8080` (Cloud Run) |
@@ -438,7 +520,9 @@ prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
 - `bussola_dados/<tabela>.json`: linhas das tabelas do §3 para os 2
   usuários, com 12 meses.
 - `ferramentas/<ferramenta>__ate_202506.json` e `…__ate_202512.json`:
-  envelopes esperados de cada ferramenta P0 para o usuário-âncora (golden).
+  envelopes esperados de cada ferramenta P0 para o usuário-âncora (golden),
+  exceto `buscar_contexto_financeiro`, que não tem golden
+  (`contratos.FERRAMENTAS_GOLDEN`, Q-17 do 000).
 - `ferramentas/resumo_mes__<AAAAMM>.json`: um envelope por mês, de 202501 a
   202512, para o âncora. O 006 usa esses arquivos antes do 003 real.
 - O MCP mock do 000 serve as ferramentas P0 e também `resumo_mes`, a partir
@@ -446,8 +530,28 @@ prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
   - `ate_anomes < 202512` recebe o golden `__ate_202506`, com um aviso de
     mock;
   - `ate_anomes = 202512` recebe o golden `__ate_202512`.
-- `rag/trechos_exemplo.json`: trechos no formato de
-  `buscar_contexto_financeiro`, usados pelo fake do buscador.
+  - usuário de `usuarios.json` que não é o âncora (o controle) recebe
+    `DADOS_INSUFICIENTES` ("O mock só tem respostas do cliente âncora."). O
+    mock nunca devolve o golden de outro cliente (Q-01 do 000);
+  - `simular_objetivo` e `comparar_cenarios` têm golden só para a entrada
+    canônica `valor_alvo=30000`, `prazo_meses=24`. O mock serve esse golden
+    para qualquer entrada válida, com o aviso "Resposta de exemplo do mock,
+    calculada para valor_alvo=30000 e prazo_meses=24." (Q-03 do 000);
+  - o golden de `oportunidades_corte` guarda até 10 itens, e o mock corta
+    a lista em `top_n`;
+  - arquivo de fixture ausente devolve `INDISPONIVEL` ("Dados de exemplo
+    indisponíveis.");
+  - `referencia_coorte` (P1) não é servida pelo mock.
+  - `buscar_contexto_financeiro` roda o buscador fake sobre
+    `rag/trechos_exemplo.json` para qualquer usuário de `usuarios.json`,
+    inclusive o controle, e para qualquer corte. Corpus ausente ou inválido
+    devolve `INDISPONIVEL`.
+- `rag/trechos_exemplo.json`: amostra curada à mão do corpus de
+  conhecimento (lista de `TrechoCorpus`, cobrindo os três temas). Não é
+  gerada por `gerar_fixtures.py`, que também não a apaga.
+- Formato: cada arquivo de tabela, `usuarios.json` e `rag/trechos_exemplo.json`
+  é uma **lista JSON** de objetos; cada golden é um envelope JSON (Q-11 do
+  000).
 
 **Valores de referência do âncora** (média de 2025, `ate_anomes = 202512`,
 tolerância de 1%):
@@ -478,3 +582,8 @@ tolerância de 1%):
   - `erro_codigo`
 - **Nunca logar:** prompt completo, texto de lançamentos, chaves ou tokens.
   O `id_usuario` sintético pode ser logado.
+- **Lista de permitidos:** o logger emite só `severity`, `message`,
+  `timestamp`, os campos acima e `id_usuario`. Outros campos extras são
+  descartados.
+- **Exceções:** registradas só no campo `excecao`, com o **nome da classe**,
+  sem traceback nem mensagem (Q-05 do 000).

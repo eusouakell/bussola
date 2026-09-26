@@ -90,9 +90,11 @@ números **e** a origem.
   - `periodo`: `inicio` = primeiro mês considerado, `fim` =
     `ate_anomes`.
 - **`avisos`:** repassa os avisos determinísticos das métricas.
-- **Defesa em profundidade no RAG:** a ferramenta descarta qualquer trecho
-  cujo `origem.id_usuario` seja diferente do `id_usuario` pedido, exceto
-  `tipo = 'coorte'`, e registra um aviso no log.
+- **RAG sem dado de cliente (Q-17 do 000):** o buscador não recebe
+  `id_usuario` nem `ate_anomes`; a ferramenta valida os dois (escopo e
+  corte da sessão), repassa `pergunta`, `k` e `tema` e devolve
+  `fonte.tabelas = []`. Avisos: `AVISO_CONHECIMENTO` sempre e
+  `AVISO_SEM_TRECHOS` quando a lista vem vazia.
 - **Logs** conforme `contratos.md` §9: `ferramenta`, `latencia_ms`,
   `erro_codigo` e `ate_anomes`. **Nunca** logar `pergunta` nem textos de
   lançamentos.
@@ -124,8 +126,10 @@ números **e** a origem.
       conforme §5.
 - [ ] Validação de entrada com os códigos da §3.3. Há pelo menos 1 teste por
       código e por ferramenta aplicável.
-- [ ] Testes de contrato por ferramenta: com fakes, o envelope bate com os
-      golden `__ate_202506` e `__ate_202512`.
+- [ ] Testes de contrato por ferramenta de `FERRAMENTAS_GOLDEN`: com
+      fakes, o envelope bate com os golden `__ate_202506` e `__ate_202512`.
+      `buscar_contexto_financeiro` não tem golden (Q-17 do 000) e é testada
+      sobre o corpus curado.
 - [ ] Teste de schema via `fastmcp.Client`: `list_tools` expõe os
       parâmetros e tipos de §5.
 - [ ] Escopo: chamadas com o id do controle nunca retornam linhas ou trechos
@@ -146,8 +150,9 @@ números **e** a origem.
   `fonte.periodo.fim = 202506`.
 - `buscar_contexto_financeiro` com `pergunta` de 501 caracteres:
   `ENTRADA_INVALIDA`.
-- Buscador fake devolvendo, de propósito, um trecho de outro usuário: o
-  trecho é descartado.
+- `buscar_contexto_financeiro` com `tema="politica"`: `ENTRADA_INVALIDA`.
+- `buscar_contexto_financeiro` sem trecho relevante: `trechos = []` e
+  `AVISO_SEM_TRECHOS`.
 - BigQuery indisponível (mock que lança exceção): `INDISPONIVEL`, e o log
   contém `erro_codigo`.
 
@@ -170,8 +175,9 @@ números **e** a origem.
 
 ## 10. Questões em aberto
 
-- **Q6 do mestre:** `VECTOR_SEARCH` ou RAG Engine. Para este ciclo é
-  transparente, via `BuscadorContexto`.
+- **Q6 do mestre:** respondida pela Q-17 do 000 (índice no repositório,
+  busca em memória). Para este ciclo é transparente, via
+  `BuscadorContexto`.
 - Nome e prazo exatos da faixa de renda em `referencia_coorte` (P1) vêm do
   001.
 
@@ -181,6 +187,6 @@ números **e** a origem.
 |---|---|---|
 | Ferramentas mínimas, read-only, números e origem, validação e testes de contrato | Mestre §10 F3 | EXPLICIT |
 | Envelope, códigos de erro e `resumo_mes` | `contratos.md` §5 | EXPLICIT |
-| Filtro defensivo de trechos no RAG | Mestre §9 e §11 | INFERRED |
+| RAG sem dado de cliente; avisos de conhecimento geral | Q-17 do 000 | EXPLICIT |
 | Limite de 360 meses para prazo plausível | `contratos.md` §5 | INFERRED |
 | Backend vetorial final | Mestre §20, Q6 | UNRESOLVED |

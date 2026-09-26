@@ -25,3 +25,8 @@ build/
 .DS_Store
 .idea/
 .vscode/
+
+# ADK / ferramentas locais (ciclo 000)
+.adk/
+*.db
+.uv-cache/

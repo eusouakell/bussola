@@ -1,0 +1,4178 @@
+[
+  {
+    "anomes": 202501,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 32.57
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 25.07
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 39.57
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 35.85
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "cart credito ifd deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 25.3
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 88.97
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 50.59
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 36.38
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 75.61
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 117.82
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 38.07
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 52.01
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 2049.19
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 1141.65
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 168.65
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 100.72
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs deliv rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 23.82
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 85.46
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1624.54
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 61.05
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 21.08
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.39
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "saque atm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "valor": 815.23
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 34.84
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 38.92
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 30.45
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 10.43
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "cart credito compra div",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "valor": 4.83
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 25.08
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "cart credito rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 16.16
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 91.06
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 75.11
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 113.97
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 39.11
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 182.47
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 172.76
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 71.85
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs mercado",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 95.14
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 81.93
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1648.15
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 62.94
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 19.24
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.89
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 34.44
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 34.51
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 35.98
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 42.88
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 56.03
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "cart credito ifd*entrega",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 45.12
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "cart credito rest local",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 15.99
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 73.98
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 112.7
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 40.31
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 29.02
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "debito conta tar serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 26.0
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 78.11
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 414.28
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 172.88
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 32.26
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs rest local",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 5.65
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 84.5
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1676.41
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 58.5
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "saque banco24h",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "valor": 268.55
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 7.11
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 12.03
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 19.13
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 34.68
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "cart credito ifd deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 52.2
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 15.92
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 73.16
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 113.21
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 39.99
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 91.36
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 169.71
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 44.48
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs deliv sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 86.95
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 84.52
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1664.78
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 146.58
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 58.54
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "saque banco24h",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "valor": 243.88
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 48.46
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 7.24
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 48.86
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 48.2
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 294.5
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 94.56
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 73.57
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 116.88
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 38.65
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 29.63
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "debito conta tar serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 54.75
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 179.09
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 330.44
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 169.14
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 61.37
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs deliv sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 52.5
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 85.21
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1677.31
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 146.58
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 59.03
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 25.98
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 28.8
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 5.69
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 43.44
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito compra div",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "valor": 13.17
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 24.02
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 17.39
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 73.89
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 111.8
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 38.86
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 70.15
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "debito conta tar serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 61.97
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 417.49
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 685.04
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 172.52
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 33.22
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs deliv rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 45.86
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 82.42
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1607.59
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 146.58
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 63.23
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 20.15
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 58.58
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "saque atm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "valor": 254.92
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 9.93
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 7.39
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 13.37
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 37.27
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 93.46
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 35.99
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 32.94
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 91.39
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 73.92
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 114.14
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 38.97
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 39.44
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 451.49
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 525.13
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 173.79
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 69.55
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs deliv rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 175.68
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs mercado",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 15.73
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 85.46
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1624.85
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 146.58
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 263.79
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 5.91
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 56.81
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 41.29
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 17.11
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 44.76
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 19.07
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 260.7
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito ifd*entrega",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 77.79
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito loja mov",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 70.59
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 209.82
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 32.74
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 75.59
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 115.04
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 39.0
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 58.71
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 163.03
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 630.38
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 167.99
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 14.95
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs rest local",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 31.42
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 80.8
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1684.84
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 146.58
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 60.5
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.62
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 15.27
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 48.77
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 9.58
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 26.03
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito app deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 46.01
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito compra div",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "valor": 190.51
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 230.91
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito loja mov",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 70.59
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 198.04
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito rest local",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 15.68
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 30.49
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 76.16
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 113.49
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 38.64
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 51.49
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 177.63
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 1130.92
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 175.24
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 61.94
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs deliv rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 165.71
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 85.35
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1642.68
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 295.95
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 19.03
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 248.52
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.83
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 26.36
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 47.24
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 21.03
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 11.37
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "cart credito app deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 84.06
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "cart credito ifd deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 81.6
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "cart credito loja mov",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 70.59
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 76.73
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 112.43
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 40.18
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 159.43
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "int iptu",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 454.8
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 175.18
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix qrs rest local",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 71.14
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 85.4
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1649.98
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 149.37
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 20.56
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.46
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 21.3
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 8.2
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 27.59
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 25.21
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito app deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 91.27
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito compra div",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "valor": 32.26
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 94.28
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito loja mov",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 70.59
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito rest local",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 33.72
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 98.29
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 75.72
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 115.4
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 38.6
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 29.24
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pag fatura cartao parcial",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 788.81
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 167.17
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 34.42
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs deliv rest",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 170.54
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs mercado",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 51.98
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 81.08
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1678.45
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 149.37
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 61.7
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 1952.95
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.52
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin apple tv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 45.87
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 38.96
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 27.59
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin netflix",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 37.09
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito compra div",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Outros gastos",
+    "micro": "Diversos",
+    "valor": 31.04
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito ifd*deliv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 46.09
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito ifd*entrega",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 25.06
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito loja mov",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 70.59
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 70.9
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 5.82
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "da net serv",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 72.75
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "deb gas",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 114.06
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 39.35
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "debito conta juros lim",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 104.13
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix energ",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 168.37
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs deliv sabor",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Delivery",
+    "micro": "Delivery",
+    "valor": 86.38
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 81.02
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix transf alug",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1614.01
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix transf decor casa",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao",
+    "valor": 149.37
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 63.96
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 5.58
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "recarga cel",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 57.2
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "saque atm",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "valor": 236.78
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "saque banco24h",
+    "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
+    "macro": "Saque",
+    "micro": "Saque",
+    "valor": 75.25
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 48.83
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 22.29
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 37.36
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 27.92
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1056.16
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 97.52
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 95.45
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "da rec fed",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos",
+    "valor": 284.6
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 170.01
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 30.34
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 100.57
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 1991.93
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pag fat cartao parcial",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 795.84
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 14.47
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 83.26
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 139.77
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 93.87
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs mercado",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 87.64
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 128.15
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 19.68
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix transf serv limp",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Empregados domesticos",
+    "valor": 132.36
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 264.32
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 28.09
+  },
+  {
+    "anomes": 202501,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 37.06
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 11.05
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 14.34
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 36.55
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 20.94
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1074.12
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 44.9
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 31.96
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "da rec fed",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos",
+    "valor": 69.46
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 164.13
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 30.83
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 88.25
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 81.11
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pag fat cartao minimo",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 111.25
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 86.08
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 174.85
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 94.45
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 123.2
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 28.69
+  },
+  {
+    "anomes": 202502,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 35.8
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 16.77
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 10.71
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 32.19
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 29.04
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1100.43
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 129.26
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "cart credito lanchonete",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 16.77
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 34.51
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 165.38
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 30.05
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "debito conta tar banc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 65.78
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 161.6
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pag fat cartao integral",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 850.98
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 83.93
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 46.71
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 95.67
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 128.15
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 247.62
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix transf serv limp",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Empregados domesticos",
+    "valor": 116.74
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 289.05
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 29.38
+  },
+  {
+    "anomes": 202503,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 37.5
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 19.91
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 28.87
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 34.43
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 19.9
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1078.22
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 140.72
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 165.72
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 31.05
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 147.61
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "debito conta tar banc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 0.77
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 169.91
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pag fat cartao minimo",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 186.07
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 30.39
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 85.21
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 292.64
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 92.62
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 123.27
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "pix transf serv limp",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Empregados domesticos",
+    "valor": 188.94
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 28.06
+  },
+  {
+    "anomes": 202504,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 36.91
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 20.14
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 6.01
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 37.3
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 42.91
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1060.2
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 52.18
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 72.62
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 209.59
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 165.31
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 31.09
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "debito conta tar banc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 29.28
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 185.97
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pag fat cartao integral",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 979.43
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 15.12
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 85.42
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 56.75
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 92.03
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 124.31
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 28.88
+  },
+  {
+    "anomes": 202505,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 37.34
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 21.13
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 44.86
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 40.9
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 23.77
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1107.45
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 52.18
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 94.56
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 63.03
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 61.15
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 170.7
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 31.11
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 2256.42
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pag fat cartao integral",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 831.68
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 83.61
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 56.54
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 93.1
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 127.1
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 60.29
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 66.67
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 27.85
+  },
+  {
+    "anomes": 202506,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 36.2
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 37.39
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 40.3
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 5.71
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 25.15
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1093.53
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 52.18
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 98.32
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito lanchonete",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 30.85
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 235.02
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 37.62
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 172.85
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 29.79
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 123.73
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 179.4
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pag fat cartao minimo",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 155.96
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 30.26
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 82.9
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 56.54
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 97.09
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 128.19
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 28.49
+  },
+  {
+    "anomes": 202507,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 35.68
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 10.45
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 20.56
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 30.44
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 18.16
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1072.65
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 7.28
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 89.65
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 168.21
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 31.43
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 113.4
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 79.16
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pag fat cartao parcial",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 1056.12
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 15.08
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 85.47
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 66.01
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 92.38
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs mercado",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 5.75
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 126.28
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 19.29
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 138.22
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 27.85
+  },
+  {
+    "anomes": 202508,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 36.53
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 9.88
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 41.66
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 11.77
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 23.98
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1057.92
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 49.29
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 35.05
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 62.78
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 34.76
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 164.04
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 30.0
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 18.69
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 155.31
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pag fat cartao parcial",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 473.36
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 83.81
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 66.01
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 96.75
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs mercado",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 32.04
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 126.01
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 29.33
+  },
+  {
+    "anomes": 202509,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 37.18
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 17.14
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 14.87
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 36.27
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 33.43
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1059.41
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 49.29
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 226.81
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 170.2
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 31.04
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "debito conta tar banc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras",
+    "valor": 25.38
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "iptu parc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "IPTU",
+    "valor": 93.17
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pag fat cartao integral",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 621.76
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 83.85
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 100.84
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 93.05
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 121.13
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 271.93
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 28.61
+  },
+  {
+    "anomes": 202510,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 37.42
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 21.2
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 7.05
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 16.83
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 42.29
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1082.63
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 157.71
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 39.51
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 61.81
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 34.71
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 164.7
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 30.29
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 18.13
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pag fat cartao parcial",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 505.0
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 83.31
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 50.11
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 93.46
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 125.32
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 241.93
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 29.22
+  },
+  {
+    "anomes": 202511,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 35.5
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin amazon prime",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 40.92
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin canva pro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 7.35
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin deezer prem",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 21.38
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "assin hbo max",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Assinaturas",
+    "micro": "Assinaturas",
+    "valor": 24.16
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "bol alug",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel",
+    "valor": 1081.14
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito compra mktplace",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 69.27
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 91.81
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito lanchonete",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 33.12
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito rest grill",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 32.69
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito rest sabor",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 98.09
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "cart credito superm",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Mercado",
+    "micro": "Mercado",
+    "valor": 102.66
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "da rec fed",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos",
+    "valor": 634.71
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "deb energ",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Energia eletrica",
+    "valor": 168.48
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "debito conta anuid cartao",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico",
+    "valor": 31.06
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "debito conta juros saldo dev",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos",
+    "valor": 115.79
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pag fat cartao parcial",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura",
+    "valor": 1088.75
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs almoco rest",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Restaurantes",
+    "micro": "Restaurantes",
+    "valor": 64.11
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs claro",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone",
+    "valor": 85.67
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs compra onl",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Lojas e sites",
+    "micro": "Compras",
+    "valor": 40.35
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs distrib gas",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Gas",
+    "valor": 94.63
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix qrs saneam",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Agua e esgoto",
+    "valor": 124.19
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix transf pess",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 257.8
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "pix transf terc",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias",
+    "valor": 282.22
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "plano cel",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Celular",
+    "valor": 27.91
+  },
+  {
+    "anomes": 202512,
+    "descr_norm": "seg resid",
+    "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
+    "macro": "Casa",
+    "micro": "Seguro residencial",
+    "valor": 36.04
+  }
+]

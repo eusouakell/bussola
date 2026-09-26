@@ -1,0 +1,61 @@
+{
+  "avisos": [
+    "Saldo ficou negativo neste mês.",
+    "Gasto superou a renda neste mês."
+  ],
+  "dados": {
+    "anomes": 202501,
+    "gasto": 6094.28,
+    "gastos_macro": [
+      {
+        "macro": "Casa",
+        "total": 3720.89
+      },
+      {
+        "macro": "Produtos financeiros",
+        "total": 926.75
+      },
+      {
+        "macro": "Outros gastos",
+        "total": 284.6
+      },
+      {
+        "macro": "Transferencias diversas",
+        "total": 284.0
+      },
+      {
+        "macro": "Restaurantes",
+        "total": 243.88
+      },
+      {
+        "macro": "Lojas e sites",
+        "total": 237.29
+      },
+      {
+        "macro": "Mercado",
+        "total": 223.3
+      },
+      {
+        "macro": "Assinaturas",
+        "total": 136.4
+      },
+      {
+        "macro": "Lazer",
+        "total": 37.17
+      }
+    ],
+    "renda": 6013.61,
+    "sobra": -80.67
+  },
+  "fonte": {
+    "ferramenta": "resumo_mes",
+    "periodo": {
+      "fim": 202501,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.gastos_categoria"
+    ]
+  }
+}

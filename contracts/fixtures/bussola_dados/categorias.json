@@ -1,0 +1,590 @@
+[
+  {
+    "corte_max_pct": 0.5,
+    "discricionaria": true,
+    "macro": "Assinaturas",
+    "micro": "Assinaturas"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Beneficios",
+    "micro": "Beneficio INSS"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Boletos diversos",
+    "micro": "Boleto"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Agua e esgoto"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Celular"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Condominio"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Empregados domesticos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Energia eletrica"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Gas"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "IPTU"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Jardinagem"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Lavanderia"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Outras contas"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Outras despesas de moradia"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Pagamento de aluguel"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "Seguro residencial"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Casa",
+    "micro": "TV Internet celular e telefone"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Cuidados pessoais",
+    "micro": "Outros cuidados pessoais"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Cuidados pessoais",
+    "micro": "Outros esportes"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Cuidados pessoais",
+    "micro": "Produtos de beleza"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Cuidados pessoais",
+    "micro": "Salao de beleza ou barbearia"
+  },
+  {
+    "corte_max_pct": 0.5,
+    "discricionaria": true,
+    "macro": "Delivery",
+    "micro": "Delivery"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Educacao",
+    "micro": "Curso de idiomas"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Educacao",
+    "micro": "Entidades de classe"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Educacao",
+    "micro": "Mensalidade escolar"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Educacao",
+    "micro": "Outras despesas de educacao"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Emprestimos e financiamentos",
+    "micro": "Emprestimos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Emprestimos e financiamentos",
+    "micro": "Financiamento de imovel"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Emprestimos e financiamentos",
+    "micro": "Outros emprestimos"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Associacoes e clubes"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Cinema"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Eletronicos"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Eventos e festas"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Ingresso de shows"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Livros musica e video"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Museu e teatro"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Outros entretenimentos"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lazer",
+    "micro": "Videogames"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Lojas e sites",
+    "micro": "Artigos esportivos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Lojas e sites",
+    "micro": "Brinquedos e artigos infantis"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lojas e sites",
+    "micro": "Compras"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Lojas e sites",
+    "micro": "Manutencao da casa"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Lojas e sites",
+    "micro": "Moveis e decoracao"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Lojas e sites",
+    "micro": "Vestuario e acessorios"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Mercado",
+    "micro": "Casa de Carnes"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Mercado",
+    "micro": "Feira livre"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Mercado",
+    "micro": "Mercado"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Mercado",
+    "micro": "Outros mercados"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Cheque"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Contabilidade"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Diversos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Frete e correios"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Multa por atraso"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Outras despesas com impostos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Outros gastos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Outros servicos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Pagamento de impostos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Pensao alimenticia"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Outros gastos",
+    "micro": "Publicidade"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Pets",
+    "micro": "Outros gastos de animais"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Pets",
+    "micro": "Pet shop"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Pets",
+    "micro": "Veterinario"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Posto de combustivel",
+    "micro": "Loja de conveniencia"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Posto de combustivel",
+    "micro": "Posto de combustivel"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Anuidade e pacote de servico"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Consorcio"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Juros pagos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Outras tarifas financeiras"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Outros seguros"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Pagamento de fatura"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Seguros"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Produtos financeiros",
+    "micro": "Titulo de capitalizacao"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Recebimentos diversos",
+    "micro": "Recebimentos diversos"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Rendimentos",
+    "micro": "Recebimento Aluguel"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Restaurantes",
+    "micro": "Cafeteria"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Restaurantes",
+    "micro": "Outras comidas e bebidas"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Restaurantes",
+    "micro": "Padaria"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Restaurantes",
+    "micro": "Restaurantes"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Salarios e bonificacoes",
+    "micro": "13o salario"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Salarios e bonificacoes",
+    "micro": "Bonus PLR"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Salarios e bonificacoes",
+    "micro": "Salario CLT"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Saque",
+    "micro": "Saque"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Transferencias diversas",
+    "micro": "Outras transferencias"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Transporte por app",
+    "micro": "Transporte por app"
+  },
+  {
+    "corte_max_pct": 0.2,
+    "discricionaria": true,
+    "macro": "Transporte publico",
+    "micro": "Passagem de onibus"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Transporte publico",
+    "micro": "Transporte publico"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Aluguel de carro"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Estacionamento"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Licenciamento IPVA e DPVAT"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Manutencao e reparo"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Multa"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Outros gastos com transporte"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Pedagio"
+  },
+  {
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
+    "macro": "Veiculos",
+    "micro": "Seguro de automovel"
+  },
+  {
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
+    "macro": "Viagens",
+    "micro": "Compra de moedas"
+  },
+  {
+    "corte_max_pct": 0.2,
+    "discricionaria": true,
+    "macro": "Viagens",
+    "micro": "Hospedagem"
+  },
+  {
+    "corte_max_pct": 0.2,
+    "discricionaria": true,
+    "macro": "Viagens",
+    "micro": "Outros gastos de viagem"
+  },
+  {
+    "corte_max_pct": 0.2,
+    "discricionaria": true,
+    "macro": "Viagens",
+    "micro": "Passagem aerea e taxas"
+  }
+]

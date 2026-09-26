@@ -1,0 +1,443 @@
+[
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Assinaturas",
+    "media": 97.69,
+    "mediana": 83.81,
+    "qtd_usuarios": 207
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Boletos diversos",
+    "media": 227.23,
+    "mediana": 171.54,
+    "qtd_usuarios": 73
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Casa",
+    "media": 1049.14,
+    "mediana": 920.84,
+    "qtd_usuarios": 207
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Cuidados pessoais",
+    "media": 98.49,
+    "mediana": 80.24,
+    "qtd_usuarios": 172
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Delivery",
+    "media": 561.98,
+    "mediana": 706.37,
+    "qtd_usuarios": 135
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Educacao",
+    "media": 82.65,
+    "mediana": 60.66,
+    "qtd_usuarios": 144
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Emprestimos e financiamentos",
+    "media": 133.79,
+    "mediana": 95.7,
+    "qtd_usuarios": 127
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Lazer",
+    "media": 339.3,
+    "mediana": 192.77,
+    "qtd_usuarios": 206
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Lojas e sites",
+    "media": 566.42,
+    "mediana": 541.13,
+    "qtd_usuarios": 204
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Mercado",
+    "media": 185.22,
+    "mediana": 169.57,
+    "qtd_usuarios": 207
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Outros gastos",
+    "media": 120.07,
+    "mediana": 83.92,
+    "qtd_usuarios": 204
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Pets",
+    "media": 67.38,
+    "mediana": 58.43,
+    "qtd_usuarios": 20
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Posto de combustivel",
+    "media": 48.18,
+    "mediana": 48.59,
+    "qtd_usuarios": 27
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Produtos financeiros",
+    "media": 1715.86,
+    "mediana": 1693.97,
+    "qtd_usuarios": 207
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Restaurantes",
+    "media": 323.23,
+    "mediana": 285.26,
+    "qtd_usuarios": 193
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Saque",
+    "media": 120.68,
+    "mediana": 88.06,
+    "qtd_usuarios": 87
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Transferencias diversas",
+    "media": 391.12,
+    "mediana": 358.04,
+    "qtd_usuarios": 207
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Transporte por app",
+    "media": 108.31,
+    "mediana": 139.35,
+    "qtd_usuarios": 140
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Transporte publico",
+    "media": 26.16,
+    "mediana": 17.97,
+    "qtd_usuarios": 137
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Veiculos",
+    "media": 161.34,
+    "mediana": 64.09,
+    "qtd_usuarios": 142
+  },
+  {
+    "faixa_renda": "3k_6k",
+    "macro": "Viagens",
+    "media": 238.4,
+    "mediana": 187.53,
+    "qtd_usuarios": 157
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Assinaturas",
+    "media": 86.55,
+    "mediana": 84.73,
+    "qtd_usuarios": 493
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Boletos diversos",
+    "media": 258.76,
+    "mediana": 190.96,
+    "qtd_usuarios": 211
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Casa",
+    "media": 1342.87,
+    "mediana": 1230.75,
+    "qtd_usuarios": 493
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Cuidados pessoais",
+    "media": 88.49,
+    "mediana": 69.35,
+    "qtd_usuarios": 431
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Delivery",
+    "media": 188.61,
+    "mediana": 175.87,
+    "qtd_usuarios": 214
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Educacao",
+    "media": 805.69,
+    "mediana": 850.8,
+    "qtd_usuarios": 466
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Emprestimos e financiamentos",
+    "media": 2540.37,
+    "mediana": 2681.53,
+    "qtd_usuarios": 466
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Lazer",
+    "media": 364.2,
+    "mediana": 223.47,
+    "qtd_usuarios": 490
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Lojas e sites",
+    "media": 369.43,
+    "mediana": 339.47,
+    "qtd_usuarios": 477
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Mercado",
+    "media": 265.53,
+    "mediana": 258.98,
+    "qtd_usuarios": 493
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Outros gastos",
+    "media": 133.59,
+    "mediana": 96.82,
+    "qtd_usuarios": 485
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Pets",
+    "media": 58.25,
+    "mediana": 47.73,
+    "qtd_usuarios": 78
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Posto de combustivel",
+    "media": 216.5,
+    "mediana": 218.68,
+    "qtd_usuarios": 313
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Produtos financeiros",
+    "media": 1544.48,
+    "mediana": 1506.68,
+    "qtd_usuarios": 493
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Restaurantes",
+    "media": 224.12,
+    "mediana": 192.33,
+    "qtd_usuarios": 449
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Saque",
+    "media": 126.2,
+    "mediana": 117.94,
+    "qtd_usuarios": 204
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Transferencias diversas",
+    "media": 370.73,
+    "mediana": 336.9,
+    "qtd_usuarios": 493
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Transporte por app",
+    "media": 40.08,
+    "mediana": 39.02,
+    "qtd_usuarios": 201
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Transporte publico",
+    "media": 28.41,
+    "mediana": 20.15,
+    "qtd_usuarios": 308
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Veiculos",
+    "media": 374.27,
+    "mediana": 130.58,
+    "qtd_usuarios": 415
+  },
+  {
+    "faixa_renda": "6k_10k",
+    "macro": "Viagens",
+    "media": 313.49,
+    "mediana": 219.4,
+    "qtd_usuarios": 377
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Assinaturas",
+    "media": 69.7,
+    "mediana": 70.32,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Boletos diversos",
+    "media": 272.84,
+    "mediana": 201.82,
+    "qtd_usuarios": 115
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Casa",
+    "media": 1051.54,
+    "mediana": 934.28,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Cuidados pessoais",
+    "media": 92.54,
+    "mediana": 71.36,
+    "qtd_usuarios": 256
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Delivery",
+    "media": 113.83,
+    "mediana": 109.87,
+    "qtd_usuarios": 133
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Educacao",
+    "media": 900.07,
+    "mediana": 890.7,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Emprestimos e financiamentos",
+    "media": 2930.89,
+    "mediana": 2905.17,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Lazer",
+    "media": 352.15,
+    "mediana": 204.97,
+    "qtd_usuarios": 298
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Lojas e sites",
+    "media": 382.03,
+    "mediana": 346.98,
+    "qtd_usuarios": 286
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Mercado",
+    "media": 282.72,
+    "mediana": 268.49,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Outros gastos",
+    "media": 141.86,
+    "mediana": 97.64,
+    "qtd_usuarios": 295
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Pets",
+    "media": 79.94,
+    "mediana": 65.04,
+    "qtd_usuarios": 74
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Posto de combustivel",
+    "media": 226.95,
+    "mediana": 222.42,
+    "qtd_usuarios": 251
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Produtos financeiros",
+    "media": 1839.69,
+    "mediana": 1726.31,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Restaurantes",
+    "media": 172.46,
+    "mediana": 138.24,
+    "qtd_usuarios": 266
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Saque",
+    "media": 111.36,
+    "mediana": 91.97,
+    "qtd_usuarios": 119
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Transferencias diversas",
+    "media": 365.57,
+    "mediana": 341.74,
+    "qtd_usuarios": 300
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Transporte por app",
+    "media": 38.06,
+    "mediana": 37.4,
+    "qtd_usuarios": 144
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Transporte publico",
+    "media": 30.01,
+    "mediana": 23.32,
+    "qtd_usuarios": 214
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Veiculos",
+    "media": 416.36,
+    "mediana": 149.45,
+    "qtd_usuarios": 275
+  },
+  {
+    "faixa_renda": "10k_20k",
+    "macro": "Viagens",
+    "media": 292.96,
+    "mediana": 189.36,
+    "qtd_usuarios": 223
+  }
+]

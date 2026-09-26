@@ -1,0 +1,22 @@
+{
+  "avisos": [
+    "Gasto superou a renda em 1 mês do período."
+  ],
+  "dados": {
+    "desvio_padrao": 1677.98,
+    "meses_considerados": 6,
+    "meses_negativos": 1,
+    "sobra_media": 1901.47,
+    "sobra_mediana": 1729.0
+  },
+  "fonte": {
+    "ferramenta": "capacidade_poupanca",
+    "periodo": {
+      "fim": 202506,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal"
+    ]
+  }
+}
