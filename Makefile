@@ -35,3 +35,22 @@ fixtures:
 test-bq:
 	cd mcp_server && uv run pytest -m bq; s=$$?; [ $$s -eq 0 ] || [ $$s -eq 5 ]
 	cd agent && uv run pytest -m bq; s=$$?; [ $$s -eq 0 ] || [ $$s -eq 5 ]
+
+# --- Front web (ciclo 008). Node 24 + npm; sem rede depois do web-install. ---
+.PHONY: web-install web web-lint web-test web-build
+
+web-install:
+	cd web && npm ci --no-audit --no-fund
+
+web:
+	cd web && npm run dev
+
+web-lint:
+	cd web && npm run lint
+
+web-test:
+	cd web && npm test
+
+# Inclui a varredura do bundle (segredos, SQL, projeto, UUID completo).
+web-build:
+	cd web && npm run build
