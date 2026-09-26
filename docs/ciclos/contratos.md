@@ -337,7 +337,9 @@ Ordens reservadas:
   sensível chamada sem consentimento `aceito` recebe do gate o resultado
   `{"erro": {"codigo": "CONSENTIMENTO_NECESSARIO", "mensagem": "..."}}`.
   Esse código é local do agente, não do MCP.
-- **ACOMPANHAR:** `avancar_mes()` e `status_plano()` (006).
+- **ACOMPANHAR:** `avancar_mes()` e `status_plano()` (006). Erros locais do
+  agente: `SEM_PLANO_ATIVO` (sem `plano_id` no state) e `FIM_DO_REPLAY`
+  (`ate_anomes` já em 202512).
 
 ### Extensões (`agent/bussola_agent/extensoes.py`, 000)
 
@@ -390,6 +392,7 @@ class RegistroApp(Protocol):
 - `acompanhamento_mes_avancado`
 - `desvio_detectado`
 - `rota_recalculada`
+- `plano_ajustado`
 
 ### Conexão MCP (`agent/bussola_agent/mcp_conexao.py`, 000)
 

@@ -58,4 +58,6 @@ A Bússola deve:
 - [Escopo e decisões](./docs/escopo-decisoes.md)
 - [Contexto de implementação (Spec Master)](./docs/contexto-spec-master.md)
 - [Blueprint de arquitetura](./docs/blueprint-arquitetura.md)
+- [Plano de ciclos paralelos (Spec Master)](./docs/ciclos/README.md)
+- [Contratos entre ciclos](./docs/ciclos/contratos.md)
 

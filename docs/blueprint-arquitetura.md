@@ -126,8 +126,14 @@ sequenceDiagram
 
 ## 4. Ferramentas MCP (contrato proposto)
 
+> **Contrato canônico:** [`docs/ciclos/contratos.md`](./ciclos/contratos.md)
+> §5 prevalece sobre esta tabela. O envelope final é
+> `{dados, fonte: {ferramenta, tabelas[], periodo: {inicio, fim}}, avisos[]}`
+> ou `{erro: {codigo, mensagem}}`. `resumo_mes` (P1) foi acrescentada para o
+> acompanhamento (006).
+
 Todas recebem `id_usuario` e `ate_anomes` (corte temporal), e todas devolvem
-`{dados, fonte: {tabela, periodo}, avisos}`.
+`{dados, fonte, avisos}`.
 
 | Ferramenta | Entrada adicional | Saída |
 |---|---|---|
@@ -139,6 +145,7 @@ Todas recebem `id_usuario` e `ate_anomes` (corte temporal), e todas devolvem
 | `comparar_cenarios` | `valor_alvo`, `prazo_meses` | conservador/equilibrado/acelerado com aporte, prazo e cortes |
 | `buscar_contexto_financeiro` | `pergunta`, `k` | trechos do corpus do próprio cliente com origem |
 | `referencia_coorte` (P1) | `categoria` | média/mediana de clientes com perfil parecido (agregado) |
+| `resumo_mes` (P1) | `anomes` | renda, gasto por macro e sobra de um mês (≤ `ate_anomes`), para o acompanhamento |
 
 ## 5. Dados (esquemas propostos)
 
@@ -180,7 +187,7 @@ bussola_rag.documentos  ── VECTOR_SEARCH / numpy (F2)
 ## 7. Build e deploy
 
 ```text
-Antigravity (Santo Digital) ── código + fases Spec Kit
+Claude Code (Spec Master + Spec Kit) ── código; Antigravity opera o produto pronto
       │ docker buildx --platform linux/amd64
       ▼
 us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes/{bussola-mcp,bussola-agent}:<tag>
@@ -196,7 +203,7 @@ caminho padrão porque exigem bucket de staging (o time não tem Storage Admin).
 
 | Quem | Como autentica | Permissões necessárias | Status |
 |---|---|---|---|
-| Integrante (dev local / Antigravity) | ADC (`gcloud auth application-default login`) | Já possui: BigQuery, Agent Platform, Discovery Engine, Run, AR | OK |
+| Integrante (dev local no Claude Code / operação no Antigravity) | ADC (`gcloud auth application-default login`) | Já possui: BigQuery, Agent Platform, Discovery Engine, Run, AR | OK |
 | SA de runtime (`bussola-runtime` ou default compute) | Identidade do Cloud Run | `aiplatform.user`, `bigquery.jobUser` + `dataViewer`, `secretmanager.secretAccessor`, `modelarmor.user`, `logging.logWriter` | **Pedido ao owner** |
 | Plano B da SA | — | `dataViewer`/`dataEditor` **por dataset** (o time concede); Gemini via API key em env; leitura via `list_rows` e escrita via streaming insert | Viável hoje |
 | `bussola-agent` → `bussola-mcp` | Token OIDC (service-to-service) | `run.invoker` no serviço MCP (o time concede, pois é Cloud Run Admin) | Viável hoje |

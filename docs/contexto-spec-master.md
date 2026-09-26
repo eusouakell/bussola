@@ -6,6 +6,11 @@
 > roadmap de implementação em **contexto acelerado** (hackathon).
 > Onde este arquivo diz "recomendação", trata-se de decisão técnica proposta,
 > ainda não ratificada pelo time — ver §20.
+>
+> **Execução paralela:** este arquivo é a referência de produto. Os runs do
+> Spec Master são disparados **por ciclo**, com os arquivos de
+> [`docs/ciclos/`](./ciclos/README.md) (um por feature, com contratos
+> congelados em [`docs/ciclos/contratos.md`](./ciclos/contratos.md)).
 
 ---
 
@@ -457,24 +462,46 @@ conversacional para a demo.
 
 ## §14 Ambiente de desenvolvimento e operação
 
-- **Operação do produto via Google Antigravity (provisionado pela Santo
-  Digital).** O desenvolvimento assistido por agentes, a execução das fases
-  do Spec Kit e a operação da PoC acontecem no Antigravity.
-- O Spec Master tem adaptador para Antigravity (`agy`). O entrypoint é o
-  agente customizado `.agents/agents/spec-master/agent.md`, gerado por
-  `init.sh link <projeto>`, e é selecionado via `/agents`. Fases do Spec Kit
-  instaladas para Antigravity (`speckit-<fase>`).
+- **Desenvolvimento no Claude Code.** O Spec Master (engine em
+  `~/.spec-master-engine`, instalado via `init.sh`) e as fases do Spec Kit
+  (`specify init --here --integration claude --script sh`) rodam no Claude
+  Code. Cada ciclo é disparado com `/spec-master docs/ciclos/NNN-....md`,
+  numa worktree e branch próprias. Passo a passo em
+  [`docs/ciclos/README.md`](./ciclos/README.md) §6.
+- **Operação no Google Antigravity (provisionado pela Santo Digital).** O
+  Antigravity opera o produto **pronto**: deploy de imagens já construídas,
+  promoção de revisão, rollback, smoke tests, consultas de auditoria e
+  apoio à demo. Ele não desenvolve e não roda o Spec Master. O ciclo 007
+  entrega:
+  - `AGENTS.md` na raiz, com as instruções e os limites do agente
+    operador;
+  - [`docs/operacao.md`](./operacao.md), o runbook.
 - **Desenvolvimento local:** credenciais do próprio integrante via
   `gcloud auth application-default login`. Os papéis do time já permitem
   BigQuery, Agent Platform e Discovery Engine localmente.
-- **Estratégia Git recomendada:** trunk-based (time pequeno, prazo curto).
-  Decisão confirmada no Step 2 do Spec Master.
+- **Estratégia Git:**
+  - uma branch por ciclo (`NNN-<feature-id>`), cada uma em sua worktree;
+  - PR para `main` na ordem de merge do plano de ciclos;
+  - dentro de cada run, a resposta no Step 2 é **Trunk-Based**
+    (`create_branch: false`), porque a branch já existe.
+  - `.spec-master/` é local (gitignored). A rastreabilidade é exportada para
+    `specs/NNN-*/traceability.md`.
 
 ## §15 Roadmap acelerado
 
 A data-limite da demo não está neste contexto (§20, Q1). O roadmap é sequencial
 por blocos, com **caminho crítico primeiro** (fatia vertical ponta a ponta) e
 linha de corte explícita.
+
+> **Execução paralela (vigente):** os blocos abaixo foram reorganizados em
+> ciclos paralelos no [plano de ciclos](./ciclos/README.md):
+>
+> - **Onda 0:** 000 (fundação e contratos);
+> - **Onda 1:** 001 ∥ 003 ∥ 004 ∥ 007;
+> - **Onda 2:** 002 ∥ 005 (podem começar junto com a Onda 1);
+> - **Onda 3:** 006, seguido da integração final.
+>
+> A tabela abaixo continua valendo como visão de entrega e linha de corte.
 
 | Bloco | Entrega | Features | Paralelização sugerida |
 |---|---|---|---|
@@ -590,9 +617,10 @@ Não avançar para Open Finance, contratação real ou canais além da demo: iss
   citados só genericamente.
 - **Q4.** Canal da demo: ADK Web UI publicada no Cloud Run (mais rápido) ou
   front de chat próprio no estilo ia.i.
-- **Q5.** Papel exato do Antigravity: só IDE/execução das fases do Spec Kit,
-  ou também operação/monitoramento da PoC publicada? As credenciais GCP no
-  Antigravity são as mesmas dos integrantes?
+- **Q5.** ~~Papel exato do Antigravity~~ **Respondida em parte:** o
+  desenvolvimento é no Claude Code e o Antigravity opera o produto pronto
+  (§14). Ainda em aberto: as credenciais GCP no Antigravity são as mesmas
+  dos integrantes?
 - **Q6.** Busca vetorial: `VECTOR_SEARCH` no BigQuery (recomendado) ou RAG
   Engine do Agent Platform.
 - **Q7.** Os pedidos de §16 serão atendidos? Se não, seguir o Plano B.
