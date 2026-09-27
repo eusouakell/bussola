@@ -34,7 +34,11 @@ services:
     # bussola-mcp-main-7bd374b-final-local (tag main, 0%).
     image: "sha256:a21227646cb4791beb8ac34de13a8c44a4366c3750dc1ade8a24a80edf66bb85"
     cpu: "1"
-    memory: 512Mi
+    # 2Gi por causa do BQ_MODO_LEITURA=memoria: o RepositorioBigQuery carrega
+    # as 5 tabelas por cliente no construtor (623 mil linhas de bussola_dados,
+    # ~250 MiB só de linhas), e 512Mi estoura no startup com BUSSOLA_FAKES=FALSE.
+    # Com bigquery.jobUser na SA (pedido 1), BQ_MODO_LEITURA=query dispensa isso.
+    memory: 2Gi
     maxInstances: 1
     env:
       GOOGLE_CLOUD_PROJECT: batalha-time-07-lkbv
@@ -104,9 +108,11 @@ services:
     maxInstances: 1
     public: true
     env:
-      # TRUE: personas de web/fixtures/users.json (espelho da tabela users)
-      # até a tabela chegar em bussola_dados.
+      # TRUE: personas de web/fixtures/users.json (espelho da tabela users).
+      # Com FALSE o BFF lê bussola_dados.users por tabledata.list, e o
+      # loadConfig exige GOOGLE_CLOUD_PROJECT (web/bff/main/config.ts).
       BUSSOLA_FAKES: "TRUE"
+      GOOGLE_CLOUD_PROJECT: batalha-time-07-lkbv
       # Revisão da tag main do agente (Gemini, plano B). O Cloud Run recusa um
       # ID token com a URL da tag como audience: ela vai na URL principal.
       AGENT_URL: https://main---bussola-agent-wimifi56uq-uc.a.run.app
