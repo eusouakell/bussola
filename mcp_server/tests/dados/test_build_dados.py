@@ -223,7 +223,11 @@ def test_checks_sql_covers_every_expected_check() -> None:
     sql = build.render_sql(build.CHECKS_SQL, "bussola_dados")
     for name in build.EXPECTED_CHECKS:
         assert f"AS {name}" in sql
-    assert "{{" not in build.render_sql(build.COUNTS_SQL, "bussola_dados")
+    counts = build.render_sql(build.COUNTS_SQL, "bussola_dados")
+    assert "{{" not in counts
+    for table in build.STEPS.values():
+        assert f"'{table}' AS tabela, COUNT(*) AS linhas FROM bussola_dados.{table}\n" in counts
+    assert counts.count("SELECT ") == len(build.STEPS)
 
 
 # ---------------------------------------------------------------------------

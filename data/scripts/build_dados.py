@@ -241,10 +241,24 @@ SELECT
      WHERE p.id_usuario IS NULL) AS users_sem_extrato
 """
 
-COUNTS_SQL = "\nUNION ALL\n".join(
-    f"SELECT '{table}' AS tabela, COUNT(*) AS linhas FROM {DATASET_PLACEHOLDER}.{table}"
-    for table in STEPS.values()
-)
+# Linhas por tabela de ``STEPS`` (texto fixo; um teste confere que cobre todas as etapas).
+COUNTS_SQL = """
+SELECT 'perfil_mensal' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.perfil_mensal
+UNION ALL
+SELECT 'gastos_categoria' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.gastos_categoria
+UNION ALL
+SELECT 'entradas_categoria' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.entradas_categoria
+UNION ALL
+SELECT 'recorrentes' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.recorrentes
+UNION ALL
+SELECT 'parcelas' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.parcelas
+UNION ALL
+SELECT 'categorias' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.categorias
+UNION ALL
+SELECT 'referencia_coorte' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.referencia_coorte
+UNION ALL
+SELECT 'users' AS tabela, COUNT(*) AS linhas FROM {{dataset}}.users
+"""
 
 # Verificação → (valor esperado, mensagem). ``None`` = só informativo.
 EXPECTED_CHECKS: dict[str, tuple[int | None, str]] = {
