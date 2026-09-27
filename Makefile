@@ -31,6 +31,12 @@ agent:
 fixtures:
 	cd mcp_server && uv run python ../data/scripts/gerar_fixtures.py --saida ../contracts/fixtures
 
+# Fixtures v1 (ciclo 001): só lê bussola_dados (ADC + GOOGLE_CLOUD_PROJECT) e preserva
+# bussola_dados/users.json e rag/. O conjunto provisório continua em `make fixtures`.
+.PHONY: fixtures-v1
+fixtures-v1:
+	cd mcp_server && uv run python ../data/scripts/build_dados.py --fixtures ../contracts/fixtures
+
 # Exit code 5 = nenhum teste bq coletado (aceito).
 test-bq:
 	cd mcp_server && uv run pytest -m bq; s=$$?; [ $$s -eq 0 ] || [ $$s -eq 5 ]

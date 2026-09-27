@@ -15,6 +15,11 @@ Fluxo (contratos §3; ciclo 001 §3.1–§3.2):
    contra ``perfil_mensal``, UUID v4, cobertura do catálogo) e imprime a contagem de
    linhas de cada tabela.
 
+Com ``--fixtures SAIDA`` o script só lê: gera as fixtures v1 de contratos §8 (plan.md
+D-07). As linhas de âncora e controle vêm do ``RepositorioBigQuery`` (modo ``query``), e
+os goldens saem de ``metricas.*`` sobre um ``RepositorioFake`` dessas mesmas linhas.
+``bussola_dados/users.json`` e ``rag/`` não são tocados.
+
 O único texto trocado nos ``.sql`` é o marcador ``{{dataset}}``, e só depois de validar o
 nome (``bussola_dados`` ou ``bussola_dados_<sufixo>``). A origem
 ``hackathon_dados.extrato_sintetico`` é somente leitura; nenhum valor de usuário entra no
@@ -26,6 +31,7 @@ Uso, com ADC (``gcloud auth application-default login``)::
     uv run --project mcp_server python data/scripts/build_dados.py
     uv run --project mcp_server python data/scripts/build_dados.py --etapas users
     uv run --project mcp_server python data/scripts/build_dados.py --somente-validar
+    uv run --project mcp_server python data/scripts/build_dados.py --fixtures contracts/fixtures
 
 Códigos de saída: 0 (ok), 2 (argumento, configuração ou entrada inválida), 3 (validação
 pós-build ou schema divergente).
@@ -37,6 +43,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
@@ -45,7 +52,28 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from bussola_mcp.contratos import ANOMES_MAX, ANOMES_MIN, UUID_V4_RE, UserPersona
+from bussola_mcp.contratos import (
+    ANOMES_MAX,
+    ANOMES_MIN,
+    CORTES_GOLDEN,
+    ENTRADA_CANONICA_SIMULACAO,
+    FERRAMENTAS_GOLDEN,
+    ID_ANCORA,
+    ID_CONTROLE,
+    UUID_V4_RE,
+    FaixaRenda,
+    UserPersona,
+    arquivo_golden,
+    arquivo_resumo_mes,
+)
+from bussola_mcp.dominio import metricas
+from bussola_mcp.dominio.fakes import RepositorioFake
+from bussola_mcp.dominio.interfaces import RepositorioFinanceiro
+from bussola_mcp.dominio.repositorio_bq import (
+    SORT_KEYS,
+    RepositorioBigQuery,
+    RepositoryUnavailableError,
+)
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[1]
@@ -95,6 +123,10 @@ MAX_SUMMARY = 280
 
 class BuildError(Exception):
     """Configuração ou dado inválido. A mensagem nunca ecoa valores de linhas."""
+
+
+class FixtureValidationError(Exception):
+    """Fixtures v1 fora dos modelos de contratos §8 (código de saída 3)."""
 
 
 # ---------------------------------------------------------------------------
@@ -405,6 +437,113 @@ def validate_build(runner: QueryRunner, dataset: str) -> tuple[dict[str, int], l
     return counts, evaluate_checks(dict(checks.items()))
 
 
+# ---------------------------------------------------------------------------
+# Fixtures v1 (plan.md D-07): só leitura de bussola_dados
+# ---------------------------------------------------------------------------
+
+FIXTURE_CUTOFF = ANOMES_MAX
+FIXTURE_USERS: tuple[tuple[str, str], ...] = ((ID_ANCORA, "ancora"), (ID_CONTROLE, "controle"))
+CLIENT_FIXTURE_TABLES: tuple[str, ...] = (
+    "perfil_mensal",
+    "gastos_categoria",
+    "entradas_categoria",
+    "recorrentes",
+    "parcelas",
+)
+# Mesmas entradas dos goldens provisórios (contratos §8).
+GOLDEN_ARGUMENTS: dict[str, dict[str, Any]] = {
+    "oportunidades_corte": {"top_n": 10},
+    "simular_objetivo": dict(ENTRADA_CANONICA_SIMULACAO),
+    "comparar_cenarios": dict(ENTRADA_CANONICA_SIMULACAO),
+}
+
+
+def fixture_repository(client: Any, dataset: str) -> RepositorioFinanceiro:
+    """Repositório de leitura das fixtures v1: ``RepositorioBigQuery`` em modo ``query``."""
+    return RepositorioBigQuery(modo="query", client=client, dataset=dataset)
+
+
+def _rows_json(table: str, rows: Iterable[Any]) -> list[dict[str, Any]]:
+    """Linhas em ordem estável (usuário, depois a ordem do repositório) e prontas para JSON."""
+    key = SORT_KEYS[table]
+    ordered = sorted(rows, key=lambda row: (getattr(row, "id_usuario", ""), *key(row)))
+    return [row.model_dump(mode="json") for row in ordered]
+
+
+def fixture_tables(repository: RepositorioFinanceiro) -> dict[str, list[dict[str, Any]]]:
+    """Linhas de âncora e controle até dezembro, o catálogo e a coorte de todas as faixas."""
+    tables: dict[str, list[dict[str, Any]]] = {}
+    for table in CLIENT_FIXTURE_TABLES:
+        read = getattr(repository, table)
+        rows = [row for id_usuario, _ in FIXTURE_USERS for row in read(id_usuario, FIXTURE_CUTOFF)]
+        tables[table] = _rows_json(table, rows)
+    tables["categorias"] = _rows_json("categorias", repository.categorias())
+    cohort = [row for band in FaixaRenda for row in repository.referencia_coorte(band.value)]
+    tables["referencia_coorte"] = _rows_json("referencia_coorte", cohort)
+    return tables
+
+
+def fixture_users(perfil: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """``usuarios.json``: faixa de renda pela renda média do ano (igual ao 000)."""
+    users = []
+    for id_usuario, papel in FIXTURE_USERS:
+        rendas = [float(row["renda"]) for row in perfil if row["id_usuario"] == id_usuario]
+        if len(rendas) != EXPECTED_MONTHS:
+            raise BuildError(f"perfil_mensal do usuário {papel} sem os {EXPECTED_MONTHS} meses")
+        faixa = metricas.income_band(sum(rendas) / len(rendas))
+        users.append({"faixa_renda": faixa, "id_usuario": id_usuario, "papel": papel})
+    return users
+
+
+def _golden(repository: RepositorioFinanceiro, tool: str, ate: int, **kwargs: Any) -> Any:
+    try:
+        result = getattr(metricas, tool)(repository, ID_ANCORA, ate, **kwargs)
+    except metricas.MetricError as exc:
+        raise BuildError(f"golden {tool} até {ate}: {exc.codigo}") from exc
+    return metricas.build_envelope(tool, result)
+
+
+def fixture_goldens(repository: RepositorioFinanceiro) -> dict[str, Any]:
+    """Goldens da âncora: as 6 ferramentas nos dois cortes e ``resumo_mes`` de cada mês."""
+    goldens: dict[str, Any] = {}
+    for cut in CORTES_GOLDEN:
+        for tool in FERRAMENTAS_GOLDEN:
+            path = f"ferramentas/{arquivo_golden(tool, cut)}"
+            goldens[path] = _golden(repository, tool, cut, **GOLDEN_ARGUMENTS.get(tool, {}))
+    for anomes in range(ANOMES_MIN, ANOMES_MAX + 1):
+        path = f"ferramentas/{arquivo_resumo_mes(anomes)}"
+        goldens[path] = _golden(repository, "resumo_mes", anomes, anomes=anomes)
+    return goldens
+
+
+def build_fixture_set(repository: RepositorioFinanceiro) -> dict[str, Any]:
+    """Conjunto v1 (caminho relativo → JSON), validado com os modelos de contratos §8.
+
+    As linhas vêm de ``repository``. Os goldens são calculados sobre um
+    ``RepositorioFake`` dessas mesmas linhas, o que garante a consistência com as fixtures.
+    """
+    tables = fixture_tables(repository)
+    data: dict[str, Any] = {"usuarios.json": fixture_users(tables["perfil_mensal"])}
+    for table, rows in tables.items():
+        data[f"bussola_dados/{table}.json"] = rows
+    fixtures = _load_sibling("gerar_fixtures")
+    with tempfile.TemporaryDirectory(prefix="bussola_fixtures_") as tmp:
+        fixtures.gravar(tmp, data)
+        data.update(fixture_goldens(RepositorioFake(tmp)))
+    try:
+        fixtures.validar_conjunto(data)
+    except (ValidationError, fixtures.ErroDados) as exc:
+        raise FixtureValidationError(f"fixtures v1 fora do contrato: {type(exc).__name__}") from exc
+    return dict(sorted(data.items()))
+
+
+def export_fixtures(repository: RepositorioFinanceiro, output: Path) -> dict[str, Any]:
+    """Grava as fixtures v1 em ``output`` sem apagar outros arquivos (users.json, rag/)."""
+    data = build_fixture_set(repository)
+    _load_sibling("gerar_fixtures").gravar(output, data)
+    return data
+
+
 def _create_client(project: str) -> Any:
     from google.cloud import bigquery
 
@@ -435,7 +574,33 @@ def _parser() -> argparse.ArgumentParser:
     mode.add_argument(
         "--somente-validar", action="store_true", help="só roda as validações pós-build"
     )
+    mode.add_argument(
+        "--fixtures",
+        type=Path,
+        default=None,
+        metavar="SAIDA",
+        help="só lê o dataset e grava as fixtures v1 de contratos §8 em SAIDA",
+    )
     return parser
+
+
+def _fixtures_command(client: Any, dataset: str, output: Path) -> int:
+    try:
+        data = export_fixtures(fixture_repository(client, dataset), output)
+    except (BuildError, RepositoryUnavailableError, OSError) as exc:
+        print(f"Erro: {exc}", file=sys.stderr)
+        return 2
+    except FixtureValidationError as exc:
+        print(f"Erro: {exc}", file=sys.stderr)
+        return 3
+    for path, rows in data.items():
+        if path.startswith("bussola_dados/") or path == "usuarios.json":
+            print(f"{path}: {len(rows)} linhas")
+    print(
+        f"{len(data)} arquivos gravados em {output} (fixtures v1 de {dataset}; "
+        "users.json e rag/ preservados)."
+    )
+    return 0
 
 
 def main(
@@ -450,7 +615,8 @@ def main(
             for step in steps:
                 print(f"-- etapa {step}\n{load_step_sql(step, dataset)}")
             return 0
-        load_personas()  # falha cedo, antes de qualquer escrita
+        if args.fixtures is None:
+            load_personas()  # falha cedo, antes de qualquer escrita
     except (BuildError, OSError) as exc:
         print(f"Erro: {exc}", file=sys.stderr)
         return 2
@@ -459,6 +625,8 @@ def main(
         print("Erro: informe --projeto ou defina GOOGLE_CLOUD_PROJECT.", file=sys.stderr)
         return 2
     client = create_client(project)
+    if args.fixtures is not None:
+        return _fixtures_command(client, dataset, args.fixtures)
     runner = QueryRunner(client)
     try:
         if not args.somente_validar:
