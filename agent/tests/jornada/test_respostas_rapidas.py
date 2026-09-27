@@ -77,6 +77,102 @@ def test_sugestoes_nao_trazem_numero_alem_do_exemplo() -> None:
     assert com_numero == ["Quero juntar R$ 30 mil em 2 anos"]
 
 
+# --- regras pela etapa da jornada (004) --------------------------------------
+
+CENARIOS_VIAVEL = {
+    "cenarios": [
+        {"nome": "conservador", "pct_capacidade": 0.4, "viavel": False},
+        {"nome": "acelerado", "pct_capacidade": 0.8, "viavel": True},
+    ],
+    "regras": {},
+}
+CENARIOS_INVIAVEIS = {
+    "cenarios": [{"nome": "acelerado", "pct_capacidade": 0.8, "viavel": False}],
+    "regras": {},
+}
+
+
+@pytest.mark.parametrize(
+    ("estado", "usadas", "recomendado", "esperado"),
+    [
+        (
+            "OBJETIVO",
+            set(),
+            None,
+            [
+                "Quero juntar R$ 30 mil em 2 anos",
+                "Quanto consigo guardar por mês?",
+                "Onde posso economizar?",
+            ],
+        ),
+        (
+            "ENTENDER",
+            {"perfil_financeiro"},
+            None,
+            [
+                "Quanto consigo guardar por mês?",
+                "Tenho parcelas em aberto?",
+                "Onde posso economizar?",
+            ],
+        ),
+        (
+            "ANTECIPAR",
+            {"perfil_financeiro", "capacidade_poupanca", "comparar_cenarios"},
+            None,
+            ["Me mostra os caminhos", "Onde posso economizar?", "Tenho parcelas em aberto?"],
+        ),
+        (
+            "ORIENTAR",
+            {"capacidade_poupanca", "comparar_cenarios"},
+            "acelerado",
+            ["Quero o caminho acelerado", "Quero outro caminho", "Onde posso economizar?"],
+        ),
+        (
+            "ORIENTAR",
+            {"capacidade_poupanca", "comparar_cenarios"},
+            None,
+            ["Quero outro caminho", "Onde posso economizar?", "Tenho parcelas em aberto?"],
+        ),
+        ("AGIR", set(), "acelerado", []),
+        ("ACOMPANHAR", set(), None, []),
+    ],
+)
+def test_etapa_da_jornada_define_as_sugestoes(
+    estado: str, usadas: set[str], recomendado: str | None, esperado: list[str]
+) -> None:
+    assert sugerir(usadas, INICIO, estado, recomendado) == esperado
+
+
+def test_exemplo_so_aparece_na_etapa_objetivo() -> None:
+    exemplo = "Quero juntar R$ 30 mil em 2 anos"
+    for estado in ("ENTENDER", "ANTECIPAR", "ORIENTAR", "AGIR", "ACOMPANHAR"):
+        assert exemplo not in sugerir(set(), [], estado, "acelerado")
+
+
+def test_etapa_desconhecida_ou_nome_de_cenario_estranho() -> None:
+    assert sugerir(set(), INICIO, "OUTRA") == sugerir(set(), INICIO)
+    assert sugerir(set(), [], "ORIENTAR", "turbo 9000")[0] == "Quero outro caminho"
+
+
+def test_na_jornada_o_cliente_tambem_nao_ve_o_que_ja_escreveu() -> None:
+    ditos = ["quero o caminho ACELERADO", "Quero outro caminho."]
+    assert sugerir(set(), ditos, "ORIENTAR", "acelerado") == [
+        "Onde posso economizar?",
+        "Quanto consigo guardar por mês?",
+        "Tenho parcelas em aberto?",
+    ]
+
+
+def test_na_jornada_so_o_exemplo_tem_numero_e_nunca_passa_do_maximo() -> None:
+    for estado in ("OBJETIVO", "ENTENDER", "ANTECIPAR", "ORIENTAR", "AGIR", "ACOMPANHAR"):
+        for recomendado in (None, "conservador", "equilibrado", "acelerado"):
+            chips = sugerir(set(), [], estado, recomendado)
+            assert len(chips) <= MAX_SUGESTOES
+            assert len(set(chips)) == len(chips)
+            com_numero = [c for c in chips if any(ch.isdigit() for ch in c)]
+            assert com_numero in ([], ["Quero juntar R$ 30 mil em 2 anos"])
+
+
 # --- callback sobre eventos -------------------------------------------------
 
 
@@ -174,6 +270,40 @@ def test_nao_sobrescreve_sugestoes_de_outro_callback() -> None:
     resposta = _texto("Não posso", custom_metadata=proprias)
     anexar(callback_context=_contexto(), llm_response=resposta)
     assert resposta.custom_metadata == proprias
+
+
+def _contexto_jornada(state: dict[str, Any], *eventos: Event) -> SimpleNamespace:
+    return SimpleNamespace(state=state, session=SimpleNamespace(events=list(eventos)))
+
+
+def test_anexar_usa_a_etapa_e_o_recomendado_do_state() -> None:
+    resposta = _texto("Seus caminhos")
+    contexto = _contexto_jornada(
+        {"estado_jornada": "ORIENTAR", "cenarios": CENARIOS_VIAVEL},
+        _cliente("Quero juntar dinheiro"),
+        _resposta("capacidade_poupanca", _mcp(OK)),
+        _resposta("comparar_cenarios", _mcp(OK)),
+    )
+    anexar(callback_context=contexto, llm_response=resposta)
+    assert resposta.custom_metadata["bussola"]["respostas_rapidas"] == [
+        "Quero o caminho acelerado",
+        "Quero outro caminho",
+        "Onde posso economizar?",
+    ]
+
+
+def test_anexar_sem_cenario_viavel_oferece_outro_caminho() -> None:
+    resposta = _texto("Nenhum cabe")
+    contexto = _contexto_jornada({"estado_jornada": "ORIENTAR", "cenarios": CENARIOS_INVIAVEIS})
+    anexar(callback_context=contexto, llm_response=resposta)
+    chips = resposta.custom_metadata["bussola"]["respostas_rapidas"]
+    assert chips[:2] == ["Quero outro caminho", "Onde posso economizar?"]
+
+
+def test_anexar_em_agir_nao_anexa_lista_vazia() -> None:
+    resposta = _texto("Registrado")
+    anexar(callback_context=_contexto_jornada({"estado_jornada": "AGIR"}), llm_response=resposta)
+    assert resposta.custom_metadata is None
 
 
 # --- integração com o Runner do ADK -----------------------------------------

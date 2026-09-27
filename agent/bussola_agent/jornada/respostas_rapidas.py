@@ -14,13 +14,22 @@ traz número inventado nem pede o que as ferramentas não atendem. As regras sã
   só depois de ``comparar_cenarios``;
 - o que o cliente já escreveu não volta como sugestão.
 
-O 004 troca estas regras pela máquina de estados da jornada.
+Com ``estado_jornada`` no state (agente da jornada do 004), a etapa define as
+candidatas (:data:`POR_ETAPA`): o exemplo só em OBJETIVO, os caminhos em
+ANTECIPAR, a escolha do recomendado e "outro caminho" em ORIENTAR. Em AGIR e
+ACOMPANHAR o campo fica ausente: valem as sugestões que 005 e 006 puserem ou as
+do front para a etapa. As regras de ferramenta já usada, do que o cliente
+escreveu e do máximo continuam valendo. Sem ``estado_jornada``, valem as regras
+acima.
 """
 
 import json
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import Any
+
+from bussola_agent.estado import CHAVE_CENARIOS, CHAVE_ESTADO_JORNADA, EstadoJornada
+from bussola_agent.jornada.annotations import recommended_scenario
 
 # Depois do guardrail de saída (10) e da verificação de números (50), contratos §6.
 ORDEM = 90
@@ -57,26 +66,91 @@ SUGESTOES: tuple[Sugestao, ...] = (
     Sugestao("Como está meu perfil financeiro?", ferramenta="perfil_financeiro"),
 )
 
+EXEMPLO = SUGESTOES[0]
+MOSTRAR_CAMINHOS = Sugestao("Me mostra os caminhos")
+"""Em ANTECIPAR os cenários ainda não existem, mesmo que já tenham sido comparados antes."""
+OUTRO_CAMINHO = Sugestao("Quero outro caminho")
+CENARIOS = frozenset({"conservador", "equilibrado", "acelerado"})
+"""Nomes fixos dos cenários (``comparar_cenarios``); outro nome não vira chip."""
+_POR_FERRAMENTA = {s.ferramenta: s for s in SUGESTOES if s.ferramenta}
+
+
+def _dados(*ferramentas: str) -> tuple[Sugestao, ...]:
+    return tuple(_POR_FERRAMENTA[f] for f in ferramentas)
+
+
+_EXPLORAR = _dados(
+    "capacidade_poupanca",
+    "oportunidades_corte",
+    "dividas_e_parcelas",
+    "resumo_mes",
+    "perfil_financeiro",
+)
+POR_ETAPA: Mapping[EstadoJornada, tuple[Sugestao, ...]] = {
+    EstadoJornada.OBJETIVO: (EXEMPLO, *_EXPLORAR),
+    EstadoJornada.ENTENDER: _dados(
+        "capacidade_poupanca",
+        "perfil_financeiro",
+        "dividas_e_parcelas",
+        "oportunidades_corte",
+        "resumo_mes",
+    ),
+    EstadoJornada.ANTECIPAR: (MOSTRAR_CAMINHOS, *_EXPLORAR),
+    EstadoJornada.ORIENTAR: (OUTRO_CAMINHO, *_dados("oportunidades_corte"), *_EXPLORAR),
+    EstadoJornada.AGIR: (),
+    EstadoJornada.ACOMPANHAR: (),
+}
+
 
 def _normalizar(texto: str) -> str:
     return " ".join(texto.casefold().split()).rstrip("?!. ")
 
 
-def sugerir(ferramentas: set[str], ditos: Iterable[str]) -> list[str]:
-    """Até ``MAX_SUGESTOES`` textos de :data:`SUGESTOES`.
+def _etapa(valor: Any) -> EstadoJornada | None:
+    try:
+        return EstadoJornada(valor)
+    except ValueError:
+        return None
+
+
+def _candidatas(etapa: EstadoJornada, recomendado: str | None) -> tuple[Sugestao, ...]:
+    candidatas = POR_ETAPA[etapa]
+    if etapa is EstadoJornada.ORIENTAR and recomendado in CENARIOS:
+        return (Sugestao(f"Quero o caminho {recomendado}"), *candidatas)
+    return candidatas
+
+
+def sugerir(
+    ferramentas: set[str],
+    ditos: Iterable[str],
+    estado: str | None = None,
+    recomendado: str | None = None,
+) -> list[str]:
+    """Até ``MAX_SUGESTOES`` textos, sem repetição.
 
     ``ferramentas`` são as que responderam sem erro na sessão e ``ditos``, as
-    mensagens do cliente.
+    mensagens do cliente. Com ``estado`` (``estado_jornada``) válido, as
+    candidatas vêm de :data:`POR_ETAPA`; ``recomendado`` é o cenário da regra
+    R9, sugerido primeiro em ORIENTAR. Sem ``estado``, valem :data:`SUGESTOES`.
     """
     ja_ditos = {_normalizar(t) for t in ditos}
-    escolhidas = [
-        s.texto
-        for s in SUGESTOES
-        if s.ferramenta not in ferramentas
-        and (not s.exige or s.exige & ferramentas)
-        and not s.antes_de & ferramentas
-        and _normalizar(s.texto) not in ja_ditos
-    ]
+    etapa = _etapa(estado) if estado is not None else None
+    if etapa is None:
+        candidatas = [
+            s
+            for s in SUGESTOES
+            if (not s.exige or s.exige & ferramentas) and not s.antes_de & ferramentas
+        ]
+    else:
+        candidatas = list(_candidatas(etapa, recomendado))
+    escolhidas: list[str] = []
+    for s in candidatas:
+        if (
+            s.ferramenta not in ferramentas
+            and _normalizar(s.texto) not in ja_ditos
+            and s.texto not in escolhidas
+        ):
+            escolhidas.append(s.texto)
     return escolhidas[:MAX_SUGESTOES]
 
 
@@ -129,6 +203,17 @@ def _eh_mensagem_final(llm_response: Any) -> bool:
     return any(p.text and not p.thought for p in partes)
 
 
+def _jornada(callback_context: Any) -> tuple[str | None, str | None]:
+    """``estado_jornada`` e o cenário recomendado dos ``cenarios`` do state, se houver."""
+    state = getattr(callback_context, "state", None)
+    if state is None:
+        return None, None
+    estado = state.get(CHAVE_ESTADO_JORNADA)
+    return (estado if isinstance(estado, str) else None), recommended_scenario(
+        state.get(CHAVE_CENARIOS)
+    )
+
+
 def anexar(callback_context: Any, llm_response: Any) -> None:
     """``after_model``: põe as sugestões em ``custom_metadata.bussola``.
 
@@ -142,7 +227,8 @@ def anexar(callback_context: Any, llm_response: Any) -> None:
     if "respostas_rapidas" in bussola:
         return None
     ferramentas, ditos = _ler_sessao(callback_context.session.events)
-    sugestoes = sugerir(ferramentas, ditos)
+    estado, recomendado = _jornada(callback_context)
+    sugestoes = sugerir(ferramentas, ditos, estado, recomendado)
     if sugestoes:
         bussola["respostas_rapidas"] = sugestoes
         metadados["bussola"] = bussola
