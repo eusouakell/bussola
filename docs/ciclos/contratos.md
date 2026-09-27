@@ -494,6 +494,8 @@ def limpar() -> None: ...                                       # só testes (Q-
 - Testes (acréscimo do 005): a fixture `criar_extensao` do
   `agent/tests/conftest.py` tem prioridade sobre o pacote real, e a fixture
   `sem_extensoes` simula a ausência de `governanca` e `acompanhamento`.
+  Com `criar_extensao`, os pacotes reais que o teste não cria também ficam
+  ausentes (acréscimo da integração 005/006).
 
 ### Persistência (`agent/bussola_agent/persistencia.py`, 000)
 

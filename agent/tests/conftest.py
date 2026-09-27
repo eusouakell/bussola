@@ -12,7 +12,9 @@
 - ``criar_extensao``: cria pacotes de extensão (``governanca``,
   ``acompanhamento``) num diretório temporário visível como
   ``bussola_agent.<nome>`` e os descarrega no fim do teste. O diretório
-  temporário tem prioridade sobre os pacotes reais (acréscimo do 005).
+  temporário tem prioridade sobre os pacotes reais (acréscimo do 005), e os
+  pacotes reais que o teste não cria ficam ausentes (acréscimo da integração
+  005/006).
 - ``sem_extensoes``: simula a ausência dos pacotes de extensão, mesmo quando o
   pacote real existe (acréscimo do 005).
 """
@@ -136,14 +138,18 @@ def criar_extensao(
 
     O diretório temporário entra **na frente** do ``__path__`` de
     ``bussola_agent``, para o pacote falso ter prioridade sobre o real; o
-    ``__init__.py`` do pacote recebe ``codigo``.
+    ``__init__.py`` do pacote recebe ``codigo``. Os pacotes de extensão que o
+    teste não cria ficam ausentes, como em ``sem_extensoes``.
     """
     raiz = tmp_path / "extensoes"
     raiz.mkdir()
     monkeypatch.setattr(bussola_agent, "__path__", [str(raiz), *bussola_agent.__path__])
     _descarregar_extensoes()
+    for nome in PACOTES_EXTENSAO:
+        sys.modules[nome] = None  # type: ignore[assignment]
 
     def criar(nome: str, codigo: str) -> Path:
+        sys.modules.pop(f"bussola_agent.{nome}", None)
         pacote = raiz / nome
         pacote.mkdir()
         (pacote / "__init__.py").write_text(codigo, encoding="utf-8")

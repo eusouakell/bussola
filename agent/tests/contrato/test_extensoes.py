@@ -142,7 +142,7 @@ def test_pacote_presente_registra_ferramentas_instrucoes_e_callbacks(
     assert ferramentas_sensiveis() == {"criar_plano"}
     assert instrucoes() == "Peça consentimento."
     assert len(callbacks.registrados("before_tool")) == 1
-    assert "bussola_agent.acompanhamento" not in sys.modules
+    assert sys.modules.get("bussola_agent.acompanhamento") is None
 
 
 def test_os_dois_pacotes_presentes(criar_extensao: CriarExtensao) -> None:
