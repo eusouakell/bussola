@@ -68,7 +68,7 @@ def env_of(manifest: dict) -> dict[str, dict]:
 
 
 @needs_helm
-@pytest.mark.parametrize("service", ["agent", "mcp"])
+@pytest.mark.parametrize("service", ["agent", "mcp", "bff"])
 def test_new_revision_gets_zero_traffic_and_release_tag(service, tmp_path):
     manifest = render(service, tmp_path)
     name = manifest["metadata"]["name"]
@@ -90,7 +90,7 @@ def test_kept_traffic_stays_at_100_percent(service, tmp_path):
 
 
 @needs_helm
-@pytest.mark.parametrize("service", ["agent", "mcp"])
+@pytest.mark.parametrize("service", ["agent", "mcp", "bff"])
 def test_manifest_targets_cloud_run_project(service, tmp_path):
     manifest = render(service, tmp_path)
 
@@ -112,6 +112,49 @@ def test_agent_uses_gemini_api_key_from_secret_manager(tmp_path):
         "name": "gemini-api-key",
         "key": "latest",
     }
+
+
+@needs_helm
+def test_bff_calls_agent_main_tag_with_service_audience(tmp_path):
+    env = env_of(render("bff", tmp_path))
+
+    assert env["AGENT_URL"]["value"] == "https://main---bussola-agent-wimifi56uq-uc.a.run.app"
+    assert env["AGENT_AUDIENCE"]["value"] == "https://bussola-agent-wimifi56uq-uc.a.run.app"
+    assert env["AGENT_USE_OIDC"]["value"] == "TRUE"
+    assert "value" not in env["AUTH_PASSWORD_HASH"]
+    assert env["AUTH_PASSWORD_HASH"]["valueFrom"]["secretKeyRef"] == {
+        "name": "bussola-auth-password-hash",
+        "key": "latest",
+    }
+
+
+@needs_helm
+@pytest.mark.parametrize(("service", "public"), [("agent", False), ("mcp", False), ("bff", True)])
+def test_only_bff_disables_invoker_check(service, public, tmp_path):
+    annotations = render(service, tmp_path)["metadata"]["annotations"]
+
+    assert annotations["run.googleapis.com/ingress"] == "all"
+    assert ("run.googleapis.com/invoker-iam-disabled" in annotations) is public
+    if public:
+        assert annotations["run.googleapis.com/invoker-iam-disabled"] == "true"
+
+
+@needs_helm
+def test_create_gives_first_revision_all_traffic(tmp_path):
+    release = {"release": {"tag": "main", "revisionSuffix": "main-aaaaaaa-local"}}
+    overrides = _merge(release, {"services": {"bff": {"create": True, "traffic": None}}})
+
+    traffic = render("bff", tmp_path, overrides)["spec"]["traffic"]
+
+    assert traffic == [
+        {"revisionName": "bussola-bff-main-aaaaaaa-local", "percent": 100, "tag": "main"}
+    ]
+
+
+@needs_helm
+def test_create_is_rejected_when_service_has_traffic(tmp_path):
+    with pytest.raises(RenderError, match="create só vale para serviço novo"):
+        render("bff", tmp_path, {"services": {"bff": {"create": True}}})
 
 
 @needs_helm
@@ -161,6 +204,12 @@ def test_kept_traffic_must_sum_100(tmp_path):
 
 
 @needs_helm
+def test_missing_traffic_without_create_is_rejected(tmp_path):
+    with pytest.raises(RenderError, match="soma 0%"):
+        render("bff", tmp_path, {"services": {"bff": {"traffic": None}}})
+
+
+@needs_helm
 @pytest.mark.parametrize("name", ["GOOGLE_API_KEY", "SESSION_TOKEN", "DB_PASSWORD", "MY_SECRET"])
 def test_secret_like_plain_env_is_rejected(name, tmp_path):
     overrides = {"services": {"agent": {"env": {name: "x"}, "secretEnv": {}}}}
@@ -171,7 +220,7 @@ def test_secret_like_plain_env_is_rejected(name, tmp_path):
 
 @needs_helm
 def test_rendered_chart_has_no_literal_secret_values(tmp_path):
-    for service in ("agent", "mcp"):
+    for service in ("agent", "mcp", "bff"):
         for item in env_of(render(service, tmp_path)).values():
             if "valueFrom" in item:
                 assert set(item) == {"name", "valueFrom"}

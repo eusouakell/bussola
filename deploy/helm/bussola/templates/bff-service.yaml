@@ -1,0 +1,1 @@
+{{- include "bussola.cloudRunService" (dict "root" . "service" .Values.services.bff) }}

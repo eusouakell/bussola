@@ -11,7 +11,7 @@ project:
 
 imageRepository: us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes
 
-# Identidade dos dois serviços. Plano B: SA default de compute, com IAM em
+# Identidade dos serviços. Plano B: SA default de compute, com IAM em
 # nível de dataset e a chave do Gemini lida do Secret Manager.
 serviceAccount: 1061873050224-compute@developer.gserviceaccount.com
 
@@ -78,3 +78,36 @@ services:
       - revisionName: bussola-agent-00001-mix
         percent: 100
         tag: c000
+
+  # Front e BFF (web/Dockerfile). É o único serviço público (`public: true`):
+  # o BFF faz o login simulado por persona e fala com o agente usando um ID
+  # token da SA, que precisa de roles/run.invoker no bussola-agent. Sessões e
+  # limite de tentativas de login ficam em memória, daí uma instância só.
+  bff:
+    name: bussola-bff
+    image: "1f2a380-local"
+    cpu: "1"
+    memory: 512Mi
+    maxInstances: 1
+    public: true
+    env:
+      # TRUE: personas de web/fixtures/users.json (espelho da tabela users)
+      # até a tabela chegar em bussola_dados.
+      BUSSOLA_FAKES: "TRUE"
+      # Revisão da tag main do agente (Gemini, plano B). O Cloud Run recusa um
+      # ID token com a URL da tag como audience: ela vai na URL principal.
+      AGENT_URL: https://main---bussola-agent-wimifi56uq-uc.a.run.app
+      AGENT_AUDIENCE: https://bussola-agent-wimifi56uq-uc.a.run.app
+      AGENT_APP: bussola_agent
+      AGENT_USE_OIDC: "TRUE"
+    # Hash scrypt da senha padrão de teste (npm run -s hash-password). A senha
+    # em si não fica em lugar nenhum do repositório.
+    secretEnv:
+      AUTH_PASSWORD_HASH:
+        secret: bussola-auth-password-hash
+        version: latest
+    # Criado com `create: true` (deploy/helm/README.md); a primeira revisão
+    # ficou com 100%. Criar de novo exige --set services.bff.traffic=null.
+    traffic:
+      - revisionName: bussola-bff-main-1f2a380-local
+        percent: 100

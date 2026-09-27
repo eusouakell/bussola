@@ -3,7 +3,8 @@
 O projeto não tem cluster Kubernetes: a org policy `gcp.restrictServiceUsage`
 bloqueia o GKE, e a constituição diz "sem GKE". O Helm entra só como
 **templater**. O chart `bussola/` gera os manifestos Knative
-(`serving.knative.dev/v1`) dos serviços `bussola-mcp` e `bussola-agent`, e o
+(`serving.knative.dev/v1`) dos serviços `bussola-mcp`, `bussola-agent` e
+`bussola-bff` (front e BFF, `web/Dockerfile`), e o
 `gcloud run services replace` aplica esses manifestos. Não existe
 `helm install`.
 
@@ -16,20 +17,25 @@ O `helm template` falha, antes de chegar ao GCP, quando:
   hífen, com o nome da revisão até 63 caracteres);
 - a tag já está em outra revisão;
 - o tráfego mantido (`services.<nome>.traffic`) não soma 100%;
+- `create: true` aparece num serviço que já tem tráfego mantido;
 - há uma variável com cara de segredo (`KEY`, `TOKEN`, `SECRET`, `PASSWORD`)
   em `env`. Segredo vai em `secretEnv`, que vira `secretKeyRef` no Secret
   Manager.
 
 Com isso, a revisão nova sempre sai com **0% de tráfego** e a tag `main`
 (ou a do ciclo), e as revisões atuais seguem com o mesmo percentual. Só o
-007 muda percentuais. O `replace` não altera IAM, então o serviço continua
-privado.
+007 muda percentuais. A exceção é a criação de um serviço (abaixo).
+
+O `replace` não mexe em bindings de IAM. Sem `public: true`, o serviço exige
+`roles/run.invoker`. Com ele, a checagem de invoker fica desligada
+(`run.googleapis.com/invoker-iam-disabled`). Só o `bff` é público: ele faz o
+login simulado por persona, e `mcp` e `agent` continuam privados.
 
 ## Deploy pelo GitHub Actions
 
 O caminho normal é o `.github/workflows/deploy.yml`. Todo push na `main`
 (trunk-based: merge ou commit direto) roda o CI e, verde, publica `mcp` e
-depois `agent`:
+depois `agent` e `bff`:
 
 1. build `linux/amd64` e push para `agentes/<serviço>:<sha curto>`;
 2. `gcloud run services describe` lê o tráfego vivo e o
@@ -45,7 +51,7 @@ A tag `main` é rolante: sempre aponta para a última revisão publicada pela
 `tag=cNNN`:
 
 ```bash
-gh workflow run deploy.yml -f service=both -f tag=c007
+gh workflow run deploy.yml -f service=all -f tag=c007
 ```
 
 O workflow só autentica por Workload Identity Federation. Sem as variáveis
@@ -70,9 +76,56 @@ gcloud run services replace /tmp/bussola-agent.yaml \
   --project batalha-time-07-lkbv --region us-central1 --dry-run
 ```
 
-Para o MCP, use `templates/mcp-service.yaml`. Fora do workflow, o tráfego
-vem de `services.<nome>.traffic` em `values.yaml`, que pode estar
-desatualizado. Aplicar é papel do workflow.
+Para o MCP, use `templates/mcp-service.yaml` (BFF: `templates/bff-service.yaml`).
+Fora do workflow, o tráfego vem de `services.<nome>.traffic` em
+`values.yaml`, que pode estar desatualizado. Aplicar é papel do workflow.
+
+## Deploy local (sem WIF)
+
+Enquanto o WIF não existe, o mesmo fluxo roda da máquina de quem tem
+`run.admin`, sem script: build, tráfego vivo, `helm template`, dry-run e
+`replace`. O sufixo termina em `-local` para marcar que a imagem saiu de uma
+máquina, e não do workflow.
+
+```bash
+SHA=$(git rev-parse --short HEAD); KEY=bff; NAME=bussola-bff
+docker buildx build --platform linux/amd64 --provenance=false --push \
+  -f web/Dockerfile --metadata-file /tmp/build.json \
+  -t us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes/$NAME:$SHA-local .
+gcloud run services describe $NAME --project batalha-time-07-lkbv \
+  --region us-central1 --format=json \
+  | jq --arg key $KEY --arg tag main -f deploy/helm/traffic.jq > /tmp/traffic.json
+helm template bussola deploy/helm/bussola -f /tmp/traffic.json \
+  --set release.tag=main --set release.revisionSuffix=main-$SHA-local \
+  --set services.$KEY.image=$(jq -r '."containerimage.digest"' /tmp/build.json) \
+  --show-only templates/$KEY-service.yaml > /tmp/$NAME.yaml
+gcloud run services replace /tmp/$NAME.yaml \
+  --project batalha-time-07-lkbv --region us-central1 --dry-run
+```
+
+Sem erro no dry-run, rode o mesmo `replace` sem `--dry-run`. A revisão nova
+fica na URL `https://main---<serviço>-wimifi56uq-uc.a.run.app`, com 0% de
+tráfego. Para `mcp` e `agent`, troque o Dockerfile (`mcp_server/Dockerfile`,
+`agent/Dockerfile`).
+
+## Criar um serviço (confirmação humana)
+
+Serviço novo não tem tráfego para manter, e o chart recusa renderizar sem
+ele. Para criar, passe `create: true` e zere o tráfego de `values.yaml`
+(`traffic=null`). A primeira revisão recebe 100%, com a tag da release:
+
+```bash
+helm template bussola deploy/helm/bussola \
+  --set release.tag=main --set release.revisionSuffix=main-$SHA-local \
+  --set services.bff.create=true --set services.bff.traffic=null \
+  --set services.bff.image=<digest> \
+  --show-only templates/bff-service.yaml > /tmp/bussola-bff.yaml
+```
+
+Depois do `replace`, registre a primeira revisão em
+`services.<nome>.traffic`, como o `traffic.jq` a devolveria (sem a tag
+`main`). Assim os outros templates voltam a renderizar. O `bussola-bff` foi
+criado assim, em 2026-09-26, com a revisão `bussola-bff-main-1f2a380-local`.
 
 ## Pré-requisitos no GCP (mudanças de IAM: confirmação humana)
 
@@ -81,6 +134,19 @@ desatualizado. Aplicar é papel do workflow.
 | Agente ler a `gemini-api-key` (plano B). O Cloud Run recusa a revisão sem isso. | Admins de Secret Manager do time | `gcloud secrets add-iam-policy-binding gemini-api-key --project batalha-time-07-lkbv --member="serviceAccount:1061873050224-compute@developer.gserviceaccount.com" --role="roles/secretmanager.secretAccessor"` |
 | Agente chamar o MCP privado (Q-16) | Quem tem `run.admin` | `gcloud run services add-iam-policy-binding bussola-mcp --project batalha-time-07-lkbv --region us-central1 --member="serviceAccount:1061873050224-compute@developer.gserviceaccount.com" --role="roles/run.invoker"` |
 | MCP ler `bussola_dados` e agente gravar em `bussola_app` (modo `memoria`, sem `bigquery.jobUser`) | Quem tem `bigquery.admin` | `deploy/iam_datasets.sh` (dry-run por padrão) |
+| BFF ler o hash da senha padrão de teste | Admins de Secret Manager do time | `gcloud secrets add-iam-policy-binding bussola-auth-password-hash --project batalha-time-07-lkbv --member="serviceAccount:1061873050224-compute@developer.gserviceaccount.com" --role="roles/secretmanager.secretAccessor"` |
+| BFF chamar o agente privado | Quem tem `run.admin` | `gcloud run services add-iam-policy-binding bussola-agent --project batalha-time-07-lkbv --region us-central1 --member="serviceAccount:1061873050224-compute@developer.gserviceaccount.com" --role="roles/run.invoker"` |
+| BFF público (`public: true`) | Quem tem `run.services.setIamPolicy` | vem do chart, no `replace` |
+
+O segredo `bussola-auth-password-hash` guarda só o hash scrypt. Quem cria
+escolhe a senha, que não vai para o repositório nem para o chat. Grave o hash
+só se a geração deu certo:
+
+```bash
+cd web && H=$(npm run -s hash-password) && printf '%s\n' "$H" \
+  | gcloud secrets versions add bussola-auth-password-hash --data-file=- \
+      --project batalha-time-07-lkbv; unset H
+```
 
 ## Testes
 

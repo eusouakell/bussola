@@ -15,9 +15,15 @@ Regras de plataforma validadas aqui:
 - a revisão nova sai sempre com 0% de tráfego e tag `main` (última revisão
   da main, deploy automático) ou cNNN (ciclo); só o 007 move tráfego;
 - o tráfego mantido soma 100% e não reutiliza a tag da revisão nova;
+- exceção: `create: true` cria o serviço, e a primeira revisão recebe 100%
+  porque não há outra. Só vale sem tráfego mantido, é manual e exige
+  confirmação humana (deploy/helm/README.md);
 - nada com cara de segredo vai em env: segredo só por secretEnv (Secret
   Manager).
-O replace não altera IAM: o serviço continua privado.
+O replace não mexe em bindings de IAM. Sem `public: true`, o serviço exige
+roles/run.invoker; com ele, a checagem de invoker fica desligada
+(run.googleapis.com/invoker-iam-disabled). Só o BFF é público, com
+confirmação humana.
 */}}
 {{- define "bussola.cloudRunService" -}}
 {{- $root := .root -}}
@@ -42,7 +48,12 @@ O replace não altera IAM: o serviço continua privado.
 {{- fail (printf "a tag %s já está na revisão %s de %s" $tag .revisionName $svc.name) -}}
 {{- end -}}
 {{- end -}}
-{{- if ne (int $total) 100 -}}
+{{- $create := eq (toString $svc.create) "true" -}}
+{{- if $create -}}
+{{- if $svc.traffic -}}
+{{- fail (printf "create só vale para serviço novo: %s já tem tráfego mantido" $svc.name) -}}
+{{- end -}}
+{{- else if ne (int $total) 100 -}}
 {{- fail (printf "o tráfego mantido de %s deve somar 100%%, soma %d%%" $svc.name (int $total)) -}}
 {{- end -}}
 {{- range $name, $_ := $svc.env -}}
@@ -60,6 +71,9 @@ metadata:
     managed-by: helm
   annotations:
     run.googleapis.com/ingress: {{ $svc.ingress | default "all" }}
+    {{- if eq (toString $svc.public) "true" }}
+    run.googleapis.com/invoker-iam-disabled: "true"
+    {{- end }}
 spec:
   template:
     metadata:
@@ -103,6 +117,6 @@ spec:
       {{- end }}
     {{- end }}
     - revisionName: {{ $revision }}
-      percent: 0
+      percent: {{ ternary 100 0 $create }}
       tag: {{ $tag }}
 {{- end -}}

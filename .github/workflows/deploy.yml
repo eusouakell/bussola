@@ -1,5 +1,6 @@
 # Bússola: CD com Helm (Q-18 do 000). Todo push na main (merge ou commit
-# direto, trunk-based) roda o CI e, verde, publica mcp e agent no Cloud Run:
+# direto, trunk-based) roda o CI e, verde, publica mcp, agent e bff no Cloud
+# Run:
 #
 #   1. build linux/amd64 e push para o Artifact Registry `agentes`;
 #   2. lê o tráfego vivo do serviço (deploy/helm/traffic.jq);
@@ -26,10 +27,10 @@ on:
   workflow_dispatch:
     inputs:
       service:
-        description: "Serviço (both = mcp e depois agent)"
+        description: "Serviço (all = mcp, agent e bff, nessa ordem)"
         type: choice
-        options: [both, mcp, agent]
-        default: both
+        options: [all, mcp, agent, bff]
+        default: all
       tag:
         description: "Tag da revisão: main ou cNNN de um ciclo (ex.: c003)"
         type: string
@@ -53,7 +54,8 @@ env:
   CHART: deploy/helm/bussola
   SERVICES: >-
     [{"key": "mcp", "name": "bussola-mcp", "dockerfile": "mcp_server/Dockerfile"},
-    {"key": "agent", "name": "bussola-agent", "dockerfile": "agent/Dockerfile"}]
+    {"key": "agent", "name": "bussola-agent", "dockerfile": "agent/Dockerfile"},
+    {"key": "bff", "name": "bussola-bff", "dockerfile": "web/Dockerfile"}]
 
 jobs:
   ci:
@@ -79,7 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           # No push não há inputs: todos os serviços, tag main.
-          ONLY="${ONLY:-both}"
+          ONLY="${ONLY:-all}"
           RELEASE_TAG="${RELEASE_TAG:-main}"
           if ! printf '%s' "$RELEASE_TAG" | grep -Eq '^(main|c[0-9]{3})$'; then
             echo "::error title=Tag inválida::Use main ou cNNN (ex.: c003)."
@@ -95,7 +97,7 @@ jobs:
             exit 0
           fi
           services=$(jq -c --arg only "$ONLY" \
-            'map(select($only == "both" or .key == $only))' <<< "$SERVICES")
+            'map(select($only == "all" or .key == $only))' <<< "$SERVICES")
           {
             echo "enabled=true"
             echo "tag=$RELEASE_TAG"
@@ -114,7 +116,7 @@ jobs:
       id-token: write
     strategy:
       fail-fast: true
-      max-parallel: 1 # mcp antes do agent
+      max-parallel: 1 # mcp, agent e bff, nessa ordem
       matrix:
         service: ${{ fromJSON(needs.plan.outputs.services) }}
     env:
@@ -168,7 +170,7 @@ jobs:
           set -euo pipefail
           if ! gcloud run services describe "$SERVICE_NAME" --project "$GCP_PROJECT" \
               --region "$GCP_REGION" --format=json > "$RUNNER_TEMP/before.json"; then
-            echo "::error title=Serviço não encontrado::$SERVICE_NAME precisa existir. A criação (primeira revisão com tráfego) é manual e do 007."
+            echo "::error title=Serviço não encontrado::$SERVICE_NAME precisa existir. A criação (create: true, primeira revisão com tráfego) é manual e exige confirmação humana: deploy/helm/README.md."
             exit 1
           fi
           jq --arg key "$KEY" --arg tag "$RELEASE_TAG" -f deploy/helm/traffic.jq \

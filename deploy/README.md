@@ -41,6 +41,11 @@ pulado com aviso:
   5 de `specs/000-fundacao-contratos/pedidos-owner.md`);
 - `GCP_DEPLOY_SA`: e-mail da SA de deploy.
 
+Sem WIF, o mesmo fluxo com Helm roda da máquina de quem tem `run.admin`
+([deploy local](helm/README.md#deploy-local-sem-wif)). Foi assim que o
+`bussola-bff` (front e BFF, público) e as revisões `main` de `mcp` e `agent`
+subiram em 2026-09-26.
+
 A SA de runtime e o plano do LLM ficam em `helm/bussola/values.yaml`.
 Mudar um deles é um commit na `main`, não um parâmetro do workflow.
 
@@ -49,7 +54,8 @@ Ficam só para emergência até a emenda da constituição
 (`specs/000-fundacao-contratos/proposta-constituicao.md`) ser aprovada. O
 workflow não os usa.
 
-Nenhum workflow move tráfego ou altera IAM. A promoção é do 007.
+Nenhum workflow move tráfego ou altera IAM. A promoção é do 007. O
+`public: true` do `bff` está declarado no chart; o `replace` só o mantém.
 
 ## Regras
 
