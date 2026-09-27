@@ -127,3 +127,9 @@ SMOKE_ARGS ?=
 
 smoke:
 	cd agent && uv run python ../deploy/smoke.py $(SMOKE_ARGS)
+
+# --- Eval de segurança (ciclo 005). Determinístico: sem Gemini e sem Model Armor. ---
+.PHONY: eval-seguranca
+
+eval-seguranca:
+	cd agent && BUSSOLA_FAKES=TRUE uv run python ../eval/seguranca/rodar_eval.py
