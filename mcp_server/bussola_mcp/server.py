@@ -1,23 +1,19 @@
-"""MCP mock do ciclo 000: 7 ferramentas P0 + ``resumo_mes`` (contratos §5 e §8).
+"""MCP server da Bússola (ciclo 003): 9 ferramentas read-only em streamable HTTP.
 
-Serve respostas determinísticas a partir de ``contracts/fixtures/`` para o agente
-(004) e o canal (007) trabalharem antes das ferramentas reais do 003
-(FR-017, FR-018). Regras (``specs/000-fundacao-contratos/contracts/mcp-ferramentas.md``):
+Substitui o mock do 000. Expõe as ferramentas de contratos §5 em ``/mcp``, cada
+uma num módulo de :mod:`bussola_mcp.ferramentas`, sobre portas injetadas
+(``RepositorioFinanceiro``, ``BuscadorContexto`` e ``FinancialComputations``).
 
-1. valida a entrada com ``Entrada*`` → ``ENTRADA_INVALIDA`` citando só nomes de campos;
-2. ``id_usuario`` fora de ``usuarios.json`` → ``USUARIO_INEXISTENTE``;
-3. ``buscar_contexto_financeiro`` busca no corpus de exemplo com o
-   :class:`BuscadorFake` para qualquer cliente conhecido (conhecimento geral, Q-17);
-4. nas demais, usuário que não é o âncora → ``DADOS_INSUFICIENTES`` (nunca o
-   golden de outro cliente);
-5. golden por ferramenta e corte (``< 202512`` → ``__ate_202506`` com aviso de mock),
-   ``resumo_mes__<anomes>``, truncamento em ``top_n`` e aviso da entrada
-   canônica nas simulações;
-6. fixture ausente ou inválida → ``INDISPONIVEL`` ("Dados de exemplo indisponíveis.").
+Fábrica única de dependências (contratos §4, :func:`build_dependencies`):
 
-Todo resultado é um envelope JSON (``structuredContent`` + ``TextContent``). Erro de
-negócio é resultado, não ``isError``. Cada chamada gera uma linha de log JSON com
-ferramenta, latência e código de erro, sem valores de entrada.
+- ``--fixtures DIR`` ou ``BUSSOLA_FAKES=TRUE`` → adaptadores sobre ``contracts/fixtures/``;
+- senão → ``RepositorioBigQuery(modo=BQ_MODO_LEITURA)`` (001) e
+  ``criar_buscador(RAG_BACKEND)`` (002), importados sob demanda. Enquanto um
+  deles não existir em ``main``, cai no adaptador de fixtures e registra
+  ``evento=dependencia_ausente``.
+
+Erros de negócio são resultado da ferramenta (envelope ``erro``), nunca
+``isError``. Cada chamada gera uma linha de log JSON (contratos §9).
 
 Uso::
 
@@ -25,48 +21,20 @@ Uso::
 """
 
 import argparse
-import copy
+import importlib
 import logging
 import os
-import time
 from pathlib import Path
-from typing import Any
+from types import ModuleType
 
 import uvicorn
 from mcp.server.fastmcp import FastMCP
-from mcp.types import ToolAnnotations
-from pydantic import BaseModel, ValidationError
 
-from bussola_mcp.contratos import (
-    ANOMES_MIN,
-    AVISO_CONHECIMENTO,
-    AVISO_SEM_TRECHOS,
-    CORTES_GOLDEN,
-    ENTRADA_CANONICA_SIMULACAO,
-    FERRAMENTAS,
-    FERRAMENTAS_GOLDEN,
-    CodigoErro,
-    DadosBuscarContexto,
-    EntradaBuscarContexto,
-    EntradaComum,
-    EntradaOportunidadesCorte,
-    EntradaResumoMes,
-    Fonte,
-    Periodo,
-    Resposta,
-    UsuarioFixture,
-    arquivo_golden,
-    arquivo_resumo_mes,
-    envelope_erro,
-    mensagem_entrada_invalida,
-)
-from bussola_mcp.dominio.fakes import (
-    ARQUIVO_TRECHOS,
-    BuscadorFake,
-    carregar_usuarios,
-    ler_json,
-    resolver_dir_fixtures,
-)
+from bussola_mcp.dominio.interfaces import BuscadorContexto, RepositorioFinanceiro
+from bussola_mcp.ferramentas import register_all
+from bussola_mcp.ferramentas.computations import build_computations
+from bussola_mcp.ferramentas.fixture_backends import FixtureRepository, FixtureSearcher
+from bussola_mcp.ferramentas.ports import ToolDependencies
 from bussola_mcp.logging_json import configurar_logging
 
 logger = logging.getLogger("bussola_mcp.server")
@@ -74,185 +42,90 @@ logger = logging.getLogger("bussola_mcp.server")
 SERVICO = "bussola-mcp"
 CAMINHO_MCP = "/mcp"
 PORTA_PADRAO = 8080
-DIR_GOLDEN = "ferramentas"
 
-CORTE_PARCIAL, CORTE_FINAL = CORTES_GOLDEN
-FERRAMENTAS_SIMULACAO = ("simular_objetivo", "comparar_cenarios")
-
-
-def _numero(valor: Any) -> str:
-    return f"{valor:g}" if isinstance(valor, float) else str(valor)
-
-
-AVISO_CORTE = f"Resposta de exemplo do mock (corte {CORTE_PARCIAL})."
-AVISO_SIMULACAO = (
-    "Resposta de exemplo do mock, calculada para "
-    + " e ".join(f"{campo}={_numero(v)}" for campo, v in ENTRADA_CANONICA_SIMULACAO.items())
-    + "."
-)
-MENSAGEM_SO_ANCORA = "O mock só tem respostas do cliente âncora."
-MENSAGEM_SEM_FIXTURES = "Dados de exemplo indisponíveis."
+REAL_REPOSITORY_MODULE = "bussola_mcp.dominio.repositorio_bq"
+REAL_SEARCHER_MODULE = "bussola_mcp.rag"
+DEFAULT_READ_MODE = "query"
+DEFAULT_RAG_BACKEND = "lexico"
+_TRUTHY = frozenset({"TRUE", "1"})
 
 INSTRUCOES = (
-    "MCP mock da Bússola (ciclo 000). Ferramentas financeiras determinísticas com "
-    "respostas de exemplo do cliente âncora e uma base de conhecimento geral "
-    "(normas do BACEN, crédito e boas práticas). Todas exigem id_usuario e ate_anomes."
+    "Ferramentas financeiras determinísticas e read-only da Bússola. Os números "
+    "do cliente vêm com a origem em fonte (tabelas e período). "
+    "buscar_contexto_financeiro traz conhecimento geral (normas do BACEN, crédito, "
+    "boas práticas e produtos), sem dado do cliente. Todas exigem id_usuario e "
+    "ate_anomes."
 )
 
-_ANOTACOES = ToolAnnotations(readOnlyHint=True, idempotentHint=True, openWorldHint=False)
+
+def fakes_enabled() -> bool:
+    """``BUSSOLA_FAKES`` ligado (``TRUE`` ou ``1``, sem diferenciar maiúsculas)."""
+    return os.environ.get("BUSSOLA_FAKES", "").strip().upper() in _TRUTHY
 
 
-class _FixtureIndisponivel(Exception):
-    """Arquivo de fixture ausente ou fora do contrato."""
+def _optional_module(name: str) -> ModuleType | None:
+    """Importa ``name`` ou devolve ``None`` quando o próprio módulo não existe.
 
-
-class MockBussola:
-    """Regras do mock sobre um diretório de fixtures, com leitura sob demanda.
-
-    Só leituras bem-sucedidas ficam em cache: um arquivo criado depois do início
-    (ex.: ``make fixtures`` com o servidor no ar) passa a ser servido.
+    Um ``ModuleNotFoundError`` de outra dependência (ex.: pacote do Google
+    ausente dentro do módulo) propaga: é falha de startup, não fallback.
     """
-
-    def __init__(self, dir_fixtures: Path | str | None = None) -> None:
-        self.dir_fixtures = resolver_dir_fixtures(dir_fixtures)
-        self._usuarios: dict[str, UsuarioFixture] | None = None
-        self._golden: dict[str, dict[str, Any]] = {}
-        self._buscador = BuscadorFake(self.dir_fixtures)
-
-    # -- fixtures ------------------------------------------------------------
-
-    def _carregar_usuarios(self) -> dict[str, UsuarioFixture]:
-        if self._usuarios is None:
-            try:
-                usuarios = carregar_usuarios(self.dir_fixtures)
-            except (OSError, ValueError) as exc:
-                raise _FixtureIndisponivel from exc
-            if usuarios is None:
-                raise _FixtureIndisponivel
-            self._usuarios = usuarios
-        return self._usuarios
-
-    def _carregar_golden(self, nome_arquivo: str, dados: type[BaseModel]) -> dict[str, Any]:
-        if nome_arquivo not in self._golden:
-            try:
-                conteudo = ler_json(self.dir_fixtures / DIR_GOLDEN / nome_arquivo)
-                if conteudo is None:
-                    raise _FixtureIndisponivel
-                envelope = Resposta[dados].model_validate(conteudo)
-            except (OSError, ValueError) as exc:
-                raise _FixtureIndisponivel from exc
-            self._golden[nome_arquivo] = envelope.model_dump(mode="json")
-        return copy.deepcopy(self._golden[nome_arquivo])
-
-    def _buscar_conhecimento(self, entrada: EntradaBuscarContexto) -> dict[str, Any]:
-        if not (self.dir_fixtures / ARQUIVO_TRECHOS).is_file():
-            raise _FixtureIndisponivel
-        try:
-            trechos = self._buscador.buscar(entrada.pergunta, entrada.k, entrada.tema)
-        except (OSError, ValueError) as exc:
-            raise _FixtureIndisponivel from exc
-        avisos = [AVISO_CONHECIMENTO] if trechos else [AVISO_CONHECIMENTO, AVISO_SEM_TRECHOS]
-        fonte = Fonte(
-            ferramenta="buscar_contexto_financeiro",
-            tabelas=[],
-            periodo=Periodo(inicio=ANOMES_MIN, fim=entrada.ate_anomes),
-        )
-        resposta = Resposta[DadosBuscarContexto](
-            dados=DadosBuscarContexto(trechos=trechos), fonte=fonte, avisos=avisos
-        )
-        return resposta.model_dump(mode="json")
-
-    # -- regras ---------------------------------------------------------------
-
-    def responder(self, ferramenta: str, argumentos: dict[str, Any]) -> dict[str, Any]:
-        """Envelope de sucesso ou de erro da ferramenta, com uma linha de log."""
-        inicio = time.perf_counter()
-        try:
-            envelope = self._responder(ferramenta, argumentos)
-        except _FixtureIndisponivel as exc:
-            causa = exc.__cause__
+    try:
+        return importlib.import_module(name)
+    except ModuleNotFoundError as exc:
+        if exc.name is not None and (name == exc.name or name.startswith(f"{exc.name}.")):
             logger.warning(
-                "fixture indisponível",
-                exc_info=(type(causa), causa, causa.__traceback__) if causa else None,
-                extra={"evento": "fixture_indisponivel", "ferramenta": ferramenta},
+                "dependência ausente, usando fixtures",
+                extra={"evento": "dependencia_ausente"},
             )
-            envelope = envelope_erro(CodigoErro.INDISPONIVEL, MENSAGEM_SEM_FIXTURES)
-        except Exception:
-            logger.exception(
-                "falha inesperada na ferramenta",
-                extra={"evento": "ferramenta_falhou", "ferramenta": ferramenta},
-            )
-            envelope = envelope_erro(CodigoErro.INDISPONIVEL)
-        erro = envelope.get("erro")
-        codigo = erro["codigo"] if isinstance(erro, dict) else None
-        logger.log(
-            logging.WARNING if codigo == CodigoErro.INDISPONIVEL else logging.INFO,
-            "ferramenta chamada",
-            extra={
-                "evento": "ferramenta_chamada",
-                "ferramenta": ferramenta,
-                "latencia_ms": round((time.perf_counter() - inicio) * 1000, 2),
-                "erro_codigo": codigo,
-            },
-        )
-        return envelope
-
-    def _responder(self, ferramenta: str, argumentos: dict[str, Any]) -> dict[str, Any]:
-        classe_entrada, classe_dados = FERRAMENTAS[ferramenta]
-        try:
-            entrada = classe_entrada.model_validate(argumentos)
-        except ValidationError as exc:
-            return envelope_erro(CodigoErro.ENTRADA_INVALIDA, mensagem_entrada_invalida(exc))
-
-        usuario = self._carregar_usuarios().get(entrada.id_usuario)
-        if usuario is None:
-            return envelope_erro(CodigoErro.USUARIO_INEXISTENTE)
-        if isinstance(entrada, EntradaBuscarContexto):
-            return self._buscar_conhecimento(entrada)
-        if usuario.papel != "ancora":
-            return envelope_erro(CodigoErro.DADOS_INSUFICIENTES, MENSAGEM_SO_ANCORA)
-
-        nome_arquivo, avisos = self._escolher_golden(ferramenta, entrada)
-        envelope = self._carregar_golden(nome_arquivo, classe_dados)
-
-        if isinstance(entrada, EntradaOportunidadesCorte):
-            envelope["dados"]["categorias"] = envelope["dados"]["categorias"][: entrada.top_n]
-
-        for aviso in avisos:
-            if aviso not in envelope["avisos"]:
-                envelope["avisos"].append(aviso)
-        return envelope
-
-    @staticmethod
-    def _escolher_golden(ferramenta: str, entrada: EntradaComum) -> tuple[str, list[str]]:
-        if isinstance(entrada, EntradaResumoMes):
-            return arquivo_resumo_mes(entrada.anomes), []
-        if ferramenta not in FERRAMENTAS_GOLDEN:
-            raise _FixtureIndisponivel
-        avisos: list[str] = []
-        if entrada.ate_anomes < CORTE_FINAL:
-            corte = CORTE_PARCIAL
-            avisos.append(AVISO_CORTE)
-        else:
-            corte = CORTE_FINAL
-        if ferramenta in FERRAMENTAS_SIMULACAO:
-            avisos.append(AVISO_SIMULACAO)
-        return arquivo_golden(ferramenta, corte), avisos
+            return None
+        raise
 
 
-def criar_servidor(
-    dir_fixtures: Path | str | None = None,
+def _real_repository(fixtures_dir: Path | None) -> RepositorioFinanceiro:
+    module = _optional_module(REAL_REPOSITORY_MODULE)
+    if module is None:
+        return FixtureRepository(fixtures_dir)
+    modo = os.environ.get("BQ_MODO_LEITURA", DEFAULT_READ_MODE).strip() or DEFAULT_READ_MODE
+    return module.RepositorioBigQuery(modo=modo)
+
+
+def _real_searcher(fixtures_dir: Path | None) -> BuscadorContexto:
+    module = _optional_module(REAL_SEARCHER_MODULE)
+    if module is None:
+        return FixtureSearcher(fixtures_dir)
+    backend = os.environ.get("RAG_BACKEND", DEFAULT_RAG_BACKEND).strip() or DEFAULT_RAG_BACKEND
+    return module.criar_buscador(backend)
+
+
+def build_dependencies(fixtures_dir: Path | str | None = None) -> ToolDependencies:
+    """Adaptadores das portas conforme o modo (fixtures ou real)."""
+    diretorio = Path(fixtures_dir) if fixtures_dir is not None else None
+    if diretorio is not None or fakes_enabled():
+        repository: RepositorioFinanceiro = FixtureRepository(diretorio)
+        searcher: BuscadorContexto = FixtureSearcher(diretorio)
+    else:
+        repository = _real_repository(diretorio)
+        searcher = _real_searcher(diretorio)
+    return ToolDependencies(
+        repository=repository,
+        searcher=searcher,
+        computations=build_computations(repository, diretorio),
+    )
+
+
+def create_server(
+    deps: ToolDependencies | None = None,
     *,
+    fixtures_dir: Path | str | None = None,
     host: str = "127.0.0.1",
     port: int = PORTA_PADRAO,
 ) -> FastMCP:
-    """FastMCP com as 8 ferramentas do mock (``FERRAMENTAS_MOCK``).
+    """FastMCP com as 9 ferramentas de ``contratos.FERRAMENTAS``.
 
-    As assinaturas usam tipos simples com os padrões de §5. Faixas e UUID são
-    validados dentro da ferramenta, que devolve o envelope de erro (research R-05).
-    Com ``host`` de loopback, o SDK liga a proteção contra DNS rebinding.
+    As assinaturas usam tipos simples com os padrões de §5; faixas e UUID são
+    validados dentro da ferramenta (research R-05 do 000). Com ``host`` de
+    loopback, o SDK liga a proteção contra DNS rebinding.
     """
-    mock = MockBussola(dir_fixtures)
     servidor = FastMCP(
         SERVICO,
         instructions=INSTRUCOES,
@@ -260,113 +133,14 @@ def criar_servidor(
         port=port,
         streamable_http_path=CAMINHO_MCP,
     )
-    ferramenta = servidor.tool(annotations=_ANOTACOES)
-
-    @ferramenta
-    def perfil_financeiro(id_usuario: str, ate_anomes: int) -> dict[str, Any]:
-        """Renda, gasto e sobra médios, fontes de renda, saldo e série mensal até o corte."""
-        return mock.responder(
-            "perfil_financeiro", {"id_usuario": id_usuario, "ate_anomes": ate_anomes}
-        )
-
-    @ferramenta
-    def capacidade_poupanca(id_usuario: str, ate_anomes: int) -> dict[str, Any]:
-        """Sobra média e mediana, desvio padrão e meses negativos até o corte."""
-        return mock.responder(
-            "capacidade_poupanca", {"id_usuario": id_usuario, "ate_anomes": ate_anomes}
-        )
-
-    @ferramenta
-    def oportunidades_corte(id_usuario: str, ate_anomes: int, top_n: int = 5) -> dict[str, Any]:
-        """Categorias com maior economia potencial mensal (até ``top_n``, de 1 a 10)."""
-        return mock.responder(
-            "oportunidades_corte",
-            {"id_usuario": id_usuario, "ate_anomes": ate_anomes, "top_n": top_n},
-        )
-
-    @ferramenta
-    def dividas_e_parcelas(id_usuario: str, ate_anomes: int) -> dict[str, Any]:
-        """Parcelas ativas, juros pagos em média e comprometimento da renda."""
-        return mock.responder(
-            "dividas_e_parcelas", {"id_usuario": id_usuario, "ate_anomes": ate_anomes}
-        )
-
-    @ferramenta
-    def simular_objetivo(
-        id_usuario: str,
-        ate_anomes: int,
-        valor_alvo: float,
-        prazo_meses: int | None = None,
-        aporte_mensal: float | None = None,
-        usar_saldo_atual: bool = False,
-    ) -> dict[str, Any]:
-        """Aporte para um prazo ou prazo para um aporte. Informe exatamente um dos dois."""
-        return mock.responder(
-            "simular_objetivo",
-            {
-                "id_usuario": id_usuario,
-                "ate_anomes": ate_anomes,
-                "valor_alvo": valor_alvo,
-                "prazo_meses": prazo_meses,
-                "aporte_mensal": aporte_mensal,
-                "usar_saldo_atual": usar_saldo_atual,
-            },
-        )
-
-    @ferramenta
-    def comparar_cenarios(
-        id_usuario: str, ate_anomes: int, valor_alvo: float, prazo_meses: int
-    ) -> dict[str, Any]:
-        """Cenários conservador, equilibrado e acelerado para o objetivo."""
-        return mock.responder(
-            "comparar_cenarios",
-            {
-                "id_usuario": id_usuario,
-                "ate_anomes": ate_anomes,
-                "valor_alvo": valor_alvo,
-                "prazo_meses": prazo_meses,
-            },
-        )
-
-    @ferramenta
-    def buscar_contexto_financeiro(
-        id_usuario: str,
-        ate_anomes: int,
-        pergunta: str,
-        k: int = 5,
-        tema: str | None = None,
-    ) -> dict[str, Any]:
-        """Trechos da base de conhecimento: normas do BACEN, crédito, boas práticas e produtos.
-
-        Conteúdo geral, não é dado do cliente. ``tema`` opcional: ``norma_bacen``,
-        ``credito``, ``boas_praticas`` ou ``produto`` (catálogo, sem taxas). Até ``k``
-        trechos (de 1 a 10), com a fonte.
-        """
-        return mock.responder(
-            "buscar_contexto_financeiro",
-            {
-                "id_usuario": id_usuario,
-                "ate_anomes": ate_anomes,
-                "pergunta": pergunta,
-                "k": k,
-                "tema": tema,
-            },
-        )
-
-    @ferramenta
-    def resumo_mes(id_usuario: str, ate_anomes: int, anomes: int) -> dict[str, Any]:
-        """Renda, gasto, sobra e gastos por macro de um mês (``anomes <= ate_anomes``)."""
-        return mock.responder(
-            "resumo_mes", {"id_usuario": id_usuario, "ate_anomes": ate_anomes, "anomes": anomes}
-        )
-
+    register_all(servidor, deps if deps is not None else build_dependencies(fixtures_dir))
     return servidor
 
 
 def _argumentos(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="python -m bussola_mcp.server",
-        description="MCP mock da Bússola (streamable HTTP em /mcp).",
+        description="MCP server da Bússola (streamable HTTP em /mcp).",
     )
     parser.add_argument("--host", default="0.0.0.0", help="padrão: 0.0.0.0")
     parser.add_argument(
@@ -379,7 +153,7 @@ def _argumentos(argv: list[str] | None) -> argparse.Namespace:
         "--fixtures",
         type=Path,
         default=None,
-        help="diretório de fixtures (padrão: <raiz do repositório>/contracts/fixtures)",
+        help="diretório de fixtures; força o modo fake (padrão: contracts/fixtures)",
     )
     return parser.parse_args(argv)
 
@@ -387,9 +161,10 @@ def _argumentos(argv: list[str] | None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> None:
     args = _argumentos(argv)
     configurar_logging(SERVICO)
-    servidor = criar_servidor(args.fixtures, host=args.host, port=args.port)
+    servidor = create_server(fixtures_dir=args.fixtures, host=args.host, port=args.port)
     logger.info(
-        f"MCP mock em {args.host}:{args.port}{CAMINHO_MCP}", extra={"evento": "servidor_iniciado"}
+        f"MCP server em {args.host}:{args.port}{CAMINHO_MCP}",
+        extra={"evento": "servidor_iniciado"},
     )
     # uvicorn sem dictConfig próprio: os logs dele passam pelo JsonFormatter da raiz.
     uvicorn.run(
