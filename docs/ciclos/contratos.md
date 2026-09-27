@@ -382,6 +382,18 @@ Códigos de erro:
 | `consentimentos` | `{acao: {consent_id, status: pendente \| aceito \| recusado, ts, resumo?, invocation_id?, usado?}}` (opcionais: acréscimo do 005, ver abaixo) | 005 |
 | `plano_id` | str \| None | 005 |
 | `acompanhamento` | list[resultado mensal] | 006 |
+| `acompanhamento_contexto` | dict \| ausente (acréscimo do 006) | 006 |
+
+- Resultado mensal (`acompanhamento`): `{plano_id, anomes, planejado,
+  realizado, desvio, status, categoria_desvio}`, com `status` ∈ `no_plano`
+  \| `desvio` \| `folga` e `categoria_desvio` = macro \| `None`.
+- `acompanhamento_contexto` é interno do 006. Os outros ciclos não leem nem
+  escrevem essa chave. Campos:
+  - `plano_inicial_id`, `planos` (ids da linhagem de ajustes) e
+    `inicio_anomes`;
+  - `linha_base` (`{macro: média}` \| `None`, calculada no primeiro desvio);
+  - `plano_vigente` (snapshot do plano ativo);
+  - `rotas` e `rotas_anomes` (últimas rotas recalculadas).
 
 Campos opcionais da entrada de `consentimentos` (acréscimo do 005):
 
