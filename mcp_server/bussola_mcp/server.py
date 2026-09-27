@@ -137,6 +137,20 @@ def create_server(
     return servidor
 
 
+def criar_servidor(
+    dir_fixtures: Path | str | None = None,
+    *,
+    host: str = "127.0.0.1",
+    port: int = PORTA_PADRAO,
+) -> FastMCP:
+    """Compatibilidade com a API do mock do 000 (mesma assinatura).
+
+    Equivale a ``create_server(fixtures_dir=dir_fixtures, ...)``: com
+    ``dir_fixtures`` serve as fixtures; sem ele, segue a fábrica de dependências.
+    """
+    return create_server(fixtures_dir=dir_fixtures, host=host, port=port)
+
+
 def _argumentos(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="python -m bussola_mcp.server",
