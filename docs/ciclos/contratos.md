@@ -62,10 +62,11 @@ merge se resolve pela união das linhas.
 │   │   ├── dominio/repositorio_bq.py  001
 │   │   ├── dominio/metricas.py        001
 │   │   ├── dominio/simulacao.py       001
+│   │   ├── dominio/marcos.py          009  (engine de marcos, funções puras)
 │   │   ├── rag/                       002  (buscadores e indice/ versionado; Q-17)
-│   │   ├── ferramentas/               003
+│   │   ├── ferramentas/               003  (planejar_marcos.py: 009)
 │   │   └── server.py                  000 (mock) → 003 (real)
-│   └── tests/{contrato,dados,rag,ferramentas}/   000/001/002/003
+│   └── tests/{contrato,dados,rag,ferramentas,marcos}/   000/001/002/003/009
 ├── agent/
 │   ├── pyproject.toml, Dockerfile     000  (acréscimo de dependências)
 │   ├── bussola_agent/
@@ -78,8 +79,9 @@ merge se resolve pela união das linhas.
 │   │   ├── agent.py                   000 (hello) → 004
 │   │   ├── prompts/, jornada/, escopo.py             004
 │   │   ├── governanca/, persistencia_bq.py           005
-│   │   └── acompanhamento/                           006
-│   └── tests/{contrato,jornada,governanca,acompanhamento}/  000/004/005/006
+│   │   ├── acompanhamento/                           006
+│   │   └── marcos/                                   009
+│   └── tests/{contrato,jornada,governanca,acompanhamento,marcos}/  000/004/005/006/009
 ├── eval/
 │   ├── rag/                           002
 │   ├── agente/                        004
@@ -329,6 +331,7 @@ Códigos de erro:
 | `buscar_contexto_financeiro` | P0 | `pergunta: str` (≤ 500 caracteres), `k: int = 5` (1–10), `tema: str \| None = None` (`norma_bacen` \| `credito` \| `boas_praticas` \| `produto`) | `trechos[{doc_id, trecho_id, titulo, tema, texto, fonte{nome, referencia, url}, score}]` |
 | `resumo_mes` | P1 | `anomes` (≤ `ate_anomes`) | `anomes, renda, gasto, sobra, gastos_macro[{macro, total}]` (usado pelo 006) |
 | `referencia_coorte` | P1 | `categoria` (macro) | `faixa_renda, macro, media, mediana, qtd_usuarios` |
+| `planejar_marcos` | 009 | `valor_alvo > 0`, `prazo_meses` (1–360), `prioridade: str \| None` (≤ 100), `usar_saldo_atual: bool = true` | `objetivo{…}, situacao{…}, motivos[{codigo, observado, limite, explicacao}], marcos[{ordem, nivel, tipo, titulo, indicador, valor_alvo, prazo_meses, aporte_mensal, por_que, relacao_com_objetivo}], proximo, aporte_necessario, capacidade_sustentavel, trajetoria_incerta, ressalvas[str], regras{…}` |
 
 - `trade_offs` são frases geradas por regra determinística (ex.: "exige
   reduzir R$ 250/mês em Restaurantes"). Não são geradas por LLM.
@@ -364,6 +367,22 @@ Códigos de erro:
   | `buscar_contexto_financeiro` | nenhuma (`[]`): corpus no repositório |
   | `resumo_mes` | `bussola_dados.perfil_mensal`, `bussola_dados.gastos_categoria` |
   | `referencia_coorte` | `bussola_dados.referencia_coorte` |
+  | `planejar_marcos` | `bussola_dados.perfil_mensal`, `bussola_dados.parcelas` |
+
+- **`planejar_marcos`** (ciclo 009) monta a rota de marcos intermediários
+  quando o objetivo não cabe nas condições atuais, em vez de rejeitar o
+  objetivo. Regras e premissas em
+  [`specs/009-marcos-financeiros/`](../../specs/009-marcos-financeiros/): o
+  contrato completo está em
+  [`contracts/planejar_marcos.md`](../../specs/009-marcos-financeiros/contracts/planejar_marcos.md)
+  e as decisões de premissa em
+  [`questoes.md`](../../specs/009-marcos-financeiros/questoes.md). Duas
+  diferenças deliberadas em relação a `simular_objetivo`:
+  - `usar_saldo_atual` é `true` por padrão (Q-009-3), com piso zero e a
+    premissa nos `avisos`;
+  - a ferramenta **não** usa `PRAZO_IMPLAUSIVEL`: prazo calculado acima de 360
+    meses vira `trajetoria_incerta`, porque devolver erro seria o "não é
+    viável" que a feature existe para eliminar.
 
 ## §6 Agente (serviço `bussola-agent`)
 
@@ -381,6 +400,7 @@ Códigos de erro:
 | `consentimentos` | `{acao: {consent_id, status: pendente \| aceito \| recusado, ts}}` | 005 |
 | `plano_id` | str \| None | 005 |
 | `acompanhamento` | list[resultado mensal] | 006 |
+| `marcos` | último `dados` de `planejar_marcos` | 009 |
 
 ### Encadeador de callbacks (`agent/bussola_agent/callbacks.py`, 000)
 
@@ -404,6 +424,7 @@ Ordens reservadas:
 | `before_tool` | 20 | 005 | gate: ação sensível sem consentimento `aceito` é bloqueada |
 | `before_tool` / `after_tool` | 90 | 005 | auditoria |
 | `after_tool` | 10 | 004 | registra `fonte` em `ultimas_fontes` |
+| `after_tool` | 30 | 009 | grava `marcos` no state a partir de `planejar_marcos` |
 | `after_model` | 10 | 005 | guardrail de saída |
 | `after_model` | 50 | 004 | verificação de números (opcional) |
 
@@ -448,19 +469,19 @@ def ferramentas_sensiveis() -> set[str]: ...                    # nomes com sens
 def limpar() -> None: ...                                       # só testes (Q-09)
 ```
 
-- `carregar_extensoes()` importa `bussola_agent.governanca` e
-  `bussola_agent.acompanhamento` quando existirem. Um pacote ausente
-  (`importlib.util.find_spec` devolve `None`) é pulado; um pacote presente
-  com erro de import **propaga** o erro, para não esconder falhas do 005/006
-  (Q-04 do 000).
+- `carregar_extensoes()` importa `bussola_agent.governanca`,
+  `bussola_agent.acompanhamento` e `bussola_agent.marcos` quando existirem. Um
+  pacote ausente (`importlib.util.find_spec` devolve `None`) é pulado; um
+  pacote presente com erro de import **propaga** o erro, para não esconder
+  falhas do 005/006/009 (Q-04 do 000).
 - Registrar duas ferramentas com o mesmo nome gera `ValueError`.
 - O `__init__.py` de cada pacote registra suas ferramentas, instruções e
   callbacks.
 - O `agent.py` chama `carregar_extensoes()` e depois monta o
   `root_agent`, usando `ferramentas()` e acrescentando `instrucoes()` ao
   prompt base.
-- Ordens de instrução reservadas: 004 usa 0–49, 005 usa 50–69 e 006 usa
-  70–89.
+- Ordens de instrução reservadas: 004 usa 0–49, 005 usa 50–69, 006 usa
+  70–89 e 009 usa 90–99.
 
 ### Persistência (`agent/bussola_agent/persistencia.py`, 000)
 

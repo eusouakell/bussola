@@ -2,13 +2,15 @@
 
 Código de contrato (constituição X): mudanças só via PR ``contracts: <mudança>``.
 
-Os ciclos 005 (``bussola_agent.governanca``) e 006
-(``bussola_agent.acompanhamento``) acrescentam ferramentas, trechos de
-instrução e callbacks sem editar o ``agent.py`` do 004. O ``__init__.py`` de
-cada pacote registra o que for seu, e o ``agent.py`` chama
-:func:`carregar_extensoes` antes de montar o ``root_agent``.
+Os ciclos 005 (``bussola_agent.governanca``), 006
+(``bussola_agent.acompanhamento``) e 009 (``bussola_agent.marcos``)
+acrescentam ferramentas, trechos de instrução e callbacks sem editar o
+``agent.py`` do 004. O ``__init__.py`` de cada pacote registra o que for seu, e
+o ``agent.py`` chama :func:`carregar_extensoes` antes de montar o
+``root_agent``.
 
-Ordens de instrução reservadas: 004 usa 0–49, 005 usa 50–69 e 006 usa 70–89.
+Ordens de instrução reservadas: 004 usa 0–49, 005 usa 50–69, 006 usa 70–89 e
+009 usa 90–99.
 """
 
 import importlib
@@ -25,6 +27,7 @@ from bussola_agent.logging_json import obter_logger
 PACOTES_EXTENSAO: tuple[str, ...] = (
     "bussola_agent.governanca",
     "bussola_agent.acompanhamento",
+    "bussola_agent.marcos",
 )
 
 _log = obter_logger(__name__)

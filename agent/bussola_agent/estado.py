@@ -27,6 +27,7 @@ CHAVE_ULTIMAS_FONTES = "ultimas_fontes"
 CHAVE_CONSENTIMENTOS = "consentimentos"
 CHAVE_PLANO_ID = "plano_id"
 CHAVE_ACOMPANHAMENTO = "acompanhamento"
+CHAVE_MARCOS = "marcos"
 
 CHAVES: tuple[str, ...] = (
     CHAVE_ID_USUARIO,
@@ -39,6 +40,7 @@ CHAVES: tuple[str, ...] = (
     CHAVE_CONSENTIMENTOS,
     CHAVE_PLANO_ID,
     CHAVE_ACOMPANHAMENTO,
+    CHAVE_MARCOS,
 )
 
 # Limite de fontes guardadas em ``ultimas_fontes`` (as mais recentes ficam).
@@ -113,6 +115,7 @@ def estado_inicial(id_usuario: str, ate_anomes: int) -> dict[str, Any]:
         CHAVE_CONSENTIMENTOS: {},
         CHAVE_PLANO_ID: None,
         CHAVE_ACOMPANHAMENTO: [],
+        CHAVE_MARCOS: None,
     }
 
 

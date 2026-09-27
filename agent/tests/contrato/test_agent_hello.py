@@ -143,7 +143,12 @@ def test_extensoes_entram_no_root_agent(
     agente = importar_de_novo().root_agent
     assert isinstance(agente.tools[0], McpToolset)
     assert [f.__name__ for f in agente.tools[1:]] == ["solicitar_consentimento"]
-    assert agente.instruction.rstrip().endswith("Peça consentimento antes de agir.")
+    # Ordem 50 (005) antes da ordem 90 (009, marcos): os dois trechos chegam.
+    assert "Peça consentimento antes de agir." in agente.instruction
+    assert "planejar_marcos" in agente.instruction
+    assert agente.instruction.index("Peça consentimento antes de agir.") < agente.instruction.index(
+        "planejar_marcos"
+    )
 
 
 def test_modelo_e_url_do_ambiente(

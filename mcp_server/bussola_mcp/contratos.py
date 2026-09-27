@@ -552,6 +552,184 @@ class DadosReferenciaCoorte(_Modelo):
 
 
 # ---------------------------------------------------------------------------
+# §5 planejar_marcos: marcos financeiros intermediários (ciclo 009)
+# ---------------------------------------------------------------------------
+
+TextoPrioridade = Annotated[
+    str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)
+]
+
+
+class CodigoMotivo(StrEnum):
+    """Por que o objetivo não cabe nas condições atuais (specs/009 FR-001)."""
+
+    CAPACIDADE_INSUFICIENTE = "CAPACIDADE_INSUFICIENTE"
+    RISCO_EXCESSIVO = "RISCO_EXCESSIVO"
+    DIVIDA_A_RESOLVER = "DIVIDA_A_RESOLVER"
+    SEM_RESERVA = "SEM_RESERVA"
+    VALOR_DISTANTE_DOS_RECURSOS = "VALOR_DISTANTE_DOS_RECURSOS"
+    RENDA_NAO_SUSTENTA = "RENDA_NAO_SUSTENTA"
+    PREMISSA_IRREALISTA = "PREMISSA_IRREALISTA"
+    PRAZO_NAO_CABE = "PRAZO_NAO_CABE"
+
+
+class TipoMarco(StrEnum):
+    """Tipos de marco, na ordem de prioridade da especificação (specs/009 FR-008)."""
+
+    EQUILIBRAR_FLUXO = "EQUILIBRAR_FLUXO"
+    REDUZIR_DIVIDA_CARA = "REDUZIR_DIVIDA_CARA"
+    FORMAR_RESERVA = "FORMAR_RESERVA"
+    ACUMULAR_PARTE_DA_META = "ACUMULAR_PARTE_DA_META"
+    AUMENTAR_CAPACIDADE = "AUMENTAR_CAPACIDADE"
+    AJUSTAR_PRAZO = "AJUSTAR_PRAZO"
+
+
+# Nível de prioridade de cada motivo: 1 estrutural, 2 vulnerável, 3 patrimônio,
+# 4 eficiência. O próximo marco sai sempre do menor nível aceso.
+NIVEL_MOTIVO: dict[CodigoMotivo, int] = {
+    CodigoMotivo.CAPACIDADE_INSUFICIENTE: 1,
+    CodigoMotivo.RISCO_EXCESSIVO: 1,
+    CodigoMotivo.DIVIDA_A_RESOLVER: 1,
+    CodigoMotivo.SEM_RESERVA: 2,
+    CodigoMotivo.VALOR_DISTANTE_DOS_RECURSOS: 3,
+    CodigoMotivo.RENDA_NAO_SUSTENTA: 3,
+    CodigoMotivo.PREMISSA_IRREALISTA: 4,
+    CodigoMotivo.PRAZO_NAO_CABE: 4,
+}
+
+NIVEL_TIPO_MARCO: dict[TipoMarco, int] = {
+    TipoMarco.EQUILIBRAR_FLUXO: 1,
+    TipoMarco.REDUZIR_DIVIDA_CARA: 1,
+    TipoMarco.FORMAR_RESERVA: 2,
+    TipoMarco.ACUMULAR_PARTE_DA_META: 3,
+    TipoMarco.AUMENTAR_CAPACIDADE: 3,
+    TipoMarco.AJUSTAR_PRAZO: 4,
+}
+
+# Avisos fixos de planejar_marcos (o LLM repassa, não reescreve).
+AVISO_MARCO_NAO_GARANTE = (
+    "Marcos são uma rota adaptativa: atingir um marco não garante o objetivo final. "
+    "Renda, patrimônio, prazo e condições futuras podem precisar mudar."
+)
+AVISO_SEM_PATRIMONIO = (
+    "Não há dado de patrimônio nem de investimentos nesta base; os marcos consideram "
+    "só renda, gastos, parcelas e saldo em conta."
+)
+AVISO_SEM_RENDIMENTO = (
+    "Sem rendimento considerado: nenhuma valorização de investimento entra nas contas."
+)
+AVISO_SALDO_COMO_RECURSO = "O saldo atual em conta foi considerado como recurso já disponível."
+AVISO_SALDO_NEGATIVO = (
+    "O saldo atual está negativo; ele foi considerado como zero e entrou no diagnóstico de risco."
+)
+AVISO_SEM_RENDA = (
+    "Renda média zero no período: os limites que dependem de renda não foram avaliados."
+)
+
+
+class EntradaPlanejarMarcos(EntradaComum):
+    """``prioridade`` é só ecoada no objetivo; nunca entra em cálculo.
+
+    ``usar_saldo_atual`` é ``True`` por padrão, diferente de
+    :class:`EntradaSimularObjetivo`: sem dado de patrimônio na base, o saldo em
+    conta é o único recurso já disponível mensurável (specs/009 Q-009-3).
+    """
+
+    valor_alvo: float = Field(gt=0)
+    prazo_meses: int = Field(ge=1, le=360)
+    prioridade: TextoPrioridade | None = None
+    usar_saldo_atual: bool = True
+
+
+class RegrasMarco(_Modelo):
+    """Premissas dos marcos, versionadas e devolvidas em ``dados.regras``.
+
+    Decisões Q-009-1 a Q-009-4 de ``specs/009-marcos-financeiros/questoes.md``.
+    """
+
+    meses_reserva: int = 3
+    fracao_reserva_parcial: float = 1 / 3
+    pct_juros_renda_divida_cara: float = 0.01
+    pct_comprometimento_renda_max: float = 30.0
+    pct_capacidade_sustentavel: float = 0.60
+    pct_aporte_renda_max: float = 0.30
+    pct_recursos_minimo_meta: float = 0.10
+    pct_meses_negativos_max: float = 0.25
+    meses_fluxo_equilibrado: int = 3
+    fator_desnivel_incerto: float = 3.0
+    piso_valor_marco: float = 500.0
+    max_marcos: int = 4
+    prazo_maximo_marco: int = 360
+    rendimento_mensal: float = 0.0
+    usar_saldo_atual: bool = True
+
+
+class ContextoFinanceiro(_Modelo):
+    """Retrato determinístico do cliente até ``ate_anomes`` (specs/009 data-model)."""
+
+    renda_media: float
+    gasto_medio: float
+    sobra_media: float
+    sobra_mediana: float
+    meses_negativos: int
+    meses_considerados: int
+    saldo_atual: float
+    recursos_disponiveis: float
+    juros_pagos_media: float
+    parcelas_mensais: float
+    comprometimento_renda_pct: float
+    meses_ate_fim_parcela: int | None = None
+    dados_ausentes: list[str] = Field(default_factory=list)
+
+
+class Motivo(_Modelo):
+    codigo: CodigoMotivo
+    observado: float
+    limite: float
+    explicacao: str
+
+
+class Marco(_Modelo):
+    """Meta intermediária. Ao menos um entre ``valor_alvo`` e ``prazo_meses``."""
+
+    ordem: int = Field(ge=1)
+    nivel: int = Field(ge=1, le=4)
+    tipo: TipoMarco
+    titulo: str
+    indicador: str
+    valor_alvo: float | None = None
+    prazo_meses: int | None = None
+    aporte_mensal: float | None = None
+    por_que: str
+    relacao_com_objetivo: str
+
+    @model_validator(mode="after")
+    def _tem_valor_ou_prazo(self) -> "Marco":
+        if self.valor_alvo is None and self.prazo_meses is None:
+            raise ValueError("marco precisa de valor_alvo ou prazo_meses")
+        return self
+
+
+class ObjetivoMarco(_Modelo):
+    valor_alvo: float
+    prazo_meses: int
+    prioridade: str | None = None
+
+
+class DadosPlanejarMarcos(_Modelo):
+    objetivo: ObjetivoMarco
+    situacao: ContextoFinanceiro
+    motivos: list[Motivo]
+    marcos: list[Marco]
+    proximo: Marco | None
+    aporte_necessario: float
+    capacidade_sustentavel: float
+    trajetoria_incerta: bool
+    ressalvas: list[str]
+    regras: RegrasMarco
+
+
+# ---------------------------------------------------------------------------
 # Catálogo de ferramentas (§5)
 # ---------------------------------------------------------------------------
 
@@ -565,6 +743,7 @@ FERRAMENTAS: dict[str, tuple[type[EntradaComum], type[_Modelo]]] = {
     "buscar_contexto_financeiro": (EntradaBuscarContexto, DadosBuscarContexto),
     "resumo_mes": (EntradaResumoMes, DadosResumoMes),
     "referencia_coorte": (EntradaReferenciaCoorte, DadosReferenciaCoorte),
+    "planejar_marcos": (EntradaPlanejarMarcos, DadosPlanejarMarcos),
 }
 
 FERRAMENTAS_P0: tuple[str, ...] = (
@@ -602,6 +781,7 @@ TABELAS_FERRAMENTA: dict[str, list[str]] = {
     "buscar_contexto_financeiro": [],
     "resumo_mes": ["bussola_dados.perfil_mensal", "bussola_dados.gastos_categoria"],
     "referencia_coorte": ["bussola_dados.referencia_coorte"],
+    "planejar_marcos": ["bussola_dados.perfil_mensal", "bussola_dados.parcelas"],
 }
 
 # ---------------------------------------------------------------------------

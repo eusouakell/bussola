@@ -30,18 +30,32 @@ def criar_plano(cenario: str) -> dict:
     return {"ok": cenario}
 
 
+CriarExtensao = Callable[[str, str], Path]
+
+
 def test_pacotes_do_contrato() -> None:
-    assert PACOTES_EXTENSAO == ("bussola_agent.governanca", "bussola_agent.acompanhamento")
+    assert PACOTES_EXTENSAO == (
+        "bussola_agent.governanca",
+        "bussola_agent.acompanhamento",
+        "bussola_agent.marcos",
+    )
 
 
-def test_carregar_sem_pacotes_nao_falha() -> None:
-    """AC-09: governanca e acompanhamento ainda não existem."""
-    for nome in PACOTES_EXTENSAO:
-        assert importlib.util.find_spec(nome) is None
+def test_carregar_so_registra_os_pacotes_presentes(criar_extensao: CriarExtensao) -> None:
+    """AC-09: governanca e acompanhamento ainda não existem; ``marcos`` (009) existe.
+
+    A fixture ``criar_extensao`` descarrega os pacotes antes do teste, para o
+    resultado não depender da ordem dos testes.
+    """
+    assert importlib.util.find_spec("bussola_agent.governanca") is None
+    assert importlib.util.find_spec("bussola_agent.acompanhamento") is None
+    assert importlib.util.find_spec("bussola_agent.marcos") is not None
     carregar_extensoes()
+    # O 009 registra instrução e callback, e nenhuma ferramenta local.
     assert ferramentas() == []
-    assert instrucoes() == ""
     assert ferramentas_sensiveis() == set()
+    assert "marco" in instrucoes().lower()
+    assert [f.__name__ for f in callbacks.registrados("after_tool")] == ["gravar_marcos"]
 
 
 def test_registro_de_ferramentas_e_sensiveis() -> None:
@@ -116,9 +130,10 @@ def test_limpar() -> None:
 
 # ---------------------------------------------------------------------------
 # Pacotes de extensão presentes (fixture ``criar_extensao`` do conftest)
+#
+# ``bussola_agent.marcos`` (009) é um pacote real, então ele também entra em
+# ``carregar_extensoes()`` nos testes abaixo.
 # ---------------------------------------------------------------------------
-
-CriarExtensao = Callable[[str, str], Path]
 
 
 def test_pacote_presente_registra_ferramentas_instrucoes_e_callbacks(
@@ -139,7 +154,7 @@ def test_pacote_presente_registra_ferramentas_instrucoes_e_callbacks(
     carregar_extensoes()
     assert [f.__name__ for f in ferramentas()] == ["solicitar_consentimento", "criar_plano"]
     assert ferramentas_sensiveis() == {"criar_plano"}
-    assert instrucoes() == "Peça consentimento."
+    assert instrucoes().startswith("Peça consentimento.")
     assert len(callbacks.registrados("before_tool")) == 1
     assert "bussola_agent.acompanhamento" not in sys.modules
 
@@ -154,7 +169,8 @@ def test_os_dois_pacotes_presentes(criar_extensao: CriarExtensao) -> None:
         "from bussola_agent import extensoes\nextensoes.registrar_instrucao(70, 'A')\n",
     )
     carregar_extensoes()
-    assert instrucoes() == "G\n\nA"
+    # G (005, ordem 50), A (006, ordem 70) e o trecho do 009 (ordem 90).
+    assert instrucoes().startswith("G\n\nA\n\n")
     assert all(nome in sys.modules for nome in PACOTES_EXTENSAO)
 
 
