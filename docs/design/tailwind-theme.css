@@ -5,7 +5,10 @@
    (canvas/Tokens.dc.html, seção "Handoff Tailwind v4").
    Ponto de partida para web/src/app.css no ciclo 007 (§5.3).
 
-   As seções 1 e 2 vêm da folha, sem alteração. A seção 3
+   Cores dos tokens trocadas pelos códigos exatos da paleta
+   Itaú PF (brand.primary #FF6200, text.primary #02036C, etc.);
+   as sem equivalente na paleta ficaram como estavam.
+   As seções 1 e 2 vêm da folha, sem outra alteração. A seção 3
    completa o ambiente com os 6 estados (claro e escuro) e os
    @keyframes de canvas/bussola.css, que é a referência
    completa (tokens escuros, classes de componente, motion).
@@ -24,23 +27,23 @@
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui;
   --font-mono: "JetBrains Mono", ui-monospace;
 
-  --color-accent: #EC7000;
-  --color-accent-cta: #DB6600;
+  --color-accent: #FF6200;
+  --color-accent-cta: #FF6200;
   --color-accent-ink: #A84F00;
-  --color-ink: #1E1A16;
-  --color-ink-2: #4A423A;
-  --color-ink-3: #675D53;
-  --color-sand-50: #FBF7F2;
+  --color-ink: #02036C;
+  --color-ink-2: #5C6B79;
+  --color-ink-3: #5C6B79;
+  --color-sand-50: #F4F6F9;
   --color-smoke-900: #1D1713;
-  --color-ok: #1E7A45;
+  --color-ok: #0F470C;
   --color-warn: #8A5200;
   --color-warn-fill: #F2A93B;
-  --color-err: #B42318;
+  --color-err: #E60000;
 
   --color-tag-diagnostico: #0B6B70;
   --color-tag-simulacao: #6A3FB5;
   --color-tag-recomendacao: #A84F00;
-  --color-tag-acao: #1E7A45;
+  --color-tag-acao: #0F470C;
 
   --color-tint-objetivo: #EEDCC8;
   --color-tint-entender: #E4DCD2;
@@ -89,7 +92,7 @@
 @utility glass-consent {
   background: rgb(255 255 255 / .88);
   backdrop-filter: blur(var(--blur-glass-consent)) saturate(150%);
-  border: 1.5px solid rgb(30 122 69 / .55);
+  border: 1.5px solid rgb(15 71 12 / .55);
   border-radius: var(--radius-consent);
   box-shadow: var(--shadow-glass), var(--shadow-consent);
 }
