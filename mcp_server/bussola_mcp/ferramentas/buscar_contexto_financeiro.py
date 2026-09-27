@@ -3,6 +3,8 @@
 The searcher receives only ``pergunta``, ``k`` and ``tema``: the corpus is
 general knowledge, without client data. ``id_usuario`` and ``ate_anomes`` are
 still validated (session scope and cut) but never reach the searcher.
+A failure of the embedding service (``numpy`` backend of cycle 002) becomes
+:class:`BackendUnavailable` (``INDISPONIVEL``), with no provider detail.
 """
 
 from typing import Any
@@ -18,14 +20,18 @@ from bussola_mcp.contratos import (
     Periodo,
 )
 from bussola_mcp.ferramentas.base import ToolRunner
-from bussola_mcp.ferramentas.ports import Computation, ToolDependencies
+from bussola_mcp.ferramentas.ports import BackendUnavailable, Computation, ToolDependencies
 from bussola_mcp.ferramentas.registry import TOOL_ANNOTATIONS
+from bussola_mcp.rag.embedding import EmbeddingUnavailableError
 
 NAME = "buscar_contexto_financeiro"
 
 
 def compute(deps: ToolDependencies, entrada: EntradaBuscarContexto) -> Computation:
-    trechos = deps.searcher.buscar(entrada.pergunta, entrada.k, entrada.tema)
+    try:
+        trechos = deps.searcher.buscar(entrada.pergunta, entrada.k, entrada.tema)
+    except EmbeddingUnavailableError as exc:
+        raise BackendUnavailable() from exc
     avisos = (AVISO_CONHECIMENTO,) if trechos else (AVISO_CONHECIMENTO, AVISO_SEM_TRECHOS)
     return Computation(
         dados=DadosBuscarContexto(trechos=trechos),
