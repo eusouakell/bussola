@@ -3,7 +3,7 @@
     "acao_simulada": true,
     "categoria": "Metas & reserva",
     "cuidado": "Não hardcodar rentabilidade se não consultada em fonte atual",
-    "fonte_oficial": "https://www.bcb.gov.br/cidadaniafinanceira",
+    "fonte_oficial": "https://feito.itau.com.br/cofrinhos-itau-seu-dinheiro-a-servico-dos-seus-sonhos",
     "nome": "Reserva por objetivo",
     "produto_id": "reserva_objetivo",
     "uso": "Criar meta/reserva e acompanhar objetivo"
@@ -12,7 +12,7 @@
     "acao_simulada": true,
     "categoria": "Dados & contexto",
     "cuidado": "Não impor corte; cliente escolhe",
-    "fonte_oficial": "https://www.bcb.gov.br/cidadaniafinanceira",
+    "fonte_oficial": "https://www.itau.com.br/controle-de-gastos",
     "nome": "Controle de Gastos",
     "produto_id": "controle_gastos",
     "uso": "Categorizar gastos, definir controles e alertas por categoria"
@@ -21,7 +21,7 @@
     "acao_simulada": true,
     "categoria": "Moradia",
     "cuidado": "Sem garantia de aprovação; condições atuais devem vir de simulador/fonte",
-    "fonte_oficial": "https://www.planalto.gov.br/ccivil_03/leis/l8004.htm",
+    "fonte_oficial": "https://www.itau.com.br/emprestimos-financiamentos/credito-imobiliario",
     "nome": "Crédito Imobiliário",
     "produto_id": "credito_imobiliario",
     "uso": "Comparar caminho de compra com financiamento"
@@ -30,7 +30,7 @@
     "acao_simulada": true,
     "categoria": "Moradia / bens",
     "cuidado": "Não prometer contemplação; explicar sorteio/lance",
-    "fonte_oficial": "https://www.procon.sp.gov.br/consorcio/",
+    "fonte_oficial": "https://www.itau.com.br/consorcios",
     "nome": "Consórcio de Imóveis",
     "produto_id": "consorcio_imoveis",
     "uso": "Alternativa quando há flexibilidade de prazo"
