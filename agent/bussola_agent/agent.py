@@ -6,6 +6,9 @@
 - Callbacks: os 4 agregados de :mod:`bussola_agent.callbacks` (no 000, as
   cadeias estão vazias) e um ``before_agent_callback`` que preenche o escopo
   da sessão com ``ANCHOR_USER_ID`` e ``REPLAY_START_ANOMES`` quando ausente.
+- Modelo: ``BUSSOLA_MODEL`` seguido dos outros Flash verificados pelo smoke,
+  com uma retentativa por modelo. Um 503 de demanda alta ou um 429 passa para
+  o próximo da cadeia antes da primeira resposta, em vez de derrubar o turno.
 
 O 004 substitui este arquivo pelo agente da jornada, mantendo o mesmo
 esqueleto (``carregar_extensoes()`` antes de montar o ``root_agent``).
@@ -16,6 +19,8 @@ import os
 from typing import Any
 
 from google.adk.agents import Agent
+from google.adk.models import FallbackModel, Gemini
+from google.genai import types
 
 from bussola_agent import callbacks
 from bussola_agent.estado import CHAVE_ATE_ANOMES, CHAVE_ID_USUARIO, estado_inicial
@@ -25,6 +30,10 @@ from bussola_agent.mcp_conexao import criar_toolset
 
 NOME_AGENTE = "bussola_hello"
 MODELO_PADRAO = "gemini-3.8-flash"
+# Cadeia Flash que respondeu no smoke (specs/000-fundacao-contratos/modelos.md).
+MODELOS_FLASH = ("gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash")
+# Uma retentativa no mesmo modelo (408, 429 e 5xx) antes de passar ao próximo.
+RETENTATIVA = types.HttpRetryOptions(attempts=2, initial_delay=1.0, max_delay=4.0)
 ANCHOR_PADRAO = "36a21505-d6d4-42d3-b319-d51a133c7269"
 REPLAY_START_PADRAO = 202506
 _CHAVES_ESCOPO = (CHAVE_ID_USUARIO, CHAVE_ATE_ANOMES)
@@ -86,6 +95,17 @@ async def inicializar_sessao(callback_context: Any) -> None:
     return None
 
 
+def criar_modelo(principal: str) -> FallbackModel:
+    """``principal`` e os demais Flash, nessa ordem, cada um com ``RETENTATIVA``.
+
+    O ``FallbackModel`` só troca de modelo antes da primeira resposta do turno,
+    então um streaming já iniciado nunca mistura dois modelos. Construir não
+    acessa a rede: o cliente do genai nasce na primeira chamada.
+    """
+    nomes = [principal, *(m for m in MODELOS_FLASH if m != principal)]
+    return FallbackModel(models=[Gemini(model=n, retry_options=RETENTATIVA) for n in nomes])
+
+
 def _instrucao() -> str:
     extras = instrucoes()
     return f"{INSTRUCAO_BASE}\n{extras}\n" if extras else INSTRUCAO_BASE
@@ -95,7 +115,7 @@ carregar_extensoes()
 
 root_agent = Agent(
     name=NOME_AGENTE,
-    model=os.getenv("BUSSOLA_MODEL") or MODELO_PADRAO,
+    model=criar_modelo(os.getenv("BUSSOLA_MODEL") or MODELO_PADRAO),
     description="Agente hello do Bússola: conversa em pt-BR usando as ferramentas MCP.",
     instruction=_instrucao(),
     tools=[criar_toolset(), *ferramentas()],

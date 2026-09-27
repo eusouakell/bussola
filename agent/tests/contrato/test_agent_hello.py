@@ -13,8 +13,10 @@ from types import ModuleType, SimpleNamespace
 import pytest
 from google.adk.agents import Agent
 from google.adk.cli.utils.agent_loader import AgentLoader
+from google.adk.models import FallbackModel, Gemini, LlmRequest, LlmResponse
 from google.adk.sessions.state import State
 from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
+from google.genai import errors, types
 
 import bussola_agent
 from bussola_agent import callbacks, extensoes
@@ -46,13 +48,54 @@ def test_root_agent_padrao(importar_de_novo: Callable[[], ModuleType]) -> None:
     agente = modulo.root_agent
     assert isinstance(agente, Agent)
     assert agente.name == "bussola_hello"
-    assert agente.model == "gemini-3.8-flash"
+    assert isinstance(agente.model, FallbackModel)
+    assert agente.model.model == "gemini-3.8-flash"
+    assert _cadeia(agente.model) == ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash"]
     [toolset] = agente.tools
     assert isinstance(toolset, McpToolset)
     assert toolset.connection_params.url == URL_PADRAO
     assert toolset.header_provider is None
     assert "{id_usuario?}" in agente.instruction
     assert "{ate_anomes?}" in agente.instruction
+
+
+def _cadeia(modelo: FallbackModel) -> list[str]:
+    return [m.model for m in modelo.models]  # type: ignore[union-attr]
+
+
+def test_modelo_principal_repetido_nao_duplica_a_cadeia(
+    importar_de_novo: Callable[[], ModuleType],
+) -> None:
+    modelo = importar_de_novo().criar_modelo("gemini-3.7-flash")
+    assert _cadeia(modelo) == ["gemini-3.7-flash", "gemini-3.8-flash", "gemini-3.5-flash"]
+    for gemini in modelo.models:
+        assert isinstance(gemini, Gemini)
+        assert gemini.retry_options is not None and gemini.retry_options.attempts == 2
+
+
+async def test_503_de_demanda_alta_passa_para_o_proximo_flash(
+    importar_de_novo: Callable[[], ModuleType], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """O 503 que derrubava o turno no Cloud Run agora cai para o próximo modelo."""
+    modelo = importar_de_novo().root_agent.model
+    chamados: list[str] = []
+
+    async def gerar(self: Gemini, llm_request: LlmRequest, stream: bool = False):  # noqa: ANN202
+        chamados.append(llm_request.model or "")
+        if self.model == "gemini-3.8-flash":
+            erro = {"error": {"code": 503, "message": "high demand", "status": "UNAVAILABLE"}}
+            raise errors.ServerError(503, erro)
+        yield LlmResponse(content=types.Content(role="model", parts=[types.Part(text="ok")]))
+
+    monkeypatch.setattr(Gemini, "generate_content_async", gerar)
+    pedido = LlmRequest(
+        model=modelo.model,
+        contents=[types.Content(role="user", parts=[types.Part(text="oi")])],
+    )
+    respostas = [r async for r in modelo.generate_content_async(pedido, stream=True)]
+
+    assert chamados == ["gemini-3.8-flash", "gemini-3.7-flash"]
+    assert [r.content.parts[0].text for r in respostas] == ["ok"]
 
 
 def test_callbacks_instalados(importar_de_novo: Callable[[], ModuleType]) -> None:
@@ -104,7 +147,8 @@ def test_modelo_e_url_do_ambiente(
     monkeypatch.setenv("BUSSOLA_MODEL", "gemini-modelo-teste")
     monkeypatch.setenv("MCP_URL", "http://127.0.0.1:9999/mcp")
     agente = importar_de_novo().root_agent
-    assert agente.model == "gemini-modelo-teste"
+    assert agente.model.model == "gemini-modelo-teste"
+    assert _cadeia(agente.model)[1:] == ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash"]
     assert agente.tools[0].connection_params.url == "http://127.0.0.1:9999/mcp"
 
 
