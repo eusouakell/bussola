@@ -140,3 +140,13 @@ A passagem para AGIR fica pronta para o 005 plugar o consentimento.
   nenhuma fonte se perde e o guarda ENTENDER → ANTECIPAR continua certo.
   Não há correção própria; um teste de integração com chamadas que terminam
   fora de ordem falha se uma atualização do ADK voltar a perder a fonte.
+- **D-12** Eval (FR-017, AC-08): cada número da resposta é classificado como
+  "ferramenta do turno", "dito na sessão" (cliente, `objetivo`,
+  `ate_anomes`) ou "sem fonte", com a mesma leitura do `after_model` 50. AC-08
+  passa com zero "sem fonte". No ao vivo, expectativas de ferramenta e etapa
+  são relatadas sem reprovar (o modelo pode avançar várias etapas num turno),
+  e turno sem resposta do modelo (cota) deixa o resultado inconclusivo. A
+  primeira execução ao vivo mostrou o texto recomendando um caminho diferente
+  do `recomendado` da tela e uma diferença de prazo calculada pelo modelo
+  (aceita por coincidência com outro inteiro da ferramenta); o prompt passou
+  a dizer a regra do recomendado e a proibir diferenças de prazo.
