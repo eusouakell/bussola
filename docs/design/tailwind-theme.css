@@ -5,7 +5,10 @@
    (canvas/Tokens.dc.html, seção "Handoff Tailwind v4").
    Ponto de partida para web/src/app.css no ciclo 007 (§5.3).
 
-   As seções 1 e 2 vêm da folha, sem alteração. A seção 3
+   Cores dos tokens trocadas pelos códigos exatos da paleta
+   Itaú PF (brand.primary #FF6200, text.primary #02036C, etc.);
+   as sem equivalente na paleta ficaram como estavam.
+   As seções 1 e 2 vêm da folha, sem outra alteração. A seção 3
    completa o ambiente com os 6 estados (claro e escuro) e os
    @keyframes de canvas/bussola.css, que é a referência
    completa (tokens escuros, classes de componente, motion).
@@ -24,30 +27,30 @@
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui;
   --font-mono: "JetBrains Mono", ui-monospace;
 
-  --color-accent: #EC7000;
-  --color-accent-cta: #DB6600;
-  --color-accent-ink: #A84F00;
-  --color-ink: #1E1A16;
-  --color-ink-2: #4A423A;
-  --color-ink-3: #675D53;
-  --color-sand-50: #FBF7F2;
-  --color-smoke-900: #1D1713;
-  --color-ok: #1E7A45;
-  --color-warn: #8A5200;
-  --color-warn-fill: #F2A93B;
-  --color-err: #B42318;
+  --color-accent: #FF6200;
+  --color-accent-cta: #FF6200;
+  --color-accent-ink: #FF6200;
+  --color-ink: #02036C;
+  --color-ink-2: #5C6B79;
+  --color-ink-3: #5C6B79;
+  --color-sand-50: #F4F6F9;
+  --color-smoke-900: #02036C;
+  --color-ok: #0F470C;
+  --color-warn: #FF6200;
+  --color-warn-fill: #FF6200;
+  --color-err: #E60000;
 
-  --color-tag-diagnostico: #0B6B70;
-  --color-tag-simulacao: #6A3FB5;
-  --color-tag-recomendacao: #A84F00;
-  --color-tag-acao: #1E7A45;
+  --color-tag-diagnostico: #02036C;
+  --color-tag-simulacao: #5C6B79;
+  --color-tag-recomendacao: #FF6200;
+  --color-tag-acao: #0F470C;
 
-  --color-tint-objetivo: #EEDCC8;
-  --color-tint-entender: #E4DCD2;
-  --color-tint-antecipar: #E3D5EC;
-  --color-tint-orientar: #F8BD88;
-  --color-tint-agir: #CFE7D3;
-  --color-tint-acompanhar: #F4CB7A;
+  --color-tint-objetivo: #F4F6F9;
+  --color-tint-entender: #F4F6F9;
+  --color-tint-antecipar: #F4F6F9;
+  --color-tint-orientar: #FF6200;
+  --color-tint-agir: #F4F6F9;
+  --color-tint-acompanhar: #FF6200;
 
   --radius-card: 22px;
   --radius-consent: 24px;
@@ -59,9 +62,9 @@
   --blur-glass-consent: 22px;
 
   --shadow-glass: inset 0 1px 0 rgb(255 255 255 / .9),
-    0 22px 48px -24px rgb(150 78 20 / .22);
-  --shadow-consent: 0 0 0 6px rgb(46 160 90 / .12),
-    0 0 44px -6px rgb(46 160 90 / .30);
+    0 22px 48px -24px rgb(2 3 108 / .22);
+  --shadow-consent: 0 0 0 6px rgb(15 71 12 / .12),
+    0 0 44px -6px rgb(15 71 12 / .30);
 
   --animate-drift: drift 26s ease-in-out infinite alternate;
   --animate-enter: enter .55s cubic-bezier(.2,.8,.2,1) both;
@@ -73,23 +76,23 @@
   backdrop-filter: blur(var(--blur-glass-chrome)) saturate(150%);
   border: 1px solid rgb(255 255 255 / .62);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / .9),
-    0 10px 30px -14px rgb(150 78 20 / .22);
-  @variant dark { background: rgb(14 11 9 / .36);
+    0 10px 30px -14px rgb(2 3 108 / .22);
+  @variant dark { background: rgb(2 3 108 / .36);
     border-color: rgb(255 255 255 / .10); }
 }
 @utility glass-card {
-  background: rgb(255 252 248 / .80);
+  background: rgb(255 255 255 / .80);
   backdrop-filter: blur(var(--blur-glass-card)) saturate(140%);
   border: 1px solid rgb(255 255 255 / .78);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-glass);
-  @variant dark { background: rgb(24 19 15 / .80);
+  @variant dark { background: rgb(2 3 108 / .80);
     border-color: rgb(255 255 255 / .10); }
 }
 @utility glass-consent {
   background: rgb(255 255 255 / .88);
   backdrop-filter: blur(var(--blur-glass-consent)) saturate(150%);
-  border: 1.5px solid rgb(30 122 69 / .55);
+  border: 1.5px solid rgb(15 71 12 / .55);
   border-radius: var(--radius-consent);
   box-shadow: var(--shadow-glass), var(--shadow-consent);
 }
@@ -105,19 +108,19 @@
 /* ---------- 3. ambiente dinâmico (CSS puro, sem canvas/WebGL) ----------
    Tint controlado por data-estado no container; transição de ~600 ms.
    Valores de canvas/bussola.css. */
-@property --amb-base { syntax: "<color>"; inherits: true; initial-value: #F6F0E8; }
-@property --amb-1    { syntax: "<color>"; inherits: true; initial-value: #EEDCC8; }
-@property --amb-2    { syntax: "<color>"; inherits: true; initial-value: #F4D3B6; }
-@property --amb-3    { syntax: "<color>"; inherits: true; initial-value: #E7DED4; }
+@property --amb-base { syntax: "<color>"; inherits: true; initial-value: #F4F6F9; }
+@property --amb-1    { syntax: "<color>"; inherits: true; initial-value: #F4F6F9; }
+@property --amb-2    { syntax: "<color>"; inherits: true; initial-value: #FF6200; }
+@property --amb-3    { syntax: "<color>"; inherits: true; initial-value: #F4F6F9; }
 
 .app { position: relative; overflow: hidden; background: var(--amb-base);
   transition: --amb-base .6s ease, --amb-1 .6s ease, --amb-2 .6s ease, --amb-3 .6s ease; }
-.app[data-estado="objetivo"]   { --amb-base:#F6F0E8; --amb-1:#EEDCC8; --amb-2:#F4D3B6; --amb-3:#E7DED4; }
-.app[data-estado="entender"]   { --amb-base:#F3EFEA; --amb-1:#E4DCD2; --amb-2:#EFD6C0; --amb-3:#DAD7D1; }
-.app[data-estado="antecipar"]  { --amb-base:#F5EFE9; --amb-1:#EBD3C0; --amb-2:#E3D5EC; --amb-3:#F1DCC6; }
-.app[data-estado="orientar"]   { --amb-base:#F8ECDF; --amb-1:#F8BD88; --amb-2:#F4A566; --amb-3:#F7D6B2; }
-.app[data-estado="agir"]       { --amb-base:#F2F1EA; --amb-1:#CFE7D3; --amb-2:#F5CDA5; --amb-3:#DCEBD9; }
-.app[data-estado="acompanhar"] { --amb-base:#F7EEDC; --amb-1:#F4CB7A; --amb-2:#F2B36E; --amb-3:#EEDDB9; }
+.app[data-estado="objetivo"]   { --amb-base:#F4F6F9; --amb-1:#02036C; --amb-2:#5C6B79; --amb-3:#F4F6F9; }
+.app[data-estado="entender"]   { --amb-base:#F4F6F9; --amb-1:#5C6B79; --amb-2:#02036C; --amb-3:#FFFFFF; }
+.app[data-estado="antecipar"]  { --amb-base:#F4F6F9; --amb-1:#02036C; --amb-2:#FF6200; --amb-3:#5C6B79; }
+.app[data-estado="orientar"]   { --amb-base:#FFFFFF; --amb-1:#FF6200; --amb-2:#FF6200; --amb-3:#F4F6F9; }
+.app[data-estado="agir"]       { --amb-base:#F4F6F9; --amb-1:#0F470C; --amb-2:#FF6200; --amb-3:#0F470C; }
+.app[data-estado="acompanhar"] { --amb-base:#FFFFFF; --amb-1:#FF6200; --amb-2:#FF6200; --amb-3:#FF6200; }
 .app.dark[data-estado="objetivo"]   { --amb-base:#15110E; --amb-1:#3B2819; --amb-2:#4A2C16; --amb-3:#2A211A; }
 .app.dark[data-estado="entender"]   { --amb-base:#141210; --amb-1:#2E2823; --amb-2:#3D2A1C; --amb-3:#24211E; }
 .app.dark[data-estado="antecipar"]  { --amb-base:#141111; --amb-1:#3A2819; --amb-2:#2E2440; --amb-3:#35271B; }
@@ -126,7 +129,7 @@
 .app.dark[data-estado="acompanhar"] { --amb-base:#161109; --amb-1:#5A3F0E; --amb-2:#5E300C; --amb-3:#3A2D14; }
 
 .ambient { position: absolute; inset: 0; overflow: hidden; z-index: 0; background: var(--amb-base); }
-.blob { position: absolute; border-radius: 50%; filter: blur(56px); will-change: transform; }
+.blob { position: absolute; border-radius: 50%; filter: blur(56px); will-change: transform; opacity: .22; }
 .blob.b1 { width: 70%; height: 80%; left: -16%; top: -24%;
   background: radial-gradient(closest-side, var(--amb-1), transparent);
   animation: drift1 26s ease-in-out infinite alternate; }
@@ -149,7 +152,7 @@
 
 /* Equivalente em classes (da folha de tokens):
    chrome  bg-white/42 backdrop-blur-glass-chrome backdrop-saturate-150
-           border border-white/60 dark:bg-black/35 dark:border-white/10
+           border border-white/60 dark:bg-ink/35 dark:border-white/10
    card    bg-sand-50/80 backdrop-blur-glass-card rounded-card
            shadow-glass dark:bg-smoke-900/80
    blob    motion-reduce:animate-none

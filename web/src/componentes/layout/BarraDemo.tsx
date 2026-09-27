@@ -61,7 +61,7 @@ export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onB
         </button>
       </div>
       {motivo && (
-        <span id={idMotivo} style={{ fontSize: 12.5, fontWeight: 700, color: "rgba(251, 243, 234, 0.78)" }}>
+        <span id={idMotivo} style={{ fontSize: 12.5, fontWeight: 700, color: "rgba(244, 246, 249, 0.78)" }}>
           {motivo}
         </span>
       )}
@@ -109,7 +109,7 @@ export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onB
                   />
                   <span style={{ display: "flex", flexDirection: "column" }}>
                     {b.rotulo}
-                    <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(251, 243, 234, 0.72)" }}>{b.descricao}</span>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(244, 246, 249, 0.72)" }}>{b.descricao}</span>
                   </span>
                 </label>
               ))}
