@@ -29,7 +29,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: astral-sh/setup-uv@v10
+      # O setup-uv não publica tag de major (v10): versão completa.
+      - uses: astral-sh/setup-uv@v10.2.0
         with:
           python-version: "3.12"
           enable-cache: true
@@ -82,7 +83,7 @@ jobs:
         with:
           version: v4.2.4
 
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.2.0
         with:
           python-version: "3.12"
           enable-cache: true
