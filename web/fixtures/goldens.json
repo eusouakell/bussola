@@ -73,7 +73,7 @@
             "viavel": false
           },
           {
-            "aporte_mensal": 1681.15,
+            "aporte_mensal": 1660.85,
             "cortes_sugeridos": [
               {
                 "macro": "Restaurantes",
@@ -89,11 +89,6 @@
                 "macro": "Assinaturas",
                 "micro": "Assinaturas",
                 "valor_mensal": 54.01
-              },
-              {
-                "macro": "Transporte publico",
-                "micro": "Passagem de onibus",
-                "valor_mensal": 20.3
               },
               {
                 "macro": "Lazer",
@@ -128,14 +123,13 @@
             ],
             "nome": "acelerado",
             "pct_capacidade": 0.8,
-            "prazo_meses": 18,
+            "prazo_meses": 19,
             "trade_offs": [
-              "Atinge a meta em 18 meses, dentro do prazo de 24 meses.",
+              "Atinge a meta em 19 meses, dentro do prazo de 24 meses.",
               "Compromete 80% da sobra mensal mediana (R$ 1.383/mês).",
               "Exige reduzir R$ 97/mês em Restaurantes.",
               "Exige reduzir R$ 86/mês em Compras.",
               "Exige reduzir R$ 54/mês em Assinaturas.",
-              "Exige reduzir R$ 20/mês em Passagem de onibus.",
               "Exige reduzir R$ 13/mês em Eletronicos.",
               "Exige reduzir R$ 11/mês em Outros entretenimentos.",
               "Exige reduzir R$ 7/mês em Outras comidas e bebidas.",
@@ -200,7 +194,7 @@
             "viavel": true
           },
           {
-            "aporte_mensal": 2287.22,
+            "aporte_mensal": 2277.07,
             "cortes_sugeridos": [
               {
                 "macro": "Restaurantes",
@@ -221,11 +215,6 @@
                 "macro": "Viagens",
                 "micro": "Outros gastos de viagem",
                 "valor_mensal": 16.24
-              },
-              {
-                "macro": "Transporte publico",
-                "micro": "Passagem de onibus",
-                "valor_mensal": 10.15
               },
               {
                 "macro": "Lazer",
@@ -263,7 +252,6 @@
               "Exige reduzir R$ 88/mês em Compras.",
               "Exige reduzir R$ 50/mês em Assinaturas.",
               "Exige reduzir R$ 16/mês em Outros gastos de viagem.",
-              "Exige reduzir R$ 10/mês em Passagem de onibus.",
               "Exige reduzir R$ 7/mês em Outros entretenimentos.",
               "Exige reduzir R$ 7/mês em Eletronicos.",
               "Exige reduzir R$ 6/mês em Outras comidas e bebidas.",
@@ -451,14 +439,6 @@
             "micro": "Assinaturas"
           },
           {
-            "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
-            "discricionaria": true,
-            "economia_potencial_mensal": 20.3,
-            "macro": "Transporte publico",
-            "media_mensal": 101.5,
-            "micro": "Passagem de onibus"
-          },
-          {
             "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
             "discricionaria": true,
             "economia_potencial_mensal": 13.39,
@@ -555,14 +535,6 @@
             "macro": "Viagens",
             "media_mensal": 81.18,
             "micro": "Outros gastos de viagem"
-          },
-          {
-            "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
-            "discricionaria": true,
-            "economia_potencial_mensal": 10.15,
-            "macro": "Transporte publico",
-            "media_mensal": 50.75,
-            "micro": "Passagem de onibus"
           },
           {
             "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",

@@ -61,37 +61,37 @@ describe("MotorSimulado: jornada canônica", () => {
     expect(r).toMatchObject({ aporte_mensal: 1250, folga_mensal: 479, viavel: true });
   });
 
-  it("recomenda o acelerado: 1681.15 por 18 meses", () => {
+  it("recomenda o acelerado: 1660.85 por 19 meses", () => {
     const eventos = turno("Me mostra os caminhos");
     const cenarios = dados(respostas(eventos).comparar_cenarios).cenarios as { nome: string; aporte_mensal: number; prazo_meses: number }[];
-    expect(cenarios.find((c) => c.nome === "acelerado")).toMatchObject({ aporte_mensal: 1681.15, prazo_meses: 18 });
+    expect(cenarios.find((c) => c.nome === "acelerado")).toMatchObject({ aporte_mensal: 1660.85, prazo_meses: 19 });
     expect(eventos.some((e) => e.customMetadata?.bussola?.recomendado === "acelerado")).toBe(true);
     const rag = dados(respostas(eventos).buscar_contexto_financeiro).trechos as { score: number }[];
     expect(rag).toHaveLength(3);
   });
 
-  it("julho: desvio de −796.62 puxado por Viagens e duas rotas", () => {
+  it("julho: desvio de −776.32 puxado por Viagens e duas rotas", () => {
     const r = dados(respostas(turno("Avançar um mês")).avancar_mes);
     expect(r).toMatchObject({
       anomes: 202507,
       realizado: 884.53,
-      desvio: -796.62,
-      tolerancia: 168.12,
+      desvio: -776.32,
+      tolerancia: 166.09,
       status: "desvio",
       acumulado: 884.53,
       restante: 29115.47,
       meses_decorridos: 1,
-      meses_restantes: 17,
+      meses_restantes: 18,
     });
     expect(r.categoria_desvio).toMatchObject({ macro: "Viagens", valor_mes: 935.14, media_base: 6.51, aumento: 928.63 });
     const [a, b] = r.rotas as Dados[];
-    expect(a).toMatchObject({ id: "A", aporte_mensal: 1712.67, prazo_meses: 17, prazo_total_meses: 18 });
-    expect(b).toMatchObject({ id: "B", aporte_mensal: 1681.15, prazo_meses: 18, prazo_total_meses: 19 });
+    expect(a).toMatchObject({ id: "A", aporte_mensal: 1617.53, prazo_meses: 18, prazo_total_meses: 19 });
+    expect(b).toMatchObject({ id: "B", aporte_mensal: 1660.85, prazo_meses: 18, prazo_total_meses: 19 });
   });
 
   it("agosto com a rota A: folga e acumulado 5103.27", () => {
     const r = dados(respostas(turno("Avançar um mês", 1)).avancar_mes);
-    expect(r).toMatchObject({ anomes: 202508, planejado: 1712.67, realizado: 4218.74, status: "folga", acumulado: 5103.27 });
+    expect(r).toMatchObject({ anomes: 202508, planejado: 1617.53, realizado: 4218.74, status: "folga", acumulado: 5103.27 });
   });
 
   it("nenhum texto do agente usa palavras proibidas", () => {
@@ -181,7 +181,7 @@ describe("MotorSimulado: consentimento", () => {
     const motor = motorAte(6);
     motor.turno("Quero adotar a rota B");
     const eventos = motor.turno("Sim, autorizo");
-    expect(dados(respostas(eventos).ajustar_plano)).toMatchObject({ rota: "B", aporte_mensal: 1681.15, prazo_meses: 19 });
+    expect(dados(respostas(eventos).ajustar_plano)).toMatchObject({ rota: "B", aporte_mensal: 1660.85, prazo_meses: 19 });
   });
 
   it("depois de dezembro devolve FIM_DO_REPLAY", () => {
@@ -195,11 +195,11 @@ describe("MotorSimulado: consentimento", () => {
     expect(codigos).toEqual(["FIM_DO_REPLAY"]);
   });
 
-  it("dezembro, com a rota A, fecha com desvio de −203.42", () => {
+  it("dezembro, com a rota A, fecha com desvio de −108.28", () => {
     const motor = motorAte(9);
     let dez: Dados = {};
     for (let i = 0; i < 4; i += 1) dez = dados(respostas(motor.turno("Avançar um mês")).avancar_mes);
-    expect(dez).toMatchObject({ anomes: 202512, desvio: -203.42 });
+    expect(dez).toMatchObject({ anomes: 202512, desvio: -108.28 });
   });
 });
 
