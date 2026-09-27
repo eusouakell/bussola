@@ -1,0 +1,768 @@
+{
+  "version": 1,
+  "status": "PLANNED",
+  "created_at": "2026-09-27T12:30:44+00:00",
+  "updated_at": "2026-09-27T12:31:20+00:00",
+  "project_root": "/home/mrlopito/desenv/itau/bussola",
+  "discovery": {
+    "project_root": "/home/mrlopito/desenv/itau/bussola",
+    "manifests": [
+      "agent/pyproject.toml",
+      "mcp_server/pyproject.toml",
+      "web/package.json"
+    ],
+    "languages": {
+      "python": 203,
+      "typescript": 163,
+      "javascript": 1
+    },
+    "source_file_count": 367,
+    "test_file_count": 151,
+    "source_files": [
+      "agent/bussola_agent/__init__.py",
+      "agent/bussola_agent/acompanhamento/__init__.py",
+      "agent/bussola_agent/acompanhamento/audit.py",
+      "agent/bussola_agent/acompanhamento/desvio.py",
+      "agent/bussola_agent/acompanhamento/envelopes.py",
+      "agent/bussola_agent/acompanhamento/fakes.py",
+      "agent/bussola_agent/acompanhamento/instructions.py",
+      "agent/bussola_agent/acompanhamento/money.py",
+      "agent/bussola_agent/acompanhamento/periods.py",
+      "agent/bussola_agent/acompanhamento/plan_context.py",
+      "agent/bussola_agent/acompanhamento/ports.py",
+      "agent/bussola_agent/acompanhamento/progress.py",
+      "agent/bussola_agent/acompanhamento/routes.py",
+      "agent/bussola_agent/acompanhamento/tools.py",
+      "agent/bussola_agent/agent.py",
+      "agent/bussola_agent/callbacks.py",
+      "agent/bussola_agent/escopo.py",
+      "agent/bussola_agent/estado.py",
+      "agent/bussola_agent/extensoes.py",
+      "agent/bussola_agent/governanca/__init__.py",
+      "agent/bussola_agent/governanca/acoes.py",
+      "agent/bussola_agent/governanca/audit.py",
+      "agent/bussola_agent/governanca/catalogo.py",
+      "agent/bussola_agent/governanca/clock.py",
+      "agent/bussola_agent/governanca/consent.py",
+      "agent/bussola_agent/governanca/envelope.py",
+      "agent/bussola_agent/governanca/guardrails.py",
+      "agent/bussola_agent/governanca/instructions.py",
+      "agent/bussola_agent/governanca/model_armor.py",
+      "agent/bussola_agent/governanca/services.py",
+      "agent/bussola_agent/governanca/text.py",
+      "agent/bussola_agent/jornada/__init__.py",
+      "agent/bussola_agent/jornada/action_claims.py",
+      "agent/bussola_agent/jornada/annotations.py",
+      "agent/bussola_agent/jornada/number_check.py",
+      "agent/bussola_agent/jornada/progress.py",
+      "agent/bussola_agent/jornada/respostas_rapidas.py",
+      "agent/bussola_agent/jornada/state_machine.py",
+      "agent/bussola_agent/jornada/tool_forcing.py",
+      "agent/bussola_agent/jornada/tool_results.py",
+      "agent/bussola_agent/jornada/tools.py",
+      "agent/bussola_agent/logging_json.py",
+      "agent/bussola_agent/marcos/__init__.py",
+      "agent/bussola_agent/marcos/instrucao.py",
+      "agent/bussola_agent/marcos/registro.py",
+      "agent/bussola_agent/mcp_conexao.py",
+      "agent/bussola_agent/persistencia.py",
+      "agent/bussola_agent/persistencia_bq.py",
+      "agent/bussola_agent/prompts/__init__.py",
+      "agent/bussola_agent/prompts/base.py",
+      "agent/bussola_agent/prompts/catalog.py",
+      "agent/bussola_agent/resilient_model.py",
+      "agent/tests/acompanhamento/conftest.py",
+      "agent/tests/acompanhamento/test_acomp_adapters.py",
+      "agent/tests/acompanhamento/test_acomp_core.py",
+      "agent/tests/acompanhamento/test_acomp_eval.py",
+      "agent/tests/acompanhamento/test_acomp_plan_context.py",
+      "agent/tests/acompanhamento/test_acomp_registration.py",
+      "agent/tests/acompanhamento/test_acomp_routes.py",
+      "agent/tests/acompanhamento/test_acomp_runner.py",
+      "agent/tests/acompanhamento/test_acomp_tools.py",
+      "agent/tests/conftest.py",
+      "agent/tests/contrato/test_agent_hello.py",
+      "agent/tests/contrato/test_callbacks.py",
+      "agent/tests/contrato/test_ddl_modelos.py",
+      "agent/tests/contrato/test_estado.py",
+      "agent/tests/contrato/test_extensoes.py",
+      "agent/tests/contrato/test_logging_json.py",
+      "agent/tests/contrato/test_mcp_conexao.py",
+      "agent/tests/contrato/test_persistencia.py",
+      "agent/tests/governanca/conftest.py",
+      "agent/tests/governanca/governance_support.py",
+      "agent/tests/governanca/test_actions.py",
+      "agent/tests/governanca/test_audit.py",
+      "agent/tests/governanca/test_catalog.py",
+      "agent/tests/governanca/test_consent.py",
+      "agent/tests/governanca/test_eval_seguranca.py",
+      "agent/tests/governanca/test_flow.py",
+      "agent/tests/governanca/test_guardrails.py",
+      "agent/tests/governanca/test_model_armor.py",
+      "agent/tests/governanca/test_persistencia_bq.py",
+      "agent/tests/governanca/test_persistencia_bq_real.py",
+      "agent/tests/governanca/test_tool_forcing_flow.py",
+      "agent/tests/governanca/test_wiring.py",
+      "agent/tests/jornada/test_action_claims.py",
+      "agent/tests/jornada/test_agent_assembly.py",
+      "agent/tests/jornada/test_annotations.py",
+      "agent/tests/jornada/test_escopo.py",
+      "agent/tests/jornada/test_eval_offline.py",
+      "agent/tests/jornada/test_journey_integration.py",
+      "agent/tests/jornada/test_number_check.py",
+      "agent/tests/jornada/test_progress.py",
+      "agent/tests/jornada/test_prompts.py",
+      "agent/tests/jornada/test_resilient_model.py",
+      "agent/tests/jornada/test_respostas_rapidas.py",
+      "agent/tests/jornada/test_state_machine.py",
+      "agent/tests/jornada/test_tool_forcing.py",
+      "agent/tests/jornada/test_tool_results.py",
+      "agent/tests/jornada/test_tools.py",
+      "agent/tests/marcos/test_extensao.py",
+      "data/rag/indexar.py",
+      "data/rag/validar_corpus.py",
+      "data/scripts/aplicar_ddl.py",
+      "data/scripts/build_dados.py",
+      "data/scripts/gerar_fixtures.py",
+      "deploy/smoke.py",
+      "deploy/smoke_modelos.py",
+      "deploy/tests/conftest.py",
+      "deploy/tests/helm_render.py",
+      "deploy/tests/test_docs_policy.py",
+      "deploy/tests/test_helm_chart.py",
+      "deploy/tests/test_promote_workflow.py",
+      "deploy/tests/test_promotion.py",
+      "deploy/tests/test_smoke.py",
+      "eval/acompanhamento/rodar_eval.py",
+      "eval/agente/rodar_eval.py",
+      "eval/rag/rodar_eval.py",
+      "eval/seguranca/rodar_eval.py",
+      "mcp_server/bussola_mcp/__init__.py",
+      "mcp_server/bussola_mcp/contratos.py",
+      "mcp_server/bussola_mcp/dominio/__init__.py",
+      "mcp_server/bussola_mcp/dominio/fakes.py",
+      "mcp_server/bussola_mcp/dominio/interfaces.py",
+      "mcp_server/bussola_mcp/dominio/marcos.py",
+      "mcp_server/bussola_mcp/dominio/metricas.py",
+      "mcp_server/bussola_mcp/dominio/repositorio_bq.py",
+      "mcp_server/bussola_mcp/dominio/simulacao.py",
+      "mcp_server/bussola_mcp/ferramentas/__init__.py",
+      "mcp_server/bussola_mcp/ferramentas/base.py",
+      "mcp_server/bussola_mcp/ferramentas/buscar_contexto_financeiro.py",
+      "mcp_server/bussola_mcp/ferramentas/capacidade_poupanca.py",
+      "mcp_server/bussola_mcp/ferramentas/comparar_cenarios.py",
+      "mcp_server/bussola_mcp/ferramentas/computations.py",
+      "mcp_server/bussola_mcp/ferramentas/dividas_e_parcelas.py",
+      "mcp_server/bussola_mcp/ferramentas/fixture_backends.py",
+      "mcp_server/bussola_mcp/ferramentas/golden_adapter.py",
+      "mcp_server/bussola_mcp/ferramentas/oportunidades_corte.py",
+      "mcp_server/bussola_mcp/ferramentas/perfil_financeiro.py",
+      "mcp_server/bussola_mcp/ferramentas/planejar_marcos.py",
+      "mcp_server/bussola_mcp/ferramentas/ports.py",
+      "mcp_server/bussola_mcp/ferramentas/referencia_coorte.py",
+      "mcp_server/bussola_mcp/ferramentas/registry.py",
+      "mcp_server/bussola_mcp/ferramentas/resumo_mes.py",
+      "mcp_server/bussola_mcp/ferramentas/simular_objetivo.py",
+      "mcp_server/bussola_mcp/logging_json.py",
+      "mcp_server/bussola_mcp/rag/__init__.py",
+      "mcp_server/bussola_mcp/rag/corpus.py",
+      "mcp_server/bussola_mcp/rag/embedding.py",
+      "mcp_server/bussola_mcp/rag/index.py",
+      "mcp_server/bussola_mcp/rag/lexical.py",
+      "mcp_server/bussola_mcp/rag/text.py",
+      "mcp_server/bussola_mcp/rag/vector.py",
+      "mcp_server/bussola_mcp/server.py",
+      "mcp_server/tests/conftest.py",
+      "mcp_server/tests/contrato/test_aplicar_ddl.py",
+      "mcp_server/tests/contrato/test_catalogo_produtos.py",
+      "mcp_server/tests/contrato/test_contratos.py",
+      "mcp_server/tests/contrato/test_ddl_modelos.py",
+      "mcp_server/tests/contrato/test_deploy_scripts.py",
+      "mcp_server/tests/contrato/test_fakes.py",
+      "mcp_server/tests/contrato/test_fixtures_oficiais.py",
+      "mcp_server/tests/contrato/test_gerar_fixtures.py",
+      "mcp_server/tests/contrato/test_logging_json.py",
+      "mcp_server/tests/contrato/test_politicas_repo.py",
+      "mcp_server/tests/contrato/test_smoke_modelos.py",
+      "mcp_server/tests/contrato/test_user_personas.py",
+      "mcp_server/tests/contrato/test_workflows.py",
+      "mcp_server/tests/dados/test_build_dados.py",
+      "mcp_server/tests/dados/test_fixtures_v1.py",
+      "mcp_server/tests/dados/test_metricas_dominio.py",
+      "mcp_server/tests/dados/test_perguntas_ancora.py",
+      "mcp_server/tests/dados/test_repositorio_bq_fake.py",
+      "mcp_server/tests/dados/test_repositorio_bq_real.py",
+      "mcp_server/tests/dados/test_simulacao_dominio.py",
+      "mcp_server/tests/ferramentas/apoio_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_bq_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_busca_conhecimento.py",
+      "mcp_server/tests/ferramentas/test_contrato_golden.py",
+      "mcp_server/tests/ferramentas/test_domain_computations.py",
+      "mcp_server/tests/ferramentas/test_erros_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_escopo_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_fabrica_dependencias.py",
+      "mcp_server/tests/ferramentas/test_golden_adapter.py",
+      "mcp_server/tests/ferramentas/test_http_servidor.py",
+      "mcp_server/tests/ferramentas/test_logs_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_runner_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_schema_ferramentas.py",
+      "mcp_server/tests/ferramentas/test_seguranca_saidas.py",
+      "mcp_server/tests/ferramentas/test_simulacao_coerencia.py",
+      "mcp_server/tests/marcos/test_engine.py",
+      "mcp_server/tests/marcos/test_ferramenta.py",
+      "mcp_server/tests/rag/conftest.py",
+      "mcp_server/tests/rag/rag_support.py",
+      "mcp_server/tests/rag/test_rag_corpus.py",
+      "mcp_server/tests/rag/test_rag_embedding.py",
+      "mcp_server/tests/rag/test_rag_eval.py",
+      "mcp_server/tests/rag/test_rag_gemini.py",
+      "mcp_server/tests/rag/test_rag_index.py",
+      "mcp_server/tests/rag/test_rag_indexar.py",
+      "mcp_server/tests/rag/test_rag_integracao.py",
+      "mcp_server/tests/rag/test_rag_lexico.py",
+      "mcp_server/tests/rag/test_rag_numpy.py",
+      "mcp_server/tests/rag/test_rag_text.py",
+      "web/bff/application/errors.ts",
+      "web/bff/application/ports/agentGateway.ts",
+      "web/bff/application/ports/logger.ts",
+      "web/bff/application/ports/loginRateLimiter.ts",
+      "web/bff/application/ports/passwordVerifier.ts",
+      "web/bff/application/ports/sessionRepository.ts",
+      "web/bff/application/ports/userRepository.ts",
+      "web/bff/application/useCases/agentConversation.test.ts",
+      "web/bff/application/useCases/authenticate.test.ts",
+      "web/bff/application/useCases/authenticate.ts",
+      "web/bff/application/useCases/getAgentSession.ts",
+      "web/bff/application/useCases/listPersonas.ts",
+      "web/bff/application/useCases/login.test.ts",
+      "web/bff/application/useCases/login.ts",
+      "web/bff/application/useCases/logout.ts",
+      "web/bff/application/useCases/sendMessage.ts",
+      "web/bff/application/useCases/startAgentSession.ts",
+      "web/bff/architecture.test.ts",
+      "web/bff/cli/hashPassword.ts",
+      "web/bff/domain/authSession.test.ts",
+      "web/bff/domain/authSession.ts",
+      "web/bff/domain/chatMessage.test.ts",
+      "web/bff/domain/chatMessage.ts",
+      "web/bff/domain/errors.ts",
+      "web/bff/domain/userAccount.test.ts",
+      "web/bff/domain/userAccount.ts",
+      "web/bff/infrastructure/agent/httpAgentGateway.test.ts",
+      "web/bff/infrastructure/agent/httpAgentGateway.ts",
+      "web/bff/infrastructure/auth/inMemoryLoginRateLimiter.test.ts",
+      "web/bff/infrastructure/auth/inMemoryLoginRateLimiter.ts",
+      "web/bff/infrastructure/auth/inMemorySessionRepository.test.ts",
+      "web/bff/infrastructure/auth/inMemorySessionRepository.ts",
+      "web/bff/infrastructure/auth/scryptPasswordVerifier.test.ts",
+      "web/bff/infrastructure/auth/scryptPasswordVerifier.ts",
+      "web/bff/infrastructure/gcp/credentials.test.ts",
+      "web/bff/infrastructure/gcp/credentials.ts",
+      "web/bff/infrastructure/logging/jsonLogger.test.ts",
+      "web/bff/infrastructure/logging/jsonLogger.ts",
+      "web/bff/infrastructure/users/bigQueryUserSource.test.ts",
+      "web/bff/infrastructure/users/bigQueryUserSource.ts",
+      "web/bff/infrastructure/users/cachedUserRepository.test.ts",
+      "web/bff/infrastructure/users/cachedUserRepository.ts",
+      "web/bff/infrastructure/users/fixtureUserSource.ts",
+      "web/bff/infrastructure/users/userSource.ts",
+      "web/bff/main/bff.integration.test.ts",
+      "web/bff/main/config.test.ts",
+      "web/bff/main/config.ts",
+      "web/bff/main/container.ts",
+      "web/bff/main/index.ts",
+      "web/bff/presentation/http/agentController.ts",
+      "web/bff/presentation/http/authController.ts",
+      "web/bff/presentation/http/cookies.ts",
+      "web/bff/presentation/http/currentSession.ts",
+      "web/bff/presentation/http/httpErrors.test.ts",
+      "web/bff/presentation/http/httpErrors.ts",
+      "web/bff/presentation/http/requests.test.ts",
+      "web/bff/presentation/http/requests.ts",
+      "web/bff/presentation/http/responses.ts",
+      "web/bff/presentation/http/router.ts",
+      "web/bff/presentation/http/security.ts",
+      "web/bff/presentation/http/staticFiles.ts",
+      "web/bff/test/fakes.ts",
+      "web/bff/test/helpers.ts",
+      "web/eslint.config.js",
+      "web/scripts/fixtures-lib.ts",
+      "web/scripts/gerar-fixtures.ts",
+      "web/scripts/varrer-bundle.test.ts",
+      "web/scripts/varrer-bundle.ts",
+      "web/src/App.tsx",
+      "web/src/agente/cliente-adk.test.ts",
+      "web/src/agente/cliente-adk.ts",
+      "web/src/agente/envelope.test.ts",
+      "web/src/agente/envelope.ts",
+      "web/src/agente/sse.test.ts",
+      "web/src/agente/sse.ts",
+      "web/src/agente/tipos.ts",
+      "web/src/agente/transporte.ts",
+      "web/src/auth/TelaLogin.test.tsx",
+      "web/src/auth/TelaLogin.tsx",
+      "web/src/auth/clienteAuth.test.ts",
+      "web/src/auth/clienteAuth.ts",
+      "web/src/auth/useAuth.ts",
+      "web/src/componentes/base/Avisos.test.tsx",
+      "web/src/componentes/base/Avisos.tsx",
+      "web/src/componentes/base/ChipFonte.tsx",
+      "web/src/componentes/base/Disclaimer.tsx",
+      "web/src/componentes/base/Icone.tsx",
+      "web/src/componentes/base/SeloSintetico.tsx",
+      "web/src/componentes/base/Tag.tsx",
+      "web/src/componentes/cards/CardConsentimento.test.tsx",
+      "web/src/componentes/cards/CardConsentimento.tsx",
+      "web/src/componentes/cards/CardDiagnostico.test.tsx",
+      "web/src/componentes/cards/CardDiagnostico.tsx",
+      "web/src/componentes/cards/CardDividas.tsx",
+      "web/src/componentes/cards/CardMarcos.test.tsx",
+      "web/src/componentes/cards/CardMarcos.tsx",
+      "web/src/componentes/cards/CardObjetivo.tsx",
+      "web/src/componentes/cards/CardOportunidadesCorte.tsx",
+      "web/src/componentes/cards/CardPlano.tsx",
+      "web/src/componentes/cards/CardSimulacao.tsx",
+      "web/src/componentes/cards/ComparadorCenarios.tsx",
+      "web/src/componentes/cards/ExplicacaoRecomendacao.tsx",
+      "web/src/componentes/cards/acompanhar.tsx",
+      "web/src/componentes/cards/ler.ts",
+      "web/src/componentes/cards/partes.tsx",
+      "web/src/componentes/conversa/AlertaGuardrail.tsx",
+      "web/src/componentes/conversa/BlocoAnalise.test.tsx",
+      "web/src/componentes/conversa/BlocoAnalise.tsx",
+      "web/src/componentes/conversa/BoasVindas.tsx",
+      "web/src/componentes/conversa/Conversa.test.tsx",
+      "web/src/componentes/conversa/Conversa.tsx",
+      "web/src/componentes/conversa/ErroFerramenta.test.tsx",
+      "web/src/componentes/conversa/ErroFerramenta.tsx",
+      "web/src/componentes/conversa/FalhaConexao.tsx",
+      "web/src/componentes/conversa/MensagemAgente.test.tsx",
+      "web/src/componentes/conversa/MensagemAgente.tsx",
+      "web/src/componentes/conversa/MensagemCliente.tsx",
+      "web/src/componentes/conversa/RespostasRapidas.tsx",
+      "web/src/componentes/conversa/Skeleton.tsx",
+      "web/src/componentes/jornada/StepperJornada.test.tsx",
+      "web/src/componentes/jornada/StepperJornada.tsx",
+      "web/src/componentes/layout/Ambiente.tsx",
+      "web/src/componentes/layout/BarraDemo.tsx",
+      "web/src/componentes/layout/Bastidores.test.tsx",
+      "web/src/componentes/layout/Bastidores.tsx",
+      "web/src/componentes/layout/Composer.tsx",
+      "web/src/componentes/layout/HeaderBussola.tsx",
+      "web/src/componentes/layout/MTopo.tsx",
+      "web/src/componentes/layout/useMidia.ts",
+      "web/src/config.ts",
+      "web/src/formatacao/formatar.test.ts",
+      "web/src/formatacao/formatar.ts",
+      "web/src/main.tsx",
+      "web/src/sessao/auditoria.test.ts",
+      "web/src/sessao/auditoria.ts",
+      "web/src/sessao/catalogo.ts",
+      "web/src/sessao/modelo.ts",
+      "web/src/sessao/reducer.test.ts",
+      "web/src/sessao/reducer.ts",
+      "web/src/sessao/sugestoes.ts",
+      "web/src/sessao/useSessao.test.tsx",
+      "web/src/sessao/useSessao.ts",
+      "web/src/simulado/agente-simulado.test.ts",
+      "web/src/simulado/agente-simulado.ts",
+      "web/src/simulado/fixtures.test.ts",
+      "web/src/simulado/guardrails.test.ts",
+      "web/src/simulado/guardrails.ts",
+      "web/src/simulado/intencoes.ts",
+      "web/src/simulado/locais.ts",
+      "web/src/simulado/roteiro.ts",
+      "web/src/simulado/textos.ts",
+      "web/src/test/setup.ts",
+      "web/src/vistas/EstadoVazio.tsx",
+      "web/src/vistas/P1Encerramento.tsx",
+      "web/src/vistas/P2MeuPlano.tsx",
+      "web/src/vistas/P3Trilha.tsx",
+      "web/src/vistas/P4Resumo.tsx",
+      "web/src/vistas/P5CheckIn.tsx",
+      "web/src/vistas/Vistas.tsx",
+      "web/src/vistas/dados.ts",
+      "web/src/vistas/partes.tsx",
+      "web/src/vistas/vistas.test.tsx",
+      "web/src/vite-env.d.ts",
+      "web/vite.config.ts"
+    ],
+    "source_roots": [
+      "agent",
+      "data",
+      "deploy",
+      "eval",
+      "mcp_server",
+      "web"
+    ],
+    "architecture_markers": [
+      "application",
+      "domain",
+      "infrastructure",
+      "ports",
+      "useCases"
+    ],
+    "candidate_bounded_contexts": [],
+    "project_classification": {
+      "size": "medium_large",
+      "recommended_scaffold": "feature-first",
+      "reason": "367 source files and 0 candidate bounded contexts detected."
+    },
+    "large_files": [
+      "data/scripts/gerar_fixtures.py",
+      "web/src/simulado/agente-simulado.ts",
+      "mcp_server/tests/contrato/test_gerar_fixtures.py",
+      "eval/agente/rodar_eval.py",
+      "data/scripts/build_dados.py",
+      "mcp_server/bussola_mcp/dominio/marcos.py",
+      "mcp_server/bussola_mcp/contratos.py",
+      "agent/bussola_agent/acompanhamento/fakes.py",
+      "agent/tests/contrato/test_mcp_conexao.py",
+      "deploy/tests/test_smoke.py",
+      "deploy/smoke.py",
+      "agent/bussola_agent/acompanhamento/tools.py",
+      "eval/acompanhamento/rodar_eval.py",
+      "agent/tests/acompanhamento/test_acomp_tools.py",
+      "agent/bussola_agent/governanca/consent.py",
+      "mcp_server/bussola_mcp/dominio/simulacao.py",
+      "agent/tests/jornada/test_journey_integration.py",
+      "mcp_server/bussola_mcp/dominio/metricas.py",
+      "mcp_server/tests/marcos/test_engine.py",
+      "deploy/smoke_modelos.py"
+    ],
+    "commands": [
+      {
+        "name": "install",
+        "command": "npm install",
+        "blocking": "false"
+      },
+      {
+        "name": "test",
+        "command": "npm test",
+        "blocking": "true"
+      },
+      {
+        "name": "lint",
+        "command": "npm run lint --if-present",
+        "blocking": "false"
+      },
+      {
+        "name": "build",
+        "command": "npm run build --if-present",
+        "blocking": "true"
+      },
+      {
+        "name": "test",
+        "command": "python3 -m pytest",
+        "blocking": "true"
+      }
+    ],
+    "git": {
+      "is_git_repo": true,
+      "dirty": true,
+      "files": [
+        "?? .clean-arch-hero/"
+      ]
+    }
+  },
+  "assessment": {
+    "clean_arch_readiness": {
+      "domain_layer_detected": true,
+      "application_layer_detected": true,
+      "infrastructure_layer_detected": true,
+      "tests_detected": true
+    },
+    "candidate_contexts": [
+      {
+        "name": "Agent",
+        "path": "agent",
+        "confidence": "LOW"
+      },
+      {
+        "name": "Data",
+        "path": "data",
+        "confidence": "LOW"
+      },
+      {
+        "name": "Deploy",
+        "path": "deploy",
+        "confidence": "LOW"
+      },
+      {
+        "name": "Eval",
+        "path": "eval",
+        "confidence": "LOW"
+      },
+      {
+        "name": "Mcp Server",
+        "path": "mcp_server",
+        "confidence": "LOW"
+      },
+      {
+        "name": "Web",
+        "path": "web",
+        "confidence": "LOW"
+      }
+    ],
+    "architecture_contract": {
+      "policy": "clean-architecture-contract",
+      "recommended_scaffold": "feature-first",
+      "empty_directories": "forbidden",
+      "note": "Clean Architecture is enforced by dependency direction and responsibilities, not directories alone."
+    },
+    "smells": [
+      {
+        "type": "large_file_candidate",
+        "file": "data/scripts/gerar_fixtures.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "web/src/simulado/agente-simulado.ts",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "mcp_server/tests/contrato/test_gerar_fixtures.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "eval/agente/rodar_eval.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "data/scripts/build_dados.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "mcp_server/bussola_mcp/dominio/marcos.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "mcp_server/bussola_mcp/contratos.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "agent/bussola_agent/acompanhamento/fakes.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "agent/tests/contrato/test_mcp_conexao.py",
+        "reason": "High size relative to project."
+      },
+      {
+        "type": "large_file_candidate",
+        "file": "deploy/tests/test_smoke.py",
+        "reason": "High size relative to project."
+      }
+    ],
+    "risks": [
+      "Working tree has existing changes; avoid touching unrelated files.",
+      "Multiple languages detected; split batches by runtime boundary."
+    ],
+    "recommended_first_move": "Refactor one high-value flow behind tests."
+  },
+  "plan": {
+    "strategy": "turbo-small-batches",
+    "architecture_contract": {
+      "scaffold": "feature-first",
+      "must_generate_before_after_map": true,
+      "must_run_architecture_gate_per_batch": true,
+      "must_discover_bounded_contexts_before_moves": true
+    },
+    "parallel_policy": "worktrees_only_independent_scopes",
+    "batches": [
+      {
+        "id": "B001",
+        "title": "Architecture map and boundary naming",
+        "lead_role": "architecture_scout",
+        "scope": [
+          "agent",
+          "data",
+          "deploy",
+          "eval",
+          "mcp_server",
+          "web"
+        ],
+        "goal": "Document current boundaries and name candidate Clean Architecture layers.",
+        "allowed_changes": [
+          "docs",
+          "architecture notes",
+          "non-runtime metadata"
+        ],
+        "rollback": "Revert generated docs/notes.",
+        "gates": []
+      },
+      {
+        "id": "B002",
+        "title": "Small refactor around data/scripts/gerar_fixtures.py",
+        "lead_role": "refactoring_agent",
+        "scope": [
+          "data/scripts/gerar_fixtures.py"
+        ],
+        "goal": "Reduce nesting/complexity and extract clearer domain/application seams while preserving behavior.",
+        "allowed_changes": [
+          "production code",
+          "unit tests",
+          "imports",
+          "small docs"
+        ],
+        "rollback": "Revert this batch diff only.",
+        "gates": [
+          {
+            "name": "test",
+            "command": "npm test",
+            "blocking": "true"
+          },
+          {
+            "name": "build",
+            "command": "npm run build --if-present",
+            "blocking": "true"
+          },
+          {
+            "name": "test",
+            "command": "python3 -m pytest",
+            "blocking": "true"
+          }
+        ]
+      },
+      {
+        "id": "B003",
+        "title": "Small refactor around web/src/simulado/agente-simulado.ts",
+        "lead_role": "refactoring_agent",
+        "scope": [
+          "web/src/simulado/agente-simulado.ts"
+        ],
+        "goal": "Reduce nesting/complexity and extract clearer domain/application seams while preserving behavior.",
+        "allowed_changes": [
+          "production code",
+          "unit tests",
+          "imports",
+          "small docs"
+        ],
+        "rollback": "Revert this batch diff only.",
+        "gates": [
+          {
+            "name": "test",
+            "command": "npm test",
+            "blocking": "true"
+          },
+          {
+            "name": "build",
+            "command": "npm run build --if-present",
+            "blocking": "true"
+          },
+          {
+            "name": "test",
+            "command": "python3 -m pytest",
+            "blocking": "true"
+          }
+        ]
+      },
+      {
+        "id": "B004",
+        "title": "Small refactor around mcp_server/tests/contrato/test_gerar_fixtures.py",
+        "lead_role": "refactoring_agent",
+        "scope": [
+          "mcp_server/tests/contrato/test_gerar_fixtures.py"
+        ],
+        "goal": "Reduce nesting/complexity and extract clearer domain/application seams while preserving behavior.",
+        "allowed_changes": [
+          "production code",
+          "unit tests",
+          "imports",
+          "small docs"
+        ],
+        "rollback": "Revert this batch diff only.",
+        "gates": [
+          {
+            "name": "test",
+            "command": "npm test",
+            "blocking": "true"
+          },
+          {
+            "name": "build",
+            "command": "npm run build --if-present",
+            "blocking": "true"
+          },
+          {
+            "name": "test",
+            "command": "python3 -m pytest",
+            "blocking": "true"
+          }
+        ]
+      },
+      {
+        "id": "B005",
+        "title": "Small refactor around eval/agente/rodar_eval.py",
+        "lead_role": "refactoring_agent",
+        "scope": [
+          "eval/agente/rodar_eval.py"
+        ],
+        "goal": "Reduce nesting/complexity and extract clearer domain/application seams while preserving behavior.",
+        "allowed_changes": [
+          "production code",
+          "unit tests",
+          "imports",
+          "small docs"
+        ],
+        "rollback": "Revert this batch diff only.",
+        "gates": [
+          {
+            "name": "test",
+            "command": "npm test",
+            "blocking": "true"
+          },
+          {
+            "name": "build",
+            "command": "npm run build --if-present",
+            "blocking": "true"
+          },
+          {
+            "name": "test",
+            "command": "python3 -m pytest",
+            "blocking": "true"
+          }
+        ]
+      }
+    ]
+  },
+  "gates": [
+    {
+      "name": "install",
+      "command": "npm install",
+      "blocking": "false"
+    },
+    {
+      "name": "test",
+      "command": "npm test",
+      "blocking": "true"
+    },
+    {
+      "name": "lint",
+      "command": "npm run lint --if-present",
+      "blocking": "false"
+    },
+    {
+      "name": "build",
+      "command": "npm run build --if-present",
+      "blocking": "true"
+    },
+    {
+      "name": "test",
+      "command": "python3 -m pytest",
+      "blocking": "true"
+    }
+  ],
+  "metrics": {
+    "source_file_count": 367,
+    "test_file_count": 151
+  },
+  "reports": []
+}
