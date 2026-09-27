@@ -9,6 +9,8 @@ dependencies = [
     "google-genai>=2.25",
     "google-auth>=2.58",
     "pydantic>=2.13",
+    "google-cloud-bigquery>=3.45.2",
+    "httpx>=0.28.1",
 ]
 
 [dependency-groups]
