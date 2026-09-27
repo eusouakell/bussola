@@ -39,4 +39,7 @@ select = ["E", "F", "I", "UP", "B"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-markers = ["bq: depende de BigQuery real (make test-bq)"]
+markers = [
+    "bq: depende de BigQuery real (make test-bq)",
+    "extensoes_reais: usa os pacotes de extensão reais (005/006); informativo, eles já ficam visíveis",
+]
