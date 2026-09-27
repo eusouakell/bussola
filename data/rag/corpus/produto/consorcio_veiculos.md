@@ -3,7 +3,7 @@ titulo: Consórcio de Veículos
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: Consórcios (página oficial)
-fonte_url: https://www.itau.com.br/consorcios
+fonte_url: https://www.procon.sp.gov.br/consorcio/
 ---
 
 ## Consórcio de Veículos: o que é e para que serve

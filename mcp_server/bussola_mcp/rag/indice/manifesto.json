@@ -2,6 +2,6 @@
   "modelo_embedding": "gemini-embedding-001",
   "dimensao": 768,
   "qtd_trechos": 75,
-  "hash_corpus": "763493e88f6b75735d13b2fe5da0addd8a8b98bc714327286a9d0bcb0ebfed14",
+  "hash_corpus": "17d4fbc82eefad247d63a472fa544cdb9fe416e0e5150506426e6fb7dfaee1ed",
   "gerado_em": "2026-09-27T12:51:34Z"
 }
