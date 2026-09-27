@@ -16,7 +16,7 @@ place and the callback returns ``None``.
 from collections.abc import Mapping
 from typing import Any
 
-from bussola_agent.jornada.number_check import is_final_text
+from bussola_agent.jornada.llm_view import is_final_text
 from bussola_agent.jornada.tool_results import tool_outcomes
 
 ORDER = 90

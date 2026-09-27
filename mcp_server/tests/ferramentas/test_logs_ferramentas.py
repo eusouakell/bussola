@@ -14,14 +14,14 @@ from apoio_ferramentas import (
     argumentos,
     capturar_logs,
     chamar,
-    deps_golden,
+    deps_fixtures,
     linhas_json,
     sessao,
 )
 
 from bussola_mcp.contratos import ID_ANCORA, ID_CONTROLE
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.ferramentas.fixture_backends import FixtureRepository, FixtureSearcher
-from bussola_mcp.ferramentas.golden_adapter import GoldenFixtureComputations
 from bussola_mcp.ferramentas.ports import ToolDependencies
 from bussola_mcp.logging_json import CAMPOS_EXTRAS_PERMITIDOS
 
@@ -35,7 +35,7 @@ def _chamadas(linhas):
 
 async def _rodar(fixtures, pares, deps=None):
     with capturar_logs() as buffer:
-        async with sessao(deps=deps or deps_golden(fixtures)) as cliente:
+        async with sessao(deps=deps or deps_fixtures(fixtures)) as cliente:
             envelopes = [await chamar(cliente, f, a) for f, a in pares]
     return envelopes, linhas_json(buffer)
 
@@ -89,7 +89,7 @@ async def test_bigquery_indisponivel_loga_codigo_e_so_a_classe_da_excecao(fixtur
     deps = ToolDependencies(
         repository=repositorio,
         searcher=FixtureSearcher(fixtures_sinteticas),
-        computations=GoldenFixtureComputations(fixtures_sinteticas, repositorio),
+        computations=DomainComputations(repositorio),
     )
     envelopes, linhas = await _rodar(
         fixtures_sinteticas, [("perfil_financeiro", argumentos("perfil_financeiro"))], deps

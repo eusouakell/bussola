@@ -1,9 +1,15 @@
 // Chips do composer: respostas rápidas do turno atual ou sugestões da etapa.
-import { motivoSemAvanco, TEXTO_AVANCAR } from "../componentes/layout/BarraDemo";
-import { SUGESTOES_POR_ESTADO } from "../simulado/textos";
+import type { Modo } from "../agente/transporte";
+import { motivoSemAvanco } from "./avanco";
 import type { ModeloSessao } from "./modelo";
+import { SUGESTOES_POR_ESTADO, TEXTO_AVANCAR } from "./sugestoes-padrao";
 
-export function sugestoesDoComposer(modelo: ModeloSessao): string[] {
+/**
+ * Sugestões da etapa quando o agente não propôs nenhuma. Só no modo simulado:
+ * `SUGESTOES_POR_ESTADO` é o roteiro do fake, e oferecê-lo ao vivo mostrava ao
+ * cliente chips que o agente real nunca propôs (A4 da varredura).
+ */
+export function sugestoesDoComposer(modelo: ModeloSessao, modo: Modo): string[] {
   const { itens, estado } = modelo;
   if (!itens.some((i) => i.tipo === "mensagem_cliente")) return [];
   const semAvanco = motivoSemAvanco(estado) !== null;
@@ -19,5 +25,6 @@ export function sugestoesDoComposer(modelo: ModeloSessao): string[] {
   }
   // Autorização pendente se responde no próprio card.
   if (Object.values(estado.consentimentos ?? {}).some((c) => c.status === "pendente")) return [];
-  return estado.estado_jornada ? filtrar(SUGESTOES_POR_ESTADO[estado.estado_jornada]) : [];
+  if (modo !== "simulado" || !estado.estado_jornada) return [];
+  return filtrar(SUGESTOES_POR_ESTADO[estado.estado_jornada]);
 }

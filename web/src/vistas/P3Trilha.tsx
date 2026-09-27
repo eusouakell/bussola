@@ -6,7 +6,7 @@ import { Icone } from "../componentes/base/Icone";
 import { capitalizar, lista, num, txt } from "../componentes/cards/ler";
 import { larguraMedidor } from "../componentes/cards/partes";
 import { brl, mascararId, mesAbrev, meses, percentual } from "../formatacao/formatar";
-import { R_AVANCAR } from "../simulado/textos";
+import { R_AVANCAR } from "../sessao/sugestoes-padrao";
 import { statusMes, type EventoTrilha, type MesLido, type PlanoLido } from "./dados";
 import { BotaoAcao, Fonte, SeloStatus, tomStatus } from "./partes";
 

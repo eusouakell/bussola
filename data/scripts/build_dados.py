@@ -40,7 +40,6 @@ pós-build ou schema divergente).
 import argparse
 import importlib.util
 import json
-import os
 import re
 import sys
 import tempfile
@@ -52,6 +51,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
+from bussola_mcp import config
 from bussola_mcp.contratos import (
     ANOMES_MAX,
     ANOMES_MIN,
@@ -76,13 +76,20 @@ from bussola_mcp.dominio.repositorio_bq import (
 )
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPTS_DIR.parents[1]
+# A raiz do repositório e os defaults de ambiente têm um dono só:
+# ``bussola_mcp.config`` (contratos §7). Aqui só se lê de lá.
+REPO_ROOT = config.RAIZ_REPOSITORIO
 SQL_DIR = REPO_ROOT / "data" / "sql"
 DDL_FILE = REPO_ROOT / "contracts" / "bigquery" / "bussola_dados.sql"
 PERSONAS_FILE = REPO_ROOT / "contracts" / "fixtures" / "bussola_dados" / "users.json"
 
-LOCATION = "us-central1"
-DEFAULT_DATASET = "bussola_dados"
+LOCATION = config.LOCAL_GCP_PADRAO
+"""Região padrão dos jobs. O valor efetivo vem de :func:`config.local_gcp`."""
+
+DEFAULT_DATASET = config.DATASET_DADOS_PADRAO
+"""Dataset canônico de destino (contratos §3); o efetivo vem de
+:func:`config.dataset_dados` ou de ``--dataset``."""
+
 SOURCE_TABLE = "hackathon_dados.extrato_sintetico"
 DATASET_PLACEHOLDER = "{{dataset}}"
 
@@ -367,15 +374,15 @@ def ensure_ddl(client: Any, project: str, dataset: str) -> list[str]:
 
 @dataclass(frozen=True)
 class QueryRunner:
-    """Executa SQL com parâmetros nomeados em ``us-central1``."""
+    """Executa SQL com parâmetros nomeados na região de :func:`config.local_gcp`."""
 
     client: Any
 
     def run(self, sql: str, parameters: Sequence[Any] = ()) -> list[Any]:
         from google.cloud import bigquery
 
-        config = bigquery.QueryJobConfig(query_parameters=list(parameters))
-        return list(self.client.query(sql, job_config=config, location=LOCATION).result())
+        job = bigquery.QueryJobConfig(query_parameters=list(parameters))
+        return list(self.client.query(sql, job_config=job, location=config.local_gcp()).result())
 
 
 def personas_parameter(personas: Iterable[UserPersona]) -> Any:
@@ -547,7 +554,7 @@ def export_fixtures(repository: RepositorioFinanceiro, output: Path) -> dict[str
 def _create_client(project: str) -> Any:
     from google.cloud import bigquery
 
-    return bigquery.Client(project=project, location=LOCATION)
+    return bigquery.Client(project=project, location=config.local_gcp())
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -560,7 +567,7 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--dataset",
-        default=os.environ.get("BQ_DATASET_DADOS") or DEFAULT_DATASET,
+        default=config.dataset_dados(),
         help="dataset de destino (padrão: BQ_DATASET_DADOS ou bussola_dados)",
     )
     parser.add_argument(
@@ -620,7 +627,7 @@ def main(
     except (BuildError, OSError) as exc:
         print(f"Erro: {exc}", file=sys.stderr)
         return 2
-    project = args.projeto or os.environ.get("GOOGLE_CLOUD_PROJECT")
+    project = args.projeto or config.projeto_gcp()
     if not project:
         print("Erro: informe --projeto ou defina GOOGLE_CLOUD_PROJECT.", file=sys.stderr)
         return 2

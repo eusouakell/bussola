@@ -272,6 +272,31 @@ describe("useSessao", () => {
     expect(result.current.pronta).toBe(true);
   });
 
+  it("bordas vão pelo port: chama quem implementa e ignora quem não implementa (R5)", async () => {
+    const configurarBordas = vi.fn();
+    const transportes: Transporte[] = [];
+    const fabrica = vi.fn((modo: Modo) => {
+      // O transporte ao vivo não oferece `configurarBordas`; o simulado, sim.
+      const base = new TransporteFalso(modo, {});
+      const t: Transporte = modo === "simulado" ? Object.assign(base, { configurarBordas }) : base;
+      transportes.push(t);
+      return t;
+    });
+
+    const { result } = renderHook(() => useSessao("simulado", fabrica));
+    await agir();
+    await agir(() => result.current.configurarBordas({ e5: true }));
+    expect(configurarBordas).toHaveBeenCalledWith({ e5: true });
+    expect(result.current.bordas).toEqual({ e3: false, e4: false, e5: true });
+
+    await agir(() => result.current.trocarModo("ao-vivo"));
+    // Sem o método no port, o hook não quebra nem faz downcast para o concreto.
+    await agir(() => result.current.configurarBordas({ e3: true }));
+    expect(transportes.map((t) => t.modo)).toEqual(["simulado", "ao-vivo"]);
+    expect(configurarBordas).toHaveBeenCalledTimes(1);
+    expect(result.current.bordas).toEqual({ e3: true, e4: false, e5: true });
+  });
+
   it("ao vivo sem login não cria sessão; o login libera e o simulado não espera", async () => {
     const { fabrica } = criarFabrica();
     const { result, rerender } = renderHook(({ liberado }) => useSessao("ao-vivo", fabrica, { aoVivoLiberado: liberado }), {

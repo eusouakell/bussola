@@ -11,7 +11,6 @@ from apoio_ferramentas import (
     DIR_OFICIAL,
     argumentos,
     chamar,
-    deps_golden,
     ler_golden,
     sessao,
 )
@@ -28,7 +27,6 @@ from bussola_mcp.contratos import (
     arquivo_golden,
     arquivo_resumo_mes,
 )
-from bussola_mcp.ferramentas.golden_adapter import CANONICAL_INPUT_WARNING, EARLIER_CUT_WARNING
 
 MESES = tuple(range(202501, 202513))
 ENTRADA_GOLDEN: dict[str, dict[str, object]] = {
@@ -67,18 +65,6 @@ async def test_resumo_mes_nao_depende_do_corte_quando_o_mes_esta_disponivel():
     assert envelope == ler_golden(DIR_OFICIAL, arquivo_resumo_mes(202503))
 
 
-@pytest.mark.parametrize("ferramenta", FERRAMENTAS_GOLDEN)
-async def test_corte_intermediario_serve_o_golden_de_202506_com_aviso(ferramenta):
-    """Decisão D-04: 202507–202511 → golden de 202506, período até 202506 e aviso."""
-    async with sessao(deps=deps_golden(DIR_OFICIAL)) as cliente:
-        envelope = await chamar(cliente, ferramenta, _argumentos_golden(ferramenta, 202509))
-    golden = ler_golden(DIR_OFICIAL, arquivo_golden(ferramenta, 202506))
-    assert envelope["dados"] == golden["dados"]
-    assert envelope["fonte"] == golden["fonte"]
-    assert envelope["fonte"]["periodo"]["fim"] == 202506
-    assert envelope["avisos"] == [*golden["avisos"], EARLIER_CUT_WARNING]
-
-
 async def test_oportunidades_respeita_top_n():
     async with sessao(DIR_OFICIAL) as cliente:
         envelope = await chamar(
@@ -95,20 +81,6 @@ async def test_oportunidades_top_n_padrao_e_5():
             cliente, "oportunidades_corte", {"id_usuario": ID_ANCORA, "ate_anomes": 202512}
         )
     assert len(envelope["dados"]["categorias"]) == 5
-
-
-@pytest.mark.parametrize("ferramenta", ["simular_objetivo", "comparar_cenarios"])
-async def test_simulacao_com_entrada_nao_canonica_traz_aviso(ferramenta):
-    """Decisão D-05: enquanto o 001 não chega, a resposta é a canônica e o aviso diz isso."""
-    async with sessao(deps=deps_golden(DIR_OFICIAL)) as cliente:
-        envelope = await chamar(
-            cliente,
-            ferramenta,
-            argumentos(ferramenta, valor_alvo=60000.0, prazo_meses=24, aporte_mensal=None)
-            if ferramenta == "simular_objetivo"
-            else argumentos(ferramenta, valor_alvo=60000.0, prazo_meses=24),
-        )
-    assert CANONICAL_INPUT_WARNING in envelope["avisos"]
 
 
 async def test_cenario_7_comparar_cenarios_ancora_202506():

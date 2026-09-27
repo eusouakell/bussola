@@ -29,7 +29,7 @@ function main(): void {
     logger.info("encerrando", { evento: "fim" });
     server.close(() => process.exit(0));
     server.closeIdleConnections();
-    setTimeout(() => process.exit(0), 10_000).unref();
+    setTimeout(() => process.exit(0), config.shutdownGraceMs).unref();
   });
 }
 

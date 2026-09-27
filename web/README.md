@@ -43,11 +43,24 @@ Alvos do `Makefile` na raiz:
 
 ## Modos
 
+Toda a configuração do front está em [`src/config.ts`](src/config.ts); nenhum
+módulo lê variável de ambiente por conta própria. Valor inválido cai no padrão,
+sem derrubar a página (o front não loga, constituição V).
+
 | Variável | Valores | Padrão |
 |---|---|---|
 | `VITE_BUSSOLA_MODO` | `simulado` ou `ao-vivo` | `simulado` |
 | `VITE_ADK_APP` | nome do app no ADK | `bussola_agent` |
+| `VITE_ADK_USUARIO` | rótulo do usuário da sessão ADK | `fernando` |
 | `VITE_BUSSOLA_LOGIN` | `TRUE` liga a tela de login do BFF no modo ao vivo | desligado |
+| `VITE_BUSSOLA_API_BASE` | prefixo das rotas do ADK e do BFF | vazio (mesma origem) |
+| `VITE_BUSSOLA_ANOMES_INICIAL` / `_FINAL` | recorte gravado da demonstração (202501–202512) | `202506` / `202512` |
+| `VITE_BUSSOLA_ID_MASCARADO` | `id_usuario` mascarado nos Bastidores antes do primeiro `stateDelta` | `36a2…7269` |
+| `VITE_BUSSOLA_ATRASO_MS` / `VITE_BUSSOLA_FATOR_LENTO` | latência do simulado e multiplicador do cenário E5 | `320` / `6` |
+| `VITE_BUSSOLA_LIMITE_MENSAGEM` / `VITE_BUSSOLA_LIMITE_SENHA` | `maxlength` do composer e da senha | `500` / `128` |
+
+No `npm run dev`, `ADK_URL` e `VITE_PORT` ajustam o proxy e a porta do Vite
+(padrões `http://localhost:8000` e `5173`).
 
 As variáveis valem na linha de comando (`VITE_BUSSOLA_MODO=ao-vivo npm run
 dev`) ou em `web/.env.local`, que não é versionado. Tudo que começa com
@@ -108,12 +121,21 @@ npm run bff                # ou, na raiz: make bff (lê ../.env se existir)
 | `AUTH_PASSWORD_HASH` | obrigatória | Hash scrypt da senha padrão de teste |
 | `AUTH_ALLOWED_ORIGINS` | vazio | Origens aceitas em `POST`/`DELETE` (ex.: `http://localhost:5173`) |
 | `AUTH_COOKIE_SECURE` | `TRUE` no Cloud Run | Cookie `__Host-` com `Secure` |
+| `AUTH_COOKIE_NAME` | `bussola_session` | Nome do cookie de sessão (com `Secure`, ganha o prefixo `__Host-`) |
+| `AUTH_SESSION_IDLE_TTL_MS`, `AUTH_SESSION_TTL_MS` | `1800000`, `28800000` | Inatividade e validade absoluta da sessão de login |
+| `AUTH_MAX_SESSIONS`, `AGENT_MAX_SESSIONS` | `500`, `20` | Sessões de login vivas no processo e sessões do agente por login |
+| `AUTH_LOGIN_MAX_FAILURES`, `AUTH_LOGIN_WINDOW_MS` | `5`, `900000` | Limite de tentativas por persona |
+| `AUTH_GLOBAL_MAX_FAILURES`, `AUTH_GLOBAL_WINDOW_MS` | `30`, `60000` | Limite de tentativas no processo |
+| `AUTH_LOGIN_MAX_CONCURRENT` | `8` | Logins simultâneos (scrypt é caro) |
+| `USERS_CACHE_TTL_MS` | `600000` | TTL do cache de contas em memória |
 | `BUSSOLA_FAKES` | `TRUE` | Users da fixture (`USERS_FIXTURE`) em vez do BigQuery |
 | `USERS_FIXTURE` | `contracts/fixtures/bussola_dados/users.json` | Chega com o PR `contracts:` de `users`; até lá, aponte para um arquivo local |
 | `GOOGLE_CLOUD_PROJECT`, `BQ_DATASET_DADOS`, `BQ_TABLE_USERS` | `bussola_dados`, `users` | Leitura de users com `BUSSOLA_FAKES=FALSE` |
 | `AGENT_URL`, `AGENT_APP` | `http://localhost:8000`, `bussola_agent` | Agente ADK |
 | `AGENT_AUDIENCE` | origem de `AGENT_URL` | Audience do ID token. Com `AGENT_URL` numa URL de tag (`main---…`), use a URL principal do agente: o Cloud Run recusa a da tag |
 | `AGENT_USE_OIDC` | `FALSE` | Token OIDC do metadata server (só no Cloud Run) |
+| `AGENT_TIMEOUT_MS` | `15000` | Timeout das chamadas não-streaming ao agente |
+| `SHUTDOWN_GRACE_MS` | `10000` | Prazo das conexões abertas depois do `SIGTERM` |
 | `STATIC_DIR` | vazio | Serve o `dist/` do front (SPA) |
 | `PORT` | `8080` | Porta HTTP |
 

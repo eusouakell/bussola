@@ -14,12 +14,12 @@
 Registered by ``agent.py`` in the frozen chain of :mod:`bussola_agent.callbacks`.
 """
 
-import os
 from collections.abc import Mapping
 from typing import Any
 
 from google.adk.tools.mcp_tool.mcp_tool import McpTool
 
+from bussola_agent import config
 from bussola_agent.estado import (
     CHAVE_ATE_ANOMES,
     CHAVE_ID_USUARIO,
@@ -38,8 +38,9 @@ from bussola_agent.mcp_conexao import (
 )
 
 ORDER = 10
-DEFAULT_ANCHOR_USER_ID = "36a21505-d6d4-42d3-b319-d51a133c7269"
-DEFAULT_REPLAY_START = 202506
+# Defaults do escopo âncora: de :mod:`bussola_agent.config`, a fonte única.
+DEFAULT_ANCHOR_USER_ID = config.ANCHOR_USER_ID_PADRAO
+DEFAULT_REPLAY_START = config.REPLAY_START_PADRAO
 SCOPE_KEYS: tuple[str, ...] = (CHAVE_ID_USUARIO, CHAVE_ATE_ANOMES)
 
 # MCP tools that take the customer's goal amount (contratos §5). The goal is
@@ -74,10 +75,7 @@ async def initialize_session(callback_context: Any) -> None:
     """
     state = callback_context.state
     try:
-        initial = estado_inicial(
-            os.getenv("ANCHOR_USER_ID") or DEFAULT_ANCHOR_USER_ID,
-            int(os.getenv("REPLAY_START_ANOMES") or DEFAULT_REPLAY_START),
-        )
+        initial = estado_inicial(config.anchor_user_id(), config.replay_start_anomes())
     except ValueError:
         _log.error(
             "ANCHOR_USER_ID ou REPLAY_START_ANOMES inválido.",

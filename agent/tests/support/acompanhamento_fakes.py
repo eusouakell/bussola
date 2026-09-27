@@ -9,7 +9,8 @@
   recebem o mesmo envelope de exemplo, que é o que os testes offline precisam.
   Com ``canned=False``, ``simular_objetivo`` é calculado para a entrada
   (comportamento esperado do 003).
-- :class:`FixtureMcpGateway` implementa a porta :class:`~.ports.McpGateway`.
+- :class:`FixtureMcpGateway` implementa a porta
+  :class:`~bussola_agent.acompanhamento.ports.McpGateway`.
 - :func:`fake_transport` substitui ``mcp_conexao._chamar_mcp`` e devolve um
   ``CallToolResult`` como o do servidor real (``structuredContent`` + JSON).
 - :class:`ScriptedLlm` é um ``BaseLlm`` roteirizado para o ``InMemoryRunner``.
@@ -44,7 +45,7 @@ from mcp.types import CallToolResult, TextContent
 from pydantic import Field
 
 import bussola_agent
-from bussola_agent import callbacks, extensoes, mcp_conexao
+from bussola_agent import callbacks, config, extensoes, mcp_conexao
 from bussola_agent.acompanhamento.money import format_brl, format_months
 from bussola_agent.acompanhamento.ports import TOOL_MONTHLY_SUMMARY, TOOL_SIMULATE_GOAL
 from bussola_agent.acompanhamento.routes import SimulationRequest, simulate_locally
@@ -63,7 +64,7 @@ from bussola_agent.estado import (
 FIXTURES_DIR = Path(bussola_agent.__file__).resolve().parents[2] / "contracts" / "fixtures"
 PARTIAL_CUT = 202506
 CANNED_INPUT = {"valor_alvo": 30000.0, "prazo_meses": 24}
-ANCHOR_USER_ID = "36a21505-d6d4-42d3-b319-d51a133c7269"
+ANCHOR_USER_ID = config.ANCHOR_USER_ID_PADRAO
 CONTROL_USER_ID = "31e94f2f-1463-49f9-a41a-b3f220ed976a"
 
 _MONTHS = (
@@ -190,7 +191,8 @@ class FixtureMcp:
 
 
 class FixtureMcpGateway:
-    """Porta :class:`~.ports.McpGateway` sobre um :class:`FixtureMcp` (escopo do state)."""
+    """Porta :class:`~bussola_agent.acompanhamento.ports.McpGateway` sobre um
+    :class:`FixtureMcp` (escopo do state)."""
 
     def __init__(self, mcp: FixtureMcp | None = None) -> None:
         self.mcp = mcp or FixtureMcp()
@@ -482,8 +484,9 @@ def install_journey(*, governance: bool = True) -> None:
 
     Mesma ordem do primeiro import de ``bussola_agent.agent``: os pacotes de
     extensão (005, se ``governance``, e 006) e depois as cadeias do 004
-    (``registrar_callbacks``). Com ``governance=False`` o chamador tira o 005
-    de ``sys.modules``, e o ``ajustar_plano`` usa a guarda local.
+    (``registrar_callbacks``). Com ``governance=False`` o gate do 005 fica fora
+    da cadeia de ``before_tool`` e quem barra o ``ajustar_plano`` sem "sim" é a
+    guarda local, que é incondicional (não depende de ``sys.modules``).
     """
     import importlib
 

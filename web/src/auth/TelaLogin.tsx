@@ -2,11 +2,12 @@
 // sintética) e digita a senha padrão de teste. O `id_usuario` fica no BFF.
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { Icone } from "../componentes/base/Icone";
+import { CONFIG } from "../config";
 import { SeloSintetico } from "../componentes/base/SeloSintetico";
-import { FalhaAuth, type ClienteAuth, type Persona } from "./clienteAuth";
+import { FalhaAuth, type Persona, type PortalAuth } from "./portal";
 
 interface Props {
-  cliente: ClienteAuth;
+  cliente: PortalAuth;
   onEntrar: (login: string, senha: string) => Promise<void>;
   onModoSimulado: () => void;
   compacto?: boolean;
@@ -165,7 +166,7 @@ export function TelaLogin({ cliente, onEntrar, onModoSimulado, compacto }: Props
             autoComplete="current-password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            maxLength={128}
+            maxLength={CONFIG.limiteSenhaChars}
             required
           />
         </div>

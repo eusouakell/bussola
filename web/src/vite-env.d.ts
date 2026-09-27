@@ -1,11 +1,4 @@
 /// <reference types="vite/client" />
 
-interface ImportMetaEnv {
-  readonly VITE_BUSSOLA_MODO?: string;
-  readonly VITE_ADK_APP?: string;
-  readonly VITE_BUSSOLA_LOGIN?: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
+// As variáveis `VITE_*` da Bússola estão em `src/config.ts` (`AmbienteFront`),
+// que é quem as lê. Aqui fica só a tipagem base do Vite.

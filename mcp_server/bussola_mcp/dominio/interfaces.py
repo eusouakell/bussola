@@ -8,6 +8,12 @@ Toda leitura por cliente recebe ``id_usuario`` e ``ate_anomes``: o escopo por
 cliente e o corte temporal são obrigatórios (constituição III e IV). O buscador
 não recebe nenhum dos dois: o corpus é conhecimento geral, sem dado de cliente
 (Q-17).
+
+As falhas de **infraestrutura** de cada porta também são parte da porta:
+:class:`RepositoryUnavailableError` e :class:`SearcherUnavailableError`. Ficam
+aqui, e não no módulo de cada adaptador, para a camada de aplicação tratá-las
+sem importar o BigQuery nem o RAG (varredura R6). As mensagens são genéricas:
+nunca SQL, projeto, credencial ou nome de provedor (constituição II).
 """
 
 from typing import Protocol, runtime_checkable
@@ -23,6 +29,21 @@ from bussola_mcp.contratos import (
     TemaConhecimento,
     Trecho,
 )
+
+
+class RepositoryUnavailableError(RuntimeError):
+    """Falha de leitura no repositório. A mensagem é genérica e segura para o cliente."""
+
+    def __init__(self, mensagem: str = "Leitura de dados indisponível.") -> None:
+        super().__init__(mensagem)
+
+
+class SearcherUnavailableError(RuntimeError):
+    """Falha do backend de busca do corpus de conhecimento.
+
+    Superclasse de ``rag.embedding.EmbeddingUnavailableError``: a ferramenta
+    trata a falha pela porta, sem conhecer o adaptador que a levantou.
+    """
 
 
 @runtime_checkable

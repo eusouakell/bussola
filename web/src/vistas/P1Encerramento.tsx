@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { Icone, type NomeIcone } from "../componentes/base/Icone";
 import { brl, dataHora, mascararId, meses } from "../formatacao/formatar";
-import { R_LEMBRETES } from "../simulado/textos";
+import { R_LEMBRETES } from "../sessao/sugestoes-padrao";
 import type { PlanoLido } from "./dados";
 import { BotaoAcao, Fontes } from "./partes";
 import type { NomeVista } from "./Vistas";

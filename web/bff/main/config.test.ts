@@ -26,7 +26,41 @@ describe("loadConfig", () => {
       agentAudience: "http://localhost:8000",
       agentApp: "bussola_agent",
       agentUseOidc: false,
+      cookieName: "bussola_session",
+      usersCacheTtlMs: 600_000,
+      sessionPolicy: { idleTtlMs: 1_800_000, absoluteTtlMs: 28_800_000, maxAgentSessions: 20 },
+      maxSessions: 500,
+      rateLimit: {
+        login: { maxFailures: 5, windowMs: 900_000 },
+        global: { maxFailures: 30, windowMs: 60_000 },
+        maxConcurrent: 8,
+      },
+      agentTimeoutMs: 15_000,
+      shutdownGraceMs: 10_000,
     });
+  });
+
+  it("TTLs, limites e nome de cookie vêm do ambiente", () => {
+    const config = loadConfig(
+      {
+        AUTH_PASSWORD_HASH: hash,
+        AUTH_COOKIE_NAME: "demo_session",
+        AUTH_SESSION_IDLE_TTL_MS: "60000",
+        AUTH_SESSION_TTL_MS: "120000",
+        AGENT_MAX_SESSIONS: "3",
+        AUTH_MAX_SESSIONS: "10",
+        AUTH_LOGIN_MAX_FAILURES: "2",
+        AGENT_TIMEOUT_MS: "1000",
+      },
+      defaults,
+    );
+    expect(config).toMatchObject({
+      cookieName: "demo_session",
+      sessionPolicy: { idleTtlMs: 60_000, absoluteTtlMs: 120_000, maxAgentSessions: 3 },
+      maxSessions: 10,
+      agentTimeoutMs: 1000,
+    });
+    expect(config.rateLimit.login.maxFailures).toBe(2);
   });
 
   it("no Cloud Run, cookie Secure e OIDC permitido", () => {
@@ -35,6 +69,7 @@ describe("loadConfig", () => {
       defaults,
     );
     expect(config.cookieSecure).toBe(true);
+    expect(config.cookieName).toBe("__Host-bussola_session");
     expect(config.agentUseOidc).toBe(true);
     expect(config.fakes).toBe(false);
   });
@@ -64,6 +99,9 @@ describe("loadConfig", () => {
     [{ PORT: "0" }, "PORT"],
     [{ AGENT_URL: "bussola-agent" }, "AGENT_URL"],
     [{ AGENT_AUDIENCE: "bussola-agent" }, "AGENT_AUDIENCE"],
+    [{ AUTH_SESSION_TTL_MS: "0" }, "AUTH_SESSION_TTL_MS"],
+    [{ AUTH_LOGIN_MAX_FAILURES: "-1" }, "AUTH_LOGIN_MAX_FAILURES"],
+    [{ AGENT_TIMEOUT_MS: "muito" }, "AGENT_TIMEOUT_MS"],
   ])("recusa %j", (env, message) => {
     expect(() => loadConfig({ AUTH_PASSWORD_HASH: hash, ...env }, defaults)).toThrow(message);
   });

@@ -2,6 +2,7 @@
 // conversa, stepper, composer, Bastidores com a barra do apresentador e as
 // vistas do plano (P1–P5), sem roteador.
 import { useState } from "react";
+import { criarTransporte } from "./agente/fabrica";
 import { TelaLogin } from "./auth/TelaLogin";
 import { ClienteAuth } from "./auth/clienteAuth";
 import { useAuth } from "./auth/useAuth";
@@ -17,7 +18,7 @@ import { MTopo } from "./componentes/layout/MTopo";
 import { useMidia } from "./componentes/layout/useMidia";
 import { CONFIG } from "./config";
 import { sugestoesDoComposer } from "./sessao/sugestoes";
-import { criarTransporte, useSessao } from "./sessao/useSessao";
+import { useSessao } from "./sessao/useSessao";
 import { Vistas, type NomeVista } from "./vistas/Vistas";
 
 type Tema = "claro" | "escuro";
@@ -94,7 +95,7 @@ export function App() {
         vazio={<BoasVindas nome={modo === "ao-vivo" ? auth.persona?.displayName : undefined} onEscolher={enviar} desabilitado={!pronta || ocupado} compacto={!desktop} />}
       />
       <Composer
-        sugestoes={sugestoesDoComposer(modelo)}
+        sugestoes={sugestoesDoComposer(modelo, modo)}
         onEnviar={enviar}
         onParar={sessao.parar}
         ocupado={ocupado}

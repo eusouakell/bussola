@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { ClienteAuth, FalhaAuth, type Persona } from "./clienteAuth";
+import { FalhaAuth, type Persona, type PortalAuth } from "./portal";
 import { TelaLogin } from "./TelaLogin";
 
 const PERSONAS: Persona[] = [
@@ -9,10 +9,14 @@ const PERSONAS: Persona[] = [
   { login: "controle", displayName: "Renata", summary: "Persona de controle." },
 ];
 
-function clienteCom(listar: () => Promise<Persona[]>): ClienteAuth {
-  const cliente = new ClienteAuth({ fetch: vi.fn() });
-  vi.spyOn(cliente, "listarPersonas").mockImplementation(listar);
-  return cliente;
+/** Duplo do port: nenhuma instância de `ClienteAuth` e nenhum `vi.spyOn` na infra. */
+function clienteCom(listar: () => Promise<Persona[]>): PortalAuth {
+  return {
+    listarPersonas: listar,
+    sessaoAtual: () => Promise.resolve(null),
+    entrar: () => Promise.reject(new Error("não usado")),
+    sair: () => Promise.resolve(),
+  };
 }
 
 describe("TelaLogin", () => {

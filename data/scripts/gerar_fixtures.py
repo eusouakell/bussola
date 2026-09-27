@@ -36,7 +36,6 @@ Leituras adotadas onde o 001 (§3.1/§3.4) é ambíguo (a mais simples em cada c
 import argparse
 import json
 import math
-import os
 import re
 import statistics
 import sys
@@ -53,6 +52,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from bussola_mcp import config
 from bussola_mcp.contratos import (
     ANOMES_MAX,
     ANOMES_MIN,
@@ -100,8 +100,10 @@ from bussola_mcp.contratos import (
     id_usuario_valido,
 )
 
-RAIZ_REPO = Path(__file__).resolve().parents[2]
-SAIDA_PADRAO = RAIZ_REPO / "contracts" / "fixtures"
+# A raiz do repositório e o diretório de fixtures têm um dono só:
+# ``bussola_mcp.config`` (contratos §7 e §8). Aqui só se lê de lá.
+RAIZ_REPO = config.RAIZ_REPOSITORIO
+SAIDA_PADRAO = config.dir_fixtures_padrao()
 
 TABELA_ORIGEM = "hackathon_dados.extrato_sintetico"
 IDS_FIXTURE: tuple[str, str] = (ID_ANCORA, ID_CONTROLE)
@@ -1235,8 +1237,8 @@ def consultar(cliente: Any, sql: str, parametros: Sequence[Any]) -> list[Any]:
     """Executa ``sql`` com parâmetros nomeados e devolve as linhas."""
     from google.cloud import bigquery
 
-    config = bigquery.QueryJobConfig(query_parameters=list(parametros))
-    return list(cliente.query(sql, job_config=config).result())
+    job = bigquery.QueryJobConfig(query_parameters=list(parametros))
+    return list(cliente.query(sql, job_config=job).result())
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -1266,7 +1268,7 @@ def main(
     criar_cliente: Callable[[str], Any] = _criar_cliente_bigquery,
 ) -> int:
     args = _parser().parse_args(argv)
-    projeto = args.projeto or os.environ.get("GOOGLE_CLOUD_PROJECT")
+    projeto = args.projeto or config.projeto_gcp()
     if not projeto:
         print("Erro: informe --projeto ou defina GOOGLE_CLOUD_PROJECT.", file=sys.stderr)
         return 2

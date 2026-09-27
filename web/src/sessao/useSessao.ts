@@ -1,25 +1,11 @@
 // Hook da sessão (T028): escolhe o transporte, aplica os eventos no reducer
 // e expõe enviar, parar, repetir, trocar de modo e as bordas do simulado.
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import { ClienteAdk } from "../agente/cliente-adk";
-import type { Modo, Transporte } from "../agente/transporte";
+import { SEM_BORDAS, type Bordas, type FabricaTransporte, type Modo, type Transporte } from "../agente/transporte";
 import { CONFIG } from "../config";
-import { AgenteSimulado, type Bordas } from "../simulado/agente-simulado";
 import { MENSAGEM_FALHA_CONEXAO } from "./catalogo";
 import { MODELO_INICIAL, type ModeloSessao } from "./modelo";
 import { reducerSessao } from "./reducer";
-
-const SEM_BORDAS: Bordas = { e3: false, e4: false, e5: false };
-
-/** Latência base do simulado no navegador (E5 multiplica por 6). */
-const ATRASO_SIMULADO_MS = 320;
-
-export function criarTransporte(modo: Modo, bordas: Bordas = SEM_BORDAS): Transporte {
-  if (modo === "ao-vivo") return new ClienteAdk({ app: CONFIG.app, usuario: CONFIG.usuarioAdk });
-  const simulado = new AgenteSimulado({ parciais: true, atrasoMs: ATRASO_SIMULADO_MS });
-  simulado.configurarBordas(bordas);
-  return simulado;
-}
 
 export interface Sessao {
   modelo: ModeloSessao;
@@ -46,7 +32,7 @@ export interface OpcoesSessao {
 
 export function useSessao(
   modoInicial: Modo = CONFIG.modo,
-  fabrica: typeof criarTransporte = criarTransporte,
+  fabrica: FabricaTransporte,
   { aoVivoLiberado = true }: OpcoesSessao = {},
 ): Sessao {
   const [modo, setModo] = useState<Modo>(modoInicial);
@@ -146,8 +132,7 @@ export function useSessao(
     const novas = { ...bordasRef.current, ...parcial };
     bordasRef.current = novas;
     setBordas(novas);
-    const t = transporte.current;
-    if (t instanceof AgenteSimulado) t.configurarBordas(parcial);
+    transporte.current?.configurarBordas?.(parcial);
   }, []);
 
   const pronta = modelo.auditoria.some((e) => e.tipo_evento === "sessao_iniciada");

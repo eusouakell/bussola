@@ -34,13 +34,11 @@
 Importar este módulo não acessa a rede nem chama modelos.
 """
 
-import os
-
 from google.adk.agents import Agent
 from google.adk.models import FallbackModel, Gemini
 from google.genai import types
 
-from bussola_agent import callbacks, escopo, prompts
+from bussola_agent import callbacks, config, escopo, prompts
 from bussola_agent.extensoes import carregar_extensoes, ferramentas, instrucoes
 from bussola_agent.jornada import (
     action_claims,
@@ -55,11 +53,15 @@ from bussola_agent.mcp_conexao import criar_toolset
 from bussola_agent.resilient_model import build_fallback_chain, capacity_error_response
 
 NOME_AGENTE = "bussola"
-MODELO_PADRAO = "gemini-3.8-flash"
-# Cadeia Flash que respondeu no smoke (specs/000-fundacao-contratos/modelos.md).
-MODELOS_FLASH = ("gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash")
-# Uma retentativa no mesmo modelo (408, 429 e 5xx) antes de passar ao próximo.
-RETENTATIVA = types.HttpRetryOptions(attempts=2, initial_delay=1.0, max_delay=4.0)
+# Modelo, cadeia de fallback e limites de retentativa: de
+# :mod:`bussola_agent.config`, a fonte única (os nomes ficam por compatibilidade).
+MODELO_PADRAO = config.MODELO_PADRAO
+MODELOS_FLASH = config.MODELOS_FLASH
+RETENTATIVA = types.HttpRetryOptions(
+    attempts=config.RETENTATIVA_TENTATIVAS,
+    initial_delay=config.RETENTATIVA_ESPERA_INICIAL_S,
+    max_delay=config.RETENTATIVA_ESPERA_MAXIMA_S,
+)
 ANCHOR_PADRAO = escopo.DEFAULT_ANCHOR_USER_ID
 REPLAY_START_PADRAO = escopo.DEFAULT_REPLAY_START
 CATEGORIAS_SEGURANCA = (
@@ -84,7 +86,7 @@ def criar_modelo(principal: str) -> FallbackModel:
     e ainda cai para o próximo modelo. Construir não acessa a rede: o cliente
     do genai nasce na primeira chamada.
     """
-    nomes = [principal, *(m for m in MODELOS_FLASH if m != principal)]
+    nomes = config.cadeia_de_modelos(principal)
     return build_fallback_chain([Gemini(model=n, retry_options=RETENTATIVA) for n in nomes])
 
 
@@ -118,7 +120,7 @@ registrar_callbacks()
 
 root_agent = Agent(
     name=NOME_AGENTE,
-    model=criar_modelo(os.getenv("BUSSOLA_MODEL") or MODELO_PADRAO),
+    model=criar_modelo(config.modelo_principal()),
     description=(
         "Bússola, do app do banco: ajuda o cliente a transformar um objetivo financeiro "
         "em plano, com números das ferramentas MCP."

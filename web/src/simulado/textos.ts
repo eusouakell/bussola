@@ -1,32 +1,32 @@
 // Copy do agente simulado (pt-BR, docs/design/prompt-claude-design-chat.md §6–7).
 // Só cita números que vieram das ferramentas; nunca calcula (constituição III).
 // Proibido: "garantido", "aprovado", "contrate agora" e urgência artificial.
-import { brl, meses, mesExtenso, percentual, periodo } from "../formatacao/formatar";
 import type { EstadoJornada } from "../agente/tipos";
+import { brl, meses, mesExtenso, percentual, periodo } from "../formatacao/formatar";
 import type { TipoObjetivo } from "./intencoes";
 
+// Os rótulos das sugestões e dos CTAs são da aplicação, não do fake: os dois
+// modos os usam. Moram em `sessao/sugestoes-padrao.ts` e o simulado os
+// reexporta para seguir usando `T.R_*` (a direção é simulado → sessao, R3).
+export {
+  R_ACELERADO,
+  R_AJUDA,
+  R_AVANCAR,
+  R_CAMINHOS,
+  R_CONTINUAR,
+  R_FINANCIAMENTO,
+  R_LEMBRETES,
+  R_MANTER,
+  R_NAO,
+  R_OUTRO_CAMINHO,
+  R_SIM,
+  R_STATUS,
+  R_VALORES_DEMO,
+  SUGESTOES_INICIAIS,
+  SUGESTOES_POR_ESTADO,
+} from "../sessao/sugestoes-padrao";
+
 export const SAUDACAO = "Oi, Fernando! Eu sou a Bússola, seu assistente financeiro. Qual objetivo você quer tirar do papel?";
-
-export const SUGESTOES_INICIAIS = [
-  "Quero comprar meu primeiro apartamento",
-  "Quero viajar no ano que vem",
-  "Quero fazer uma pós",
-  "Quero organizar minhas dívidas",
-];
-
-export const R_VALORES_DEMO = "R$ 30 mil em 2 anos";
-export const R_CAMINHOS = "Me mostra os caminhos";
-export const R_ACELERADO = "Quero o caminho acelerado";
-export const R_OUTRO_CAMINHO = "Outro caminho";
-export const R_AVANCAR = "Avançar um mês";
-export const R_STATUS = "Ver status do plano";
-export const R_MANTER = "Manter o plano";
-export const R_LEMBRETES = "Ativar lembretes mensais";
-export const R_FINANCIAMENTO = "Simular um financiamento";
-export const R_CONTINUAR = "Continuar o plano";
-export const R_SIM = "Sim, autorizo";
-export const R_NAO = "Agora não";
-export const R_AJUDA = "O que você pode fazer?";
 
 export const OBJETIVOS: Record<Exclude<TipoObjetivo, "dividas">, { descricao: string; frase: string }> = {
   imovel: { descricao: "Primeiro apartamento", frase: "seu primeiro apartamento" },
@@ -267,13 +267,3 @@ export const AJUDA =
   "Posso te ajudar a planejar um objetivo, comparar caminhos, criar um plano com a sua autorização e acompanhar mês a mês. Não movo dinheiro nem contrato produtos.";
 
 export const NAO_ENTENDI = "Não entendi bem. Posso te ajudar com o seu objetivo, os caminhos ou o acompanhamento do plano.";
-
-/** Sugestões de fallback por estado da jornada (quando o agente não manda `respostas_rapidas`). */
-export const SUGESTOES_POR_ESTADO: Record<EstadoJornada, string[]> = {
-  OBJETIVO: SUGESTOES_INICIAIS,
-  ENTENDER: [R_VALORES_DEMO],
-  ANTECIPAR: [R_CAMINHOS],
-  ORIENTAR: [R_ACELERADO, R_OUTRO_CAMINHO],
-  AGIR: [R_AVANCAR, R_LEMBRETES],
-  ACOMPANHAR: [R_AVANCAR, R_STATUS],
-};

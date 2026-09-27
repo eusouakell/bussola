@@ -17,11 +17,12 @@ Garantias (constituição III e IV):
 - A ordem das linhas é a mesma nos dois modos (ver :data:`SORT_KEYS`).
 - ``recorrentes`` reaplica o critério de ≥ 3 meses distintos só sobre as linhas até o
   corte (plan.md D-05), para o futuro não vazar para o corte.
-- Falhas do BigQuery viram :class:`RepositoryUnavailableError`, com mensagem genérica
-  (sem SQL, projeto ou credencial).
+- Falhas do BigQuery viram
+  :class:`~bussola_mcp.dominio.interfaces.RepositoryUnavailableError` (falha da porta,
+  definida em ``interfaces.py`` e reexportada aqui), com mensagem genérica — sem SQL,
+  projeto ou credencial.
 """
 
-import os
 import re
 import sys
 from collections import defaultdict
@@ -30,6 +31,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from bussola_mcp import config
 from bussola_mcp.contratos import (
     ANOMES_MAX,
     ANOMES_MIN,
@@ -45,16 +47,22 @@ from bussola_mcp.contratos import (
     anomes_valido,
     normalizar_id_usuario,
 )
+from bussola_mcp.dominio.interfaces import RepositoryUnavailableError
 
 READ_MODES: tuple[str, ...] = ("query", "memoria")
-DEFAULT_MODE = "query"
-DEFAULT_DATASET = "bussola_dados"
-LOCATION = "us-central1"
 MIN_RECURRENCE_MONTHS = 3
 
-ENV_MODE = "BQ_MODO_LEITURA"
-ENV_DATASET = "BQ_DATASET_DADOS"
-ENV_PROJECT = "GOOGLE_CLOUD_PROJECT"
+# Modo, dataset, região e projeto são configuração: os nomes das variáveis e os
+# padrões vivem em :mod:`bussola_mcp.config`. Os aliases abaixo ficam para quem
+# já importava estes nomes daqui.
+DEFAULT_MODE = config.MODO_LEITURA_BQ_PADRAO
+DEFAULT_DATASET = config.DATASET_DADOS_PADRAO
+LOCATION = config.LOCAL_GCP_PADRAO
+"""Região padrão. O valor efetivo vem de :func:`bussola_mcp.config.local_gcp`."""
+
+ENV_MODE = config.VAR_MODO_LEITURA_BQ
+ENV_DATASET = config.VAR_DATASET_DADOS
+ENV_PROJECT = config.VAR_PROJETO_GCP
 
 _DATASET_RE = re.compile(r"bussola_dados(?:_[a-z0-9_]{1,64})?")
 
@@ -82,13 +90,6 @@ SORT_KEYS: dict[str, Callable[[Any], tuple[Any, ...]]] = {
     "categorias": lambda r: (r.macro, r.micro),
     "referencia_coorte": lambda r: (_BAND_ORDER.get(r.faixa_renda, len(_BAND_ORDER)), r.macro),
 }
-
-
-class RepositoryUnavailableError(RuntimeError):
-    """Falha de leitura no BigQuery. A mensagem é genérica e segura para o cliente."""
-
-    def __init__(self, mensagem: str = "Leitura de dados indisponível.") -> None:
-        super().__init__(mensagem)
 
 
 # ---------------------------------------------------------------------------
@@ -204,7 +205,7 @@ def _row_dict(row: Any) -> dict[str, Any]:
 def _create_client(projeto: str | None) -> Any:
     from google.cloud import bigquery
 
-    return bigquery.Client(project=projeto, location=LOCATION)
+    return bigquery.Client(project=projeto, location=config.local_gcp())
 
 
 def _as_tuple(row: Mapping[str, Any], fields: tuple[str, ...]) -> tuple[Any, ...]:
@@ -223,8 +224,9 @@ class RepositorioBigQuery:
         dataset: str | None = None,
         projeto: str | None = None,
     ) -> None:
-        self.modo = validate_mode(modo or os.environ.get(ENV_MODE) or DEFAULT_MODE)
-        self.dataset = validate_dataset(dataset or os.environ.get(ENV_DATASET) or DEFAULT_DATASET)
+        self.modo = validate_mode(modo or config.modo_leitura_bq())
+        self.dataset = validate_dataset(dataset or config.dataset_dados())
+        self.local = config.local_gcp()
         self._queries = build_queries(self.dataset)
         self._categories: list[Categoria] | None = None
         # memoria: tabela → id_usuario → linhas como tuplas (ordem dos campos do modelo).
@@ -232,9 +234,7 @@ class RepositorioBigQuery:
         self._shared: dict[str, list[tuple[Any, ...]]] = {}
         try:
             self._client = (
-                client
-                if client is not None
-                else _create_client(projeto or os.environ.get(ENV_PROJECT))
+                client if client is not None else _create_client(projeto or config.projeto_gcp())
             )
             if self.modo == "memoria":
                 self._load_memory()
@@ -248,14 +248,16 @@ class RepositorioBigQuery:
     def _run_query(self, name: str, **params: tuple[str, Any]) -> list[dict[str, Any]]:
         from google.cloud import bigquery
 
-        config = bigquery.QueryJobConfig(
+        job_config = bigquery.QueryJobConfig(
             query_parameters=[
                 bigquery.ScalarQueryParameter(chave, tipo, valor)
                 for chave, (tipo, valor) in params.items()
             ]
         )
         try:
-            job = self._client.query(self._queries[name], job_config=config, location=LOCATION)
+            job = self._client.query(
+                self._queries[name], job_config=job_config, location=self.local
+            )
             return [_row_dict(row) for row in job.result()]
         except Exception as exc:
             raise RepositoryUnavailableError() from exc

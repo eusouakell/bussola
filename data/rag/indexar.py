@@ -32,6 +32,7 @@ from pathlib import Path
 
 import numpy as np
 
+from bussola_mcp import config
 from bussola_mcp.contratos import ProdutoCatalogo
 from bussola_mcp.rag.corpus import load_corpus, validate_corpus
 from bussola_mcp.rag.embedding import (
@@ -57,7 +58,8 @@ from bussola_mcp.rag.index import (
     serialize_manifest,
 )
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+# A raiz do repositório tem um dono só: ``bussola_mcp.config``.
+REPO_ROOT = config.RAIZ_REPOSITORIO
 DEFAULT_CORPUS = REPO_ROOT / "data" / "rag" / "corpus"
 DEFAULT_CATALOG = REPO_ROOT / "contracts" / "catalogo_produtos.json"
 

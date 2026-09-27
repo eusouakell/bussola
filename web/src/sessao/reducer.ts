@@ -3,7 +3,7 @@ import { dadosDe, extrairEnvelope } from "../agente/envelope";
 import type { Dados, EstadoSessao, EventoAdk, RespostaFerramenta } from "../agente/tipos";
 import { mascararArgs } from "../formatacao/formatar";
 import { auditoriaChamada, auditoriaEstado, auditoriaGuardrail, auditoriaInicio, auditoriaResposta } from "./auditoria";
-import { CATALOGO } from "./catalogo";
+import { CATALOGO, type NomeCard } from "./catalogo";
 import {
   MODELO_INICIAL,
   type EventoAuditoria,
@@ -76,7 +76,7 @@ function indiceFerramenta(itens: ItemConversa[], id: string | undefined, nome: s
 
 function novoCard(
   r: Rascunho,
-  componente: string,
+  componente: NomeCard,
   nome: string,
   chamadaId: string,
   resposta: RespostaFerramenta,

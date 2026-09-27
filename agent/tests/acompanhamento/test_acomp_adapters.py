@@ -9,15 +9,15 @@ import pytest
 
 from bussola_agent import mcp_conexao, persistencia_bq
 from bussola_agent.acompanhamento import ports
-from bussola_agent.acompanhamento.fakes import (
+from bussola_agent.acompanhamento.tools import avancar_mes
+from bussola_agent.persistencia import RegistroEmMemoria
+from tests.support.acompanhamento_fakes import (
     ANCHOR_USER_ID,
     FixtureMcp,
     fake_transport,
     plan_state,
     tool_context,
 )
-from bussola_agent.acompanhamento.tools import avancar_mes
-from bussola_agent.persistencia import RegistroEmMemoria
 
 
 @pytest.fixture

@@ -17,15 +17,6 @@ from typing import Any
 import pytest
 
 from bussola_agent.acompanhamento import envelopes, ports
-from bussola_agent.acompanhamento.fakes import (
-    ANCHOR_USER_ID,
-    CONTROL_USER_ID,
-    FIXTURES_DIR,
-    FixtureMcp,
-    FixtureMcpGateway,
-    plan_state,
-    tool_context,
-)
 from bussola_agent.acompanhamento.plan_context import CONTEXT_KEY
 from bussola_agent.acompanhamento.tools import (
     GOVERNANCE_PACKAGE,
@@ -36,16 +27,19 @@ from bussola_agent.acompanhamento.tools import (
 )
 from bussola_agent.logging_json import CAMPOS_PERMITIDOS, configurar_logging
 from bussola_agent.persistencia import RegistroEmMemoria
+from tests.support.acompanhamento_fakes import (
+    ANCHOR_USER_ID,
+    CONTROL_USER_ID,
+    FIXTURES_DIR,
+    FixtureMcp,
+    FixtureMcpGateway,
+    plan_state,
+    tool_context,
+)
 
 pytestmark = pytest.mark.usefixtures("gateway")
 
 CONSENT = {"ajustar_plano": {"consent_id": "consent-1", "status": "aceito", "ts": "t"}}
-
-
-@pytest.fixture
-def no_governance(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Sem o 005 carregado: vale a guarda local de consentimento."""
-    monkeypatch.delitem(sys.modules, GOVERNANCE_PACKAGE, raising=False)
 
 
 def _events(registry: RegistroEmMemoria) -> list[str]:
@@ -296,7 +290,6 @@ async def test_logs_carry_only_the_allowed_fields(json_logs: io.StringIO) -> Non
 # --- ajustar_plano ----------------------------------------------------------
 
 
-@pytest.mark.usefixtures("no_governance")
 async def test_adjust_is_blocked_without_consent(registry: RegistroEmMemoria) -> None:
     _, ctx = await _advanced()
     result = await ajustar_plano(ctx, rota="A")
@@ -308,17 +301,38 @@ async def test_adjust_is_blocked_without_consent(registry: RegistroEmMemoria) ->
     assert _code(await ajustar_plano(ctx, rota="A")) == "CONSENTIMENTO_NECESSARIO"
 
 
-async def test_the_governance_gate_replaces_the_local_guard(
+async def test_the_local_guard_holds_even_with_the_005_package_imported(
     monkeypatch: pytest.MonkeyPatch, registry: RegistroEmMemoria
 ) -> None:
+    """Pacote do 005 em ``sys.modules`` não é gate registrado (R1).
+
+    Antes, a guarda local se desligava só porque o módulo estava importado, e a
+    ação sensível executava sem consentimento. Agora a guarda é incondicional.
+    """
     monkeypatch.setitem(sys.modules, GOVERNANCE_PACKAGE, types.ModuleType(GOVERNANCE_PACKAGE))
     _, ctx = await _advanced()
+    assert _code(await ajustar_plano(ctx, rota="A")) == "CONSENTIMENTO_NECESSARIO"
+    assert registry.planos == []
+    assert ctx.state["plano_id"] == "plano-inicial"
+
+
+async def test_the_local_guard_accepts_a_consent_the_gate_just_consumed(
+    registry: RegistroEmMemoria,
+) -> None:
+    """Ordem real: o gate marca ``usado`` **antes** da execução (contratos §6).
+
+    Como ``status`` continua ``aceito``, a guarda incondicional aceita a mesma
+    invocação que o gate liberou. Quem impede o replay é o gate, não a guarda.
+    """
+    _, ctx = await _advanced()
+    ctx.state["consentimentos"] = {
+        "ajustar_plano": {"consent_id": "consent-1", "status": "aceito", "ts": "t", "usado": True}
+    }
     result = await ajustar_plano(ctx, rota="A")
     assert result["dados"]["rota"] == "A"
     assert len(registry.planos) == 1
 
 
-@pytest.mark.usefixtures("no_governance")
 async def test_adjust_adopts_route_a_and_the_next_month_follows_it(
     registry: RegistroEmMemoria,
 ) -> None:
@@ -358,7 +372,6 @@ async def test_adjust_adopts_route_a_and_the_next_month_follows_it(
     assert following["meses_restantes"] == 22
 
 
-@pytest.mark.usefixtures("no_governance")
 @pytest.mark.parametrize(
     ("kwargs", "expected"),
     [
@@ -375,7 +388,6 @@ async def test_route_selection(kwargs: dict[str, Any], expected: str) -> None:
     assert (await ajustar_plano(ctx, **kwargs))["dados"]["rota"] == expected
 
 
-@pytest.mark.usefixtures("no_governance")
 @pytest.mark.parametrize(
     "kwargs",
     [{}, {"rota": "C"}, {"rota": "A", "aporte_mensal": 3000.0}, {"aporte_mensal": 1.0}],
@@ -390,7 +402,6 @@ async def test_ambiguous_or_invented_routes_are_refused(
     assert registry.planos == []
 
 
-@pytest.mark.usefixtures("no_governance")
 async def test_there_is_no_route_before_a_deviation_nor_after_adopting_one() -> None:
     ctx = tool_context(plan_state())
     ctx.state["consentimentos"] = CONSENT
@@ -408,7 +419,6 @@ class _NoPlanStorage(RegistroEmMemoria):
         raise RuntimeError("fora do ar")
 
 
-@pytest.mark.usefixtures("no_governance")
 async def test_adjust_keeps_the_current_plan_when_storage_fails() -> None:
     ports.configure_registry(_NoPlanStorage())
     _, ctx = await _advanced()
@@ -440,7 +450,6 @@ async def test_status_does_not_advance_the_month(mcp: FixtureMcp) -> None:
     assert mcp.calls == []
 
 
-@pytest.mark.usefixtures("no_governance")
 async def test_status_after_three_months_follows_the_lineage() -> None:
     ctx = tool_context(plan_state())
     await avancar_mes(ctx)
@@ -471,7 +480,6 @@ async def test_status_without_plan() -> None:
 # --- envelopes ----------------------------------------------------------------
 
 
-@pytest.mark.usefixtures("no_governance")
 async def test_envelopes_never_leak_sql_project_or_future_periods() -> None:
     ctx = tool_context(plan_state())
     responses = [await avancar_mes(ctx)]

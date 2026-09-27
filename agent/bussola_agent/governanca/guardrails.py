@@ -20,7 +20,6 @@ Reasons (front contract): ``outro_cliente``, ``ignorar_instrucoes``,
 ``atividade_ilicita``.
 """
 
-import os
 import re
 from collections import OrderedDict
 from collections.abc import Iterable
@@ -30,6 +29,7 @@ from typing import Any, Protocol
 from google.adk.models.llm_response import LlmResponse
 from google.genai import types
 
+from bussola_agent.config import projeto_gcp
 from bussola_agent.estado import CHAVE_ID_USUARIO, CHAVE_PLANO_ID
 from bussola_agent.governanca import services
 from bussola_agent.governanca.audit import record_event, session_id_of
@@ -41,6 +41,7 @@ from bussola_agent.governanca.consent import (
     user_text,
 )
 from bussola_agent.governanca.text import normalize
+from bussola_agent.jornada import llm_view
 from bussola_agent.logging_json import obter_logger
 from bussola_agent.persistencia import TipoEvento
 
@@ -224,7 +225,7 @@ def check_input_rules(text: str, known_ids: Iterable[str]) -> str | None:
 
 
 def _projects() -> tuple[str, ...]:
-    extra = (os.getenv("GOOGLE_CLOUD_PROJECT") or "").strip().lower()
+    extra = projeto_gcp().lower()
     return (*KNOWN_PROJECTS, extra) if len(extra) >= 6 else KNOWN_PROJECTS
 
 
@@ -351,13 +352,11 @@ async def screen_input(callback_context: Any, llm_request: Any) -> LlmResponse |
 
 
 def response_text(llm_response: Any) -> str:
-    parts = getattr(getattr(llm_response, "content", None), "parts", None) or []
-    return "".join(p.text for p in parts if isinstance(p.text, str) and not p.thought)
+    return llm_view.final_text(llm_response)
 
 
 def _has_function_call(llm_response: Any) -> bool:
-    parts = getattr(getattr(llm_response, "content", None), "parts", None) or []
-    return any(p.function_call for p in parts)
+    return llm_view.has_function_call(llm_response)
 
 
 def _blank_partial() -> LlmResponse:

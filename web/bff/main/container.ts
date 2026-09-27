@@ -9,7 +9,6 @@ import { Login } from "../application/useCases/login.ts";
 import { Logout } from "../application/useCases/logout.ts";
 import { SendMessage } from "../application/useCases/sendMessage.ts";
 import { StartAgentSession } from "../application/useCases/startAgentSession.ts";
-import type { SessionPolicy } from "../domain/authSession.ts";
 import { HttpAgentGateway } from "../infrastructure/agent/httpAgentGateway.ts";
 import { InMemoryLoginRateLimiter } from "../infrastructure/auth/inMemoryLoginRateLimiter.ts";
 import { InMemorySessionRepository } from "../infrastructure/auth/inMemorySessionRepository.ts";
@@ -25,14 +24,6 @@ import { SessionCookie } from "../presentation/http/cookies.ts";
 import { CurrentSession } from "../presentation/http/currentSession.ts";
 import { createRequestHandler, type RequestHandler } from "../presentation/http/router.ts";
 import type { BffConfig } from "./config.ts";
-
-const MINUTE = 60_000;
-
-export const SESSION_POLICY: SessionPolicy = {
-  idleTtlMs: 30 * MINUTE,
-  absoluteTtlMs: 8 * 60 * MINUTE,
-  maxAgentSessions: 20,
-};
 
 export interface Bff {
   handler: RequestHandler;
@@ -51,17 +42,19 @@ export function buildContainer(config: BffConfig, logger: Logger): Bff {
           logger.warn(`${count} linhas inválidas ignoradas em users`, { evento: "users_linhas_invalidas" }),
       });
 
-  const users = new CachedUserRepository(source, { ttlMs: 10 * MINUTE });
-  const sessions = new InMemorySessionRepository({ maxSessions: 500, policy: SESSION_POLICY });
+  const policy = config.sessionPolicy;
+  const users = new CachedUserRepository(source, { ttlMs: config.usersCacheTtlMs });
+  const sessions = new InMemorySessionRepository({ maxSessions: config.maxSessions, policy });
   const agent = new HttpAgentGateway({
     baseUrl: config.agentUrl,
     audience: config.agentAudience,
     app: config.agentApp,
     idTokens: config.agentUseOidc && metadata ? metadata : undefined,
+    timeoutMs: config.agentTimeoutMs,
   });
 
-  const cookie = new SessionCookie(config.cookieSecure, SESSION_POLICY.absoluteTtlMs / 1000);
-  const currentSession = new CurrentSession(new Authenticate({ sessions, policy: SESSION_POLICY }), cookie);
+  const cookie = new SessionCookie(config.cookieName, config.cookieSecure, policy.absoluteTtlMs / 1000);
+  const currentSession = new CurrentSession(new Authenticate({ sessions, policy }), cookie);
 
   const auth = new AuthController({
     listPersonas: new ListPersonas(users),
@@ -70,9 +63,10 @@ export function buildContainer(config: BffConfig, logger: Logger): Bff {
       verifier: new ScryptPasswordVerifier(config.passwordHash),
       sessions,
       rateLimiter: new InMemoryLoginRateLimiter({
-        login: { maxFailures: 5, windowMs: 15 * MINUTE },
-        global: { maxFailures: 30, windowMs: MINUTE },
+        login: config.rateLimit.login,
+        global: config.rateLimit.global,
       }),
+      maxConcurrent: config.rateLimit.maxConcurrent,
       logger,
     }),
     logout: new Logout(sessions),
@@ -82,7 +76,7 @@ export function buildContainer(config: BffConfig, logger: Logger): Bff {
   });
 
   const agentController = new AgentController({
-    startSession: new StartAgentSession({ agent, policy: SESSION_POLICY, logger }),
+    startSession: new StartAgentSession({ agent, policy, logger }),
     getSession: new GetAgentSession(agent),
     sendMessage: new SendMessage(agent),
     currentSession,

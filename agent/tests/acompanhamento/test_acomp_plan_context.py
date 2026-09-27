@@ -1,6 +1,5 @@
 """Plano ativo e ``acompanhamento_contexto``: ordem de resolução (unidade)."""
 
-from bussola_agent.acompanhamento.fakes import ANCHOR_USER_ID, plan_state
 from bussola_agent.acompanhamento.plan_context import (
     CONTEXT_KEY,
     ActivePlan,
@@ -10,6 +9,7 @@ from bussola_agent.acompanhamento.plan_context import (
     write_context,
 )
 from bussola_agent.persistencia import Plano, RegistroEmMemoria
+from tests.support.acompanhamento_fakes import ANCHOR_USER_ID, plan_state
 
 
 def _snapshot(**overrides: object) -> dict[str, object]:

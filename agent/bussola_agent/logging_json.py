@@ -23,10 +23,11 @@ Uso::
 
 import json
 import logging
-import os
 import sys
 from datetime import UTC, datetime
 from typing import IO, Any
+
+from bussola_agent import config
 
 SERVICO = "bussola-agent"
 
@@ -102,7 +103,8 @@ class _SaidaPadraoHandler(logging.StreamHandler):
 def _nivel(nivel: str | int | None) -> int:
     if isinstance(nivel, int):
         return nivel
-    nome = (nivel or os.getenv("LOG_LEVEL") or "INFO").strip().upper()
+    pedido = nivel.strip().upper() if isinstance(nivel, str) else ""
+    nome = pedido or config.nivel_de_log()
     valor = logging.getLevelName(nome)
     return valor if isinstance(valor, int) else logging.INFO
 

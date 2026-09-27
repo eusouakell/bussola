@@ -20,9 +20,11 @@ from pathlib import Path
 import numpy as np
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from bussola_mcp import config
 from bussola_mcp.contratos import TrechoCorpus
 
-INDEX_DIR = Path(__file__).resolve().parent / "indice"
+INDEX_DIR = config.DIR_INDICE_RAG
+"""Índice versionado do RAG (caminho em :mod:`bussola_mcp.config`)."""
 CHUNKS_FILE = "trechos.jsonl"
 EMBEDDINGS_FILE = "embeddings.npy"
 MANIFEST_FILE = "manifesto.json"

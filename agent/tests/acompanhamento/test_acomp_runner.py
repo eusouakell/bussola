@@ -17,8 +17,14 @@ import pytest
 import bussola_agent
 import bussola_agent.acompanhamento as acompanhamento
 import bussola_agent.agent  # noqa: F401  (primeiro import fora dos testes, como em produção)
-from bussola_agent import extensoes, mcp_conexao, persistencia_bq
-from bussola_agent.acompanhamento.fakes import (
+from bussola_agent import callbacks, extensoes, mcp_conexao, persistencia_bq
+from bussola_agent.acompanhamento.plan_context import CONTEXT_KEY
+from bussola_agent.acompanhamento.tools import GOVERNANCE_PACKAGE
+from bussola_agent.governanca import audit, consent, guardrails, services
+from bussola_agent.governanca.clock import FixedClock
+from bussola_agent.governanca.guardrails import RuleScreener
+from bussola_agent.persistencia import RegistroEmMemoria, TipoEvento
+from tests.support.acompanhamento_fakes import (
     CONTROL_USER_ID,
     Call,
     Conversation,
@@ -34,12 +40,6 @@ from bussola_agent.acompanhamento.fakes import (
     render_tool_answer,
     unbacked_numbers,
 )
-from bussola_agent.acompanhamento.plan_context import CONTEXT_KEY
-from bussola_agent.acompanhamento.tools import GOVERNANCE_PACKAGE
-from bussola_agent.governanca import audit, consent, guardrails, services
-from bussola_agent.governanca.clock import FixedClock
-from bussola_agent.governanca.guardrails import RuleScreener
-from bussola_agent.persistencia import RegistroEmMemoria, TipoEvento
 
 FOLLOW_UP_EVENTS = {
     TipoEvento.ACOMPANHAMENTO_MES_AVANCADO.value,
@@ -201,6 +201,53 @@ async def test_the_local_guard_blocks_ajustar_plano_while_005_is_absent() -> Non
     assert envelope["erro"]["codigo"] == "CONSENTIMENTO_NECESSARIO"
     assert turn.text == envelope["erro"]["mensagem"]
     assert turn.state["plano_id"] == "plano-inicial"
+
+
+async def test_the_local_guard_holds_when_005_is_imported_but_the_gate_is_not_registered() -> None:
+    """R1: pacote do 005 importado, gate fora da cadeia — a ação sensível não roda.
+
+    Este módulo importa ``bussola_agent.governanca``, então o pacote está em
+    ``sys.modules`` durante o teste; ``governance=False`` deixa o gate de fora
+    da cadeia de ``before_tool``. Era exatamente o furo do proxy por
+    ``sys.modules``: antes, ``ajustar_plano`` gravava um plano novo aqui.
+    """
+    assert GOVERNANCE_PACKAGE in sys.modules
+    chat = await _conversation(plan_state(), governance=False)
+    assert consent.gate not in callbacks.registrados("before_tool")
+    await chat.say("avançar um mês", command_router, render_tool_answer)
+    turn = await chat.say("rota A", Call("ajustar_plano", {"rota": "A"}), render_tool_answer)
+    (_, envelope), *_ = turn.responses
+    assert envelope["erro"]["codigo"] == "CONSENTIMENTO_NECESSARIO"
+    assert turn.state["plano_id"] == "plano-inicial"
+
+
+async def test_the_gate_consumes_the_consent_before_the_tool_and_the_guard_lets_it_through(
+    registry: RegistroEmMemoria,
+) -> None:
+    """Com o 005 na cadeia, o "sim" ainda ajusta o plano (guarda incondicional).
+
+    Prova a ordem de consumo: ao fim do turno a entrada está ``usado: True`` e
+    o plano foi trocado, ou seja, o gate marcou ``usado`` **antes** da execução
+    e a guarda local aceitou a mesma invocação. Um segundo ``ajustar_plano`` sem
+    novo "sim" é barrado pelo gate: o consentimento vale uma execução.
+    """
+    chat = await _conversation(plan_state())
+    await chat.say("avançar um mês", command_router, render_tool_answer)
+    ask = Call("solicitar_consentimento", {"acao": "ajustar_plano", "resumo": "Adotar a rota A"})
+    await chat.say("Quero adotar a rota A", ask, render_tool_answer)
+
+    adjusted = await chat.say("sim", Call("ajustar_plano", {"rota": "A"}), render_tool_answer)
+    entry = adjusted.state["consentimentos"]["ajustar_plano"]
+    assert (entry["status"], entry["usado"]) == ("aceito", True)
+    new_plan_id = adjusted.state["plano_id"]
+    assert new_plan_id != "plano-inicial"
+    assert len(registry.planos) == 1
+
+    replay = await chat.say("de novo", Call("ajustar_plano", {"rota": "A"}), render_tool_answer)
+    (_, envelope), *_ = replay.responses
+    assert envelope["erro"]["codigo"] == "CONSENTIMENTO_NECESSARIO"
+    assert replay.state["plano_id"] == new_plan_id
+    assert len(registry.planos) == 1
 
 
 async def test_end_of_replay_is_reported_in_customer_words() -> None:

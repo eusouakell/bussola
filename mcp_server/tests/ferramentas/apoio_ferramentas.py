@@ -24,8 +24,8 @@ from bussola_mcp.contratos import (
     Trecho,
 )
 from bussola_mcp.dominio.fakes import dir_fixtures_padrao
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.ferramentas.fixture_backends import FixtureRepository, FixtureSearcher
-from bussola_mcp.ferramentas.golden_adapter import GoldenFixtureComputations
 from bussola_mcp.ferramentas.ports import Computation, ToolDependencies
 from bussola_mcp.logging_json import configurar_logging
 from bussola_mcp.server import create_server
@@ -103,18 +103,17 @@ def argumentos(
     }
 
 
-def deps_golden(fixtures: Path | None = None) -> ToolDependencies:
-    """Portas de fixtures com o adaptador de golden explícito (regras D-03 a D-06).
+def deps_fixtures(fixtures: Path | None = None) -> ToolDependencies:
+    """Portas de fixtures com o cálculo de domínio, montadas explicitamente.
 
-    Os testes das regras próprias do adaptador provisório usam isto, e não a
-    fábrica, para seguirem verdes depois da troca pós-001 em
-    ``computations.build_computations`` (plan.md).
+    Equivale ao que ``server.build_dependencies(fixtures)`` monta; fica aqui para
+    os testes que precisam trocar uma das portas por um dublê.
     """
     repositorio = FixtureRepository(fixtures)
     return ToolDependencies(
         repository=repositorio,
         searcher=FixtureSearcher(fixtures),
-        computations=GoldenFixtureComputations(fixtures, repositorio),
+        computations=DomainComputations(repositorio),
     )
 
 

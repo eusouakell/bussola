@@ -1,6 +1,7 @@
 """Aplica o DDL de ``contracts/bigquery/*.sql`` no BigQuery (FR-020, contratos §3).
 
-Cria, de forma idempotente e em ``us-central1``, os datasets ``bussola_dados``,
+Cria, de forma idempotente e na região de ``GOOGLE_CLOUD_LOCATION``
+(``bussola_mcp.config.local_gcp``), os datasets ``bussola_dados``,
 ``bussola_app`` e ``bussola_app_dev`` com as tabelas deles (o RAG não usa BigQuery;
 Q-17):
 
@@ -23,7 +24,6 @@ Códigos de saída: 0 (ok), 2 (projeto ausente ou DDL inválido), 3 (schema dive
 """
 
 import argparse
-import os
 import re
 import sys
 from collections.abc import Callable, Iterable, Sequence
@@ -31,11 +31,16 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-RAIZ_REPO = Path(__file__).resolve().parents[2]
-DIR_DDL = RAIZ_REPO / "contracts" / "bigquery"
-LOCALIZACAO = "us-central1"
+from bussola_mcp import config
 
-DATASET_DADOS = "bussola_dados"
+# A raiz do repositório, a região e o dataset de dados têm um dono só:
+# ``bussola_mcp.config`` (contratos §7). Aqui só se lê de lá.
+RAIZ_REPO = config.RAIZ_REPOSITORIO
+DIR_DDL = RAIZ_REPO / "contracts" / "bigquery"
+LOCALIZACAO = config.LOCAL_GCP_PADRAO
+"""Região padrão. O valor efetivo vem de :func:`config.local_gcp`."""
+
+DATASET_DADOS = config.DATASET_DADOS_PADRAO
 DATASET_APP = "bussola_app"
 DATASET_APP_DEV = "bussola_app_dev"
 # Arquivo de DDL → dataset que ele declara.
@@ -329,7 +334,7 @@ def comparar_localizacao(esperada: str | None, real: str | None) -> list[str]:
 def aplicar(cliente: Any, plano: Sequence[Instrucao]) -> None:
     """Executa as instruções na ordem (todas ``IF NOT EXISTS``)."""
     for instrucao in plano:
-        cliente.query(instrucao.sql, location=instrucao.localizacao or LOCALIZACAO).result()
+        cliente.query(instrucao.sql, location=instrucao.localizacao or config.local_gcp()).result()
         print(f"aplicado: {instrucao.alvo}")
 
 
@@ -355,7 +360,7 @@ def verificar(cliente: Any, projeto: str, plano: Sequence[Instrucao]) -> list[st
 def _criar_cliente_bigquery(projeto: str) -> Any:
     from google.cloud import bigquery
 
-    return bigquery.Client(project=projeto, location=LOCALIZACAO)
+    return bigquery.Client(project=projeto, location=config.local_gcp())
 
 
 def _imprimir_plano(plano: Sequence[Instrucao], projeto: str | None) -> None:
@@ -405,7 +410,7 @@ def main(
     criar_cliente: Callable[[str], Any] = _criar_cliente_bigquery,
 ) -> int:
     args = _parser().parse_args(argv)
-    projeto = args.projeto or os.environ.get("GOOGLE_CLOUD_PROJECT")
+    projeto = args.projeto or config.projeto_gcp()
     try:
         plano = montar_plano(args.dir_ddl, args.dataset_app_dev)
     except (ErroDDL, OSError) as exc:

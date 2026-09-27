@@ -10,7 +10,7 @@ import { MODELO_INICIAL, type ModeloSessao } from "../sessao/modelo";
 import { reducerSessao, type AcaoSessao } from "../sessao/reducer";
 import { MotorSimulado, relogioFixo } from "../simulado/agente-simulado";
 import { gerarRoteiro, MENSAGENS_ROTEIRO } from "../simulado/roteiro";
-import { R_AVANCAR, R_LEMBRETES, R_STATUS } from "../simulado/textos";
+import { R_AVANCAR, R_LEMBRETES, R_STATUS } from "../sessao/sugestoes-padrao";
 import { R_OUTRO_OBJETIVO } from "./P1Encerramento";
 import { VISTAS, Vistas, type NomeVista } from "./Vistas";
 

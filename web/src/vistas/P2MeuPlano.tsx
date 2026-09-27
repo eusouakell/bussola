@@ -3,7 +3,7 @@
 import { Icone } from "../componentes/base/Icone";
 import { larguraMedidor } from "../componentes/cards/partes";
 import { brl, meses, numero, percentual } from "../formatacao/formatar";
-import { R_AVANCAR } from "../simulado/textos";
+import { R_AVANCAR } from "../sessao/sugestoes-padrao";
 import { doProgresso, type PlanoLido } from "./dados";
 import { BotaoAcao, Fonte, KpiFonte, NotaUltimoMes, SeloStatus, tomStatus } from "./partes";
 import type { NomeVista } from "./Vistas";

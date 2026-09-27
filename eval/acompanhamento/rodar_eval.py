@@ -1,7 +1,7 @@
 """Eval offline do acompanhamento com replay temporal (ciclo 006, FR-014).
 
 Roda a conversa do cliente âncora no ``InMemoryRunner`` do ADK com o LLM
-roteirizado de :mod:`bussola_agent.acompanhamento.fakes` e o MCP de fixtures
+roteirizado de :mod:`tests.support.acompanhamento_fakes` e o MCP de fixtures
 (``contracts/fixtures/``). Não acessa a rede, o GCP nem modelos reais.
 
 Verifica, conforme a seção 3.7 do ciclo:
@@ -27,7 +27,6 @@ import asyncio
 import json
 import logging
 import os
-import sys
 import warnings
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -40,7 +39,12 @@ from bussola_agent import callbacks, extensoes, mcp_conexao, persistencia_bq
 from bussola_agent.acompanhamento import ports
 from bussola_agent.acompanhamento.desvio import compute_deviation
 from bussola_agent.acompanhamento.envelopes import WARNING_LOCAL_ROUTE
-from bussola_agent.acompanhamento.fakes import (
+from bussola_agent.acompanhamento.money import format_brl, money
+from bussola_agent.governanca import services
+from bussola_agent.governanca.guardrails import RuleScreener
+from bussola_agent.logging_json import configurar_logging
+from bussola_agent.persistencia import RegistroEmMemoria
+from tests.support.acompanhamento_fakes import (
     ANCHOR_USER_ID,
     CONTROL_USER_ID,
     FIXTURES_DIR,
@@ -57,12 +61,6 @@ from bussola_agent.acompanhamento.fakes import (
     render_tool_answer,
     unbacked_numbers,
 )
-from bussola_agent.acompanhamento.money import format_brl, money
-from bussola_agent.acompanhamento.tools import GOVERNANCE_PACKAGE
-from bussola_agent.governanca import services
-from bussola_agent.governanca.guardrails import RuleScreener
-from bussola_agent.logging_json import configurar_logging
-from bussola_agent.persistencia import RegistroEmMemoria
 
 EVAL_DIR = Path(__file__).resolve().parent
 PLAN_START = 202506
@@ -131,18 +129,16 @@ def offline_session(*, governance: bool = True) -> Iterator[tuple[FixtureMcp, An
     """Composição real (004 + 005 + 006), registro do processo em memória e MCP de fixtures.
 
     O guardrail de entrada usa só as regras locais (sem Model Armor). Com
-    ``governance=False``, o pacote do 005 sai de ``sys.modules`` durante a
-    sessão, para medir a guarda local do ``ajustar_plano``. Ao sair, restaura
-    o transporte MCP, os registros, os serviços do 005 e ``sys.modules``.
+    ``governance=False``, o gate do 005 fica fora da cadeia de ``before_tool``
+    e quem barra o ``ajustar_plano`` é a guarda local do 006, que é
+    incondicional. Ao sair, restaura o transporte MCP, os registros e os
+    serviços do 005.
     """
     fixture_mcp = FixtureMcp()
     registry = RegistroEmMemoria()
     original_transport = mcp_conexao._chamar_mcp
-    governance_module = sys.modules.get(GOVERNANCE_PACKAGE)
     callbacks.limpar()
     extensoes.limpar()
-    if not governance:
-        sys.modules.pop(GOVERNANCE_PACKAGE, None)
     install_journey(governance=governance)
     ports.reset()
     persistencia_bq.set_default_registry(registry)
@@ -152,8 +148,6 @@ def offline_session(*, governance: bool = True) -> Iterator[tuple[FixtureMcp, An
         yield fixture_mcp, registry
     finally:
         mcp_conexao._chamar_mcp = original_transport
-        if governance_module is not None:
-            sys.modules[GOVERNANCE_PACKAGE] = governance_module
         ports.reset()
         services.reset()
         persistencia_bq.set_default_registry(None)

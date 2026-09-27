@@ -4,7 +4,7 @@
 import { Disclaimer } from "../componentes/base/Disclaimer";
 import { larguraMedidor } from "../componentes/cards/partes";
 import { brl, mesAbrev, percentual } from "../formatacao/formatar";
-import { R_AVANCAR, R_LEMBRETES, R_STATUS } from "../simulado/textos";
+import { R_AVANCAR, R_LEMBRETES, R_STATUS } from "../sessao/sugestoes-padrao";
 import { doProgresso, type PlanoLido } from "./dados";
 import { BotaoAcao, Fonte, Fontes, NotaUltimoMes, tomStatus } from "./partes";
 

@@ -1,7 +1,7 @@
 // Estado do login simulado no BFF. Desligado (`ativo = false`), o front roda
 // como antes: simulado ou ao vivo direto no ADK pelo proxy do Vite.
 import { useCallback, useEffect, useState } from "react";
-import { ClienteAuth, type Persona } from "./clienteAuth";
+import type { Persona, PortalAuth } from "./portal";
 
 export type FaseAuth = "desligado" | "verificando" | "anonimo" | "logado";
 
@@ -13,9 +13,7 @@ export interface Auth {
   sair: () => Promise<void>;
 }
 
-const CLIENTE_PADRAO = new ClienteAuth();
-
-export function useAuth(ativo: boolean, cliente: ClienteAuth = CLIENTE_PADRAO): Auth {
+export function useAuth(ativo: boolean, cliente: PortalAuth): Auth {
   const [verificado, setVerificado] = useState(false);
   const [persona, setPersona] = useState<Persona | null>(null);
 

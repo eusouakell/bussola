@@ -30,7 +30,7 @@ import unicodedata
 from typing import Any
 
 from bussola_agent.estado import CHAVE_ESTADO_JORNADA
-from bussola_agent.jornada.number_check import is_final_text
+from bussola_agent.jornada import llm_view
 from bussola_agent.jornada.tool_results import tool_outcomes
 from bussola_agent.logging_json import obter_logger
 
@@ -128,14 +128,6 @@ def claimed_tool(text: str) -> str | None:
     return None
 
 
-def _answer_text(llm_response: Any) -> str:
-    content = getattr(llm_response, "content", None)
-    parts = getattr(content, "parts", None) or []
-    return "".join(
-        p.text for p in parts if getattr(p, "text", None) and not getattr(p, "thought", False)
-    )
-
-
 def _tool_answered(callback_context: Any) -> bool:
     session = getattr(callback_context, "session", None)
     events = list(getattr(session, "events", None) or [])
@@ -145,9 +137,9 @@ def _tool_answered(callback_context: Any) -> bool:
 
 def check_action_claims(callback_context: Any, llm_response: Any) -> None:
     """``after_model`` order 60: flags an action claimed without any tool in the turn."""
-    if not is_final_text(llm_response) or _tool_answered(callback_context):
+    if not llm_view.is_final_text(llm_response) or _tool_answered(callback_context):
         return None
-    tool = claimed_tool(_answer_text(llm_response))
+    tool = claimed_tool(llm_view.final_text(llm_response))
     if tool is None:
         return None
     state = getattr(callback_context, "state", None) or {}

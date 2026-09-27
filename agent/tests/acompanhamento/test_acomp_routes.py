@@ -5,7 +5,6 @@ from typing import Any
 import pytest
 
 from bussola_agent.acompanhamento import envelopes
-from bussola_agent.acompanhamento.fakes import ANCHOR_USER_ID, FixtureMcp, FixtureMcpGateway
 from bussola_agent.acompanhamento.routes import (
     ROUTE_KEEP_CONTRIBUTION,
     ROUTE_KEEP_TERM,
@@ -16,6 +15,7 @@ from bussola_agent.acompanhamento.routes import (
     response_matches,
     simulate_locally,
 )
+from tests.support.acompanhamento_fakes import ANCHOR_USER_ID, FixtureMcp, FixtureMcpGateway
 
 SCOPE = {"id_usuario": ANCHOR_USER_ID, "ate_anomes": 202507}
 PREMISES = {"capacidade_mensal": 1729.0, "rendimento_mensal": 0.0}

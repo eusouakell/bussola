@@ -17,10 +17,11 @@ Uso::
 
 import json
 import logging
-import os
 import sys
 from datetime import UTC, datetime
 from typing import Any, TextIO
+
+from bussola_mcp import config
 
 CAMPOS_EXTRAS_PERMITIDOS: tuple[str, ...] = (
     "session_id",
@@ -34,7 +35,8 @@ CAMPOS_EXTRAS_PERMITIDOS: tuple[str, ...] = (
     "id_usuario",
 )
 
-NIVEL_PADRAO = "INFO"
+NIVEL_PADRAO = config.NIVEL_LOG_PADRAO
+"""Nível usado quando ``LOG_LEVEL`` está ausente ou não é um nível conhecido."""
 
 
 class JsonFormatter(logging.Formatter):
@@ -68,6 +70,9 @@ class _HandlerBussola(logging.StreamHandler):
 def configurar_logging(servico: str, fluxo: TextIO | None = None) -> logging.Logger:
     """Instala o :class:`JsonFormatter` no logger raiz, com o nível de ``LOG_LEVEL``.
 
+    O nível vem de :func:`bussola_mcp.config.nivel_log`; um valor desconhecido
+    cai em :data:`NIVEL_PADRAO`.
+
     Pode ser chamada mais de uma vez: substitui o handler instalado antes, sem
     duplicar linhas. Devolve o logger raiz.
     """
@@ -78,7 +83,7 @@ def configurar_logging(servico: str, fluxo: TextIO | None = None) -> logging.Log
     handler = _HandlerBussola(fluxo if fluxo is not None else sys.stdout)
     handler.setFormatter(JsonFormatter(servico))
     raiz.addHandler(handler)
-    nivel = os.environ.get("LOG_LEVEL", NIVEL_PADRAO).strip().upper() or NIVEL_PADRAO
+    nivel = config.nivel_log()
     if not isinstance(logging.getLevelName(nivel), int):
         nivel = NIVEL_PADRAO
     raiz.setLevel(nivel)

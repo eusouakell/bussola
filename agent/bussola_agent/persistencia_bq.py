@@ -17,7 +17,6 @@
 """
 
 import json
-import os
 import re
 import threading
 from collections.abc import Callable, Mapping, Sequence
@@ -25,6 +24,12 @@ from typing import Any, Protocol
 
 from pydantic import BaseModel
 
+from bussola_agent.config import (
+    DATASET_APP_PADRAO,
+    dataset_app,
+    fakes_habilitados,
+    projeto_gcp,
+)
 from bussola_agent.logging_json import obter_logger
 from bussola_agent.persistencia import (
     Acompanhamento,
@@ -35,10 +40,9 @@ from bussola_agent.persistencia import (
     RegistroEmMemoria,
 )
 
-DEFAULT_DATASET = "bussola_app"
+DEFAULT_DATASET = DATASET_APP_PADRAO
 # Values of ``BUSSOLA_FAKES`` that turn the fakes off. Anything else (including
 # unset) keeps the fake, so a misconfigured process never writes by accident.
-_FAKES_OFF = frozenset({"FALSE", "0", "NO", "NAO", "NÃO", "OFF"})
 
 _PROJECT_RE = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
 _DATASET_RE = re.compile(r"^[A-Za-z0-9_]{1,1024}$")
@@ -82,8 +86,7 @@ class BigQueryClient(Protocol):
 
 def fakes_enabled(env: Mapping[str, str] | None = None) -> bool:
     """``True`` unless ``BUSSOLA_FAKES`` explicitly turns the fakes off."""
-    valor = (env if env is not None else os.environ).get("BUSSOLA_FAKES", "TRUE")
-    return valor.strip().upper() not in _FAKES_OFF
+    return fakes_habilitados(env)
 
 
 def _default_client_factory(project: str) -> BigQueryClient:
@@ -112,8 +115,8 @@ class RegistroBigQuery:
         client_factory: Callable[[str], BigQueryClient] = _default_client_factory,
         query_config_factory: Callable[[str, str, str], Any] = _plan_query_config,
     ) -> None:
-        project = project or os.getenv("GOOGLE_CLOUD_PROJECT") or ""
-        dataset = dataset or os.getenv("BQ_DATASET_APP") or DEFAULT_DATASET
+        project = project or projeto_gcp()
+        dataset = dataset or dataset_app()
         if not _PROJECT_RE.fullmatch(project):
             raise ValueError("GOOGLE_CLOUD_PROJECT ausente ou inválido.")
         if not _DATASET_RE.fullmatch(dataset):
@@ -201,12 +204,9 @@ def _require(value: object, kind: type[BaseModel]) -> None:
 
 def build_registry(env: Mapping[str, str] | None = None) -> RegistroApp:
     """``RegistroEmMemoria`` with the fakes on; ``RegistroBigQuery`` otherwise."""
-    env = env if env is not None else os.environ
     if fakes_enabled(env):
         return RegistroEmMemoria()
-    return RegistroBigQuery(
-        project=env.get("GOOGLE_CLOUD_PROJECT"), dataset=env.get("BQ_DATASET_APP")
-    )
+    return RegistroBigQuery(project=projeto_gcp(env), dataset=dataset_app(env))
 
 
 _default: RegistroApp | None = None

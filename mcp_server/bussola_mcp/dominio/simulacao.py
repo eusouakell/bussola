@@ -117,10 +117,19 @@ def format_percent(fraction: float) -> str:
     return f"{round(fraction * 100)}%"
 
 
+def strip_accents(text: str) -> str:
+    """Texto em ASCII, sem acento: decompõe em NFKD e descarta o que não é ASCII.
+
+    Base única das chaves de comparação do domínio (rótulos de categoria em
+    :func:`normalize_label`, tokens da busca fake). ``rag/text.py`` faz uma
+    normalização diferente de propósito: lá o que não é ASCII é preservado.
+    """
+    return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+
+
 def normalize_label(text: str) -> str:
     """Chave de rótulo sem acento, sem diferença de caixa e com espaços simples."""
-    ascii_text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
-    return " ".join(ascii_text.casefold().split())
+    return " ".join(strip_accents(text).casefold().split())
 
 
 def opportunity_criterion(corte_max_pct: float) -> str:

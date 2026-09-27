@@ -74,6 +74,12 @@ interface Props {
   vazio?: ReactNode;
 }
 
+/** Exaustividade do `switch` de cards: o argumento só compila se for `never`. */
+function semCard(nome: never): null {
+  void nome;
+  return null;
+}
+
 export function Conversa({ itens, estado, ocupado, lento, onEnviar, onRepetir, onModoSimulado, vazio }: Props) {
   const rolagem = useRef<HTMLElement>(null);
   const grupos = agrupar(itens);
@@ -119,7 +125,8 @@ export function Conversa({ itens, estado, ocupado, lento, onEnviar, onRepetir, o
       case "CardStatusPlano":
         return <CardStatusPlano item={item} />;
       default:
-        return null;
+        // `NomeCard` sem `case` acima vira erro de compilação aqui (R9).
+        return semCard(item.componente);
     }
   }
 

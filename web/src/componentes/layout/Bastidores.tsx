@@ -2,9 +2,9 @@
 // bottom sheet no mobile, com Jornada, Ferramentas, Consentimentos e Auditoria.
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Consentimento } from "../../agente/tipos";
+import { CONFIG } from "../../config";
 import { brl, hora, horaSegundos, mascararArgs, mascararId, mesAbrev, periodo } from "../../formatacao/formatar";
 import type { EventoAuditoria, ModeloSessao, RegistroFerramenta, TipoEventoAuditoria } from "../../sessao/modelo";
-import { ID_USUARIO_MASCARADO } from "../../simulado/locais";
 import { Icone } from "../base/Icone";
 import { passosJornada } from "../jornada/StepperJornada";
 
@@ -208,7 +208,7 @@ export function RodapeEstado({ modelo }: { modelo: ModeloSessao }) {
         .join(" · ")
     : "—";
   const cenario = estado.cenario_escolhido ? estado.cenario_escolhido.charAt(0).toUpperCase() + estado.cenario_escolhido.slice(1) : "—";
-  const cliente = estado.id_usuario ? mascararId(estado.id_usuario) : ID_USUARIO_MASCARADO;
+  const cliente = estado.id_usuario ? mascararId(estado.id_usuario) : CONFIG.idUsuarioMascarado;
   return (
     <dl className="kv" style={{ margin: 0 }}>
       <div>

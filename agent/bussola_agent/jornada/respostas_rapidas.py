@@ -29,6 +29,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from bussola_agent.estado import CHAVE_CENARIOS, CHAVE_ESTADO_JORNADA, EstadoJornada
+from bussola_agent.jornada import llm_view
 from bussola_agent.jornada.annotations import recommended_scenario
 
 # Depois do guardrail de saída (10) e da verificação de números (50), contratos §6.
@@ -175,16 +176,11 @@ def _falhou(resposta: Any) -> bool:
     return False
 
 
-def _partes(evento: Any) -> list[Any]:
-    conteudo = getattr(evento, "content", None)
-    return list(getattr(conteudo, "parts", None) or [])
-
-
 def _ler_sessao(eventos: Iterable[Any]) -> tuple[set[str], list[str]]:
     ferramentas: set[str] = set()
     ditos: list[str] = []
     for evento in eventos:
-        for parte in _partes(evento):
+        for parte in llm_view.parts(evento):
             resposta = parte.function_response
             if resposta is not None and resposta.name and not _falhou(resposta.response):
                 ferramentas.add(resposta.name)
@@ -195,12 +191,7 @@ def _ler_sessao(eventos: Iterable[Any]) -> tuple[set[str], list[str]]:
 
 def _eh_mensagem_final(llm_response: Any) -> bool:
     """Texto completo do modelo, sem chamada de ferramenta pendente."""
-    if llm_response.partial or llm_response.error_code:
-        return False
-    partes = _partes(llm_response)
-    if any(p.function_call for p in partes):
-        return False
-    return any(p.text and not p.thought for p in partes)
+    return llm_view.is_final_text(llm_response)
 
 
 def _jornada(callback_context: Any) -> tuple[str | None, str | None]:

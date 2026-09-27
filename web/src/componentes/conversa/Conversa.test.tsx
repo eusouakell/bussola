@@ -5,7 +5,7 @@ import { MODELO_INICIAL, type ItemConversa, type ModeloSessao } from "../../sess
 import { reducerSessao, type AcaoSessao } from "../../sessao/reducer";
 import { sugestoesDoComposer } from "../../sessao/sugestoes";
 import { gerarRoteiro } from "../../simulado/roteiro";
-import { R_AVANCAR, SUGESTOES_POR_ESTADO } from "../../simulado/textos";
+import { R_AVANCAR, SUGESTOES_POR_ESTADO } from "../../sessao/sugestoes-padrao";
 import { agrupar, Conversa } from "./Conversa";
 
 function modeloDoRoteiro(): ModeloSessao {
@@ -108,25 +108,35 @@ describe("Conversa: estados de espera", () => {
 
 describe("sugestoesDoComposer", () => {
   it("não sugere nada antes do cliente falar", () => {
-    expect(sugestoesDoComposer({ ...MODELO_INICIAL, estado: { estado_jornada: "OBJETIVO" } })).toEqual([]);
+    expect(sugestoesDoComposer({ ...MODELO_INICIAL, estado: { estado_jornada: "OBJETIVO" } }, "simulado")).toEqual([]);
   });
 
   it("usa as respostas rápidas do turno atual", () => {
     const itens: ItemConversa[] = [cliente("c1", "oi"), { ...(agente("a1") as Extract<ItemConversa, { tipo: "mensagem_agente" }>), respostasRapidas: ["Sim"] }];
-    expect(sugestoesDoComposer({ ...MODELO_INICIAL, itens, estado: { estado_jornada: "ENTENDER" } })).toEqual(["Sim"]);
+    expect(sugestoesDoComposer({ ...MODELO_INICIAL, itens, estado: { estado_jornada: "ENTENDER" } }, "simulado")).toEqual(["Sim"]);
+    expect(sugestoesDoComposer({ ...MODELO_INICIAL, itens, estado: { estado_jornada: "ENTENDER" } }, "ao-vivo")).toEqual(["Sim"]);
   });
 
   it("cai nas sugestões da etapa e esconde o avanço sem plano", () => {
     const base = { ...MODELO_INICIAL, itens: [cliente("c1", "oi"), agente("a1")] };
-    expect(sugestoesDoComposer({ ...base, estado: { estado_jornada: "ACOMPANHAR", plano_id: "p", ate_anomes: 202507 } })).toEqual(
-      SUGESTOES_POR_ESTADO.ACOMPANHAR,
-    );
-    expect(sugestoesDoComposer({ ...base, estado: { estado_jornada: "ACOMPANHAR", plano_id: "p", ate_anomes: 202512 } })).not.toContain(R_AVANCAR);
+    expect(
+      sugestoesDoComposer({ ...base, estado: { estado_jornada: "ACOMPANHAR", plano_id: "p", ate_anomes: 202507 } }, "simulado"),
+    ).toEqual(SUGESTOES_POR_ESTADO.ACOMPANHAR);
+    expect(
+      sugestoesDoComposer({ ...base, estado: { estado_jornada: "ACOMPANHAR", plano_id: "p", ate_anomes: 202512 } }, "simulado"),
+    ).not.toContain(R_AVANCAR);
+  });
+
+  it("ao vivo não usa o roteiro do simulado: sem respostas rápidas do agente, nenhum chip (A4)", () => {
+    const base = { ...MODELO_INICIAL, itens: [cliente("c1", "oi"), agente("a1")] };
+    const estado = { estado_jornada: "ACOMPANHAR" as const, plano_id: "p", ate_anomes: 202507 };
+    expect(sugestoesDoComposer({ ...base, estado }, "simulado")).toEqual(SUGESTOES_POR_ESTADO.ACOMPANHAR);
+    expect(sugestoesDoComposer({ ...base, estado }, "ao-vivo")).toEqual([]);
   });
 
   it("não sugere nada com autorização pendente", () => {
     const base = { ...MODELO_INICIAL, itens: [cliente("c1", "oi"), agente("a1")] };
     const estado = { estado_jornada: "AGIR" as const, consentimentos: { criar_plano: { consent_id: "c", status: "pendente" as const } } };
-    expect(sugestoesDoComposer({ ...base, estado })).toEqual([]);
+    expect(sugestoesDoComposer({ ...base, estado }, "simulado")).toEqual([]);
   });
 });

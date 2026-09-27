@@ -7,6 +7,7 @@ import type {
   RespostaFerramenta,
   TagMensagem,
 } from "../agente/tipos";
+import type { NomeCard } from "./catalogo";
 
 export type StatusFerramenta = "consultando" | "ok" | "erro";
 
@@ -47,7 +48,7 @@ export interface ItemFerramenta extends ItemBase {
 export interface ItemCard extends ItemBase {
   tipo: "card";
   turno: number;
-  componente: string;
+  componente: NomeCard;
   chamadaId: string;
   nome: string;
   resposta: RespostaFerramenta;

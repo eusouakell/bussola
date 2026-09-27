@@ -24,8 +24,8 @@ from apoio_ferramentas import (
 )
 
 from bussola_mcp.contratos import ID_ANCORA, ID_CONTROLE
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.ferramentas.fixture_backends import FixtureRepository
-from bussola_mcp.ferramentas.golden_adapter import GoldenFixtureComputations
 from bussola_mcp.ferramentas.ports import ToolDependencies
 
 PROIBIDOS = [
@@ -92,7 +92,7 @@ async def test_backends_com_falha_suja_nao_vazam(fixtures_sinteticas):
     deps = ToolDependencies(
         repository=repositorio,
         searcher=BuscadorEspiao(erro=ConnectionError(SUJO)),
-        computations=GoldenFixtureComputations(fixtures_sinteticas, repositorio),
+        computations=DomainComputations(repositorio),
     )
     with capturar_logs() as logs:
         async with sessao(deps=deps) as cliente:

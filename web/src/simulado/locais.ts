@@ -3,6 +3,7 @@
 // casas aqui, na "ferramenta"; a UI só formata (constituição III).
 import goldensJson from "../../fixtures/goldens.json";
 import type { Dados, Envelope, ErroEnvelope, Fonte } from "../agente/tipos";
+import { CONFIG } from "../config";
 import { brl, meses, periodo } from "../formatacao/formatar";
 
 export interface TrechoRag {
@@ -21,9 +22,9 @@ interface Goldens {
 
 const GOLDENS = goldensJson as unknown as Goldens;
 
-export const ANOMES_INICIAL = 202506;
-export const ANOMES_FINAL = 202512;
-export const ID_USUARIO_MASCARADO = "36a2…7269";
+/** Recorte gravado da demonstração (config: `VITE_BUSSOLA_ANOMES_*`). */
+const ANOMES_INICIAL = CONFIG.anomesInicial;
+const ANOMES_FINAL = CONFIG.anomesFinal;
 const TOLERANCIA = 0.1;
 
 export type Resultado = Envelope | ErroEnvelope;
@@ -207,7 +208,7 @@ export function compartilharDados(): Resultado {
 // ---------------------------------------------------------------- simular_objetivo (rotas)
 
 function premissas(): Dados {
-  return golden("simular_objetivo__ate_202506").dados.premissas as Dados;
+  return golden(`simular_objetivo__ate_${ANOMES_INICIAL}`).dados.premissas as Dados;
 }
 
 function capacidade(): number {
@@ -351,7 +352,7 @@ export interface SaidaAvancarMes {
 
 export function avancarMes(plano: PlanoVigente | null, ateAnomes: number, historico: ResultadoMes[]): SaidaAvancarMes {
   if (!plano) return { resultado: erro("SEM_PLANO_ATIVO", "nenhum plano ativo") };
-  if (ateAnomes >= ANOMES_FINAL) return { resultado: erro("FIM_DO_REPLAY", "replay terminou em 202512") };
+  if (ateAnomes >= ANOMES_FINAL) return { resultado: erro("FIM_DO_REPLAY", `replay terminou em ${ANOMES_FINAL}`) };
   const anomes = proximoAnomes(ateAnomes);
   const resumo = resumoMes(anomes);
   if (!resumo) return { resultado: erro("INDISPONIVEL", "resumo do mês ausente") };

@@ -14,25 +14,32 @@ O adaptador usa o ``genai.Client()`` padrão, que lê o ambiente:
 A chave nunca é lida, registrada ou exibida por este módulo.
 """
 
-import os
 import time
 from collections.abc import Sequence
 from typing import Any, Literal, Protocol, runtime_checkable
 
 import numpy as np
 
+from bussola_mcp import config
+from bussola_mcp.dominio.interfaces import SearcherUnavailableError
+
 TaskType = Literal["RETRIEVAL_DOCUMENT", "RETRIEVAL_QUERY"]
 TASK_DOCUMENT: TaskType = "RETRIEVAL_DOCUMENT"
 TASK_QUERY: TaskType = "RETRIEVAL_QUERY"
 
-DEFAULT_MODEL = "gemini-embedding-001"
-DEFAULT_DIMENSION = 768
+DEFAULT_MODEL = config.MODELO_EMBEDDING_PADRAO
+DEFAULT_DIMENSION = config.DIMENSAO_EMBEDDING_PADRAO
 _BATCH_VERTEX = 1  # no Vertex, o gemini-embedding-001 aceita um texto por chamada
 _BATCH_API = 20
 
 
-class EmbeddingUnavailableError(RuntimeError):
-    """O serviço de embedding falhou. A mensagem é genérica, sem detalhe do provedor."""
+class EmbeddingUnavailableError(SearcherUnavailableError):
+    """O serviço de embedding falhou. A mensagem é genérica, sem detalhe do provedor.
+
+    Especialização de
+    :class:`~bussola_mcp.dominio.interfaces.SearcherUnavailableError` (a falha da
+    porta ``BuscadorContexto``), para a ferramenta tratá-la sem importar este módulo.
+    """
 
     def __init__(self, cause: str | None = None) -> None:
         super().__init__("serviço de embedding indisponível no momento")
@@ -51,8 +58,12 @@ class Embedder(Protocol):
 
 
 def embedding_model_from_env() -> str | None:
-    """``EMBEDDING_MODEL`` do ambiente, ou ``None`` se vazio."""
-    return os.environ.get("EMBEDDING_MODEL", "").strip() or None
+    """``EMBEDDING_MODEL`` do ambiente, ou ``None`` se vazio.
+
+    Fachada de :func:`bussola_mcp.config.modelo_embedding`, mantida porque o
+    indexador (``data/rag/indexar.py``) importa este nome.
+    """
+    return config.modelo_embedding()
 
 
 class GeminiEmbedder:

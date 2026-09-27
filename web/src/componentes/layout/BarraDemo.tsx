@@ -1,27 +1,19 @@
 // Barra do apresentador (FR-014, FR-015, FR-021, FR-023): mês de referência,
 // "Avançar um mês", modo de execução e cenários de borda do simulado.
 import { useId } from "react";
-import type { Modo } from "../../agente/transporte";
+import type { Bordas, Modo } from "../../agente/transporte";
 import type { EstadoSessao } from "../../agente/tipos";
+import { CONFIG } from "../../config";
 import { mesAbrev } from "../../formatacao/formatar";
-import type { Bordas } from "../../simulado/agente-simulado";
-import { ANOMES_FINAL, ANOMES_INICIAL } from "../../simulado/locais";
+import { motivoSemAvanco } from "../../sessao/avanco";
+import { R_AVANCAR, TEXTO_AVANCAR } from "../../sessao/sugestoes-padrao";
 import { Icone } from "../base/Icone";
-
-export const TEXTO_AVANCAR = "avançar um mês";
 
 const BORDAS: { chave: keyof Bordas; rotulo: string; descricao: string }[] = [
   { chave: "e3", rotulo: "E3 · Ferramenta com erro", descricao: "oportunidades de corte falham uma vez" },
   { chave: "e4", rotulo: "E4 · Dados insuficientes", descricao: "capacidade de poupança sem histórico" },
   { chave: "e5", rotulo: "E5 · Resposta lenta", descricao: "skeleton e cursor de digitação" },
 ];
-
-/** Motivo para o botão ficar desabilitado, ou `null` quando pode avançar. */
-export function motivoSemAvanco(estado: EstadoSessao): string | null {
-  if (!estado.plano_id) return "Crie o plano para acompanhar mês a mês.";
-  if ((estado.ate_anomes ?? ANOMES_INICIAL) >= ANOMES_FINAL) return "Os dados da demonstração vão até dez/2025.";
-  return null;
-}
 
 interface Props {
   estado: EstadoSessao;
@@ -46,7 +38,7 @@ export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onB
         <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
           <span className="pe">Modo demonstração</span>
           <span style={{ fontSize: 14, fontWeight: 800 }} className="num">
-            Mês de referência: {mesAbrev(estado.ate_anomes ?? ANOMES_INICIAL)}
+            Mês de referência: {mesAbrev(estado.ate_anomes ?? CONFIG.anomesInicial)}
           </span>
         </div>
         <button
@@ -56,7 +48,7 @@ export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onB
           aria-describedby={motivo ? idMotivo : undefined}
           onClick={() => onEnviar(TEXTO_AVANCAR)}
         >
-          Avançar um mês
+          {R_AVANCAR}
           <Icone nome="avancar" tamanho="sm" />
         </button>
       </div>

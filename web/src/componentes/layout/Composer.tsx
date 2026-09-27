@@ -1,5 +1,6 @@
 // Composer (FR-006): sugestões em chips, campo de mensagem, enviar e parar.
 import { useState, type FormEvent } from "react";
+import { CONFIG } from "../../config";
 import { Icone } from "../base/Icone";
 
 interface Props {
@@ -48,7 +49,7 @@ export function Composer({ sugestoes, onEnviar, onParar, ocupado, desabilitado, 
           type="text"
           autoComplete="off"
           value={texto}
-          maxLength={500}
+          maxLength={CONFIG.limiteMensagemChars}
           placeholder={placeholder ?? "Escreva para a Bússola…"}
           onChange={(e) => setTexto(e.target.value)}
           disabled={Boolean(desabilitado)}

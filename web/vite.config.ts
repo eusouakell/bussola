@@ -4,7 +4,9 @@ import react from "@vitejs/plugin-react";
 import { defineConfig, type ProxyOptions } from "vite";
 
 // Em dev, o Vite encaminha a API do ADK para o `make agent` (porta 8000).
-const ADK = "http://localhost:8000";
+// `ADK_URL` e `VITE_PORT` permitem apontar para outro host ou porta.
+const ADK = process.env.ADK_URL || "http://localhost:8000";
+const PORTA = Number(process.env.VITE_PORT) || 5173;
 
 // O ADK só aceita Origin igual ao próprio host. Pedidos da página do Vite
 // (mesma origem do dev server, cujo Host o Vite já valida) passam a levar a
@@ -23,7 +25,7 @@ const paraAdk: ProxyOptions = {
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    port: 5173,
+    port: PORTA,
     proxy: {
       "/apps": paraAdk,
       "/run_sse": paraAdk,

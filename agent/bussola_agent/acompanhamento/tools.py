@@ -9,7 +9,6 @@ formato que o front exibe (``web/src/simulado/locais.ts``).
 
 import asyncio
 import math
-import sys
 from collections.abc import Mapping
 from typing import Any
 
@@ -57,6 +56,9 @@ TOOL_STATUS = "status_plano"
 TOOL_ADJUST = "ajustar_plano"
 
 GOVERNANCE_PACKAGE = "bussola_agent.governanca"
+"""Nome do pacote do 005. Só o arnês de teste/eval usa, para compor a jornada
+com ou sem governança; a guarda de consentimento **não** olha ``sys.modules``."""
+
 ERROR_NO_DATA = "DADOS_INSUFICIENTES"
 _EPSILON = 0.005
 
@@ -398,6 +400,15 @@ async def status_plano(tool_context: ToolContext) -> dict[str, Any]:
 
 
 def _consent_accepted(state: Mapping[str, Any]) -> bool:
+    """True se há consentimento ``aceito`` para ``ajustar_plano`` neste estado.
+
+    Não olha ``usado``, de propósito: o gate do 005 (``before_tool`` 20) consome
+    o consentimento **antes** da execução da ferramenta (contratos §6, campo
+    ``usado``), mantendo ``status: aceito``. Exigir ``usado`` falso aqui
+    rejeitaria o fluxo legítimo. Quem impede o replay é o gate; esta guarda só
+    garante que nenhuma execução acontece sem um "sim" registrado, mesmo que o
+    gate não esteja na cadeia.
+    """
     consents = state.get(CHAVE_CONSENTIMENTOS)
     entry = consents.get(TOOL_ADJUST) if isinstance(consents, Mapping) else None
     if not isinstance(entry, Mapping):
@@ -472,8 +483,10 @@ async def ajustar_plano(
     if plan is None:
         return envelopes.error(envelopes.ERROR_NO_ACTIVE_PLAN, envelopes.MSG_NO_ACTIVE_PLAN)
 
-    # Guarda local enquanto o gate do 005 (before_tool 20) não está carregado.
-    if GOVERNANCE_PACKAGE not in sys.modules and not _consent_accepted(state):
+    # Ação sensível (contratos §6): sem "sim" registrado, não executa. A guarda
+    # é incondicional; o gate do 005 (before_tool 20) é a primeira linha, esta é
+    # a última, para o caso de o gate não estar na cadeia.
+    if not _consent_accepted(state):
         return envelopes.error(envelopes.ERROR_CONSENT_REQUIRED, envelopes.MSG_CONSENT_REQUIRED)
 
     context = read_context(state)

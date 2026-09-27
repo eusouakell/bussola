@@ -15,8 +15,8 @@ import pytest
 
 from bussola_agent import persistencia_bq
 from bussola_agent.acompanhamento import ports
-from bussola_agent.acompanhamento.fakes import FixtureMcp, FixtureMcpGateway
 from bussola_agent.persistencia import RegistroEmMemoria
+from tests.support.acompanhamento_fakes import FixtureMcp, FixtureMcpGateway
 
 _HERE = Path(__file__).resolve().parent
 

@@ -1,28 +1,14 @@
-// Login simulado por persona no BFF (`web/bff`): lista de personas, login,
-// sessão atual e logout. A sessão fica num cookie HttpOnly que o navegador
-// manda sozinho; o front só conhece o `login` da persona, nunca o `id_usuario`.
-
-export interface Persona {
-  login: string;
-  displayName: string;
-  summary: string;
-}
-
-/** Falha com a mensagem em pt-BR do envelope `{erro: {codigo, mensagem}}`. */
-export class FalhaAuth extends Error {
-  readonly codigo: string;
-
-  constructor(codigo: string, mensagem: string) {
-    super(mensagem);
-    this.name = "FalhaAuth";
-    this.codigo = codigo;
-  }
-}
+// Adapter HTTP do port `PortalAuth` contra o BFF (`web/bff`): lista de
+// personas, login, sessão atual e logout. A sessão fica num cookie HttpOnly que
+// o navegador manda sozinho; o front só conhece o `login` da persona, nunca o
+// `id_usuario`.
+import { CONFIG } from "../config";
+import { FalhaAuth, type Persona, type PortalAuth } from "./portal";
 
 const MENSAGEM_PADRAO = "Não foi possível falar com o servidor. Tente de novo.";
 
 export interface OpcoesAuth {
-  /** Prefixo das rotas (vazio: mesmo host do BFF). */
+  /** Prefixo das rotas (padrão: `CONFIG.baseApi`, vazio no mesmo host do BFF). */
   base?: string;
   fetch?: typeof fetch;
 }
@@ -33,7 +19,7 @@ function ehPersona(valor: unknown): valor is Persona {
   return typeof p.login === "string" && typeof p.displayName === "string" && typeof p.summary === "string";
 }
 
-export class ClienteAuth {
+export class ClienteAuth implements PortalAuth {
   private readonly opcoes: OpcoesAuth;
 
   constructor(opcoes: OpcoesAuth = {}) {
@@ -43,7 +29,7 @@ export class ClienteAuth {
   private async buscar(caminho: string, init?: RequestInit): Promise<Response> {
     const f = this.opcoes.fetch ?? ((...args: Parameters<typeof fetch>) => fetch(...args));
     try {
-      return await f(`${this.opcoes.base ?? ""}${caminho}`, { credentials: "same-origin", ...init });
+      return await f(`${this.opcoes.base ?? CONFIG.baseApi}${caminho}`, { credentials: "same-origin", ...init });
     } catch {
       throw new FalhaAuth("REDE", MENSAGEM_PADRAO);
     }
@@ -67,7 +53,7 @@ export class ClienteAuth {
   }
 
   async listarPersonas(): Promise<Persona[]> {
-    const resposta = await this.buscar("/auth/personas");
+    const resposta = await this.buscar(CONFIG.rotasAuth.personas);
     if (!resposta.ok) throw await this.falha(resposta);
     const corpo = (await resposta.json().catch(() => null)) as { personas?: unknown } | null;
     if (!Array.isArray(corpo?.personas)) throw new FalhaAuth("RESPOSTA_INVALIDA", MENSAGEM_PADRAO);
@@ -76,14 +62,14 @@ export class ClienteAuth {
 
   /** Persona logada ou `null` sem sessão (401). */
   async sessaoAtual(): Promise<Persona | null> {
-    const resposta = await this.buscar("/auth/me");
+    const resposta = await this.buscar(CONFIG.rotasAuth.eu);
     if (resposta.status === 401) return null;
     if (!resposta.ok) throw await this.falha(resposta);
     return this.persona(resposta);
   }
 
   async entrar(login: string, senha: string): Promise<Persona> {
-    const resposta = await this.buscar("/auth/login", {
+    const resposta = await this.buscar(CONFIG.rotasAuth.entrar, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ login, password: senha }),
@@ -93,7 +79,7 @@ export class ClienteAuth {
   }
 
   async sair(): Promise<void> {
-    const resposta = await this.buscar("/auth/logout", { method: "POST" });
+    const resposta = await this.buscar(CONFIG.rotasAuth.sair, { method: "POST" });
     if (!resposta.ok) throw await this.falha(resposta);
   }
 }

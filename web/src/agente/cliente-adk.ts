@@ -1,5 +1,6 @@
 // Transporte ao vivo (contracts/eventos-agente.md §1): sessão no ADK,
 // `run_sse` com streaming e ressincronização do state depois do turno.
+import { CONFIG } from "../config";
 import { lerEventos } from "./sse";
 import type { EstadoSessao, EventoAdk } from "./tipos";
 import { FalhaConexao, type InicioSessao, type Transporte } from "./transporte";
@@ -7,7 +8,7 @@ import { FalhaConexao, type InicioSessao, type Transporte } from "./transporte";
 export interface OpcoesAdk {
   app: string;
   usuario: string;
-  /** Prefixo das rotas (vazio: mesmo host, com o proxy do Vite em dev). */
+  /** Prefixo das rotas (padrão: `CONFIG.baseApi`; vazio usa o proxy do Vite em dev). */
   base?: string;
   fetch?: typeof fetch;
 }
@@ -23,11 +24,11 @@ export class ClienteAdk implements Transporte {
 
   private buscar(caminho: string, init?: RequestInit): Promise<Response> {
     const f = this.opcoes.fetch ?? ((...args: Parameters<typeof fetch>) => fetch(...args));
-    return f(`${this.opcoes.base ?? ""}${caminho}`, init);
+    return f(`${this.opcoes.base ?? CONFIG.baseApi}${caminho}`, init);
   }
 
   private get caminhoSessoes(): string {
-    return `/apps/${encodeURIComponent(this.opcoes.app)}/users/${encodeURIComponent(this.opcoes.usuario)}/sessions`;
+    return `${CONFIG.rotasAdk.apps}/${encodeURIComponent(this.opcoes.app)}/users/${encodeURIComponent(this.opcoes.usuario)}/sessions`;
   }
 
   async iniciar(): Promise<InicioSessao> {
@@ -57,7 +58,7 @@ export class ClienteAdk implements Transporte {
     if (!this.sessionId) throw new FalhaConexao("sem sessão");
     let resposta: Response;
     try {
-      resposta = await this.buscar("/run_sse", {
+      resposta = await this.buscar(CONFIG.rotasAdk.runSse, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
         body: JSON.stringify({

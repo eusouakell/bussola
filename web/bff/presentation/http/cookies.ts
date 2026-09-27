@@ -2,8 +2,9 @@
 // prefixo `__Host-` (exige Secure, Path=/ e nenhum Domain).
 import type { IncomingMessage } from "node:http";
 
-export function sessionCookieName(secure: boolean): string {
-  return secure ? "__Host-bussola_session" : "bussola_session";
+/** Nome do cookie (config); com HTTPS ganha o prefixo obrigatório `__Host-`. */
+export function sessionCookieName(secure: boolean, base = "bussola_session"): string {
+  return secure ? `__Host-${base}` : base;
 }
 
 export function readCookie(header: string | undefined, name: string): string | undefined {
@@ -30,8 +31,8 @@ export class SessionCookie {
   private readonly secure: boolean;
   private readonly maxAgeSeconds: number;
 
-  constructor(secure: boolean, maxAgeSeconds: number) {
-    this.name = sessionCookieName(secure);
+  constructor(name: string, secure: boolean, maxAgeSeconds: number) {
+    this.name = name;
     this.secure = secure;
     this.maxAgeSeconds = maxAgeSeconds;
   }

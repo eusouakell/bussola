@@ -2,11 +2,36 @@
 // de erro por código (contracts/eventos-agente.md §4).
 import type { TagMensagem } from "../agente/tipos";
 
+/**
+ * Cards que a conversa sabe renderizar. União fechada: um nome errado passa a
+ * ser erro de compilação, em vez de um card que desaparece em silêncio (R9).
+ * `Conversa.tsx` precisa de um `case` para cada nome desta lista.
+ */
+export const NOMES_CARD = [
+  "CardDiagnostico",
+  "CardDividas",
+  "CardOportunidadesCorte",
+  "CardSimulacao",
+  "ComparadorCenarios",
+  "CardMarcos",
+  "ExplicacaoRecomendacao",
+  "CardObjetivo",
+  "CardPlano",
+  "ReciboAcao",
+  "CardPlanejadoRealizado",
+  // Decididos pelo reducer a partir do `status` de `avancar_mes`, não pelo catálogo.
+  "CardRotaRecalculada",
+  "CardOportunidade",
+  "CardStatusPlano",
+] as const;
+
+export type NomeCard = (typeof NOMES_CARD)[number];
+
 interface EntradaCatalogo {
   legivel: string;
   tag?: TagMensagem;
   /** Nome do componente de card; ausente = só linha e Bastidores. */
-  card?: string;
+  card?: NomeCard;
 }
 
 export const CATALOGO: Record<string, EntradaCatalogo> = {

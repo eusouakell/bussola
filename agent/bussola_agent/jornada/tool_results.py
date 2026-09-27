@@ -14,6 +14,8 @@ from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import dataclass
 from typing import Any
 
+from bussola_agent.jornada.llm_view import parts
+
 
 def is_envelope(value: object) -> bool:
     return isinstance(value, Mapping) and ("dados" in value or "erro" in value)
@@ -91,18 +93,13 @@ class ToolOutcome:
         return extract_envelope(self.response)
 
 
-def _parts(event: Any) -> list[Any]:
-    content = getattr(event, "content", None)
-    return list(getattr(content, "parts", None) or [])
-
-
 def tool_outcomes(events: Iterable[Any], invocation_id: str | None = None) -> Iterator[ToolOutcome]:
     """Function responses in ``events``; only the given invocation when ``invocation_id`` is set."""
     for event in events or ():
         event_invocation = getattr(event, "invocation_id", None)
         if invocation_id is not None and event_invocation != invocation_id:
             continue
-        for part in _parts(event):
+        for part in parts(event):
             response = getattr(part, "function_response", None)
             if response is not None and response.name:
                 yield ToolOutcome(response.name, response.response, event_invocation)
@@ -114,5 +111,5 @@ def user_texts(events: Iterable[Any]) -> list[str]:
     for event in events or ():
         if getattr(event, "author", None) != "user":
             continue
-        texts.extend(p.text for p in _parts(event) if getattr(p, "text", None))
+        texts.extend(p.text for p in parts(event) if getattr(p, "text", None))
     return texts

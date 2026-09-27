@@ -19,15 +19,15 @@ Premissas em :class:`~bussola_mcp.contratos.RegrasMarco`, decididas em
 rendimento assumido, nada de aumento de renda suposto: o que não existe na base
 vira aviso, nunca número (FR-004).
 
-Enquanto ``dominio/simulacao.py`` e ``dominio/metricas.py`` (ciclo 001) não
-estiverem em ``main``, :func:`meses_para`, :func:`aporte_para` e
-:func:`contexto_de_perfil` fazem a conta aqui, com rendimento zero — a mesma
-premissa de ``RegrasCenario``. Quando o 001 chegar, elas passam a delegar
-(tarefa T032 do ciclo).
+A aritmética vem de ``dominio/simulacao.py`` (ciclo 001, já em ``main``):
+:func:`meses_para` delega em ``months_to_reach``, as médias em ``mean_brl`` e
+``median_brl`` e o texto de prazo em ``format_months``. O que fica aqui é o que
+a engine de marcos tem de diferente: rendimento zero (a mesma premissa de
+``RegrasCenario``), "sem aporte possível" como ``None`` em vez de erro, série
+vazia como ``0.0`` e :func:`_texto_brl`, que escreve o valor **com** centavos
+(``simulacao.format_brl_whole`` escreve sem, e os dois não são
+intercambiáveis). Dívida T032 do ciclo 009 quitada.
 """
-
-import math
-import statistics
 
 from bussola_mcp.contratos import (
     AVISO_MARCO_NAO_GARANTE,
@@ -49,6 +49,7 @@ from bussola_mcp.contratos import (
     TipoMarco,
     brl,
 )
+from bussola_mcp.dominio.simulacao import format_months, mean_brl, median_brl, months_to_reach
 
 RESSALVA_NAO_GARANTE = (
     "Este marco melhora sua posição financeira e mantém o objetivo aberto, "
@@ -73,38 +74,48 @@ RESSALVA_SEM_TRAJETORIA = (
 def meses_para(falta: float, aporte: float) -> int | None:
     """Meses inteiros para juntar ``falta`` guardando ``aporte`` por mês.
 
-    ``0`` quando não falta nada; ``None`` quando não há aporte possível.
+    ``0`` quando não falta nada; ``None`` quando não há aporte possível — é a
+    única diferença em relação a ``simulacao.months_to_reach``, que trata aporte
+    não positivo como erro de entrada.
     """
     if falta <= 0:
         return 0
     if aporte <= 0:
         return None
-    return math.ceil(falta / aporte)
+    return months_to_reach(falta, aporte)
 
 
 def aporte_para(falta: float, prazo_meses: int) -> float:
-    """Aporte mensal para juntar ``falta`` em ``prazo_meses``, em BRL."""
+    """Aporte mensal para juntar ``falta`` em ``prazo_meses``, em BRL.
+
+    Não é ``simulacao.aporte_para_prazo``: aqui a entrada é o que **falta**
+    (``0`` é um valor legítimo, não erro) e a saída é só o número, sem
+    viabilidade nem motivo.
+    """
     if prazo_meses <= 0:
         return 0.0
     return brl(max(falta, 0.0) / prazo_meses)
 
 
 def _media(valores: list[float]) -> float:
-    return brl(statistics.fmean(valores)) if valores else 0.0
+    """``simulacao.mean_brl`` com série vazia valendo ``0.0`` em vez de erro."""
+    return mean_brl(valores) if valores else 0.0
 
 
 def _mediana(valores: list[float]) -> float:
-    return brl(statistics.median(valores)) if valores else 0.0
+    """``simulacao.median_brl`` com série vazia valendo ``0.0`` em vez de erro."""
+    return median_brl(valores) if valores else 0.0
 
 
 def _texto_brl(valor: float) -> str:
-    """``13843.56`` -> ``"R$ 13.843,56"`` (frase determinística, não é formatação de UI)."""
+    """``13843.56`` -> ``"R$ 13.843,56"`` (frase determinística, não é formatação de UI).
+
+    Com centavos, ao contrário de ``simulacao.format_brl_whole``: os textos de
+    marco citam o valor exato do objetivo, e arredondar mudaria o número que o
+    cliente lê.
+    """
     inteiro, _, centavos = f"{brl(valor):,.2f}".partition(".")
     return f"R$ {inteiro.replace(',', '.')},{centavos}"
-
-
-def _texto_meses(quantidade: int) -> str:
-    return "1 mês" if quantidade == 1 else f"{quantidade} meses"
 
 
 # ---------------------------------------------------------------------------
@@ -326,7 +337,7 @@ def diagnosticar(
                 observado=aporte_necessario,
                 limite=capacidade,
                 explicacao=(
-                    f"Em {_texto_meses(prazo_meses)}, o objetivo pede "
+                    f"Em {format_months(prazo_meses)}, o objetivo pede "
                     f"{_texto_brl(aporte_necessario)} por mês, e a sua capacidade sustentável "
                     f"hoje é de {_texto_brl(capacidade)} por mês."
                 ),
@@ -373,7 +384,8 @@ def _marco_equilibrar_fluxo(contexto: ContextoFinanceiro, regras: RegrasMarco) -
         TipoMarco.EQUILIBRAR_FLUXO,
         titulo="Equilibrar o fluxo de caixa do mês",
         indicador=(
-            f"sobra mensal maior ou igual a zero em {_texto_meses(regras.meses_fluxo_equilibrado)} "
+            "sobra mensal maior ou igual a zero em "
+            f"{format_months(regras.meses_fluxo_equilibrado)} "
             "seguidos, com saldo fora do negativo"
         ),
         por_que=(
@@ -422,9 +434,9 @@ def _marcos_reserva(
 
     def montar(alvo: float, prazo: int | None, parcial: bool) -> dict[str, object]:
         titulo = (
-            f"Formar a primeira parte da reserva ({_texto_meses(1)} de gasto)"
+            f"Formar a primeira parte da reserva ({format_months(1)} de gasto)"
             if parcial
-            else f"Formar a reserva de {_texto_meses(regras.meses_reserva)} de gasto"
+            else f"Formar a reserva de {format_months(regras.meses_reserva)} de gasto"
         )
         return _marco(
             TipoMarco.FORMAR_RESERVA,
@@ -467,7 +479,7 @@ def _marco_acumular(
         indicador=f"{_texto_brl(acumulado)} acumulados para o objetivo",
         por_que=(
             f"É o que a sua capacidade sustentável de {_texto_brl(capacidade)} por mês constrói "
-            f"em {_texto_meses(prazo_objetivo)}, sem apertar o orçamento nem contar com sorte."
+            f"em {format_months(prazo_objetivo)}, sem apertar o orçamento nem contar com sorte."
         ),
         relacao=(
             f"São {fatia:.0%} do objetivo já formados em patrimônio seu, que seguem valendo se o "
@@ -510,7 +522,7 @@ def _marco_ajustar_prazo(
     return _marco(
         TipoMarco.AJUSTAR_PRAZO,
         titulo="Rever o prazo do objetivo, mantendo o valor",
-        indicador=f"{_texto_brl(valor_alvo)} alcançados em {_texto_meses(prazo)}",
+        indicador=f"{_texto_brl(valor_alvo)} alcançados em {format_months(prazo)}",
         por_que=(
             f"Com a capacidade atual de {_texto_brl(capacidade)} por mês, este é o prazo em que o "
             "objetivo fecha sem premissa otimista nenhuma."

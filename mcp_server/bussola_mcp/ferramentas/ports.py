@@ -7,6 +7,12 @@ The tools depend only on these abstractions:
   metrics and simulation functions of contratos §4 (``dominio/metricas.py`` and
   ``dominio/simulacao.py``, cycle 001).
 
+The infrastructure failures of the two contract ports
+(:class:`~bussola_mcp.dominio.interfaces.RepositoryUnavailableError` and
+:class:`~bussola_mcp.dominio.interfaces.SearcherUnavailableError`) are re-exported
+here, next to :class:`BackendUnavailable`: the tool layer catches them without
+importing the BigQuery or the RAG module (sweep R6).
+
 Each computation returns a :class:`Computation` with the ``dados`` model of the
 tool, the period actually considered and the deterministic warnings. Domain
 failures are raised as :class:`DomainError` (mapped to a contract error code)
@@ -21,7 +27,22 @@ from typing import Protocol, runtime_checkable
 from pydantic import BaseModel
 
 from bussola_mcp.contratos import CodigoErro, Periodo
-from bussola_mcp.dominio.interfaces import BuscadorContexto, RepositorioFinanceiro
+from bussola_mcp.dominio.interfaces import (
+    BuscadorContexto,
+    RepositorioFinanceiro,
+    RepositoryUnavailableError,
+    SearcherUnavailableError,
+)
+
+__all__ = [
+    "BackendUnavailable",
+    "Computation",
+    "DomainError",
+    "FinancialComputations",
+    "RepositoryUnavailableError",
+    "SearcherUnavailableError",
+    "ToolDependencies",
+]
 
 
 @dataclass(frozen=True)

@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from bussola_agent.estado import CHAVE_ATE_ANOMES, CHAVE_ESTADO_JORNADA, CHAVE_OBJETIVO
+from bussola_agent.jornada import llm_view
 from bussola_agent.jornada.tool_results import ToolOutcome, tool_outcomes, user_texts
 from bussola_agent.logging_json import obter_logger
 from bussola_agent.mcp_conexao import FERRAMENTAS_MCP
@@ -247,39 +248,18 @@ def source_footer(outcomes: Iterable[ToolOutcome]) -> str | None:
     return f"Fonte: {names}{suffix}."
 
 
-def _parts(holder: Any) -> list[Any]:
-    content = getattr(holder, "content", None)
-    return list(getattr(content, "parts", None) or [])
-
-
-def is_final_text(llm_response: Any) -> bool:
-    """Complete model text without a pending function call."""
-    if getattr(llm_response, "partial", False) or getattr(llm_response, "error_code", None):
-        return False
-    parts = _parts(llm_response)
-    if any(getattr(p, "function_call", None) for p in parts):
-        return False
-    return any(getattr(p, "text", None) and not getattr(p, "thought", False) for p in parts)
-
-
-def _answer_text(llm_response: Any) -> str:
-    return "".join(
-        p.text for p in _parts(llm_response) if getattr(p, "text", None) and not p.thought
-    )
-
-
 def _client_texts(callback_context: Any, events: list[Any]) -> list[str]:
     texts = user_texts(events)
     current = getattr(callback_context, "user_content", None)
-    texts.extend(p.text for p in getattr(current, "parts", None) or [] if getattr(p, "text", None))
+    texts.extend(p.text for p in llm_view.content_parts(current) if p.text)
     return texts
 
 
 def check_numbers(callback_context: Any, llm_response: Any) -> None:
     """``after_model`` order 50: logs unsupported numbers and adds the source footer."""
-    if not is_final_text(llm_response):
+    if not llm_view.is_final_text(llm_response):
         return None
-    text = _answer_text(llm_response)
+    text = llm_view.final_text(llm_response)
     claims = checked_numbers(text)
     if not claims:
         return None
@@ -310,6 +290,5 @@ def check_numbers(callback_context: Any, llm_response: Any) -> None:
             "Resposta com números de ferramenta sem citar a fonte; rodapé acrescentado.",
             extra={**base, "erro_codigo": ERROR_SOURCE_NOT_CITED},
         )
-        last = [p for p in _parts(llm_response) if getattr(p, "text", None) and not p.thought][-1]
-        last.text = f"{last.text.rstrip()}\n\n{footer}"
+        llm_view.append_text(llm_response, footer)
     return None

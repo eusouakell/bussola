@@ -15,7 +15,6 @@
 """
 
 import asyncio
-import os
 import re
 import threading
 from collections.abc import Callable, Mapping
@@ -23,6 +22,7 @@ from typing import Any, Protocol
 
 import httpx
 
+from bussola_agent import config
 from bussola_agent.governanca.guardrails import (
     IGNORE_INSTRUCTIONS,
     INFRA,
@@ -34,7 +34,7 @@ from bussola_agent.governanca.guardrails import (
 from bussola_agent.logging_json import obter_logger
 
 ORIGIN_MODEL_ARMOR = "model_armor"
-DEFAULT_TIMEOUT_S = 3.0
+DEFAULT_TIMEOUT_S = config.TIMEOUT_MODEL_ARMOR_S
 SCOPES = ("https://www.googleapis.com/auth/cloud-platform",)
 TEMPLATE_RE = re.compile(
     r"^projects/(?P<project>[a-z][a-z0-9-]{4,28}[a-z0-9])"
@@ -208,7 +208,7 @@ class LayeredScreener:
 
 def build_screener(env: Mapping[str, str] | None = None) -> Screener:
     """Rules alone without ``MODEL_ARMOR_TEMPLATE``; rules + Model Armor with it."""
-    template = ((env if env is not None else os.environ).get("MODEL_ARMOR_TEMPLATE") or "").strip()
+    template = config.template_model_armor(env)
     if not template:
         _log.info("Guardrail por regras (sem Model Armor).", extra={"evento": "guardrail_regras"})
         return RuleScreener()

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { ClienteAuth, FalhaAuth } from "./clienteAuth";
+import { ClienteAuth } from "./clienteAuth";
+import { FalhaAuth } from "./portal";
 
 const FERNANDO = { login: "fernando", displayName: "Fernando", summary: "Cliente âncora." };
 

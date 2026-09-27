@@ -2,7 +2,8 @@
 // mesmos eventos ADK que o ciclo 004 emitiria. MCP responde com os goldens
 // literais; ferramentas locais saem de `locais.ts`. Sem rede e sem GCP.
 import type { Dados, EstadoSessao, EventoAdk, MetadadosBussola, Parte } from "../agente/tipos";
-import type { InicioSessao, Transporte } from "../agente/transporte";
+import { SEM_BORDAS, type Bordas, type InicioSessao, type Transporte } from "../agente/transporte";
+import { CONFIG } from "../config";
 import { brl, meses } from "../formatacao/formatar";
 import { nomeEmFrase } from "../sessao/catalogo";
 import { detectarGuardrail, type Bloqueio } from "./guardrails";
@@ -24,14 +25,8 @@ export function relogioFixo(inicioIso = RELOGIO_INICIO_ISO, passoMs = 1000): Rel
   };
 }
 
-export interface Bordas {
-  /** E3: `oportunidades_corte` indisponível na próxima consulta. */
-  e3: boolean;
-  /** E4: `capacidade_poupanca` com dados insuficientes. */
-  e4: boolean;
-  /** E5: respostas lentas (skeleton e cursor de digitação). */
-  e5: boolean;
-}
+// `Bordas` é parte do port `Transporte` (a UI liga, o transporte implementa).
+export type { Bordas } from "../agente/transporte";
 
 const AVISO_RAG = "Conteúdo educativo e geral, não é recomendação individual. Confira a norma em vigor no site do Banco Central.";
 const TRECHOS_RECOMENDACAO = ["reserva-emergencia#1", "comprometimento-renda#1", "custo-efetivo-total#1"];
@@ -63,7 +58,7 @@ function metaRedonda(bruto: number): number {
 
 /** Núcleo determinístico: texto do cliente → eventos ADK completos do turno. */
 export class MotorSimulado {
-  bordas: Bordas = { e3: false, e4: false, e5: false };
+  bordas: Bordas = { ...SEM_BORDAS };
   private estado: EstadoSessao = {};
   private contadores = { fc: 0, consent: 0, plano: 0, inv: 0, ev: 0 };
   private eventos: EventoAdk[] = [];
@@ -97,7 +92,7 @@ export class MotorSimulado {
 
   iniciar(): EventoAdk[] {
     this.comecar();
-    this.delta({ id_usuario: L.ID_USUARIO_MASCARADO, ate_anomes: L.ANOMES_INICIAL, estado_jornada: "OBJETIVO" });
+    this.delta({ id_usuario: CONFIG.idUsuarioMascarado, ate_anomes: CONFIG.anomesInicial, estado_jornada: "OBJETIVO" });
     return this.fechar();
   }
 
@@ -395,7 +390,7 @@ export class MotorSimulado {
   }
 
   private ate(): number {
-    return this.estado.ate_anomes ?? L.ANOMES_INICIAL;
+    return this.estado.ate_anomes ?? CONFIG.anomesInicial;
   }
 
   /** Devolve a sobra mediana da ferramenta (`null` quando indisponível), base da checagem de viabilidade. */
@@ -687,7 +682,7 @@ export class MotorSimulado {
     this.historico = [...this.historico, registro];
     this.rotas = rotas;
     const d = r.dados;
-    const fim = registro.anomes >= L.ANOMES_FINAL ? " Esse é o último mês da demonstração." : "";
+    const fim = registro.anomes >= CONFIG.anomesFinal ? " Esse é o último mês da demonstração." : "";
     if (registro.status === "desvio") {
       const causa = d.categoria_desvio as { macro: string; valor_mes: number; media_base: number } | null;
       this.falar(
@@ -853,7 +848,7 @@ export class AgenteSimulado implements Transporte {
     const eventos = this.motor.turno(texto);
     const esperar = this.opcoes.esperar ?? esperarPadrao;
     const base = this.opcoes.atrasoMs ?? 0;
-    const fator = this.motor.bordas.e5 ? 6 : 1;
+    const fator = this.motor.bordas.e5 ? CONFIG.fatorLento : 1;
     const agora = () => (this.opcoes.relogio ?? Date.now)() / 1000;
     const carimbar = (e: EventoAdk): EventoAdk => (base > 0 ? { ...e, timestamp: agora() } : e);
 

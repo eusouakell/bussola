@@ -22,12 +22,12 @@ from bussola_mcp.contratos import CodigoErro, Periodo, RegrasMarco
 from bussola_mcp.dominio import marcos, metricas
 from bussola_mcp.dominio.interfaces import RepositorioFinanceiro
 from bussola_mcp.dominio.metricas import MetricError, MetricResult
-from bussola_mcp.dominio.repositorio_bq import RepositoryUnavailableError
 from bussola_mcp.ferramentas.ports import (
     BackendUnavailable,
     Computation,
     DomainError,
     FinancialComputations,
+    RepositoryUnavailableError,
 )
 
 

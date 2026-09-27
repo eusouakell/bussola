@@ -69,6 +69,14 @@ def test_aporte_para_arredonda_em_2_casas() -> None:
     assert marcos.aporte_para(-10.0, 3) == 0.0
 
 
+@pytest.mark.parametrize(
+    "valor, esperado", [(30000.0, "R$ 30.000,00"), (1234.5, "R$ 1.234,50"), (0.0, "R$ 0,00")]
+)
+def test_texto_brl_tem_centavos(valor: float, esperado: str) -> None:
+    """Os textos de marco citam o valor com centavos (``format_brl_whole`` arredonda)."""
+    assert marcos._texto_brl(valor) == esperado
+
+
 # ---------------------------------------------------------------------------
 # Contexto a partir das linhas do repositório (FR-003)
 # ---------------------------------------------------------------------------

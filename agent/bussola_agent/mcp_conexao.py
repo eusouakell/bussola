@@ -19,7 +19,6 @@ Importar este módulo não acessa a rede.
 
 import asyncio
 import json
-import os
 import threading
 import time
 from collections.abc import Callable, Mapping
@@ -36,6 +35,7 @@ from mcp.client.streamable_http import streamable_http_client
 from mcp.shared._httpx_utils import create_mcp_http_client
 from mcp.types import CallToolResult, TextContent
 
+from bussola_agent import config
 from bussola_agent.estado import (
     CHAVE_ATE_ANOMES,
     CHAVE_ID_USUARIO,
@@ -44,7 +44,7 @@ from bussola_agent.estado import (
 )
 from bussola_agent.logging_json import obter_logger
 
-URL_PADRAO = "http://localhost:8080/mcp"
+URL_PADRAO = config.MCP_URL_PADRAO
 
 # Ferramentas servidas pelo mock do 000 (7 P0 + ``resumo_mes``), contratos §5.
 FERRAMENTAS_MCP: tuple[str, ...] = (
@@ -66,10 +66,10 @@ ERRO_INDISPONIVEL = "INDISPONIVEL"
 MSG_INDISPONIVEL = "Serviço temporariamente indisponível."
 MSG_ESCOPO_INVALIDO = "Entrada inválida: id_usuario, ate_anomes."
 
-# Validade do ID token em cache (o token do Google expira em 1 hora).
-TTL_TOKEN_S = 45 * 60
-# Tempo máximo de uma chamada MCP (inclui partida a frio do Cloud Run).
-TIMEOUT_CHAMADA_S = 30.0
+# Validade do ID token em cache e tempo máximo de uma chamada: de
+# :mod:`bussola_agent.config`, a fonte única (os nomes ficam por compatibilidade).
+TTL_TOKEN_S = config.TTL_TOKEN_OIDC_S
+TIMEOUT_CHAMADA_S = config.TIMEOUT_MCP_S
 
 _log = obter_logger(__name__)
 
@@ -80,13 +80,11 @@ _log = obter_logger(__name__)
 
 
 def _resolver_url(url: str | None) -> str:
-    return (url or os.getenv("MCP_URL") or URL_PADRAO).strip()
+    return config.mcp_url(url)
 
 
 def _resolver_oidc(usar_oidc: bool | None) -> bool:
-    if usar_oidc is not None:
-        return bool(usar_oidc)
-    return os.getenv("MCP_USE_OIDC", "FALSE").strip().upper() == "TRUE"
+    return config.mcp_use_oidc(usar_oidc)
 
 
 def audience_de(url: str) -> str:

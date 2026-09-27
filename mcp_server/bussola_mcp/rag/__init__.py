@@ -4,7 +4,7 @@ Ponto de entrada para o ``server.py`` (003)::
 
     from bussola_mcp.rag import criar_buscador
 
-    buscador = criar_buscador(os.environ.get("RAG_BACKEND", "lexico"))
+    buscador = criar_buscador()  # RAG_BACKEND, padrão lexico
     trechos = buscador.buscar(pergunta, k, tema)   # list[Trecho]
 
 - ``lexico`` (padrão): :class:`BuscadorLexico`, BM25 puro Python, sem GCP.
@@ -16,9 +16,9 @@ no construtor. Erros de montagem são ``ValueError`` (``InvalidIndexError``);
 uma falha de embedding na busca é :class:`EmbeddingUnavailableError`.
 """
 
-import os
 from pathlib import Path
 
+from bussola_mcp import config
 from bussola_mcp.dominio.interfaces import BuscadorContexto
 from bussola_mcp.rag.embedding import Embedder, EmbeddingUnavailableError
 from bussola_mcp.rag.index import INDEX_DIR, InvalidIndexError
@@ -51,12 +51,13 @@ def criar_buscador(
 ) -> BuscadorContexto:
     """Monta o buscador do ``backend`` (``lexico`` | ``numpy``).
 
-    ``None`` ou vazio lê ``RAG_BACKEND`` e, sem ele, usa ``lexico``. Um valor
-    desconhecido levanta ``ValueError``. ``index_dir`` e ``embedder`` servem
-    aos testes; em produção ficam nos padrões (índice versionado e Gemini).
+    ``None`` ou vazio lê ``RAG_BACKEND`` (:func:`bussola_mcp.config.backend_rag`)
+    e, sem ele, usa ``lexico``. Um valor desconhecido levanta ``ValueError``.
+    ``index_dir`` e ``embedder`` servem aos testes; em produção ficam nos padrões
+    (índice versionado e Gemini).
     """
-    name = (backend if backend is not None else os.environ.get("RAG_BACKEND", "")).strip()
-    name = name.lower() or BACKEND_LEXICO
+    pedido = backend if backend is not None else config.backend_rag()
+    name = pedido.strip().lower() or BACKEND_LEXICO
     directory = index_dir if index_dir is not None else INDEX_DIR
     if name == BACKEND_LEXICO:
         return BuscadorLexico(directory)

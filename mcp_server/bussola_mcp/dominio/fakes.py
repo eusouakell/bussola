@@ -19,12 +19,12 @@ equivale a tabela vazia.
 
 import json
 import re
-import unicodedata
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel
 
+from bussola_mcp import config
 from bussola_mcp.contratos import (
     Categoria,
     EntradaCategoria,
@@ -38,9 +38,10 @@ from bussola_mcp.contratos import (
     TrechoCorpus,
     UsuarioFixture,
 )
+from bussola_mcp.dominio.simulacao import strip_accents
 
-# fakes.py → dominio → bussola_mcp → mcp_server → raiz do repositório.
-RAIZ_REPOSITORIO = Path(__file__).resolve().parents[3]
+RAIZ_REPOSITORIO = config.RAIZ_REPOSITORIO
+"""Raiz do repositório. Alias de :data:`bussola_mcp.config.RAIZ_REPOSITORIO`."""
 
 ARQUIVO_USUARIOS = "usuarios.json"
 DIR_TABELAS = "bussola_dados"
@@ -48,8 +49,8 @@ ARQUIVO_TRECHOS = Path("rag") / "trechos_exemplo.json"
 
 
 def dir_fixtures_padrao() -> Path:
-    """``<raiz do repositório>/contracts/fixtures``."""
-    return RAIZ_REPOSITORIO / "contracts" / "fixtures"
+    """``<raiz do repositório>/contracts/fixtures`` (caminho em ``config``)."""
+    return config.dir_fixtures_padrao()
 
 
 def resolver_dir_fixtures(dir_fixtures: Path | str | None) -> Path:
@@ -228,7 +229,7 @@ _RE_PALAVRA = re.compile(r"\w+")
 
 def tokens(texto: str) -> set[str]:
     """Palavras de 3+ letras, sem acento e em minúsculas, sem palavras vazias."""
-    sem_acento = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode("ascii")
+    sem_acento = strip_accents(texto)
     return {
         palavra
         for palavra in _RE_PALAVRA.findall(sem_acento.casefold())

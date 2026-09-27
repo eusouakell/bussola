@@ -23,13 +23,13 @@ Uso::
 import argparse
 import importlib
 import logging
-import os
 from pathlib import Path
 from types import ModuleType
 
 import uvicorn
 from mcp.server.fastmcp import FastMCP
 
+from bussola_mcp import config
 from bussola_mcp.dominio.interfaces import BuscadorContexto, RepositorioFinanceiro
 from bussola_mcp.ferramentas import register_all
 from bussola_mcp.ferramentas.computations import build_computations
@@ -41,13 +41,11 @@ logger = logging.getLogger("bussola_mcp.server")
 
 SERVICO = "bussola-mcp"
 CAMINHO_MCP = "/mcp"
-PORTA_PADRAO = 8080
+PORTA_PADRAO = config.PORTA_PADRAO
+"""Porta padrão do MCP. O valor efetivo vem de :func:`bussola_mcp.config.porta_http`."""
 
 REAL_REPOSITORY_MODULE = "bussola_mcp.dominio.repositorio_bq"
 REAL_SEARCHER_MODULE = "bussola_mcp.rag"
-DEFAULT_READ_MODE = "query"
-DEFAULT_RAG_BACKEND = "lexico"
-_TRUTHY = frozenset({"TRUE", "1"})
 
 INSTRUCOES = (
     "Ferramentas financeiras determinísticas e read-only da Bússola. Os números "
@@ -59,8 +57,8 @@ INSTRUCOES = (
 
 
 def fakes_enabled() -> bool:
-    """``BUSSOLA_FAKES`` ligado (``TRUE`` ou ``1``, sem diferenciar maiúsculas)."""
-    return os.environ.get("BUSSOLA_FAKES", "").strip().upper() in _TRUTHY
+    """``BUSSOLA_FAKES`` ligado (:func:`bussola_mcp.config.fakes_ligados`)."""
+    return config.fakes_ligados()
 
 
 def _optional_module(name: str) -> ModuleType | None:
@@ -85,16 +83,14 @@ def _real_repository(fixtures_dir: Path | None) -> RepositorioFinanceiro:
     module = _optional_module(REAL_REPOSITORY_MODULE)
     if module is None:
         return FixtureRepository(fixtures_dir)
-    modo = os.environ.get("BQ_MODO_LEITURA", DEFAULT_READ_MODE).strip() or DEFAULT_READ_MODE
-    return module.RepositorioBigQuery(modo=modo)
+    return module.RepositorioBigQuery(modo=config.modo_leitura_bq())
 
 
 def _real_searcher(fixtures_dir: Path | None) -> BuscadorContexto:
     module = _optional_module(REAL_SEARCHER_MODULE)
     if module is None:
         return FixtureSearcher(fixtures_dir)
-    backend = os.environ.get("RAG_BACKEND", DEFAULT_RAG_BACKEND).strip() or DEFAULT_RAG_BACKEND
-    return module.criar_buscador(backend)
+    return module.criar_buscador(config.backend_rag())
 
 
 def build_dependencies(fixtures_dir: Path | str | None = None) -> ToolDependencies:
@@ -160,8 +156,8 @@ def _argumentos(argv: list[str] | None) -> argparse.Namespace:
     parser.add_argument(
         "--port",
         type=int,
-        default=os.environ.get("PORT", str(PORTA_PADRAO)),
-        help="padrão: $PORT ou 8080",
+        default=config.porta_http(),
+        help=f"padrão: ${config.VAR_PORTA} ou {config.PORTA_PADRAO}",
     )
     parser.add_argument(
         "--fixtures",

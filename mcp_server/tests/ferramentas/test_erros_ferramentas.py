@@ -19,7 +19,7 @@ from apoio_ferramentas import (
     argumentos,
     chamar,
     codigo,
-    deps_golden,
+    deps_fixtures,
     sessao,
 )
 
@@ -28,17 +28,14 @@ from bussola_mcp.contratos import (
     ID_CONTROLE,
     MENSAGENS_ERRO,
     CodigoErro,
-    arquivo_golden,
 )
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.ferramentas.fixture_backends import FixtureRepository, FixtureSearcher
-from bussola_mcp.ferramentas.golden_adapter import (
-    CUT_UNAVAILABLE_MESSAGE,
-    GoldenFixtureComputations,
-)
 from bussola_mcp.ferramentas.ports import DomainError, ToolDependencies
 
-# ``planejar_marcos`` (009) não tem golden gravado: ``gerar_fixtures.py`` só grava
-# os de ``FERRAMENTAS_GOLDEN``, e ela calcula sempre pelo domínio.
+# Ferramentas P0 de dados do cliente com golden gravado em ``contracts/fixtures``:
+# ``resumo_mes`` tem um golden por mês, e ``referencia_coorte`` e ``planejar_marcos``
+# (009) não têm nenhum (``gerar_fixtures.py`` só grava os de ``FERRAMENTAS_GOLDEN``).
 GOLDEN_P0 = tuple(
     f
     for f in FERRAMENTAS_CLIENTE
@@ -55,7 +52,7 @@ def _deps(fixtures: Path, *, repo_erro=None, buscador_erro=None) -> ToolDependen
     return ToolDependencies(
         repository=repositorio,
         searcher=buscador,
-        computations=GoldenFixtureComputations(fixtures, repositorio),
+        computations=DomainComputations(repositorio),
     )
 
 
@@ -66,8 +63,8 @@ def _reescrever_tabela(fixtures: Path, tabela: str, filtro) -> None:
 
 
 async def _codigo_de(fixtures: Path, ferramenta: str, args: dict, deps=None) -> dict:
-    """Sem ``deps``, usa o adaptador de golden explícito (regras D-04 a D-06)."""
-    async with sessao(deps=deps or deps_golden(fixtures)) as cliente:
+    """Sem ``deps``, usa as portas de fixtures com o cálculo de domínio."""
+    async with sessao(deps=deps or deps_fixtures(fixtures)) as cliente:
         return await chamar(cliente, ferramenta, args)
 
 
@@ -354,7 +351,7 @@ async def test_falha_ao_verificar_cliente_fica_indisponivel(fixtures_sinteticas,
     deps = ToolDependencies(
         repository=repositorio,
         searcher=FixtureSearcher(fixtures_sinteticas),
-        computations=GoldenFixtureComputations(fixtures_sinteticas, repositorio),
+        computations=DomainComputations(repositorio),
     )
     envelope = await _codigo_de(fixtures_sinteticas, ferramenta, argumentos(ferramenta), deps)
     _assert_erro(envelope, CodigoErro.INDISPONIVEL)
@@ -379,29 +376,6 @@ async def test_tabela_invalida_fica_indisponivel(fixtures_sinteticas):
     (fixtures_sinteticas / "bussola_dados" / "perfil_mensal.json").write_text("[{", "utf-8")
     envelope = await _codigo_de(
         fixtures_sinteticas, "perfil_financeiro", argumentos("perfil_financeiro")
-    )
-    _assert_erro(envelope, CodigoErro.INDISPONIVEL)
-
-
-@pytest.mark.parametrize("ferramenta", GOLDEN_P0)
-async def test_corte_anterior_a_202506_sem_golden(fixtures_sinteticas, ferramenta):
-    envelope = await _codigo_de(
-        fixtures_sinteticas, ferramenta, argumentos(ferramenta, ate_anomes=202503)
-    )
-    assert envelope == {"erro": {"codigo": "INDISPONIVEL", "mensagem": CUT_UNAVAILABLE_MESSAGE}}
-
-
-@pytest.mark.parametrize("ferramenta", GOLDEN_P0)
-async def test_golden_ausente(fixtures_sinteticas, ferramenta):
-    (fixtures_sinteticas / "ferramentas" / arquivo_golden(ferramenta, 202512)).unlink()
-    envelope = await _codigo_de(fixtures_sinteticas, ferramenta, argumentos(ferramenta))
-    _assert_erro(envelope, CodigoErro.INDISPONIVEL)
-
-
-async def test_resumo_de_mes_sem_golden(fixtures_sinteticas):
-    """As fixtures sintéticas não têm ``resumo_mes__202507`` (conftest)."""
-    envelope = await _codigo_de(
-        fixtures_sinteticas, "resumo_mes", argumentos("resumo_mes", anomes=202507)
     )
     _assert_erro(envelope, CodigoErro.INDISPONIVEL)
 

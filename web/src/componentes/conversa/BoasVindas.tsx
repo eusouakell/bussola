@@ -1,5 +1,5 @@
 // Boas-vindas (Main.dc.html / M1BoasVindas.dc.html): saudação e 4 objetivos.
-import { SUGESTOES_INICIAIS } from "../../simulado/textos";
+import { SUGESTOES_INICIAIS } from "../../sessao/sugestoes-padrao";
 import { Icone, type NomeIcone } from "../base/Icone";
 
 const ICONES: NomeIcone[] = ["casa", "aviao", "capelo", "lista"];
