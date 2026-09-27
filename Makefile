@@ -22,11 +22,13 @@ lint:
 	cd agent && uv run ruff check . ../deploy && uv run ruff format --check . ../deploy
 	cd agent && uv run ruff check ../eval/agente && uv run ruff format --check ../eval/agente
 	$(SHELLCHECK) deploy/*.sh
+	cd mcp_server && uv run ruff check ../data/rag ../eval/rag && uv run ruff format --check ../data/rag ../eval/rag
 
 format:
 	cd mcp_server && uv run ruff check --fix . ../data/scripts && uv run ruff format . ../data/scripts
 	cd agent && uv run ruff check --fix . ../deploy && uv run ruff format . ../deploy
 	cd agent && uv run ruff check --fix ../eval/agente && uv run ruff format ../eval/agente
+	cd mcp_server && uv run ruff check --fix ../data/rag ../eval/rag && uv run ruff format ../data/rag ../eval/rag
 
 mcp:
 	cd mcp_server && BUSSOLA_FAKES=$${BUSSOLA_FAKES:-TRUE} PORT=$(MCP_PORT) uv run python -m bussola_mcp.server
@@ -47,6 +49,29 @@ fixtures-v1:
 test-bq:
 	cd mcp_server && uv run pytest -m bq; s=$$?; [ $$s -eq 0 ] || [ $$s -eq 5 ]
 	cd agent && uv run pytest -m bq; s=$$?; [ $$s -eq 0 ] || [ $$s -eq 5 ]
+
+# --- RAG de conhecimento (ciclo 002). ---
+.PHONY: validar-corpus indice indice-embeddings eval-rag test-gemini
+
+validar-corpus:
+	cd mcp_server && uv run python ../data/rag/validar_corpus.py
+
+# Só trechos + manifesto (backend lexico), sem GCP.
+indice:
+	cd mcp_server && uv run python ../data/rag/indexar.py --sem-embeddings
+
+# Com embeddings (backend numpy). Plano B: GOOGLE_GENAI_USE_VERTEXAI=FALSE e
+# GOOGLE_API_KEY passado inline na linha de comando, nunca gravado.
+indice-embeddings:
+	cd mcp_server && uv run python ../data/rag/indexar.py
+
+# Top-3 dos dois backends, offline (cache de perguntas versionado).
+eval-rag:
+	cd mcp_server && uv run python ../eval/rag/rodar_eval.py --resultados ../eval/rag/RESULTADOS.md
+
+# Chama a API real do Gemini (fora do make test); exige credencial no ambiente.
+test-gemini:
+	cd mcp_server && BUSSOLA_TESTE_GEMINI=TRUE uv run pytest -m gemini tests/rag
 
 # --- Front web (ciclo 008). Node 24 + npm; sem rede depois do web-install. ---
 .PHONY: web-install web web-lint web-test web-build bff
