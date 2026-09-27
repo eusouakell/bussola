@@ -1,0 +1,135 @@
+# Conjunto de avaliação do RAG de conhecimento (ciclo 002).
+#
+# Cada pergunta positiva lista os trechos que respondem a ela (`esperados`).
+# Conta acerto quando pelo menos um deles aparece no top-`k` do buscador.
+# `tipo: produto` marca as perguntas que devem trazer um trecho do catálogo.
+# As perguntas `negativas` estão fora do domínio: o backend lexico deve
+# devolver lista vazia, e o numpy, nenhum trecho acima do limiar.
+#
+# Rode com `make eval-rag` e registre o resultado em eval/rag/RESULTADOS.md.
+
+k: 3
+
+perguntas:
+  - id: p01
+    tipo: conhecimento
+    pergunta: O banco pode cobrar de juros no cartão mais do que o valor que eu devia?
+    esperados: [cartao-rotativo#2]
+
+  - id: p02
+    tipo: conhecimento
+    pergunta: Por quanto tempo a dívida pode ficar no rotativo do cartão?
+    esperados: [cartao-rotativo#1]
+
+  - id: p03
+    tipo: conhecimento
+    pergunta: Paguei só o mínimo da fatura, o que acontece com o resto?
+    esperados: [cartao-rotativo#3, cartao-rotativo#1]
+
+  - id: p04
+    tipo: conhecimento
+    pergunta: O que é o CET de um empréstimo e o que entra nele?
+    esperados: [custo-efetivo-total#1, custo-efetivo-total#2]
+
+  - id: p05
+    tipo: conhecimento
+    pergunta: Existe um limite para os juros do cheque especial?
+    esperados: [cheque-especial#1]
+
+  - id: p06
+    tipo: conhecimento
+    pergunta: Consigo transferir meu empréstimo para outro banco que cobre menos juros?
+    esperados: [portabilidade-credito#1, portabilidade-credito#2, portabilidade-credito#3]
+
+  - id: p07
+    tipo: conhecimento
+    pergunta: Como vejo todas as dívidas que estão no meu nome no Banco Central?
+    esperados: [registrato#1, registrato#2]
+
+  - id: p08
+    tipo: conhecimento
+    pergunta: O gerente disse que só libera o empréstimo se eu fizer um seguro. Ele pode fazer isso?
+    esperados: [direitos-consumidor-bancario#3, comparar-custo-credito#3]
+
+  - id: p09
+    tipo: conhecimento
+    pergunta: Quais serviços da conta corrente o banco não pode cobrar?
+    esperados: [servicos-essenciais#1, servicos-essenciais#2]
+
+  - id: p10
+    tipo: conhecimento
+    pergunta: Qual a diferença entre consignado e empréstimo pessoal?
+    esperados: [modalidades-credito#1, modalidades-credito#2]
+
+  - id: p11
+    tipo: conhecimento
+    pergunta: Não consigo pagar as dívidas e está faltando dinheiro até para o básico. O que a lei prevê?
+    esperados: [superendividamento#1, superendividamento#2, superendividamento#4]
+
+  - id: p12
+    tipo: conhecimento
+    pergunta: Quanto eu deveria ter guardado para emergências?
+    esperados: [reserva-emergencia#1, reserva-emergencia#2]
+
+  - id: p13
+    tipo: conhecimento
+    pergunta: Tenho cartão atrasado, cheque especial e um empréstimo. Qual pago primeiro?
+    esperados: [ordem-quitacao#1, ordem-quitacao#3]
+
+  - id: p14
+    tipo: conhecimento
+    pergunta: Como organizo minhas contas do mês para sobrar dinheiro?
+    esperados: [orcamento-mensal#1, orcamento-mensal#2, orcamento-mensal#3]
+
+  - id: p15
+    tipo: conhecimento
+    pergunta: Qual parte do salário é seguro comprometer com prestações?
+    esperados: [comprometimento-renda#1]
+
+  - id: p16
+    tipo: conhecimento
+    pergunta: Se eu adiantar as parcelas do financiamento, os juros diminuem?
+    esperados: [liquidacao-antecipada#1, liquidacao-antecipada#2]
+
+  - id: p17
+    tipo: conhecimento
+    pergunta: Como saber qual de duas propostas de crédito sai mais barata?
+    esperados: [comparar-custo-credito#1, comparar-custo-credito#2, custo-efetivo-total#3]
+
+  - id: p18
+    tipo: conhecimento
+    pergunta: Onde reclamo se o banco não resolver meu problema?
+    esperados: [direitos-consumidor-bancario#4]
+
+  - id: p19
+    tipo: produto
+    pergunta: Onde guardo o dinheiro da entrada?
+    esperados: [cofrinhos#1]
+
+  - id: p20
+    tipo: produto
+    pergunta: Quero comprar um carro sem pegar financiamento. Que alternativa existe?
+    esperados: [consorcio_veiculos#1, consorcio_veiculos#2]
+
+  - id: p21
+    tipo: produto
+    pergunta: Tem alguma ferramenta para acompanhar meus gastos por categoria e receber alertas?
+    esperados: [controle_gastos#1, controle_gastos#2]
+
+  - id: p22
+    tipo: produto
+    pergunta: Quero reorganizar minhas dívidas com o banco em um acordo só. Existe um produto para isso?
+    esperados: [renegociacao#1, renegociacao#2]
+
+negativas:
+  - id: n01
+    pergunta: previsão do tempo
+
+  - id: n02
+    pergunta: Qual a previsão do tempo para amanhã?
+
+  - id: n03
+    pergunta: Quem ganhou o jogo de futebol ontem à noite?
+
+  - id: n04
+    pergunta: Me passa uma receita de bolo de cenoura com cobertura de chocolate.
