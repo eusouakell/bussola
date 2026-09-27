@@ -194,15 +194,20 @@ def _codigo(envelope: dict[str, Any]) -> str | None:
     return erro.get("codigo") if isinstance(erro, dict) else None
 
 
-async def test_toolset_lista_as_8_ferramentas_do_mock(mock_vazio: str) -> None:
-    """AC-06: ``criar_toolset(...).get_tools()`` lista as 8 ferramentas."""
+async def test_toolset_lista_as_ferramentas_do_servidor(mock_vazio: str) -> None:
+    """AC-06: ``criar_toolset(...).get_tools()`` lista as 9 ferramentas do servidor (003).
+
+    As 8 de ``FERRAMENTAS_MCP`` e ``referencia_coorte`` (contratos §5).
+    """
     toolset = criar_toolset(url=mock_vazio)
     try:
         ferramentas = await toolset.get_tools()
     finally:
         await toolset.close()
-    assert sorted(f.name for f in ferramentas) == sorted(FERRAMENTAS_MCP)
-    assert len(ferramentas) == 8
+    nomes = {f.name for f in ferramentas}
+    assert set(FERRAMENTAS_MCP) <= nomes
+    assert "referencia_coorte" in nomes
+    assert len(ferramentas) == 9
 
 
 async def test_toolset_com_filtro(mock_vazio: str) -> None:
@@ -288,7 +293,7 @@ async def test_header_oidc_no_mock_real_com_cache(
         segunda = await toolset.get_tools(readonly_context=contexto)
     finally:
         await toolset.close()
-    assert len(primeira) == len(segunda) == 8
+    assert len(primeira) == len(segunda) == 9
     assert pedidos == [mock_vazio.removesuffix("/mcp")]
 
 
