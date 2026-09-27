@@ -7,15 +7,16 @@ explícito. A operação (canal, smoke, logs, rollback) está em
 
 ## Legenda
 
-- **[confirmar na integração]** marca números e textos que vêm do
-  roteiro gravado (`web/fixtures/roteiro-demo.json`, modo `Simulado`) e dos
-  goldens do motor.
-  - Os ciclos 004 (agente e jornada), 005 (consentimento) e 006
-    (acompanhamento) podem mudar a redação.
-  - Os números devem ser os mesmos, porque vêm das ferramentas
-    determinísticas sobre os mesmos dados. O LLM não calcula.
-  - Refaça o ensaio completo no ADK real depois do merge desses ciclos e
-    atualize as linhas marcadas.
+- **Números conferidos na integração (2026-09-27)** contra as ferramentas
+  determinísticas sobre as fixtures v1 (`contracts/fixtures/`): o domínio
+  do 001 servido pelo MCP do 003 e o acompanhamento do 006
+  (`make eval-acompanhamento`). O roteiro gravado
+  (`web/fixtures/roteiro-demo.json`, modo `Simulado`) traz os mesmos
+  valores.
+  - No `Ao vivo (ADK)` a redação muda a cada execução. Os números não
+    mudam, porque vêm das ferramentas. O LLM não calcula.
+  - Se as fixtures ou os dados mudarem, refaça a conferência
+    (`make eval-agente` e `make eval-acompanhamento`) e atualize esta página.
 - As **falas** são o que o apresentador digita (ou clica na resposta
   rápida). A **narração** é o que ele diz para a plateia enquanto o agente
   responde.
@@ -36,14 +37,14 @@ explícito. A operação (canal, smoke, logs, rollback) está em
 |---|---|---|---|---|
 | 0:00 | — | (login como Fernando) | — | Saudação e estado `OBJETIVO` na barra |
 | 0:15 | OBJETIVO | "Quero comprar meu primeiro apartamento" | `registrar_objetivo` | O agente anota o objetivo e pergunta valor e prazo |
-| 0:40 | ENTENDER → ANTECIPAR | "R$ 30 mil em 2 anos" | `perfil_financeiro`, `capacidade_poupanca`, `dividas_e_parcelas`, `oportunidades_corte`, `simular_objetivo` | Perfil e viabilidade com fonte **[confirmar na integração]** |
-| 1:30 | ORIENTAR | "Me mostra os caminhos" | `comparar_cenarios`, `buscar_contexto_financeiro` | Três caminhos, com o acelerado recomendado **[confirmar na integração]** |
+| 0:40 | ENTENDER → ANTECIPAR | "R$ 30 mil em 2 anos" | `perfil_financeiro`, `capacidade_poupanca`, `dividas_e_parcelas`, `oportunidades_corte`, `simular_objetivo` | Perfil e viabilidade com fonte |
+| 1:30 | ORIENTAR | "Me mostra os caminhos" | `comparar_cenarios`, `buscar_contexto_financeiro` | Três caminhos, com o acelerado recomendado |
 | 2:10 | AGIR | "Quero o caminho acelerado" | `escolher_cenario`, `solicitar_consentimento` | Cartão de consentimento: "Posso …? Responda **sim** ou **não**." |
 | 2:30 | AGIR | "Sim, autorizo" | `criar_plano` | Plano criado, com o botão "Avançar um mês" liberado |
-| 2:50 | ACOMPANHAR | "Avançar um mês" (botão da barra) | `avancar_mes`, `resumo_mes`, `simular_objetivo` | jul/2025 com **desvio** e duas rotas **[confirmar na integração]** |
+| 2:50 | ACOMPANHAR | "Avançar um mês" (botão da barra) | `avancar_mes`, `resumo_mes`, `simular_objetivo` | jul/2025 com **desvio** e duas rotas |
 | 3:35 | ACOMPANHAR | "Quero adotar a rota A" | `solicitar_consentimento` | Novo cartão de consentimento (ajuste do plano) |
-| 3:50 | ACOMPANHAR | "Sim, autorizo" | `ajustar_plano` | Plano ajustado **[confirmar na integração]** |
-| 4:05 | ACOMPANHAR | "Avançar um mês" | `avancar_mes`, `resumo_mes` | ago/2025 acima do planejado **[confirmar na integração]** |
+| 3:50 | ACOMPANHAR | "Sim, autorizo" | `ajustar_plano` | Plano ajustado |
+| 4:05 | ACOMPANHAR | "Avançar um mês" | `avancar_mes`, `resumo_mes` | ago/2025 acima do planejado |
 | 4:20 | (guardrail) | "Então meu financiamento vai ser aprovado?" | nenhuma | Recusa de garantir crédito, com uma alternativa |
 | 4:35 | — | (fechamento) | — | Bastidores: estados percorridos e fontes |
 
@@ -53,8 +54,7 @@ explícito. A operação (canal, smoke, logs, rollback) está em
 Bússola registra o objetivo e só pergunta o que falta."
 
 **0:40, ENTENDER e ANTECIPAR.** "Agora ela lê o extrato de seis meses e
-simula. Cada número tem fonte: é ferramenta, não o modelo." Números
-**[confirmar na integração]**:
+simula. Cada número tem fonte: é ferramenta, não o modelo." Números:
 
 - renda média de R$ 6.691,39;
 - sobra mediana de R$ 1.729,00 por mês;
@@ -66,10 +66,10 @@ A frase de exemplo do ciclo 004 (§7) usa 60 mil. A demo usa **30 mil em 2
 anos** porque o roteiro gravado e os goldens do motor usam esse valor.
 
 **1:30, ORIENTAR.** "Três caminhos, com trade-offs explícitos. A
-recomendação cabe no prazo." Números **[confirmar na integração]**:
+recomendação cabe no prazo." Números:
 
-- acelerado: R$ 1.681,15 por mês, 18 meses, com cortes sugeridos em
-  Restaurantes, Compras e Assinaturas;
+- acelerado: R$ 1.660,85 por mês (80% da sobra mediana), meta em 19
+  meses, com cortes sugeridos em Restaurantes, Compras e Assinaturas;
 - conservador: 44 meses;
 - equilibrado: 29 meses.
 
@@ -79,22 +79,26 @@ apresentador responder algo ambíguo, o agente pergunta de novo. Isso também
 serve de demonstração.
 
 **2:50, ACOMPANHAR com desvio.** "Avançamos o relógio: é julho. A viagem
-pesou." Números **[confirmar na integração]**:
+pesou." Números:
 
-- sobra de R$ 884,53 contra R$ 1.681,15 planejados;
-- desvio de -R$ 796,62;
+- sobra de R$ 884,53 contra R$ 1.660,85 planejados;
+- desvio de -R$ 776,32, fora da tolerância de R$ 166,09 (10% do
+  planejado);
 - maior peso em Viagens: R$ 935,14 no mês, contra uma média de R$ 6,51;
-- duas rotas para voltar ao plano: rota A, novo aporte; rota B, novo prazo.
+- duas rotas para voltar ao plano, com R$ 29.115,47 restantes:
+  - rota A, manter o prazo: R$ 1.617,53 por mês nos 18 meses restantes;
+  - rota B, manter o aporte: R$ 1.660,85 por mês, também 18 meses. O
+    acelerado tinha folga, então o prazo total de 19 meses se mantém.
 
 **3:35–3:50, ajuste com novo consentimento.** "Mudar o plano também pede
-autorização." Resultado **[confirmar na integração]**: aporte de R$ 1.712,67
-por mês, 17 meses até a meta.
+autorização." Resultado: aporte de R$ 1.617,53 por mês, 18 meses até a
+meta. Nenhum dinheiro é movido.
 
-**4:05, mês seguinte.** "Agosto voltou ao trilho." Números **[confirmar na
-integração]**:
+**4:05, mês seguinte.** "Agosto voltou ao trilho." Números:
 
-- sobra de R$ 4.218,74;
-- acumulado de R$ 5.103,27, 17,01% da meta.
+- sobra de R$ 4.218,74 contra R$ 1.617,53 planejados (folga de
+  R$ 2.601,21);
+- acumulado de R$ 5.103,27, 17,01% da meta, com 17 meses restantes.
 
 **4:20, guardrail.** "Ela não promete o que não pode: aprovação de crédito
 depende do banco." O roteiro gravado também traz um pedido de dados de outro
