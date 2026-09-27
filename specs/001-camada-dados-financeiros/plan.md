@@ -49,6 +49,7 @@ mcp_server/tests/dados/              # unitários, integração offline e @pytes
 | D-06 | O seed de `categorias` é INFERRED: 0,5 em assinaturas e delivery; 0,3 em restaurantes, lazer e compras; 0,2 em padaria, clubes, infantis e viagens. Tem 7 pares diferentes da regra provisória do 000 | A regra do 000 era por palavra-chave. O seed versionado é a fonte (ciclo §3.1). Isso muda os goldens de `oportunidades_corte` e `comparar_cenarios` |
 | D-07 | As fixtures v1 saem de `build_dados.py --fixtures`: as linhas vêm do `RepositorioBigQuery` e os goldens de `metricas.*` sobre `RepositorioFake` dessas linhas | O mesmo código gera o golden e responde em produção, e o teste de consistência compara os dois |
 | D-08 | `categorias()` fica em cache na instância (seed estático). As demais leituras não têm cache | Economiza um job por chamada de `oportunidades_corte` e `comparar_cenarios` |
+| D-09 | As fixtures v1 mudam goldens que o `web/` copia (`web/fixtures/goldens.json`) e números fixos em `web/src/simulado/agente-simulado.test.ts` (acelerado de 202506: 1.681,15 → 18 meses passa a 1.660,85 → 19). O job `web` do CI quebra até o dono do `web/` (008) rodar `npm run fixtures` e atualizar esses testes (e `web/fixtures/roteiro-demo.json`, se usar os valores) | O 001 não pode editar `web/`. Os valores novos vêm do seed D-06 e são os que o 003 serve em produção |
 
 ## API pública para o 003 (estável)
 
@@ -200,8 +201,9 @@ class RepositorioBigQuery:                       # implementa RepositorioFinance
     perfil até o corte (D-05), sem `usuarios.json`.
 - **006:** lê `resumo_mes__AAAAMM` das fixtures v1, sem código novo. Em produção, chama
   `metricas.resumo_mes` via a ferramenta do 003.
-- **Web:** `web/fixtures/goldens.json` é cópia dos goldens. Depois das fixtures v1, o dono
-  do `web/` roda `npm run fixtures`.
+- **Web (D-09):** `web/fixtures/goldens.json` é cópia dos goldens. Depois do merge do 001, o
+  dono do `web/` roda `npm run fixtures` e atualiza `agente-simulado.test.ts` (1.660,85 → 19
+  meses no acelerado de 202506). Até lá, o job `web` do CI fica vermelho.
 - **000/Makefile:** `make fixtures` ainda gera o conjunto provisório. As fixtures v1 saem
   de `make fixtures-v1` (acréscimo deste ciclo).
 
