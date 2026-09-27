@@ -31,8 +31,8 @@ services:
   mcp:
     name: bussola-mcp
     # Tag ou digest (sha256:...) em imageRepository. Vivo: revisão
-    # bussola-mcp-main-1f2a380-local (tag main).
-    image: "sha256:90d0dfef5e25402fdcec0ac3ee3a9278ccbee4c75fff33b91d583c96b4b22aee"
+    # bussola-mcp-main-7bd374b-final-local (tag main, 0%).
+    image: "sha256:a21227646cb4791beb8ac34de13a8c44a4366c3750dc1ade8a24a80edf66bb85"
     cpu: "1"
     memory: 512Mi
     maxInstances: 1
@@ -61,8 +61,8 @@ services:
 
   agent:
     name: bussola-agent
-    # Vivo: revisão bussola-agent-main-eee18b6-chips-local (tag main).
-    image: "sha256:d3d7e21e0545a628b2e5f9a9b9e5a0e5c65af83d8382d3d124c50fcb5f4ab8be"
+    # Vivo: revisão bussola-agent-main-7bd374b-final-local (tag main, 0%).
+    image: "sha256:31479929dcd40df5998e958524a0ae24c55b51b555922455daab30340f9e4a71"
     cpu: "1"
     memory: 1Gi
     maxInstances: 1
@@ -96,8 +96,9 @@ services:
   # limite de tentativas de login ficam em memória, daí uma instância só.
   bff:
     name: bussola-bff
-    # Vivo: revisão bussola-bff-main-9766008-foco-local (100%, tag main).
-    image: "sha256:366768c93ad67b374a6f4aaa5f5a14e29247971e99b19b48439523ac0f7ebbf6"
+    # Vivo: revisão bussola-bff-main-7bd374b-final-local (tag main, 0%); os 100%
+    # seguem na bussola-bff-main-9766008-foco-local.
+    image: "sha256:ae20836b130c1911101472eb0e6e6ea595d477b346fbc7c26c20e85909987af9"
     cpu: "1"
     memory: 512Mi
     maxInstances: 1
