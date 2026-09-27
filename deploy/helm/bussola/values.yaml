@@ -48,8 +48,9 @@ services:
       BQ_DATASET_DADOS: bussola_dados
       # Plano B: list_rows, sem bigquery.jobUser na SA (contratos §4).
       BQ_MODO_LEITURA: memoria
-      # TRUE até o RepositorioBigQuery (001) e o servidor real (003) chegarem em main.
-      BUSSOLA_FAKES: "TRUE"
+      # FALSE: dados reais de bussola_dados. Exige bigquery.dataViewer na SA
+      # (concedido em 2026-09-27; deploy/iam_datasets.sh documenta o comando).
+      BUSSOLA_FAKES: "FALSE"
       LOG_LEVEL: INFO
     secretEnv: {}
     # Tráfego mantido; soma 100. O workflow deploy troca esta lista pelo
@@ -108,10 +109,10 @@ services:
     maxInstances: 1
     public: true
     env:
-      # TRUE: personas de web/fixtures/users.json (espelho da tabela users).
-      # Com FALSE o BFF lê bussola_dados.users por tabledata.list, e o
-      # loadConfig exige GOOGLE_CLOUD_PROJECT (web/bff/main/config.ts).
-      BUSSOLA_FAKES: "TRUE"
+      # FALSE: personas reais de bussola_dados.users por tabledata.list
+      # (web/bff/main/config.ts). Exige bigquery.dataViewer na SA (mesma
+      # concessão do mcp, acima) e GOOGLE_CLOUD_PROJECT, já definido abaixo.
+      BUSSOLA_FAKES: "FALSE"
       GOOGLE_CLOUD_PROJECT: batalha-time-07-lkbv
       # Revisão da tag main do agente (Gemini, plano B). O Cloud Run recusa um
       # ID token com a URL da tag como audience: ela vai na URL principal.
