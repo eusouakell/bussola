@@ -120,7 +120,7 @@ def test_golden_answer_is_fully_supported() -> None:
         "sobram R$ 1.901,47 por mês (mediana R$ 1.729,00). Em 1 dos 6 meses o saldo ficou "
         "negativo. O saldo atual é R$ 17.652,15.\n"
         "**Simulação**\nConservador: R$ 691,60 por mês em 44 meses (40% da sobra). "
-        "Equilibrado: R$ 1.037,40 em 29 meses. Acelerado: R$ 1.681,15 em 18 meses, "
+        "Equilibrado: R$ 1.037,40 em 29 meses. Acelerado: R$ 1.660,85 em 19 meses, "
         "cerca de 80% da sobra (R$ 1,7 mil).\n"
         "Fonte: perfil financeiro e comparação de cenários, jan–jun/2025."
     )

@@ -2,7 +2,7 @@
 
 Roda os casos de ``perguntas.yaml`` no ``root_agent`` real (ferramentas,
 instrução e callbacks) num ``InMemoryRunner``, contra o MCP local em modo fake
-(o mock do 000 com ``contracts/fixtures/``, iniciado aqui em ``127.0.0.1``).
+(o MCP do 003 com o domínio do 001 sobre ``contracts/fixtures/``, iniciado aqui em ``127.0.0.1``).
 Para cada resposta final, confere se **todo número** aparece no retorno das
 ferramentas do turno ou no que o cliente disse na sessão, com a mesma leitura
 de números do ``after_model`` 50 (:mod:`bussola_agent.jornada.number_check`).
@@ -648,7 +648,8 @@ async def run_eval(
         if mcp_url is None:
             os.environ["MCP_USE_OIDC"] = "FALSE"  # o mock local não pede ID token
         url = mcp_url or stack.enter_context(mock_mcp())
-        label = "informado em `--mcp-url`" if mcp_url else "mock do 000 com `contracts/fixtures/`"
+        local = "MCP local (003 + domínio do 001) com `contracts/fixtures/`"
+        label = "informado em `--mcp-url`" if mcp_url else local
         harness = Harness(mode, url, ate_anomes)
         results = []
         for case in selected:

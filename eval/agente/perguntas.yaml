@@ -82,7 +82,7 @@ casos:
               **Simulação**
               - Conservador: R$ 691,60 por mês, em 44 meses.
               - Equilibrado: R$ 1.037,40 por mês, em 29 meses.
-              - Acelerado: R$ 1.681,15 por mês, em 18 meses, com cortes em restaurantes e compras.
+              - Acelerado: R$ 1.660,85 por mês, em 19 meses, com cortes em restaurantes e compras.
               **Recomendação**
               Só o acelerado cabe no prazo de 24 meses; ele usa 80% da sua sobra mediana.
               Fonte: comparação de cenários, jan–jun/2025.
@@ -208,9 +208,8 @@ casos:
                   aporte_mensal: 1550
           - responder: |-
               **Simulação**
-              A simulação de referência do mock é de R$ 1.250,00 por mês em 24 meses.
-              Com os R$ 300 a mais, o novo prazo vem da ferramenta real, que recalcula
-              a partir do novo aporte.
+              Com R$ 300 a mais, o aporte vai a R$ 1.550,00 por mês e a meta chega
+              em 20 meses. Ainda sobram R$ 179,00 por mês da sua sobra mediana.
               Fonte: simulação do objetivo, jan–jun/2025.
 
   - id: q7-dividas

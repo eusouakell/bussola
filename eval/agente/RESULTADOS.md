@@ -7,9 +7,9 @@ respostas não é gravado aqui.
 <!-- eval:offline:inicio -->
 ## Modo offline
 
-- Execução: 2026-09-27 03:27 UTC; modelo: roteiro de cada turno (`ScriptedLlm`); MCP: mock do 000 com `contracts/fixtures/`.
+- Execução: 2026-09-27 04:43 UTC; modelo: roteiro de cada turno (`ScriptedLlm`); MCP: MCP local (003 + domínio do 001) com `contracts/fixtures/`.
 - Casos: 10; turnos: 13.
-- Números verificados: 46; com fonte na ferramenta do turno: 45; ditos pelo cliente ou no objetivo: 1; **sem fonte: 0** (100% com fonte).
+- Números verificados: 47; com fonte na ferramenta do turno: 46; ditos pelo cliente ou no objetivo: 1; **sem fonte: 0** (100% com fonte).
 - Expectativas cumpridas: 19 de 19.
 - Resultado: **aprovado**.
 
@@ -24,7 +24,7 @@ respostas não é gravado aqui.
 | q3-cortes | 1 | oportunidades_corte | OBJETIVO | 4/0/0 | Diagnóstico | sim | nenhuma |
 | q4-falta-entrada | 1 | simular_objetivo | ENTENDER | 5/0/0 | Simulação | sim | nenhuma |
 | q5-cabe-no-prazo | 1 | simular_objetivo | ENTENDER | 5/0/0 | Simulação | sim | nenhuma |
-| q6-mais-300 | 1 | simular_objetivo | ENTENDER | 3/1/0 | Simulação | sim | nenhuma |
+| q6-mais-300 | 1 | simular_objetivo | ENTENDER | 4/1/0 | Simulação | sim | nenhuma |
 | q7-dividas | 1 | dividas_e_parcelas | ENTENDER | 4/0/0 | Diagnóstico | sim | nenhuma |
 | escopo-controle | 1 | perfil_financeiro | OBJETIVO | 0/0/0 |  | não | nenhuma |
 | recusa-credito | 1 | nenhuma | OBJETIVO | 0/0/0 |  | não | nenhuma |
@@ -70,9 +70,9 @@ respostas não é gravado aqui.
   número da ferramenta e passar (na primeira execução ao vivo, uma diferença
   de prazo). O prompt passou a proibir diferenças de prazo ou de valor que não
   estejam no texto das ferramentas (commit `2be0b9c`, D-12).
-- q6 (mais R$ 300 por mês): o mock do 000 devolve a simulação canônica
-  qualquer que seja o aporte (D-08). O novo prazo só pode ser verificado
-  contra o MCP real do 003.
+- q6 (mais R$ 300 por mês): com o 003 e o 001 na `main`, o MCP recalcula o
+  prazo a partir do novo aporte (R$ 1.550,00 → 20 meses nas fixtures v1). No
+  mock do 000 a simulação era sempre a canônica (D-08).
 - Recusa e escopo (`recusa-credito`, `escopo-controle`) rodam só no offline:
   nenhum payload adversarial vai ao Gemini real (NFR-003).
 - Cota: a chave compartilhada entre os ciclos devolveu 429 nos três Flash

@@ -187,8 +187,8 @@ def test_choose_named_scenario_returns_details_from_the_comparison() -> None:
     assert result["dados"] == {
         "cenario": "acelerado",
         "detalhes": {
-            "aporte_mensal": 1681.15,
-            "prazo_meses": 18,
+            "aporte_mensal": 1660.85,
+            "prazo_meses": 19,
             "viavel": True,
             "pct_capacidade": 0.8,
         },

@@ -356,7 +356,7 @@ async def test_demo_journey_from_goal_to_action(
         "Me mostra os caminhos",
         call(("comparar_cenarios", {"valor_alvo": 30000, "prazo_meses": 24})),
         text(
-            "**Simulação**\nAcelerado: R$ 1.681,15 por mês em 18 meses.\n"
+            "**Simulação**\nAcelerado: R$ 1.660,85 por mês em 19 meses.\n"
             "**Recomendação**\nO caminho acelerado cabe na sua sobra.\n"
             "Fonte: comparação de cenários, jan–jun/2025."
         ),
