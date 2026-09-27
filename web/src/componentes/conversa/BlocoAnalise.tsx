@@ -3,13 +3,28 @@
 import { useState } from "react";
 import { fonteDe } from "../../agente/envelope";
 import { periodo } from "../../formatacao/formatar";
-import { nomeLegivel } from "../../sessao/catalogo";
+import { mensagemErro, nomeLegivel } from "../../sessao/catalogo";
 import type { ItemFerramenta } from "../../sessao/modelo";
 import { Icone } from "../base/Icone";
 import { ErroFerramenta, erroVisivelNaConversa } from "./ErroFerramenta";
 
 function codigoErro(item: ItemFerramenta): string | undefined {
   return item.resposta?.tipo === "erro" ? item.resposta.codigo : undefined;
+}
+
+/**
+ * Erros visíveis agrupados por mensagem (BUG-05b): várias ferramentas com a
+ * mesma copy viram um aviso só. Quais falharam continua nas linhas da lista.
+ */
+function errosPorMensagem(itens: ItemFerramenta[]): { chave: string; nome: string; codigo: string }[] {
+  const porMensagem = new Map<string, { chave: string; nome: string; codigo: string }>();
+  for (const item of itens) {
+    const codigo = codigoErro(item);
+    if (codigo === undefined || !erroVisivelNaConversa(item.nome, codigo)) continue;
+    const mensagem = mensagemErro(codigo, item.nome);
+    if (!porMensagem.has(mensagem)) porMensagem.set(mensagem, { chave: item.chave, nome: item.nome, codigo });
+  }
+  return [...porMensagem.values()];
 }
 
 function Status({ item }: { item: ItemFerramenta }) {
@@ -57,10 +72,7 @@ export function BlocoAnalise({ itens, onEnviar, ocupado }: Props) {
   const [escolha, setEscolha] = useState<boolean | null>(null);
   const emAndamento = itens.some((i) => i.status === "consultando");
   const concluidas = itens.filter((i) => i.status !== "consultando").length;
-  const erros = itens.filter((i) => {
-    const codigo = codigoErro(i);
-    return codigo !== undefined && erroVisivelNaConversa(i.nome, codigo);
-  });
+  const erros = errosPorMensagem(itens);
 
   if (itens.length === 1) {
     const [item] = itens;
@@ -100,12 +112,9 @@ export function BlocoAnalise({ itens, onEnviar, ocupado }: Props) {
         <Icone nome="chevronBaixo" estilo={{ transform: aberto ? "rotate(180deg)" : undefined, color: "var(--ink-3)" }} />
       </button>
       {aberto && itens.map((item) => <LinhaFerramenta key={item.chave} item={item} />)}
-      {itens.map((item) => {
-        const codigo = codigoErro(item);
-        return codigo ? (
-          <ErroFerramenta key={`${item.chave}-erro`} nome={item.nome} codigo={codigo} onEnviar={onEnviar} desabilitado={ocupado} />
-        ) : null;
-      })}
+      {erros.map((erro) => (
+        <ErroFerramenta key={`${erro.chave}-erro`} nome={erro.nome} codigo={erro.codigo} onEnviar={onEnviar} desabilitado={ocupado} />
+      ))}
     </div>
   );
 }

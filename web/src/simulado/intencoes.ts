@@ -18,6 +18,7 @@ export type Intencao =
   | { tipo: "adotar_rota"; rota: "A" | "B" | null }
   | { tipo: "lembretes" }
   | { tipo: "financiamento" }
+  | { tipo: "duvida_credito" }
   | { tipo: "status" }
   | { tipo: "manter" }
   | { tipo: "diagnostico" }
@@ -43,11 +44,14 @@ function lerPrazo(t: string): { meses: number; resto: string } | null {
   return { meses: m[2].startsWith("ano") ? n * 12 : n, resto: t.slice(0, m.index) + t.slice(m.index + m[0].length) };
 }
 
+/** Multiplicador do sufixo: `50 mil` → 50000; `100 milhoes` → 100000000 (BUG-03). */
+const MULTIPLICADOR: Record<string, number> = { mil: 1000, k: 1000, milhao: 1e6, milhoes: 1e6, mi: 1e6 };
+
 function lerValor(t: string): number | null {
-  const m = /(\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:,\d+)?)\s*(mil|k)?\b/.exec(t);
+  const m = /(\d{1,3}(?:\.\d{3})+(?:,\d+)?|\d+(?:,\d+)?)\s*(milhoes|milhao|mil|mi|k)?\b/.exec(t);
   if (!m) return null;
   const n = lerNumero(m[1]);
-  return m[2] ? n * 1000 : n;
+  return m[2] ? n * MULTIPLICADOR[m[2]] : n;
 }
 
 /** Resposta a um consentimento pendente (regra do ciclo 005). `null` = não é resposta. */
@@ -94,7 +98,7 @@ export function lerIntencao(texto: string): Intencao {
     if (valor) return { tipo: "aporte", aporte_mensal: valor };
   }
   if (prazo) return { tipo: "valores", valor_alvo: lerValor(prazo.resto), prazo_meses: prazo.meses };
-  if (/(r\$|\bmil\b|\breais\b)/.test(t) && lerValor(t)) return { tipo: "valores", valor_alvo: lerValor(t), prazo_meses: null };
+  if (/(r\$|\bmil\b|\bmilh\w+\b|\breais\b)/.test(t) && lerValor(t)) return { tipo: "valores", valor_alvo: lerValor(t), prazo_meses: null };
   if (/\bnao sei\b/.test(t)) return { tipo: "nao_sei_valor" };
 
   if (/\b(caminhos?|cenarios?|opcoes|compar\w*)\b/.test(t)) {
@@ -105,6 +109,11 @@ export function lerIntencao(texto: string): Intencao {
   if (/\b(viaj\w*|viagem|ferias)\b/.test(t)) return { tipo: "objetivo", objetivo: "viagem" };
   if (/\b(pos|pos-graduacao|mba|curso|faculdade|especializacao)\b/.test(t)) return { tipo: "objetivo", objetivo: "educacao" };
   if (/\b(dividas?|parcelas?|endividad\w*)\b/.test(t)) return { tipo: "objetivo", objetivo: "dividas" };
+
+  // BUG-02: pergunta legítima sobre crédito que não é promessa de aprovação.
+  if (/\b(emprestimos?|credito|financiamentos?|financiar|juros|cet|consignado|cheque especial|rotativo)\b/.test(t)) {
+    return { tipo: "duvida_credito" };
+  }
 
   if (/\b(outro|novo) objetivo\b/.test(t)) return { tipo: "novo_objetivo" };
   if (/\b(diagnostico|refaz\w*|meus gastos|perfil)\b/.test(t)) return { tipo: "diagnostico" };

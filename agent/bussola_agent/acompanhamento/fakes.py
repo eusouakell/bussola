@@ -1,10 +1,14 @@
 """Fakes do 006 para testes e eval offline (``BUSSOLA_FAKES=TRUE``), sem rede e sem GCP.
 
 - :class:`FixtureMcp` responde ``resumo_mes`` e ``simular_objetivo`` a partir
-  de ``contracts/fixtures/`` com as regras do mock do 000 (só o âncora tem
-  dados; ``resumo_mes`` exige ``anomes <= ate_anomes``; ``simular_objetivo``
-  devolve o golden do corte). Com ``canned=False``, ``simular_objetivo`` é
-  calculado para a entrada (comportamento esperado do 003).
+  de ``contracts/fixtures/`` com as regras do mock do 000 (``resumo_mes`` exige
+  ``anomes <= ate_anomes``; ``simular_objetivo`` devolve o golden do corte). Só
+  o âncora tem golden gravado, mas isso não é falta de histórico: como no
+  ``golden_adapter`` do MCP, ``DADOS_INSUFICIENTES`` fica reservado a quem não
+  tem nenhum mês de ``perfil_mensal`` até o corte (BUG-05); os outros clientes
+  recebem o mesmo envelope de exemplo, que é o que os testes offline precisam.
+  Com ``canned=False``, ``simular_objetivo`` é calculado para a entrada
+  (comportamento esperado do 003).
 - :class:`FixtureMcpGateway` implementa a porta :class:`~.ports.McpGateway`.
 - :func:`fake_transport` substitui ``mcp_conexao._chamar_mcp`` e devolve um
   ``CallToolResult`` como o do servidor real (``structuredContent`` + JSON).
@@ -62,15 +66,41 @@ CANNED_INPUT = {"valor_alvo": 30000.0, "prazo_meses": 24}
 ANCHOR_USER_ID = "36a21505-d6d4-42d3-b319-d51a133c7269"
 CONTROL_USER_ID = "31e94f2f-1463-49f9-a41a-b3f220ed976a"
 
-WARNING_MOCK_CUT = f"Resposta de exemplo do mock (corte {PARTIAL_CUT})."
-WARNING_MOCK_SIMULATION = (
-    "Resposta de exemplo do mock, calculada para valor_alvo=30000 e prazo_meses=24."
+_MONTHS = (
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro",
+)
+
+
+def month_label(anomes: int) -> str:
+    """``202506`` → ``"junho/2025"``: mesmo texto do ``golden_adapter`` do MCP."""
+    return f"{_MONTHS[anomes % 100 - 1]}/{anomes // 100}"
+
+
+WARNING_DEMO_PREFIX = "Exemplo desta demonstração:"
+"""Prefixo estável dos avisos de dado gravado, igual ao do MCP (BUG-06)."""
+
+WARNING_DEMO_CUT = f"{WARNING_DEMO_PREFIX} números com dados até {month_label(PARTIAL_CUT)}."
+WARNING_DEMO_SIMULATION = (
+    f"{WARNING_DEMO_PREFIX} simulação para uma meta de "
+    f"{format_brl(CANNED_INPUT['valor_alvo'])} "
+    f"em {format_months(int(CANNED_INPUT['prazo_meses']))}."
 )
 
 _MESSAGES = {
     "ENTRADA_INVALIDA": "Entrada inválida.",
     "USUARIO_INEXISTENTE": "Cliente não encontrado.",
-    "DADOS_INSUFICIENTES": "O mock só tem respostas do cliente âncora.",
+    "DADOS_INSUFICIENTES": "Ainda não tenho nenhum mês de histórico até esta data.",
     "PRAZO_IMPLAUSIVEL": "Prazo implausível para o objetivo informado.",
     "INDISPONIVEL": "Dados de exemplo indisponíveis.",
 }
@@ -94,6 +124,16 @@ class FixtureMcp:
         items = json.loads((self.fixtures_dir / "usuarios.json").read_text(encoding="utf-8"))
         return {item["id_usuario"]: item["papel"] for item in items}
 
+    def _months(self, user_id: str, cut: int) -> list[int]:
+        """Meses de ``perfil_mensal`` do cliente até o corte (regra honesta do domínio)."""
+        path = self.fixtures_dir / "bussola_dados" / "perfil_mensal.json"
+        rows = json.loads(path.read_text(encoding="utf-8"))
+        return sorted(
+            row["anomes"]
+            for row in rows
+            if row["id_usuario"].lower() == user_id.lower() and row["anomes"] <= cut
+        )
+
     def _load(self, name: str) -> dict[str, Any]:
         path = self.fixtures_dir / "ferramentas" / f"{name}.json"
         return json.loads(path.read_text(encoding="utf-8"))
@@ -109,7 +149,7 @@ class FixtureMcp:
         role = self._users().get(str(user_id).lower())
         if role is None:
             return _error("USUARIO_INEXISTENTE")
-        if role != "ancora":
+        if not self._months(str(user_id), int(cut)):
             return _error("DADOS_INSUFICIENTES")
         if tool == TOOL_MONTHLY_SUMMARY:
             return self._monthly_summary(args, cut)
@@ -132,9 +172,9 @@ class FixtureMcp:
             return _error("ENTRADA_INVALIDA")
         golden_cut = PARTIAL_CUT if cut < ANOMES_MAX else ANOMES_MAX
         envelope = self._load(f"simular_objetivo__ate_{golden_cut}")
-        warnings = [WARNING_MOCK_CUT] if golden_cut == PARTIAL_CUT else []
+        warnings = [WARNING_DEMO_CUT] if golden_cut == PARTIAL_CUT else []
         if self.canned:
-            warnings.append(WARNING_MOCK_SIMULATION)
+            warnings.append(WARNING_DEMO_SIMULATION)
         else:
             premises = envelope["dados"]["premissas"]
             try:
@@ -304,20 +344,6 @@ class ScriptedLlm(BaseLlm):
 
 ADVANCE_COMMANDS = ("avançar um mês", "avancar um mes", "próximo mês")
 STATUS_COMMANDS = ("ver status do plano", "status do plano")
-_MONTHS = (
-    "janeiro",
-    "fevereiro",
-    "março",
-    "abril",
-    "maio",
-    "junho",
-    "julho",
-    "agosto",
-    "setembro",
-    "outubro",
-    "novembro",
-    "dezembro",
-)
 _STATUS_TEXT = {
     "desvio": "abaixo do planejado",
     "no_plano": "dentro do plano",

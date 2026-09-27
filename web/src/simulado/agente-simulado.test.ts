@@ -4,6 +4,8 @@ import { MODELO_INICIAL, type ModeloSessao } from "../sessao/modelo";
 import { reducerSessao, type AcaoSessao } from "../sessao/reducer";
 import { AgenteSimulado, MotorSimulado, fatiar, relogioFixo } from "./agente-simulado";
 import { gerarRoteiro, MENSAGENS_ROTEIRO } from "./roteiro";
+import * as T from "./textos";
+import { brl, meses } from "../formatacao/formatar";
 import roteiroGravado from "../../fixtures/roteiro-demo.json";
 import { R_OUTRO_OBJETIVO } from "../vistas/P1Encerramento";
 
@@ -219,17 +221,133 @@ describe("MotorSimulado: estados de borda", () => {
     expect(textos(eventos).join(" ")).toMatch(/poucos meses de histórico/);
   });
 
-  it("valores fora da demo redirecionam sem simular", () => {
+  it("valores fora da demo, mas dentro da sobra, são simulados com os números do cliente", () => {
     const motor = motorAte(1);
     const eventos = motor.turno("R$ 50 mil em 3 anos");
-    expect(respostas(eventos).simular_objetivo).toBeUndefined();
-    expect(textos(eventos)[0]).toMatch(/R\$ 30 mil em 24 meses/);
+    expect(dados(respostas(eventos).simular_objetivo)).toMatchObject({
+      valor_alvo: 50000,
+      prazo_meses: 36,
+      aporte_mensal: 1388.89,
+      viavel: true,
+    });
+    expect(textos(eventos).join(" ")).not.toMatch(/gravad/);
   });
 
   it("aporte livre simula pelo valor mensal", () => {
     const motor = motorAte(3);
     const r = dados(respostas(motor.turno("E se eu guardar R$ 2.000 por mês?")).simular_objetivo);
     expect(r).toMatchObject({ modo: "aporte", aporte_mensal: 2000, prazo_meses: 15, viavel: false });
+  });
+});
+
+describe("BUG-01: atividade ilícita", () => {
+  const PEDIDO = "gostaria de juntar 50 mil reais usando trafico de pessoas";
+
+  it("bloqueia a frase do relato e não registra objetivo nenhum", () => {
+    const motor = motorAte(0);
+    const eventos = motor.turno(PEDIDO);
+    const chamadas = eventos.flatMap((e) => (e.content?.parts ?? []).filter((p) => p.functionCall));
+    expect(chamadas.map((p) => p.functionCall?.name)).toEqual([]);
+    expect(motor.estadoAtual.objetivo).toBeUndefined();
+    expect(eventos[0].customMetadata?.bussola?.guardrail).toBe("atividade_ilicita");
+    expect(textos(eventos)[0]).toContain("Trabalho só com objetivos financeiros legítimos");
+  });
+
+  it("o plano para roubar um banco também é bloqueio, não resposta genérica", () => {
+    const motor = motorAte(1);
+    const eventos = motor.turno("gostaria de um plano para roubar um banco e pegar todo o dinheiro");
+    expect(eventos[0].customMetadata?.bussola?.guardrail).toBe("atividade_ilicita");
+    expect(textos(eventos).join(" ")).not.toContain(T.FORA_DO_ESCOPO_1);
+  });
+});
+
+describe("BUG-02: fora do escopo escalona em vez de repetir", () => {
+  const FORA = ["me da uma receita de pizza", "quem ganhou o oscar esse ano", "me ensina a fazer bolo", "conta uma piada"];
+
+  it("quatro perguntas seguidas dão quatro respostas, nunca duas iguais em sequência", () => {
+    const motor = motorAte(0);
+    const falas = FORA.map((m) => textos(motor.turno(m)).join(" "));
+    for (let i = 1; i < falas.length; i += 1) expect(falas[i], falas[i]).not.toBe(falas[i - 1]);
+    expect(falas[0]).toBe(T.FORA_DO_ESCOPO_1);
+    expect(falas[2]).toMatch(/canais de atendimento/);
+    expect(falas[3]).toMatch(/atendimento do app/);
+  });
+
+  it("as respostas rápidas afunilam junto com o texto", () => {
+    const motor = motorAte(0);
+    const rapidas = () => motor.turno(FORA[0]).at(-1)?.customMetadata?.bussola?.respostas_rapidas ?? [];
+    expect(rapidas()).toEqual(T.SUGESTOES_INICIAIS);
+    expect(rapidas()).toEqual([T.SUGESTOES_INICIAIS[0], T.R_AJUDA]);
+    expect(rapidas()).toEqual([T.R_AJUDA]);
+  });
+
+  it("uma intenção reconhecida zera o contador", () => {
+    const motor = motorAte(0);
+    const primeira = textos(motor.turno(FORA[0])).join(" ");
+    motor.turno("Quero comprar meu primeiro apartamento");
+    expect(textos(motor.turno(FORA[0])).join(" ")).toBe(primeira);
+  });
+
+  it("pergunta sobre empréstimo sem juros é tratada como dúvida de crédito", () => {
+    const motor = motorAte(1);
+    const eventos = motor.turno("como eu posso pegar emprestimo no itau sem nenhum juros?");
+    expect(textos(eventos)[0]).toBe(T.DUVIDA_CREDITO);
+    expect(textos(eventos)[0]).not.toBe(T.NAO_ENTENDI);
+    expect(eventos.at(-1)?.customMetadata?.bussola?.respostas_rapidas).toEqual([T.R_FINANCIAMENTO, T.R_CONTINUAR]);
+  });
+});
+
+describe("BUG-03: meta acima do perfil", () => {
+  const META = "gostaria de comprar uma casa de 100 milhoes de reais em 2 anos";
+
+  it("registra o sonho do cliente e faz a checagem de realidade com os números dele", () => {
+    const motor = motorAte(0);
+    const eventos = motor.turno(META);
+    expect(dados(respostas(eventos).registrar_objetivo).objetivo).toMatchObject({ valor_alvo: 100000000, prazo_meses: 24 });
+    expect(respostas(eventos).simular_objetivo).toBeUndefined();
+    const texto = textos(eventos).join(" ");
+    expect(texto).toContain(`${brl(100_000_000)} em ${meses(24)}`);
+    expect(texto).toContain(`${brl(4_166_666.67)} por mês`); // valor ÷ prazo
+    expect(texto).toContain(brl(1729)); // sobra mediana do golden de capacidade_poupanca
+    expect(texto).toContain(`${brl(41_000)} em ${meses(24)}`); // meta intermediária vinda da sobra
+  });
+
+  it("propõe a meta intermediária e o prazo mais longo nas respostas rápidas", () => {
+    const motor = motorAte(0);
+    const rapidas = motor.turno(META).at(-2)?.customMetadata?.bussola?.respostas_rapidas;
+    expect(rapidas).toEqual([`Começar com ${brl(41_000)} em ${meses(24)}`, `Alongar para ${meses(48)} e mirar ${brl(82_000)}`]);
+  });
+
+  it("a meta intermediária proposta é aceita e simulada", () => {
+    const motor = motorAte(0);
+    motor.turno(META);
+    const eventos = motor.turno(`Começar com ${brl(41_000)} em ${meses(24)}`);
+    expect(dados(respostas(eventos).simular_objetivo)).toMatchObject({ valor_alvo: 41000, aporte_mensal: 1708.33, viavel: true });
+  });
+
+  it("insistir muda o texto e o aviso da demonstração aparece uma única vez", () => {
+    const motor = motorAte(0);
+    const primeira = textos(motor.turno(META));
+    const segunda = textos(motor.turno("quero 100 milhoes em 2 anos mesmo assim"));
+    const terceira = textos(motor.turno("insisto: 100 milhoes em 2 anos"));
+    // A checagem de realidade é o texto que repete o valor pedido pelo cliente.
+    const checagem = (ts: string[]) => ts.find((t) => t.includes(brl(100_000_000)));
+    expect(primeira).toContain(T.AVISO_SIMULACAO_GRAVADA);
+    expect(segunda.join(" ")).not.toContain(T.AVISO_SIMULACAO_GRAVADA);
+    expect(checagem(segunda)).not.toBe(checagem(primeira));
+    expect(checagem(terceira)).not.toBe(checagem(segunda));
+    expect(segunda.join(" ")).toContain("destino final");
+  });
+
+  it("renegociar o valor não repete o mesmo diagnóstico (BUG-05b)", () => {
+    const motor = motorAte(0);
+    const primeira = textos(motor.turno(META));
+    const segunda = textos(motor.turno("quero 100 milhoes em 2 anos mesmo assim"));
+    const diagnostico = primeira.find((t) => t.startsWith("Olhei seu extrato"));
+    expect(diagnostico).toBeDefined();
+    expect(segunda.some((t) => t.startsWith("Olhei seu extrato"))).toBe(false);
+    // e a sobra reaproveitada continua alimentando a checagem de realidade
+    expect(segunda.join(" ")).toContain(brl(1729));
   });
 });
 

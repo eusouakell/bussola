@@ -66,6 +66,7 @@ export type MotivoGuardrail =
   | "infra"
   | "promessa_credito"
   | "compartilhar_dados"
+  | "atividade_ilicita"
   | "fora_do_escopo";
 
 export type TagMensagem = "diagnostico" | "simulacao" | "recomendacao" | "acao";

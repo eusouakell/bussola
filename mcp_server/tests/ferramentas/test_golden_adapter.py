@@ -4,6 +4,7 @@ import json
 import shutil
 
 import pytest
+from apoio_ferramentas import DIR_OFICIAL
 
 from bussola_mcp.contratos import (
     ID_ANCORA,
@@ -12,15 +13,18 @@ from bussola_mcp.contratos import (
     DadosOportunidadesCorte,
 )
 from bussola_mcp.dominio.fakes import dir_fixtures_padrao
-from bussola_mcp.ferramentas.computations import build_computations
+from bussola_mcp.ferramentas.computations import DomainComputations, build_computations
 from bussola_mcp.ferramentas.fixture_backends import FixtureRepository, FixtureSearcher
 from bussola_mcp.ferramentas.golden_adapter import (
     CANONICAL_INPUT_WARNING,
     CANONICAL_TARGET,
     CANONICAL_TERM,
     COHORT_WARNING,
+    DEMO_WARNING_PREFIX,
     EARLIER_CUT_WARNING,
     GoldenFixtureComputations,
+    brl_label,
+    month_label,
     normalize_label,
 )
 from bussola_mcp.ferramentas.ports import BackendUnavailable, DomainError, FinancialComputations
@@ -39,7 +43,30 @@ def test_adaptador_implementa_a_porta(fixtures_sinteticas):
 
 def test_entrada_canonica_vem_do_contrato():
     assert (CANONICAL_TARGET, CANONICAL_TERM) == (30000.0, 24)
-    assert "30000" in CANONICAL_INPUT_WARNING and "24" in CANONICAL_INPUT_WARNING
+    assert "R$ 30.000,00" in CANONICAL_INPUT_WARNING and "24 meses" in CANONICAL_INPUT_WARNING
+
+
+@pytest.mark.parametrize("aviso", [EARLIER_CUT_WARNING, CANONICAL_INPUT_WARNING])
+def test_avisos_de_demonstracao_falam_com_o_cliente(aviso):
+    """BUG-06: prefixo estável, sem jargão interno e sem ``anomes`` cru."""
+    assert aviso.startswith(DEMO_WARNING_PREFIX)
+    for interno in ("mock", "valor_alvo", "prazo_meses", "202506", "ate_anomes", "golden"):
+        assert interno not in aviso
+
+
+@pytest.mark.parametrize(
+    "anomes, esperado",
+    [(202501, "janeiro/2025"), (202506, "junho/2025"), (202512, "dezembro/2025")],
+)
+def test_month_label(anomes, esperado):
+    assert month_label(anomes) == esperado
+
+
+@pytest.mark.parametrize(
+    "valor, esperado", [(30000.0, "R$ 30.000,00"), (1234.5, "R$ 1.234,50"), (0.0, "R$ 0,00")]
+)
+def test_brl_label(valor, esperado):
+    assert brl_label(valor) == esperado
 
 
 @pytest.mark.parametrize(
@@ -118,10 +145,53 @@ def test_referencia_coorte_ignora_caixa_e_acento(fixtures_sinteticas):
     assert resultado.avisos == (COHORT_WARNING,)
 
 
-def test_controle_sem_golden(fixtures_sinteticas):
-    with pytest.raises(DomainError) as info:
-        _calculos(fixtures_sinteticas).perfil_financeiro(ID_CONTROLE, 202512)
-    assert info.value.codigo == CodigoErro.DADOS_INSUFICIENTES
+def test_controle_sem_golden_cai_no_dominio(fixtures_sinteticas):
+    """BUG-05: sem golden gravado o cliente é calculado, não recusado."""
+    calculos = _calculos(fixtures_sinteticas)
+    dominio = DomainComputations(FixtureRepository(fixtures_sinteticas))
+    for metodo in ("perfil_financeiro", "capacidade_poupanca", "dividas_e_parcelas"):
+        resultado = getattr(calculos, metodo)(ID_CONTROLE, 202512)
+        assert resultado.dados == getattr(dominio, metodo)(ID_CONTROLE, 202512).dados, metodo
+        assert EARLIER_CUT_WARNING not in resultado.avisos
+    assert calculos.has_golden(ID_ANCORA) and not calculos.has_golden(ID_CONTROLE)
+
+
+@pytest.mark.parametrize(
+    "ate_anomes, meses, sobra_mediana", [(202506, 6, 2208.24), (202512, 12, 2824.05)]
+)
+def test_controle_oficial_tem_historico_e_diagnostico(ate_anomes, meses, sobra_mediana):
+    """BUG-05: a persona de controle tem 12 meses; o corte não muda isso."""
+    calculos = GoldenFixtureComputations(DIR_OFICIAL, FixtureRepository(DIR_OFICIAL))
+    perfil = calculos.perfil_financeiro(ID_CONTROLE, ate_anomes)
+    capacidade = calculos.capacidade_poupanca(ID_CONTROLE, ate_anomes)
+    assert (perfil.dados.meses_considerados, capacidade.dados.meses_considerados) == (meses, meses)
+    assert (perfil.dados.sobra_mediana, capacidade.dados.sobra_mediana) == (
+        sobra_mediana,
+        sobra_mediana,
+    )
+    assert perfil.periodo.model_dump() == {"inicio": 202501, "fim": ate_anomes}
+
+
+def test_controle_oficial_simula_com_a_propria_capacidade():
+    """A simulação do controle usa a capacidade dele, sem o aviso de entrada canônica."""
+    calculos = GoldenFixtureComputations(DIR_OFICIAL, FixtureRepository(DIR_OFICIAL))
+    resultado = calculos.simular_objetivo(ID_CONTROLE, 202512, 30000.0, 24, None, False)
+    assert resultado.dados.premissas["capacidade_mensal"] == 2824.05
+    assert CANONICAL_INPUT_WARNING not in resultado.avisos
+
+
+def test_sem_nenhum_mes_ainda_e_dados_insuficientes(fixtures_sinteticas):
+    """Única razão honesta de ``DADOS_INSUFICIENTES``: nenhum mês até o corte (regra 2)."""
+    caminho = fixtures_sinteticas / "bussola_dados" / "perfil_mensal.json"
+    linhas = json.loads(caminho.read_text("utf-8"))
+    caminho.write_text(
+        json.dumps([linha for linha in linhas if linha["id_usuario"] != ID_CONTROLE]), "utf-8"
+    )
+    calculos = _calculos(fixtures_sinteticas)
+    for metodo in ("perfil_financeiro", "capacidade_poupanca"):
+        with pytest.raises(DomainError) as info:
+            getattr(calculos, metodo)(ID_CONTROLE, 202512)
+        assert info.value.codigo == CodigoErro.DADOS_INSUFICIENTES, metodo
 
 
 def test_golden_invalido_fica_indisponivel(fixtures_sinteticas):

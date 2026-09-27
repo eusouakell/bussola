@@ -9,11 +9,16 @@ request, without leaking data after the cut or data of another client.
 
 Rules:
 
-1. only the anchor client of ``usuarios.json`` has goldens; any other known
-   client gets ``DADOS_INSUFICIENTES``;
-2. no month of ``perfil_mensal`` up to ``ate_anomes`` → ``DADOS_INSUFICIENTES``;
+1. only the anchor client of ``usuarios.json`` has goldens (``gerar_fixtures``
+   records them for the anchor alone); any other client is computed by
+   :class:`~bussola_mcp.ferramentas.computations.DomainComputations` over the
+   same repository, so having no golden is never mistaken for having no
+   history (BUG-05);
+2. no month of ``perfil_mensal`` up to ``ate_anomes`` → ``DADOS_INSUFICIENTES``,
+   the only honest reason for that code here (same rule as ``metricas``);
 3. cut 202506 or 202512 → exact golden; 202507–202511 → the 202506 golden
    with a warning (period ends at 202506); before 202506 → ``INDISPONIVEL``;
+   rules 3 to 5 apply to the anchor only, since only it is served a golden;
 4. simulations with a non-canonical input get the canonical golden plus a
    warning;
 5. ``oportunidades_corte`` is truncated to ``top_n``;
@@ -48,6 +53,7 @@ from bussola_mcp.contratos import (
 )
 from bussola_mcp.dominio.fakes import carregar_usuarios, ler_json, resolver_dir_fixtures
 from bussola_mcp.dominio.interfaces import RepositorioFinanceiro
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.ferramentas.fixture_backends import MISSING_FIXTURES_MESSAGE
 from bussola_mcp.ferramentas.ports import BackendUnavailable, Computation, DomainError
 
@@ -56,16 +62,45 @@ PARTIAL_CUT, FINAL_CUT = CORTES_GOLDEN
 CANONICAL_TARGET = float(ENTRADA_CANONICA_SIMULACAO["valor_alvo"])
 CANONICAL_TERM = int(ENTRADA_CANONICA_SIMULACAO["prazo_meses"])
 
-ONLY_ANCHOR_MESSAGE = "Dados de exemplo disponíveis só para o cliente âncora."
 CUT_UNAVAILABLE_MESSAGE = "Dados de exemplo indisponíveis para este corte."
 MONTH_UNAVAILABLE_MESSAGE = "Não há dados deste mês para o cliente."
 NO_BAND_MESSAGE = "Faixa de renda do cliente indisponível."
 NO_REFERENCE_MESSAGE = "Sem referência da faixa de renda para esta categoria."
 
-EARLIER_CUT_WARNING = f"Resposta de exemplo calculada com dados até {PARTIAL_CUT}."
+MONTH_NAMES = (
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro",
+)
+
+
+def month_label(anomes: int) -> str:
+    """``202506`` → ``"junho/2025"``: mês em pt-BR, nunca o ``anomes`` cru ao cliente."""
+    return f"{MONTH_NAMES[anomes % 100 - 1]}/{anomes // 100}"
+
+
+def brl_label(valor: float) -> str:
+    """``30000.0`` → ``"R$ 30.000,00"``: valor em BRL com 2 casas, no formato pt-BR."""
+    inteiro, _, centavos = f"{brl(valor):,.2f}".partition(".")
+    return f"R$ {inteiro.replace(',', '.')},{centavos}"
+
+
+DEMO_WARNING_PREFIX = "Exemplo desta demonstração:"
+"""Prefixo estável dos avisos de dado gravado, para o front apresentá-los juntos (BUG-06)."""
+
+EARLIER_CUT_WARNING = f"{DEMO_WARNING_PREFIX} números com dados até {month_label(PARTIAL_CUT)}."
 CANONICAL_INPUT_WARNING = (
-    f"Resposta de exemplo calculada para valor_alvo={CANONICAL_TARGET:g} "
-    f"e prazo_meses={CANONICAL_TERM}."
+    f"{DEMO_WARNING_PREFIX} simulação para uma meta de {brl_label(CANONICAL_TARGET)} "
+    f"em {CANONICAL_TERM} meses."
 )
 COHORT_WARNING = (
     "Referência agregada de 2025 de clientes da mesma faixa de renda, sem dado individual."
@@ -84,6 +119,8 @@ class GoldenFixtureComputations:
     def __init__(self, fixtures_dir: Path | str | None, repository: RepositorioFinanceiro) -> None:
         self.fixtures_dir = resolver_dir_fixtures(fixtures_dir)
         self.repository = repository
+        self.domain = DomainComputations(repository)
+        """Cálculo de domínio dos clientes sem golden gravado (rule 1)."""
         self._users: dict[str, UsuarioFixture] | None = None
         self._goldens: dict[str, Resposta[Any]] = {}
 
@@ -113,11 +150,13 @@ class GoldenFixtureComputations:
 
     # -- rules -----------------------------------------------------------------
 
-    def _anchor_months(self, id_usuario: str, ate_anomes: int) -> list[int]:
-        """Months available up to the cut, only for the anchor client (rules 1–2)."""
+    def has_golden(self, id_usuario: str) -> bool:
+        """Whether a golden was recorded for the client: only the anchor has one (rule 1)."""
         user = self._load_users().get(id_usuario.lower())
-        if user is None or user.papel != "ancora":
-            raise DomainError(CodigoErro.DADOS_INSUFICIENTES, ONLY_ANCHOR_MESSAGE)
+        return user is not None and user.papel == "ancora"
+
+    def _months(self, id_usuario: str, ate_anomes: int) -> list[int]:
+        """Months of ``perfil_mensal`` available up to the cut; none → ``DADOS_INSUFICIENTES``."""
         months = [linha.anomes for linha in self.repository.perfil_mensal(id_usuario, ate_anomes)]
         if not months:
             raise DomainError(CodigoErro.DADOS_INSUFICIENTES)
@@ -133,7 +172,7 @@ class GoldenFixtureComputations:
         raise BackendUnavailable(CUT_UNAVAILABLE_MESSAGE)
 
     def _from_golden(self, ferramenta: str, id_usuario: str, ate_anomes: int) -> Computation:
-        self._anchor_months(id_usuario, ate_anomes)
+        self._months(id_usuario, ate_anomes)
         corte, avisos = self._golden_cut(ate_anomes)
         golden = self._load_golden(arquivo_golden(ferramenta, corte), FERRAMENTAS[ferramenta][1])
         computation = Computation(
@@ -142,14 +181,23 @@ class GoldenFixtureComputations:
         return computation.with_avisos(*avisos)
 
     # -- FinancialComputations -------------------------------------------------
+    #
+    # Sem golden gravado (rule 1), o cálculo vai para ``self.domain``: o cliente
+    # tem histórico, só não tem envelope gravado.
 
     def perfil_financeiro(self, id_usuario: str, ate_anomes: int) -> Computation:
+        if not self.has_golden(id_usuario):
+            return self.domain.perfil_financeiro(id_usuario, ate_anomes)
         return self._from_golden("perfil_financeiro", id_usuario, ate_anomes)
 
     def capacidade_poupanca(self, id_usuario: str, ate_anomes: int) -> Computation:
+        if not self.has_golden(id_usuario):
+            return self.domain.capacidade_poupanca(id_usuario, ate_anomes)
         return self._from_golden("capacidade_poupanca", id_usuario, ate_anomes)
 
     def oportunidades_corte(self, id_usuario: str, ate_anomes: int, top_n: int) -> Computation:
+        if not self.has_golden(id_usuario):
+            return self.domain.oportunidades_corte(id_usuario, ate_anomes, top_n)
         computation = self._from_golden("oportunidades_corte", id_usuario, ate_anomes)
         dados = computation.dados
         assert isinstance(dados, DadosOportunidadesCorte)
@@ -157,6 +205,8 @@ class GoldenFixtureComputations:
         return Computation(dados=truncated, periodo=computation.periodo, avisos=computation.avisos)
 
     def dividas_e_parcelas(self, id_usuario: str, ate_anomes: int) -> Computation:
+        if not self.has_golden(id_usuario):
+            return self.domain.dividas_e_parcelas(id_usuario, ate_anomes)
         return self._from_golden("dividas_e_parcelas", id_usuario, ate_anomes)
 
     def simular_objetivo(
@@ -168,6 +218,10 @@ class GoldenFixtureComputations:
         aporte_mensal: float | None,
         usar_saldo_atual: bool,
     ) -> Computation:
+        if not self.has_golden(id_usuario):
+            return self.domain.simular_objetivo(
+                id_usuario, ate_anomes, valor_alvo, prazo_meses, aporte_mensal, usar_saldo_atual
+            )
         computation = self._from_golden("simular_objetivo", id_usuario, ate_anomes)
         canonical = (
             valor_alvo == CANONICAL_TARGET
@@ -180,12 +234,16 @@ class GoldenFixtureComputations:
     def comparar_cenarios(
         self, id_usuario: str, ate_anomes: int, valor_alvo: float, prazo_meses: int
     ) -> Computation:
+        if not self.has_golden(id_usuario):
+            return self.domain.comparar_cenarios(id_usuario, ate_anomes, valor_alvo, prazo_meses)
         computation = self._from_golden("comparar_cenarios", id_usuario, ate_anomes)
         canonical = valor_alvo == CANONICAL_TARGET and prazo_meses == CANONICAL_TERM
         return computation if canonical else computation.with_avisos(CANONICAL_INPUT_WARNING)
 
     def resumo_mes(self, id_usuario: str, ate_anomes: int, anomes: int) -> Computation:
-        months = self._anchor_months(id_usuario, ate_anomes)
+        if not self.has_golden(id_usuario):
+            return self.domain.resumo_mes(id_usuario, ate_anomes, anomes)
+        months = self._months(id_usuario, ate_anomes)
         if anomes not in months:
             raise DomainError(CodigoErro.DADOS_INSUFICIENTES, MONTH_UNAVAILABLE_MESSAGE)
         golden = self._load_golden(arquivo_resumo_mes(anomes), DadosResumoMes)

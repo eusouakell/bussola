@@ -90,9 +90,9 @@ planejado é o aporte da rota A.
 | Sessão sem plano_id: SEM_PLANO_ATIVO | SEM_PLANO_ATIVO | SEM_PLANO_ATIVO | sim |
 | Sessão sem plano_id: corte mantido | 202506 | 202506 | sim |
 | Sessão sem plano_id: texto é a mensagem da ferramenta | Para acompanhar mês a mês, primeiro precisamos criar o seu plano. | Para acompanhar mês a mês, primeiro precisamos criar o seu plano. | sim |
-| Cliente de controle: DADOS_INSUFICIENTES | DADOS_INSUFICIENTES | DADOS_INSUFICIENTES | sim |
-| Cliente de controle: corte mantido | 202506 | 202506 | sim |
-| Cliente de controle: texto é a mensagem da ferramenta | O mock só tem respostas do cliente âncora. | O mock só tem respostas do cliente âncora. | sim |
+| Cliente de controle: sem erro | {} | {} | sim |
+| Cliente de controle: mês revelado | 202507 | 202507 | sim |
+| Cliente de controle: corte avançou | 202507 | 202507 | sim |
 | Ajuste sem consentimento (gate do 005) | CONSENTIMENTO_NECESSARIO | CONSENTIMENTO_NECESSARIO | sim |
 | Ajuste sem consentimento (gate do 005): plano mantido | plano-inicial | plano-inicial | sim |
 | Ajuste sem consentimento (guarda local do 006, sem o 005) | CONSENTIMENTO_NECESSARIO | CONSENTIMENTO_NECESSARIO | sim |

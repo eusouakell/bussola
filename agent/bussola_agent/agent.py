@@ -15,9 +15,11 @@
   ================  =====  ==============================================
   fase              ordem  função
   ================  =====  ==============================================
+  ``before_model``  30     ferramenta obrigatória após o "sim" do cliente
   ``before_tool``   10     escopo da sessão (``enforce_scope``)
   ``after_tool``    10     jornada e fontes (``record_tool_result``)
   ``after_model``   50     verificação de números (``check_numbers``)
+  ``after_model``   60     ação afirmada sem ferramenta no turno
   ``after_model``   90     ``tag``/``recomendado``, depois respostas rápidas
   ================  =====  ==============================================
 
@@ -40,7 +42,13 @@ from google.genai import types
 
 from bussola_agent import callbacks, escopo, prompts
 from bussola_agent.extensoes import carregar_extensoes, ferramentas, instrucoes
-from bussola_agent.jornada import annotations, number_check, respostas_rapidas
+from bussola_agent.jornada import (
+    action_claims,
+    annotations,
+    number_check,
+    respostas_rapidas,
+    tool_forcing,
+)
 from bussola_agent.jornada.tools import escolher_cenario, registrar_objetivo
 from bussola_agent.logging_json import configurar_logging
 from bussola_agent.mcp_conexao import criar_toolset
@@ -95,9 +103,11 @@ def configuracao_geracao() -> types.GenerateContentConfig:
 
 def registrar_callbacks() -> None:
     """Cadeias do 004 no registro de :mod:`bussola_agent.callbacks`."""
+    callbacks.registrar("before_model", tool_forcing.force_authorized_action, tool_forcing.ORDER)
     callbacks.registrar("before_tool", escopo.enforce_scope, escopo.ORDER)
     callbacks.registrar("after_tool", escopo.record_tool_result, escopo.ORDER)
     callbacks.registrar("after_model", number_check.check_numbers, number_check.ORDER)
+    callbacks.registrar("after_model", action_claims.check_action_claims, action_claims.ORDER)
     # Mesma ordem: as anotações rodam antes das respostas rápidas.
     callbacks.registrar("after_model", annotations.annotate, annotations.ORDER)
     callbacks.registrar("after_model", respostas_rapidas.anexar, respostas_rapidas.ORDEM)

@@ -16,7 +16,8 @@ quick replies, writes ``guardrail_bloqueio`` and logs without the text.
 final message while a consent request is pending.
 
 Reasons (front contract): ``outro_cliente``, ``ignorar_instrucoes``,
-``infra``, ``promessa_credito``, ``compartilhar_dados``, ``fora_do_escopo``.
+``infra``, ``promessa_credito``, ``compartilhar_dados``, ``fora_do_escopo``,
+``atividade_ilicita``.
 """
 
 import os
@@ -49,6 +50,7 @@ INFRA = "infra"
 CREDIT_PROMISE = "promessa_credito"
 SHARE_DATA = "compartilhar_dados"
 OUT_OF_SCOPE = "fora_do_escopo"
+ILLICIT_ACTIVITY = "atividade_ilicita"
 REASONS: tuple[str, ...] = (
     OTHER_CUSTOMER,
     IGNORE_INSTRUCTIONS,
@@ -56,6 +58,7 @@ REASONS: tuple[str, ...] = (
     CREDIT_PROMISE,
     SHARE_DATA,
     OUT_OF_SCOPE,
+    ILLICIT_ACTIVITY,
 )
 
 ORIGIN_RULES = "regras"
@@ -77,6 +80,8 @@ MESSAGES: dict[str, str] = {
     CREDIT_PROMISE: "Não consigo garantir aprovação de crédito, porque isso depende de uma "
     "análise do banco. Posso simular um financiamento genérico, sem taxas, só como referência.",
     OUT_OF_SCOPE: "Não posso ajudar com isso. " + _CONTINUE,
+    ILLICIT_ACTIVITY: "Não consigo ajudar com isso. Trabalho só com objetivos financeiros "
+    "legítimos, usando os seus dados. " + _CONTINUE,
 }
 OUTPUT_MESSAGE = (
     "Não consegui montar uma resposta segura para isso, então preferi não mostrar. " + _CONTINUE
@@ -115,8 +120,28 @@ class Screener(Protocol):
 
 UUID_RE = re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.I)
 
+# Illicit activity (BUG-01b), first rule here as in the front simulator. Two
+# groups over the normalized text: terms with no legitimate use in this domain,
+# and an illicit verb next to a first-person intent. A victim's report ("fui
+# roubado", "sofri um golpe", "quero me proteger de golpe") stays out: the verbs
+# are only matched in the infinitive and "golpe" only counts next to "dar" or
+# "aplicar".
+_ILLICIT_TERMS = (
+    r"\b(trafico de (pessoas|drogas|armas|orgaos)|trafic(ar|ando)"
+    r"|lav(agem de dinheiro|ar dinheiro)|caixa dois|piramide financeira"
+    r"|esquema ponzi|soneg(ar|acao|ando)|agiotagem|estelionato|propina|suborno"
+    r"|contrabando|falsificar (documento|nota|assinatura)\w*)\b"
+)
+_ILLICIT_REQUEST = (
+    r"\b(quero|queria|gostaria|preciso|como (eu )?(posso|faco)|me ajuda a"
+    r"|plano (para|pra)|jeito de)\b[^.!?]*"
+    r"\b(roubar|assaltar|furtar|fraudar|(dar|aplicar) um golpe|sequestrar"
+    r"|enganar o (banco|fisco|leao))\b"
+)
+
 # Input rules, in the order of the front simulator (web/src/simulado).
 _INPUT_RULES: tuple[tuple[str, re.Pattern[str]], ...] = (
+    (ILLICIT_ACTIVITY, re.compile(f"{_ILLICIT_TERMS}|{_ILLICIT_REQUEST}")),
     (
         IGNORE_INSTRUCTIONS,
         re.compile(

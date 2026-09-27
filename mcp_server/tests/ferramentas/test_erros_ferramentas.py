@@ -268,12 +268,16 @@ async def test_prazo_calculado_acima_de_360_vira_prazo_implausivel(fixtures_sint
 
 
 @pytest.mark.parametrize("ferramenta", [*GOLDEN_P0, "resumo_mes"])
-async def test_controle_sem_golden_da_dados_insuficientes(fixtures_sinteticas, ferramenta):
-    """Decisão D-06: só o âncora tem golden enquanto o 001 não chega."""
+async def test_controle_sem_golden_e_calculado_pelo_dominio(fixtures_sinteticas, ferramenta):
+    """BUG-05: só o âncora tem golden, mas não ter golden não é não ter histórico.
+
+    A decisão D-06 (``DADOS_INSUFICIENTES`` para quem não é o âncora) fazia o
+    cliente de controle parecer sem dados. Agora o cálculo cai no domínio.
+    """
     envelope = await _codigo_de(
         fixtures_sinteticas, ferramenta, argumentos(ferramenta, id_usuario=ID_CONTROLE)
     )
-    _assert_erro(envelope, CodigoErro.DADOS_INSUFICIENTES)
+    assert "erro" not in envelope, envelope
 
 
 @pytest.mark.parametrize("ferramenta", [*GOLDEN_P0, "resumo_mes", "referencia_coorte"])

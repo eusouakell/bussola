@@ -339,7 +339,6 @@ async def edge_cases(report: Report) -> None:
     cases = [
         ("Corte em 202512", plan_state(ate_anomes=202512), "FIM_DO_REPLAY", 202512),
         ("Sessão sem plano_id", plan_state(plano_id=None), "SEM_PLANO_ATIVO", PLAN_START),
-        ("Cliente de controle", plan_state(CONTROL_USER_ID), "DADOS_INSUFICIENTES", PLAN_START),
     ]
     for name, state, code, cut in cases:
         with offline_session():
@@ -351,6 +350,18 @@ async def edge_cases(report: Report) -> None:
             report.check(
                 f"{name}: texto é a mensagem da ferramenta", error.get("mensagem"), turn.text
             )
+
+    # BUG-05: o cliente de controle tem os mesmos 12 meses do âncora. Não ter
+    # envelope de exemplo gravado não é não ter histórico, então o mês é
+    # revelado como para o âncora, em vez de virar DADOS_INSUFICIENTES.
+    with offline_session():
+        chat = await build_conversation(plan_state(CONTROL_USER_ID))
+        turn = await chat.say(ADVANCE, command_router, render_tool_answer)
+        envelope = _first(turn)
+        report.check("Cliente de controle: sem erro", {}, envelope.get("erro", {}))
+        dados = envelope.get("dados") or {}
+        report.check("Cliente de controle: mês revelado", 202507, dados.get("anomes"))
+        report.check("Cliente de controle: corte avançou", 202507, turn.state["ate_anomes"])
 
     for label, governance in (("gate do 005", True), ("guarda local do 006, sem o 005", False)):
         with offline_session(governance=governance):

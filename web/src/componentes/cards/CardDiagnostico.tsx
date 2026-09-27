@@ -45,9 +45,14 @@ export function CardDiagnostico({ item }: { item: ItemCard }) {
   const saldo = obj(perfil, "saldo");
   const sobraMediana = num(capacidade, "sobra_mediana") ?? num(perfil, "sobra_mediana");
   const sobraMedia = num(capacidade, "sobra_media") ?? num(perfil, "sobra_media");
-  const faltas = [rPerfil, rCapacidade]
-    .map((r, i) => (r?.tipo === "erro" ? mensagemErro(r.codigo, i === 0 ? "perfil_financeiro" : "capacidade_poupanca") : null))
-    .filter((m): m is string => m !== null);
+  // Dedup: as duas ferramentas com o mesmo código dariam a mesma frase (BUG-05b).
+  const faltas = [
+    ...new Set(
+      [rPerfil, rCapacidade]
+        .map((r, i) => (r?.tipo === "erro" ? mensagemErro(r.codigo, i === 0 ? "perfil_financeiro" : "capacidade_poupanca") : null))
+        .filter((m): m is string => m !== null),
+    ),
+  ];
   const avisos = [...new Set([...avisosDe(rPerfil), ...avisosDe(rCapacidade)])];
   const periodo = fonteDe(rPerfil)?.periodo ?? fonteDe(rCapacidade)?.periodo;
 

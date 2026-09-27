@@ -432,8 +432,10 @@ Ordens reservadas:
 | `before_tool` | 20 | 005 | gate: ação sensível sem consentimento `aceito` é bloqueada |
 | `before_tool` / `after_tool` | 90 | 005 | auditoria |
 | `after_tool` | 10 | 004 | registra `fonte` em `ultimas_fontes` |
+| `before_model` | 30 | 004 | força a chamada da ferramenta no turno da autorização (`tool_config`) |
 | `after_model` | 10 | 005 | guardrail de saída |
 | `after_model` | 50 | 004 | verificação de números (opcional) |
+| `after_model` | 60 | 004 | detecta ação afirmada em texto sem ferramenta no turno |
 
 ### Ações do estado AGIR (ferramentas ADK locais, não MCP)
 
@@ -616,13 +618,20 @@ prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
   - `ate_anomes < 202512` recebe o golden `__ate_202506`, com um aviso de
     mock;
   - `ate_anomes = 202512` recebe o golden `__ate_202512`.
-  - usuário de `usuarios.json` que não é o âncora (o controle) recebe
-    `DADOS_INSUFICIENTES` ("O mock só tem respostas do cliente âncora."). O
-    mock nunca devolve o golden de outro cliente (Q-01 do 000);
+  - usuário de `usuarios.json` que não é o âncora (o controle) é calculado
+    pelo domínio sobre as fixtures dele, não pelo golden. O mock nunca
+    devolve o golden de outro cliente (Q-01 do 000). `DADOS_INSUFICIENTES`
+    fica reservado ao caso honesto: nenhum mês de `perfil_mensal` até o
+    corte (revisto no 009, BUG-05 — a regra anterior recusava o controle por
+    papel, mesmo com 12 meses de histórico);
   - `simular_objetivo` e `comparar_cenarios` têm golden só para a entrada
     canônica `valor_alvo=30000`, `prazo_meses=24`. O mock serve esse golden
-    para qualquer entrada válida, com o aviso "Resposta de exemplo do mock,
-    calculada para valor_alvo=30000 e prazo_meses=24." (Q-03 do 000);
+    para qualquer entrada válida, com o aviso "Exemplo desta demonstração:
+    simulação para uma meta de R$ 30.000,00 em 24 meses." (Q-03 do 000;
+    texto reescrito no 009, BUG-06 — o anterior vazava jargão interno ao
+    cliente). Os avisos de demonstração começam sempre pelo prefixo
+    `Exemplo desta demonstração:`, que o front usa para apresentá-los como
+    badge compacto em vez de alerta;
   - o golden de `oportunidades_corte` guarda até 10 itens, e o mock corta
     a lista em `top_n`;
   - arquivo de fixture ausente devolve `INDISPONIVEL` ("Dados de exemplo

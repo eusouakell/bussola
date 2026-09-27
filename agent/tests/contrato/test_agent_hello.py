@@ -21,7 +21,13 @@ from google.genai import errors, types
 import bussola_agent
 from bussola_agent import callbacks, escopo, extensoes
 from bussola_agent.estado import CHAVES
-from bussola_agent.jornada import annotations, number_check, respostas_rapidas
+from bussola_agent.jornada import (
+    action_claims,
+    annotations,
+    number_check,
+    respostas_rapidas,
+    tool_forcing,
+)
 from bussola_agent.mcp_conexao import URL_PADRAO
 from bussola_agent.resilient_model import NonStreamingModel, capacity_error_response
 
@@ -122,12 +128,13 @@ def test_callbacks_instalados(importar_de_novo: Callable[[], ModuleType]) -> Non
     assert agente.on_model_error_callback is capacity_error_response
     assert callbacks.registrados("after_model") == [
         number_check.check_numbers,
+        action_claims.check_action_claims,
         annotations.annotate,
         respostas_rapidas.anexar,
     ]
     assert callbacks.registrados("before_tool") == [escopo.enforce_scope]
     assert callbacks.registrados("after_tool") == [escopo.record_tool_result]
-    assert callbacks.registrados("before_model") == []
+    assert callbacks.registrados("before_model") == [tool_forcing.force_authorized_action]
 
 
 def test_carregar_extensoes_e_chamado(

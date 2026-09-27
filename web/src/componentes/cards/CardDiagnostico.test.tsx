@@ -65,4 +65,30 @@ describe("CardDiagnostico", () => {
     expect(nota.textContent).toContain("Tenho poucos meses de histórico");
     expect(screen.queryByRole("alert")).toBeNull();
   });
+
+  it("perfil e capacidade com o mesmo código mostram a frase uma vez só (BUG-05b)", () => {
+    const copy = "Tenho poucos meses de histórico para estimar sua sobra com segurança.";
+    render(
+      <CardDiagnostico
+        item={card(
+          { tipo: "erro", codigo: "DADOS_INSUFICIENTES" },
+          { capacidade_poupanca: { tipo: "erro", codigo: "DADOS_INSUFICIENTES" } },
+        )}
+      />,
+    );
+    expect(screen.getAllByRole("note")).toHaveLength(1);
+    expect(screen.getAllByText(copy)).toHaveLength(1);
+  });
+
+  it("aviso repetido nas duas ferramentas aparece uma vez só (BUG-05b)", () => {
+    const aviso = "Saldo ficou negativo em 2 meses do período.";
+    render(
+      <CardDiagnostico
+        item={card(envelope("perfil_financeiro__ate_202506"), {
+          capacidade_poupanca: envelope("perfil_financeiro__ate_202506"),
+        })}
+      />,
+    );
+    expect(screen.getAllByText(aviso)).toHaveLength(1);
+  });
 });

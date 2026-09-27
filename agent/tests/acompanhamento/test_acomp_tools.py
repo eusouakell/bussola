@@ -7,16 +7,20 @@ das fixtures do cliente âncora (``contracts/fixtures/``).
 
 import io
 import json
+import shutil
 import sys
 import types
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 
 import pytest
 
 from bussola_agent.acompanhamento import envelopes, ports
 from bussola_agent.acompanhamento.fakes import (
+    ANCHOR_USER_ID,
     CONTROL_USER_ID,
+    FIXTURES_DIR,
     FixtureMcp,
     FixtureMcpGateway,
     plan_state,
@@ -195,16 +199,40 @@ async def test_invalid_scope_is_rejected_before_any_call(
     assert mcp.calls == []
 
 
-async def test_mcp_errors_pass_through_and_keep_the_month() -> None:
-    result, ctx = await _advanced(user_id=CONTROL_USER_ID)
-    assert result == {
-        "erro": {
-            "codigo": "DADOS_INSUFICIENTES",
-            "mensagem": "O mock só tem respostas do cliente âncora.",
-        }
-    }
+async def test_mcp_errors_pass_through_and_keep_the_month(mcp: FixtureMcp) -> None:
+    mcp.fail_tools["resumo_mes"] = "INDISPONIVEL"
+    result, ctx = await _advanced()
+    assert _code(result) == "INDISPONIVEL"
+    assert result["erro"]["mensagem"] == "Dados de exemplo indisponíveis."
     assert ctx.state["ate_anomes"] == 202506
     assert ctx.state["acompanhamento"] == []
+
+
+async def test_a_client_without_a_recorded_golden_is_still_served(mcp: FixtureMcp) -> None:
+    """BUG-05: a persona de controle tem 12 meses; não ter golden não é não ter dados."""
+    result, ctx = await _advanced(user_id=CONTROL_USER_ID)
+    assert "erro" not in result, result
+    assert result["dados"]["anomes"] == 202507
+    assert ctx.state["ate_anomes"] == 202507
+    assert {tool for tool, _ in mcp.calls} == {"resumo_mes", "simular_objetivo"}
+    assert all(args["id_usuario"] == CONTROL_USER_ID for _, args in mcp.calls)
+
+
+async def test_no_month_until_the_cut_is_insufficient_data(tmp_path: Path) -> None:
+    """Única razão honesta de ``DADOS_INSUFICIENTES``: nenhum mês até o corte."""
+    shutil.copytree(FIXTURES_DIR, tmp_path / "fixtures")
+    perfil = tmp_path / "fixtures" / "bussola_dados" / "perfil_mensal.json"
+    linhas = json.loads(perfil.read_text(encoding="utf-8"))
+    perfil.write_text(
+        json.dumps([row for row in linhas if row["id_usuario"] != CONTROL_USER_ID]),
+        encoding="utf-8",
+    )
+    mcp = FixtureMcp(fixtures_dir=tmp_path / "fixtures")
+    scope = {"ate_anomes": 202506, "anomes": 202503}
+    assert "dados" in mcp.call("resumo_mes", {"id_usuario": ANCHOR_USER_ID, **scope})
+    recusa = mcp.call("resumo_mes", {"id_usuario": CONTROL_USER_ID, **scope})
+    assert recusa["erro"]["codigo"] == "DADOS_INSUFICIENTES"
+    assert "mock" not in recusa["erro"]["mensagem"]
 
 
 class _LeakyGateway(FixtureMcpGateway):

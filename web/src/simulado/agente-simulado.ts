@@ -3,6 +3,7 @@
 // literais; ferramentas locais saem de `locais.ts`. Sem rede e sem GCP.
 import type { Dados, EstadoSessao, EventoAdk, MetadadosBussola, Parte } from "../agente/tipos";
 import type { InicioSessao, Transporte } from "../agente/transporte";
+import { brl, meses } from "../formatacao/formatar";
 import { nomeEmFrase } from "../sessao/catalogo";
 import { detectarGuardrail, type Bloqueio } from "./guardrails";
 import { lerConsentimento, lerIntencao, type RespostaConsentimento, type TipoObjetivo } from "./intencoes";
@@ -54,6 +55,12 @@ function pad(n: number): string {
   return String(n).padStart(4, "0");
 }
 
+/** Meta intermediária num número redondo, sempre para baixo: milhar a partir de R$ 10 mil, centena abaixo disso. */
+function metaRedonda(bruto: number): number {
+  const passo = bruto >= 10000 ? 1000 : 100;
+  return Math.max(Math.floor(bruto / passo) * passo, passo);
+}
+
 /** Núcleo determinístico: texto do cliente → eventos ADK completos do turno. */
 export class MotorSimulado {
   bordas: Bordas = { e3: false, e4: false, e5: false };
@@ -66,6 +73,13 @@ export class MotorSimulado {
   private rotas: L.Rota[] = [];
   private pendente: Pendente | null = null;
   private e3Consumido = false;
+  /** Turnos seguidos fora do escopo (BUG-02) e metas seguidas fora do perfil (BUG-03). */
+  private foraDoEscopo = 0;
+  private metasForaDoPerfil = 0;
+  private avisoSimulacaoDito = false;
+  /** Diagnóstico já emitido (chave de período/bordas) e a sobra que ele trouxe. */
+  private diagnosticoEm: string | null = null;
+  private sobraConhecida: number | null = null;
   private readonly relogio: Relogio;
 
   constructor(relogio: Relogio = Date.now) {
@@ -187,6 +201,10 @@ export class MotorSimulado {
 
   private intencao(texto: string) {
     const i = lerIntencao(texto);
+    if (i.tipo === "outro") return this.foraDeEscopo();
+    this.foraDoEscopo = 0;
+    // A insistência na meta só conta em turnos seguidos falando de valores.
+    if (i.tipo !== "valores") this.metasForaDoPerfil = 0;
     switch (i.tipo) {
       case "objetivo":
         return this.objetivo(i.objetivo);
@@ -225,9 +243,24 @@ export class MotorSimulado {
         return this.novoObjetivo();
       case "ajuda":
         return this.falar(T.AJUDA, { respostas_rapidas: this.sugestoes() });
+      case "duvida_credito":
+        return this.falar(T.DUVIDA_CREDITO, { respostas_rapidas: [T.R_FINANCIAMENTO, T.R_CONTINUAR] });
       default:
-        return this.falar(T.NAO_ENTENDI, { respostas_rapidas: this.sugestoes() });
+        return this.foraDeEscopo();
     }
+  }
+
+  /** BUG-02: redireciona ao escopo, escalonando a cada turno seguido fora dele. */
+  private foraDeEscopo() {
+    this.foraDoEscopo += 1;
+    const estado = this.estado.estado_jornada ?? "OBJETIVO";
+    if (this.foraDoEscopo === 1) {
+      return this.falar(T.FORA_DO_ESCOPO_1, { respostas_rapidas: this.sugestoes() });
+    }
+    if (this.foraDoEscopo === 2) {
+      return this.falar(T.foraDoEscopo2(estado), { respostas_rapidas: [this.sugestoes()[0], T.R_AJUDA] });
+    }
+    return this.falar(T.foraDoEscopoFinal(this.foraDoEscopo), { respostas_rapidas: [T.R_AJUDA] });
   }
 
   private guardrail(b: Bloqueio) {
@@ -287,10 +320,6 @@ export class MotorSimulado {
     const atual = this.estado.objetivo ?? null;
     const valor = valorDito ?? atual?.valor_alvo ?? null;
     const prazo = prazoDito ?? atual?.prazo_meses ?? null;
-    if (valor !== null && prazo !== null && !(valor === 30000 && prazo === 24)) {
-      this.falar(T.redirecionarDemo(), { respostas_rapidas: [T.R_VALORES_DEMO] });
-      return;
-    }
     const tipo = atual?.tipo ?? "imovel";
     const descricao = atual?.descricao || T.OBJETIVOS.imovel.descricao;
     const args = { tipo, descricao, valor_alvo: valor, prazo_meses: prazo, prioridade: atual?.prioridade ?? "alta" };
@@ -313,12 +342,20 @@ export class MotorSimulado {
       });
       return;
     }
-    this.diagnosticar(true);
+    const sobra = this.diagnosticarUmaVez();
+    const necessario = L.r2(valor / prazo);
+    if (sobra !== null && necessario > sobra) {
+      this.metaAcimaDoPerfil({ valor, prazo, necessario, sobra, descricao });
+      return;
+    }
+    this.metasForaDoPerfil = 0;
+    const demo = valor === 30000 && prazo === 24;
     const [sim] = this.chamar([
       {
         nome: "simular_objetivo",
         args: this.argsMcp({ valor_alvo: valor, prazo_meses: prazo }),
-        executar: () => L.goldenAte("simular_objetivo", this.ate()),
+        // Fora da meta gravada, a simulação vem da mesma função determinística das rotas.
+        executar: () => (demo ? L.goldenAte("simular_objetivo", this.ate()) : L.simularObjetivo(valor, { prazo_meses: prazo }, this.ate())),
       },
     ]);
     if (!L.ehErro(sim)) {
@@ -326,11 +363,63 @@ export class MotorSimulado {
     }
   }
 
+  /**
+   * BUG-03: o objetivo do cliente fica registrado; aqui vem a checagem de
+   * realidade com os números dele e uma primeira etapa vinda da sobra mediana.
+   */
+  private metaAcimaDoPerfil(d: { valor: number; prazo: number; necessario: number; sobra: number; descricao: string }) {
+    this.metasForaDoPerfil += 1;
+    const intermediaria = metaRedonda(d.sobra * d.prazo);
+    const prazoLongo = Math.min(d.prazo * 2, 360);
+    const longa = metaRedonda(d.sobra * prazoLongo);
+    const texto = T.metaForaDoPerfil(
+      {
+        descricao: d.descricao,
+        valor_alvo: d.valor,
+        prazo_meses: d.prazo,
+        aporte_necessario: d.necessario,
+        sobra_mediana: d.sobra,
+        meta_intermediaria: intermediaria,
+      },
+      this.metasForaDoPerfil,
+    );
+    const respostas = [`Começar com ${brl(intermediaria)} em ${meses(d.prazo)}`];
+    if (prazoLongo > d.prazo && longa > intermediaria && longa < d.valor) {
+      respostas.push(`Alongar para ${meses(prazoLongo)} e mirar ${brl(longa)}`);
+    }
+    this.falar(texto, { tag: "simulacao", respostas_rapidas: respostas });
+    if (!this.avisoSimulacaoDito) {
+      this.avisoSimulacaoDito = true;
+      this.falar(T.AVISO_SIMULACAO_GRAVADA);
+    }
+  }
+
   private ate(): number {
     return this.estado.ate_anomes ?? L.ANOMES_INICIAL;
   }
 
-  private diagnosticar(avancarJornada: boolean) {
+  /** Devolve a sobra mediana da ferramenta (`null` quando indisponível), base da checagem de viabilidade. */
+  /** Chave do diagnóstico: muda com o período e com as bordas que alteram o resultado. */
+  private chaveDiagnostico(): string {
+    return `${this.ate()}|${this.bordas.e4}|${this.bordas.e3 && !this.e3Consumido}`;
+  }
+
+  /**
+   * BUG-03/BUG-05b: renegociar o valor não repete o mesmo diagnóstico. Na
+   * primeira vez o bloco sai inteiro; depois só reaproveita a sobra já lida e
+   * recoloca a jornada em ANTECIPAR (o `registrar_objetivo` a devolveu a
+   * ENTENDER).
+   */
+  private diagnosticarUmaVez(): number | null {
+    const chave = this.chaveDiagnostico();
+    if (this.diagnosticoEm === chave) {
+      this.delta({ estado_jornada: "ANTECIPAR" });
+      return this.sobraConhecida;
+    }
+    return this.diagnosticar(true);
+  }
+
+  private diagnosticar(avancarJornada: boolean): number | null {
     const e3 = this.bordas.e3 && !this.e3Consumido;
     const e4 = this.bordas.e4;
     const executar = (nome: string) => (): L.Resultado => {
@@ -347,18 +436,22 @@ export class MotorSimulado {
     );
     const dados = (r: L.Resultado) => (L.ehErro(r) ? null : r.dados);
     const p = dados(perfil);
+    const sobra = dados(capacidade)?.sobra_mediana as number | undefined;
     const fonte = L.ehErro(perfil) ? null : perfil.fonte.periodo;
     this.falar(
       T.diagnostico({
         periodo: fonte ?? { inicio: 202501, fim: this.ate() },
         renda_media: p?.renda_media as number | undefined,
-        sobra_mediana: dados(capacidade)?.sobra_mediana as number | undefined,
+        sobra_mediana: sobra,
         comprometimento: dados(dividas)?.comprometimento_renda_pct as number | undefined,
         e3,
         e4,
       }),
       { tag: "diagnostico" },
     );
+    this.diagnosticoEm = this.chaveDiagnostico();
+    this.sobraConhecida = typeof sobra === "number" ? sobra : null;
+    return this.sobraConhecida;
   }
 
   private rediagnosticar() {

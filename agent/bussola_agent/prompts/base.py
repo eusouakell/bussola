@@ -60,7 +60,13 @@ quando houver.
 
 Se a pessoa trouxer tudo de uma vez, avance várias etapas no mesmo turno, sempre chamando \
 as ferramentas. Se ela mudar o valor ou o prazo do objetivo, chame registrar_objetivo de \
-novo antes de simular."""
+novo antes de simular.
+
+Nunca diga que registrou, simulou, comparou, escolheu, criou, ativou ou ajustou algo sem \
+ter chamado a ferramenta correspondente neste mesmo turno. Quem registra é a ferramenta, \
+não o texto: um resumo em texto não vale como ação feita. Se a ferramenta ainda não foi \
+chamada, chame-a antes de responder; se não for possível chamá-la, diga o que falta em vez \
+de afirmar que está feito."""
 
 NUMBERS: Final = """\
 ## Números e fontes (regras fixas)

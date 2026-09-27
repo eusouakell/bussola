@@ -16,8 +16,9 @@ Desenho:
   perder o streaming por token é aceitável: o front fecha a mensagem no evento
   sem ``partial`` (``specs/008-front-web/contracts/eventos-agente.md`` §2).
 - :func:`capacity_error_response` é o ``on_model_error_callback`` do agente:
-  quando todos os modelos se esgotam por capacidade, troca o erro por uma
-  mensagem em pt-BR, sem detalhe interno.
+  quando todos os modelos se esgotam por capacidade, troca o erro por
+  :data:`CAPACITY_MESSAGE`, em pt-BR, sem detalhe interno e sem transferir ao
+  cliente a razão técnica da espera.
 """
 
 from collections.abc import AsyncGenerator, AsyncIterator, Sequence
@@ -33,8 +34,18 @@ from bussola_agent.logging_json import obter_logger
 CAPACITY_STATUS_CODES: frozenset[int] = FallbackModel.DEFAULT_STATUS_CODES
 """429 e 5xx: os mesmos códigos com que o ``FallbackModel`` passa ao próximo modelo."""
 
-CAPACITY_MESSAGE = "O serviço de IA está com alta demanda agora. Tente de novo em alguns segundos."
-"""Texto ao cliente quando nenhum modelo da cadeia conseguiu responder."""
+CAPACITY_MESSAGE = (
+    "Preciso de mais alguns segundos para te responder direito — prefiro isso a te "
+    "dar uma resposta pela metade. Me chame de novo daqui a pouco que eu retomo "
+    "exatamente de onde paramos."
+)
+"""Texto ao cliente quando nenhum modelo da cadeia conseguiu responder.
+
+Chega ao front como texto normal do agente, no balão da mensagem, não como
+aviso nem como erro. A mensagem assume a responsabilidade, não culpa volume de
+uso nem o cliente, e promete continuidade: o ``session.state`` fica intacto, o
+turno seguinte retoma a mesma sessão.
+"""
 
 _log = obter_logger(__name__)
 

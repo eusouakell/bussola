@@ -23,7 +23,25 @@ export function normalizar(texto: string): string {
 const CONTINUAR = "Quer continuar o plano do apartamento?";
 const RESPOSTAS_CONTINUAR = ["Continuar o plano", "O que você pode fazer?"];
 
+// BUG-01: atividade ilícita. Dois grupos, sobre o texto já normalizado:
+// (a) termos sem uso legítimo neste domínio; (b) verbo ilícito com intenção em
+// primeira pessoa. Relato de vítima ("fui roubado", "sofri um golpe") fica de
+// fora: os verbos são pedidos no infinitivo e "golpe" só conta com "dar/aplicar".
+const TERMOS_ILICITOS =
+  /\b(trafico de (pessoas|drogas|armas|orgaos)|trafic(ar|ando)|lav(agem de dinheiro|ar dinheiro)|caixa dois|piramide financeira|esquema ponzi|soneg(ar|acao|ando)|agiotagem|estelionato|propina|suborno|contrabando|falsificar (documento|nota|assinatura)\w*)\b/;
+
+const PEDIDO_ILICITO =
+  /\b(quero|queria|gostaria|preciso|como (eu )?(posso|faco)|me ajuda a|plano (para|pra)|jeito de)\b[^.!?]*\b(roubar|assaltar|furtar|fraudar|(dar|aplicar) um golpe|sequestrar|enganar o (banco|fisco|leao))\b/;
+
 const REGRAS: { motivo: MotivoGuardrail; padrao: RegExp; texto: string; respostas: string[]; alerta: boolean }[] = [
+  {
+    motivo: "atividade_ilicita",
+    padrao: new RegExp(`${TERMOS_ILICITOS.source}|${PEDIDO_ILICITO.source}`),
+    texto:
+      "Não consigo ajudar com isso. Trabalho só com objetivos financeiros legítimos, usando os seus dados. Se quiser, seguimos com o seu plano.",
+    respostas: RESPOSTAS_CONTINUAR,
+    alerta: true,
+  },
   {
     motivo: "ignorar_instrucoes",
     padrao:

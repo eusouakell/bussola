@@ -59,7 +59,7 @@ async def test_uma_linha_por_chamada_com_os_campos_de_9(fixtures_sinteticas):
     "ferramenta, args, codigo_esperado",
     [
         ("perfil_financeiro", {"id_usuario": UUID_DESCONHECIDO}, "USUARIO_INEXISTENTE"),
-        ("capacidade_poupanca", {"id_usuario": ID_CONTROLE}, "DADOS_INSUFICIENTES"),
+        ("referencia_coorte", {"categoria": "Categoria que não existe"}, "DADOS_INSUFICIENTES"),
         ("comparar_cenarios", {"prazo_meses": 361}, "PRAZO_IMPLAUSIVEL"),
     ],
 )

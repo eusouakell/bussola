@@ -26,6 +26,7 @@ export const R_FINANCIAMENTO = "Simular um financiamento";
 export const R_CONTINUAR = "Continuar o plano";
 export const R_SIM = "Sim, autorizo";
 export const R_NAO = "Agora não";
+export const R_AJUDA = "O que você pode fazer?";
 
 export const OBJETIVOS: Record<Exclude<TipoObjetivo, "dividas">, { descricao: string; frase: string }> = {
   imovel: { descricao: "Primeiro apartamento", frase: "seu primeiro apartamento" },
@@ -42,9 +43,70 @@ export const SEM_VALOR =
 
 export const SO_VALOR = "Anotei o valor. E em quanto tempo você quer chegar lá?";
 
-export function redirecionarDemo(): string {
-  return "Nesta demonstração, os cálculos estão gravados para uma meta de R$ 30 mil em 24 meses. Vamos seguir com esse exemplo?";
+/** Linha secundária, dita uma única vez: a simulação detalhada é a da demonstração. */
+export const AVISO_SIMULACAO_GRAVADA =
+  "Nesta demonstração, a simulação detalhada está gravada para R$ 30 mil em 24 meses.";
+
+interface MetaForaDoPerfil {
+  descricao: string;
+  valor_alvo: number;
+  prazo_meses: number;
+  aporte_necessario: number;
+  sobra_mediana: number;
+  meta_intermediaria: number;
 }
+
+/**
+ * BUG-03: meta acima do perfil. Reconhece o objetivo, mostra os números do
+ * cliente e propõe uma primeira etapa. `tentativa` muda o texto quando ele
+ * insiste: o sonho vira destino final e a meta possível vira degrau.
+ */
+export function metaForaDoPerfil(d: MetaForaDoPerfil, tentativa: number): string {
+  const conta = `${brl(d.valor_alvo)} em ${meses(d.prazo_meses)} pedem ${brl(d.aporte_necessario)} por mês, e o que costuma sobrar no seu mês é ${brl(d.sobra_mediana)}`;
+  const etapa = `${brl(d.meta_intermediaria)} em ${meses(d.prazo_meses)}`;
+  if (tentativa <= 1) {
+    return `Anotei o seu objetivo: ${d.descricao}, ${brl(d.valor_alvo)} em ${meses(d.prazo_meses)}. O plano para chegar nesse tamanho é complexo: ${conta}. Minha sugestão é focar primeiro numa meta que cabe no seu perfil, de ${etapa}. Depois dela, a gente aumenta o objetivo e chega mais perto do seu sonho — assim você tem mais chance de avançar de verdade.`;
+  }
+  const variantes = [
+    `Seu destino final continua anotado: ${d.descricao}, ${brl(d.valor_alvo)}. A conta é que não fecha hoje: ${conta}. Então vamos por etapas, e a primeira é ${etapa}, no seu ritmo. Com ela de pé, subimos o objetivo um degrau, e depois outro, até chegar perto do que você quer.`,
+    `Entendo a vontade, e ela segue no mapa como destino final. Só que os números do seu mês são estes: ${conta}. Por isso eu insisto na primeira etapa de ${etapa}: é dela que sai o próximo degrau em direção ao seu objetivo maior.`,
+  ];
+  return variantes[(tentativa - 2) % variantes.length];
+}
+
+/** BUG-02: assunto fora do escopo, com resposta que escalona a cada turno seguido. */
+export const FORA_DO_ESCOPO_1 =
+  "Essa eu não sei responder. Eu cuido do seu objetivo financeiro: monto um plano, comparo caminhos e acompanho mês a mês. Por onde você quer começar?";
+
+const FORA_DO_ESCOPO_2: Record<EstadoJornada, string> = {
+  OBJETIVO:
+    "Continuo fora do meu assunto, então deixo o convite mais direto: me diga o que você quer conquistar — um apartamento, uma viagem, uma pós — ou peça para eu olhar suas dívidas.",
+  ENTENDER:
+    "Esse tema não é meu. O que eu preciso de você é o tamanho da meta e o prazo, por exemplo R$ 30 mil em 2 anos. Com isso eu já monto a conta.",
+  ANTECIPAR:
+    "Isso foge do que eu faço. Daqui, o que ajuda é ver os caminhos possíveis para a sua meta, ou você me dizer quanto consegue guardar por mês.",
+  ORIENTAR:
+    "Esse assunto não é comigo. Do que está na mesa, eu posso seguir com um dos caminhos que te mostrei ou desenhar outro com o valor que couber no seu mês.",
+  AGIR: "Fora do meu assunto de novo. O que eu tenho para agora é avançar um mês do seu plano ou ativar os lembretes mensais.",
+  ACOMPANHAR: "Isso eu não cubro. No seu plano, eu posso avançar mais um mês ou mostrar o status do que você já acumulou.",
+};
+
+export function foraDoEscopo2(estado: EstadoJornada): string {
+  return FORA_DO_ESCOPO_2[estado];
+}
+
+const FORA_DO_ESCOPO_FINAL = [
+  "Vou ficar no que faço bem, que é o seu plano. Para outros assuntos, o app do Itaú tem os canais de atendimento. Quando quiser, é só me dizer o seu objetivo.",
+  "Sigo por aqui, à sua disposição para o seu plano. Os outros temas ficam melhor com o atendimento do app do Itaú. Quando você quiser retomar a meta, eu continuo aqui.",
+];
+
+/** Terceira vez em diante: encerra o assunto e aponta o atendimento humano, sem repetir a frase. */
+export function foraDoEscopoFinal(vez: number): string {
+  return FORA_DO_ESCOPO_FINAL[(vez - 3) % FORA_DO_ESCOPO_FINAL.length];
+}
+
+export const DUVIDA_CREDITO =
+  "Sobre crédito eu não negocio nem antecipo condições: taxa, prazo e limite saem da análise do banco. O que eu consigo fazer é simular um financiamento genérico, sem taxas, só como referência. Quer que eu faça isso?";
 
 export function diagnostico(d: {
   periodo: { inicio: number; fim: number };
