@@ -102,10 +102,14 @@ A passagem para AGIR fica pronta para o 005 plugar o consentimento.
 - **D-03** Em AGIR e ACOMPANHAR a máquina do 004 não avança sozinha (005 e
   006 são donos dessas transições).
 - **D-04** Verificador de números: evidência = resultados de ferramenta do
-  turno, números ditos pelo cliente na sessão e o `objetivo` registrado;
-  formas derivadas (fração → %, AAAAMM → ano, meses múltiplos de 12 → anos);
-  arredondamento a 2, 1 ou 0 casas, e a "mil" conforme as casas usadas;
-  inteiros soltos de 0 a 10 ficam isentos.
+  turno (invocação atual, inclusive números dentro de textos), números ditos
+  pelo cliente na sessão, o `objetivo` registrado e o `ate_anomes`; formas
+  derivadas (fração → %, AAAAMM → ano e mês, meses múltiplos de 12 → anos,
+  "N mil", "N anos"); tolerância de formatação = arredondamento ou
+  truncamento na última casa mostrada (691,6 → 692 e 1901,47 → 1901 passam;
+  54,01 → 55 não); inteiros soltos de 0 a 10 ficam isentos. O rodapé de
+  fonte só entra quando alguma ferramenta MCP respondeu no turno e o texto
+  não cita "Fonte".
 - **D-05** Catálogo embutido em `prompts/` porque a imagem do agente copia só
   `agent/`; teste garante igualdade com `contracts/catalogo_produtos.json`.
 - **D-06** Resultado do eval em `eval/agente/RESULTADOS.md` (nome pedido pelo

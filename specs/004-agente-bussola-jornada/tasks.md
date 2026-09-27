@@ -34,8 +34,8 @@ Legenda: `[x]` feito, `[ ]` pendente. Commits pequenos (`agent:`, `eval:`,
 
 ## Fase 5: resposta final
 
-- [ ] T040 `jornada/number_check.py` (FR-014) + testes.
-- [ ] T041 `jornada/annotations.py` (FR-016) + testes.
+- [x] T040 `jornada/number_check.py` (FR-014) + testes.
+- [x] T041 `jornada/annotations.py` (FR-016) + testes.
 - [ ] T042 `jornada/respostas_rapidas.py` por jornada (FR-015) + testes.
 
 ## Fase 6: agente
