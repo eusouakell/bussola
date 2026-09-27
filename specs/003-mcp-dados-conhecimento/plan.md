@@ -52,7 +52,8 @@ ferramentas/__init__.register_all(server, deps)
 
 ```text
 mcp_server/bussola_mcp/
-├── server.py                    # create_server, build_dependencies, main (CLI igual ao mock)
+├── server.py                    # create_server, build_dependencies, main (CLI igual ao mock),
+│                                # criar_servidor (alias da API do mock do 000)
 └── ferramentas/
     ├── __init__.py              # TOOL_MODULES, register_all
     ├── ports.py                 # Computation, DomainError, BackendUnavailable,
@@ -62,13 +63,27 @@ mcp_server/bussola_mcp/
     ├── golden_adapter.py        # GoldenFixtureComputations (provisório, D-03..D-06)
     ├── fixture_backends.py      # FixtureRepository, FixtureSearcher (fakes + INDISPONIVEL)
     ├── perfil_financeiro.py … referencia_coorte.py   # 9 módulos: NAME, compute, register
-mcp_server/tests/ferramentas/
-    ├── conftest.py, apoio.py    # cliente em memória, helpers
-    ├── test_contrato_golden.py  test_schema.py  test_erros.py  test_escopo.py
-    ├── test_busca.py  test_seguranca_saidas.py  test_logs.py  test_runner.py
-    ├── test_golden_adapter.py  test_fabrica.py  test_http.py  test_simulacao_coerencia.py
-    └── test_bq.py               # @pytest.mark.bq
+mcp_server/tests/ferramentas/   # sem __init__.py: nomes de arquivo únicos no projeto
+    ├── apoio_ferramentas.py        # sessão em memória, chamar(), espiões e dublês das portas
+    ├── test_schema_ferramentas.py  # list_tools ↔ §5 (cliente MCP em memória)
+    ├── test_contrato_golden.py     # golden × corte, §7, truncamento, entrada não canônica
+    ├── test_erros_ferramentas.py   # 5 códigos × ferramentas aplicáveis, precedência
+    ├── test_escopo_ferramentas.py  # id de controle, espião do repositório e do buscador
+    ├── test_busca_conhecimento.py  # tema, k, lista vazia, fonte.url, corpus oficial
+    ├── test_seguranca_saidas.py    # varredura SELECT / batalha-time-07 / googleapis / Bearer
+    ├── test_logs_ferramentas.py    # campos de §9, nunca pergunta, textos ou ids
+    ├── test_runner_ferramentas.py  # ToolRunner e is_implausible_term (unitário)
+    ├── test_golden_adapter.py      # GoldenFixtureComputations (unitário)
+    ├── test_fabrica_dependencias.py # fakes, modo real com módulos injetados, fallback, CLI
+    ├── test_http_servidor.py       # subprocess em streamable HTTP; equivalente a make mcp
+    ├── test_simulacao_coerencia.py # importorskip de dominio/simulacao (001)
+    └── test_bq_ferramentas.py      # @pytest.mark.bq, importorskip de repositorio_bq (001)
 ```
+
+`criar_servidor(dir_fixtures, *, host, port)` continua exportado como alias
+de `create_server` para quem usava a API do mock (ciclos em paralelo).
+`test_mock_servidor.py` e `test_mock_http.py` (000) saem; a cobertura está
+acima (D-07).
 
 ### Fábrica de dependências (`server.build_dependencies`)
 
@@ -100,16 +115,27 @@ Arquivo: `mcp_server/bussola_mcp/ferramentas/computations.py`.
 2. Em `build_computations(repository, fixtures_dir)`, devolver
    `DomainComputations(repository)` no lugar de `GoldenFixtureComputations(...)`.
 
-Nada muda em `server.py`, nos módulos de ferramenta nem nos testes de
-contrato: eles comparam com os golden oficiais, que o 001 também precisa
-reproduzir. `golden_adapter.py` e `test_golden_adapter.py` podem sair no mesmo
-PR. `test_simulacao_coerencia.py` passa a rodar (hoje é `importorskip`).
+Nada muda em `server.py`, nos módulos de ferramenta nem nos testes:
+
+- os testes que passam pela fábrica comparam com os golden **oficiais**
+  (`test_contrato_golden.py`, `test_http_servidor.py`), que o 001 precisa
+  reproduzir, ou só conferem regras válidas para qualquer adaptador (escopo,
+  varredura, schema, busca);
+- os testes das regras próprias do adaptador provisório (D-04 a D-06: corte
+  intermediário, entrada não canônica, controle sem golden, corte < 202506)
+  usam `apoio_ferramentas.deps_golden()`, que injeta `GoldenFixtureComputations`
+  explicitamente, e seguem verdes;
+- `test_simulacao_coerencia.py` e `test_bq_ferramentas.py` passam a rodar
+  (hoje são `importorskip`).
+
+Opcional, num PR seguinte: apagar `golden_adapter.py`, `deps_golden`,
+`test_golden_adapter.py` e os testes marcados "Decisão D-04/D-05/D-06".
 
 ## Após o merge do 002
 
 Nenhuma mudança de código. Com `BUSSOLA_FAKES` desligado, a fábrica passa a
 importar `bussola_mcp.rag.criar_buscador(RAG_BACKEND)` e o aviso
-`dependencia_ausente` some. `test_fabrica.py` já cobre esse caminho com um
+`dependencia_ausente` some. `test_fabrica_dependencias.py` já cobre esse caminho com um
 módulo `bussola_mcp.rag` injetado.
 
 ## Riscos e decisões
@@ -118,5 +144,8 @@ módulo `bussola_mcp.rag` injetado.
   nomeado). Mitigação: a chamada fica isolada em `_real_repository()`.
 - **R-02:** `referencia_coorte` não tem coluna de mês; o corte não se aplica.
   `fonte.periodo` = primeiro mês do cliente → corte. Registrado para o 001.
+  No adaptador de golden não há golden dessa ferramenta: ele só consulta as
+  linhas de `repository.referencia_coorte(faixa)` com a `faixa_renda` de
+  `usuarios.json` (busca sem acento e sem caixa pela `macro`, sem cálculo).
 - **R-03:** o 000 publicou 8 ferramentas; o agente lista 8
   (`FERRAMENTAS_MCP`). O servidor expõe 9; o filtro do agente decide quais usa.
