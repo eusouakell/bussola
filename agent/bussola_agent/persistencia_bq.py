@@ -1,11 +1,18 @@
 """``RegistroBigQuery``: :class:`RegistroApp` over BigQuery streaming insert (005).
 
 - Rows come from ``model.model_dump(mode="json")`` and go to
-  ``{GOOGLE_CLOUD_PROJECT}.{BQ_DATASET_APP}.{tabela}`` through
-  ``insert_rows_json``. No SQL is built from text: the only query
-  (:data:`PLAN_QUERY`, in :meth:`RegistroBigQuery.obter_plano`) is a constant
-  that takes ``@plano_id`` as a parameter and reads the dataset from the job's
-  ``default_dataset``. Project and dataset names are validated first.
+  ``{GOOGLE_CLOUD_PROJECT}.{BQ_DATASET_APP}.{tabela}``.
+- ``planos`` is written by :data:`PLAN_INSERT`, a parameterized ``INSERT``
+  running as a query job, because a plan is read back in a later turn:
+  a query job is visible to the next query, while a streaming row sits in the
+  write buffer first. This makes ``registrar_plano`` need
+  ``bigquery.jobUser`` — the same role ``obter_plano`` already needs.
+- ``consentimentos``, ``auditoria`` and ``acompanhamento`` keep
+  ``insert_rows_json``: they are append-only and never read back here.
+- No SQL is built from text. Both statements (:data:`PLAN_INSERT` and
+  :data:`PLAN_QUERY`) are constants that only take parameters and read the
+  dataset from the job's ``default_dataset``. Project and dataset names are
+  validated first.
 - The BigQuery client is a port (:class:`BigQueryClient`, the subset of
   ``google.cloud.bigquery.Client`` used here). It is created on first use,
   so importing or building the registry never opens the network.
@@ -60,7 +67,13 @@ PLAN_COLUMNS: tuple[str, ...] = (
     "ate_anomes",
     "criado_em",
 )
-# The only query. ``planos`` resolves against the job's ``default_dataset``.
+# The two statements. ``planos`` resolves against the job's ``default_dataset``.
+PLAN_INSERT = (
+    "INSERT INTO planos (plano_id, session_id, id_usuario, objetivo, valor_alvo, "
+    "prazo_meses, cenario, aporte_mensal, ate_anomes, criado_em) "
+    "VALUES (@plano_id, @session_id, @id_usuario, @objetivo, @valor_alvo, "
+    "@prazo_meses, @cenario, @aporte_mensal, @ate_anomes, @criado_em)"
+)
 PLAN_QUERY = (
     "SELECT plano_id, session_id, id_usuario, objetivo, valor_alvo, prazo_meses, cenario, "
     "aporte_mensal, ate_anomes, criado_em FROM planos "
@@ -95,6 +108,34 @@ def _default_client_factory(project: str) -> BigQueryClient:
     return bigquery.Client(project=project)
 
 
+# BigQuery type of each column of ``planos``, in ``PLAN_COLUMNS`` order.
+PLAN_PARAM_TYPES: tuple[str, ...] = (
+    "STRING",  # plano_id
+    "STRING",  # session_id
+    "STRING",  # id_usuario
+    "STRING",  # objetivo
+    "FLOAT64",  # valor_alvo
+    "INT64",  # prazo_meses
+    "STRING",  # cenario
+    "FLOAT64",  # aporte_mensal
+    "INT64",  # ate_anomes
+    "TIMESTAMP",  # criado_em
+)
+
+
+def _plan_insert_config(project: str, dataset: str, plano: Plano) -> Any:
+    """Job config of :data:`PLAN_INSERT`: one typed parameter per column."""
+    from google.cloud import bigquery
+
+    return bigquery.QueryJobConfig(
+        default_dataset=bigquery.DatasetReference(project, dataset),
+        query_parameters=[
+            bigquery.ScalarQueryParameter(coluna, tipo, getattr(plano, coluna))
+            for coluna, tipo in zip(PLAN_COLUMNS, PLAN_PARAM_TYPES, strict=True)
+        ],
+    )
+
+
 def _plan_query_config(project: str, dataset: str, plano_id: str) -> Any:
     from google.cloud import bigquery
 
@@ -114,6 +155,7 @@ class RegistroBigQuery:
         dataset: str | None = None,
         client_factory: Callable[[str], BigQueryClient] = _default_client_factory,
         query_config_factory: Callable[[str, str, str], Any] = _plan_query_config,
+        insert_config_factory: Callable[[str, str, Plano], Any] = _plan_insert_config,
     ) -> None:
         project = project or projeto_gcp()
         dataset = dataset or dataset_app()
@@ -126,9 +168,11 @@ class RegistroBigQuery:
         self._client = client
         self._client_factory = client_factory
         self._query_config_factory = query_config_factory
+        self._insert_config_factory = insert_config_factory
         self._lock = threading.Lock()
-        # Plans written by this process: ``obter_plano`` works without
-        # ``bigquery.jobUser`` (Plano B) and right after the insert.
+        # Plans written by this process, to spare ``obter_plano`` a query job.
+        # Only a cache: ``PLAN_INSERT`` already leaves the row readable, so
+        # losing it (a new instance, a restart) costs latency, not the plan.
         self._plans: dict[str, Plano] = {}
 
     # -- infrastructure ---------------------------------------------------
@@ -159,9 +203,15 @@ class RegistroBigQuery:
     # -- RegistroApp ------------------------------------------------------
 
     def registrar_plano(self, plano: Plano) -> str:
+        """Writes one row per plan version and leaves it readable right away."""
         _require(plano, Plano)
-        # A plan may get new versions (006 adjusts it): the insert id is per version.
-        self._insert("planos", plano, f"{plano.plano_id}:{plano.criado_em.isoformat()}")
+        # A plan may get new versions (006 adjusts it): every version is a row
+        # and ``obter_plano`` takes the newest by ``criado_em``.
+        config = self._insert_config_factory(self.project, self.dataset, plano)
+        try:
+            self._get_client().query(PLAN_INSERT, job_config=config).result()
+        except Exception as exc:
+            raise RegistryWriteError("Falha ao gravar em planos.") from exc
         self._plans[plano.plano_id] = plano.model_copy(deep=True)
         return plano.plano_id
 

@@ -5,9 +5,10 @@ import { AgenteSimulado } from "../simulado/agente-simulado";
 import { ClienteAdk } from "./cliente-adk";
 import { SEM_BORDAS, type Bordas, type Modo, type Transporte } from "./transporte";
 
-export function criarTransporte(modo: Modo, bordas: Bordas = SEM_BORDAS): Transporte {
+/** `usuario` separa a conversa lembrada por persona logada no BFF. */
+export function criarTransporte(modo: Modo, bordas: Bordas = SEM_BORDAS, usuario: string = CONFIG.usuarioAdk): Transporte {
   if (modo === "ao-vivo") {
-    return new ClienteAdk({ app: CONFIG.app, usuario: CONFIG.usuarioAdk, base: CONFIG.baseApi });
+    return new ClienteAdk({ app: CONFIG.app, usuario, base: CONFIG.baseApi });
   }
   const simulado = new AgenteSimulado({ parciais: true, atrasoMs: CONFIG.atrasoSimuladoMs });
   simulado.configurarBordas(bordas);

@@ -116,7 +116,6 @@ export function loadConfig(env: NodeJS.ProcessEnv, defaults: { usersFixture: str
     sessionPolicy: {
       idleTtlMs: positivo(env.AUTH_SESSION_IDLE_TTL_MS, 30 * MINUTO, "AUTH_SESSION_IDLE_TTL_MS"),
       absoluteTtlMs: positivo(env.AUTH_SESSION_TTL_MS, 8 * 60 * MINUTO, "AUTH_SESSION_TTL_MS"),
-      maxAgentSessions: positivo(env.AGENT_MAX_SESSIONS, 20, "AGENT_MAX_SESSIONS"),
     },
     maxSessions: positivo(env.AUTH_MAX_SESSIONS, 500, "AUTH_MAX_SESSIONS"),
     rateLimit: {

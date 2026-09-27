@@ -16,7 +16,7 @@ import {
 } from "./modelo";
 
 export type AcaoSessao =
-  | { tipo: "iniciada"; estado: EstadoSessao; eventos: EventoAdk[]; agora: number }
+  | { tipo: "iniciada"; estado: EstadoSessao; eventos: EventoAdk[]; agora: number; retomada?: boolean }
   | { tipo: "enviada"; texto: string; agora: number }
   | { tipo: "evento"; evento: EventoAdk; agora: number }
   | { tipo: "turno_fim"; estado?: EstadoSessao | null; agora: number }
@@ -175,12 +175,33 @@ function ultimoAgenteDoTurno(r: Rascunho): number {
   return -1;
 }
 
-function aplicarEvento(m: ModeloSessao, e: EventoAdk, agora: number): ModeloSessao {
+/**
+ * Mensagem do cliente vinda do histórico. Ao vivo o item já foi criado pelo
+ * "enviada"; numa conversa retomada ele só existe neste evento.
+ */
+function retomarMensagemDoCliente(m: ModeloSessao, e: EventoAdk, agora: number): ModeloSessao {
+  const texto = (e.content?.parts ?? [])
+    .filter((p) => typeof p.text === "string" && !p.thought)
+    .map((p) => p.text as string)
+    .join("");
+  if (!texto) return m;
+  const r = new Rascunho(m);
+  r.m.turno += 1;
+  r.m.itens.push({
+    tipo: "mensagem_cliente",
+    chave: r.chave(),
+    ts: typeof e.timestamp === "number" ? e.timestamp * 1000 : agora,
+    texto,
+  });
+  return r.m;
+}
+
+function aplicarEvento(m: ModeloSessao, e: EventoAdk, agora: number, retomada = false): ModeloSessao {
   if (e.error) {
     const ultimaDoCliente = m.itens.findLast((i) => i.tipo === "mensagem_cliente");
     return falha(m, "Não consegui falar com a Bússola agora.", ultimaDoCliente?.texto, agora);
   }
-  if (e.author === "user") return m;
+  if (e.author === "user") return retomada ? retomarMensagemDoCliente(m, e, agora) : m;
   const r = new Rascunho(m);
   const ts = typeof e.timestamp === "number" ? e.timestamp * 1000 : agora;
   const partes = e.content?.parts ?? [];
@@ -344,7 +365,10 @@ export function reducerSessao(m: ModeloSessao, acao: AcaoSessao): ModeloSessao {
       r.auditar(auditoriaInicio(acao.agora, acao.estado));
       r.mudarEstado(acao.estado, acao.agora);
       let saida = r.m;
-      for (const evento of acao.eventos) saida = aplicarEvento(saida, evento, acao.agora);
+      // O histórico guardado não tem eventos parciais, mas um parcial que
+      // escape não deve virar rascunho de streaming numa conversa retomada.
+      const eventos = acao.retomada ? acao.eventos.filter((e) => !e.partial) : acao.eventos;
+      for (const evento of eventos) saida = aplicarEvento(saida, evento, acao.agora, acao.retomada);
       return saida;
     }
     case "enviada": {

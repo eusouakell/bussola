@@ -45,6 +45,7 @@ export function createRequestHandler(deps: RouterDeps): RequestHandler {
 
     const sessions = SESSIONS_PATH.exec(pathname);
     if (sessions && method === "POST") return agent.createSession(req, res, sessions[1]);
+    if (sessions && method === "GET") return agent.listSessions(req, res, sessions[1]);
     const session = SESSION_PATH.exec(pathname);
     if (session && method === "GET") return agent.readSession(req, res, session[1], session[2]);
 

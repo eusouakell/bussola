@@ -1,12 +1,13 @@
-// Sessão de login simulado (entidade). O token é opaco; a sessão guarda quais
-// sessões do agente pertencem ao login, para que uma persona não leia nem
-// escreva na sessão de outra.
+// Sessão de login simulado (entidade). O token é opaco e a sessão só guarda
+// identidade e tempo. Quem é dono de uma sessão do agente é o próprio agente:
+// a sessão vive lá sob o `login`, e ele responde 404 para a de outra persona.
+// Guardar essa posse aqui trancaria a persona fora da própria conversa a cada
+// reinício do BFF, que roda com uma instância só.
 import type { UserAccount } from "./userAccount.ts";
 
 export interface SessionPolicy {
   idleTtlMs: number;
   absoluteTtlMs: number;
-  maxAgentSessions: number;
 }
 
 export class AuthSession {
@@ -14,7 +15,6 @@ export class AuthSession {
   readonly account: UserAccount;
   readonly createdAt: number;
   private lastSeenAt: number;
-  private readonly agentSessionIds = new Set<string>();
 
   constructor(token: string, account: UserAccount, now: number) {
     this.token = token;
@@ -29,19 +29,5 @@ export class AuthSession {
 
   touch(now: number): void {
     this.lastSeenAt = now;
-  }
-
-  /** Registra a sessão do agente; acima do limite, esquece a mais antiga. */
-  bindAgentSession(agentSessionId: string, policy: SessionPolicy): void {
-    this.agentSessionIds.add(agentSessionId);
-    while (this.agentSessionIds.size > policy.maxAgentSessions) {
-      const oldest = this.agentSessionIds.values().next().value;
-      if (oldest === undefined) break;
-      this.agentSessionIds.delete(oldest);
-    }
-  }
-
-  ownsAgentSession(agentSessionId: unknown): agentSessionId is string {
-    return typeof agentSessionId === "string" && this.agentSessionIds.has(agentSessionId);
   }
 }

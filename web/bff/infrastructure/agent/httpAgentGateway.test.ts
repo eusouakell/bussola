@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from "vitest";
-import { AgentUnavailable } from "../../application/errors.ts";
+import { AgentUnavailable, NotFound } from "../../application/errors.ts";
 import { ChatMessage } from "../../domain/chatMessage.ts";
 import { HttpAgentGateway } from "./httpAgentGateway.ts";
 
@@ -37,6 +37,22 @@ describe("HttpAgentGateway", () => {
     const { agent, fetch } = gateway(() => new Response("{}", { status: 404 }));
     expect(await agent.getSession("fernando", "s/1")).toBeNull();
     expect(String(fetch.mock.calls[0][0])).toMatch(/\/sessions\/s%2F1$/);
+  });
+
+  it("lista as conversas do usuário e descarta item sem id", async () => {
+    const { agent, fetch } = gateway(() =>
+      Response.json([{ id: "s1", lastUpdateTime: 2 }, { lastUpdateTime: 9 }, { id: "s2", lastUpdateTime: 1 }]),
+    );
+    const conversas = await agent.listSessions("fernando");
+    expect(conversas.map((c) => c.id)).toEqual(["s1", "s2"]);
+    const [url, init] = fetch.mock.calls[0];
+    expect(String(url)).toBe("https://bussola-agent.example.run.app/apps/bussola_agent/users/fernando/sessions");
+    expect(init.method).toBe("GET");
+  });
+
+  it("lista que não é array é agente indisponível", async () => {
+    const { agent } = gateway(() => Response.json({ sessions: [] }));
+    await expect(agent.listSessions("fernando")).rejects.toThrow(AgentUnavailable);
   });
 
   it("monta o corpo do run_sse só com o texto e devolve os bytes do SSE", async () => {
@@ -76,6 +92,12 @@ describe("HttpAgentGateway", () => {
     });
     await agent.createSession("fernando", {});
     expect(idToken).toHaveBeenCalledWith("https://bussola-agent-principal.example.run.app");
+  });
+
+  it("404 no turno é NotFound: sessão inexistente ou de outra persona", async () => {
+    const { agent } = gateway(() => new Response("", { status: 404 }));
+    const turn = { userId: "bianca", sessionId: "s-do-fernando", message: ChatMessage.create("oi") };
+    await expect(agent.streamRun(turn, new AbortController().signal)).rejects.toThrow(NotFound);
   });
 
   it("erro HTTP ou de rede vira AgentUnavailable com código curto", async () => {

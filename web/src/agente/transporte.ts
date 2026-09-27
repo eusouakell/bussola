@@ -7,6 +7,17 @@ export interface InicioSessao {
   estado: EstadoSessao;
   /** Eventos do início (o simulado emite o `stateDelta` inicial). */
   eventos: EventoAdk[];
+  /** Conversa que já existia: os eventos são histórico, não o turno atual. */
+  retomada?: boolean;
+}
+
+/** Uma conversa salva, para o cliente escolher qual retomar. */
+export interface ResumoConversa {
+  sessionId: string;
+  /** Milissegundos; `undefined` quando o backend não guarda horário. */
+  atualizadaEm?: number;
+  /** Objetivo do plano, quando a conversa já chegou lá. */
+  titulo?: string;
 }
 
 /**
@@ -34,10 +45,16 @@ export interface Transporte {
   ressincronizar?(): Promise<EstadoSessao | null>;
   /** Liga ou desliga cenários de borda; ausente no transporte ao vivo (R5). */
   configurarBordas?(bordas: Partial<Bordas>): void;
+  /** Conversas salvas do cliente; ausente no transporte sem histórico. */
+  listar?(): Promise<ResumoConversa[]>;
+  /** Reabre uma conversa salva com o histórico dela. */
+  retomar?(sessionId: string): Promise<InicioSessao>;
+  /** Começa uma conversa nova, esquecendo a que estava lembrada. */
+  esquecer?(): void;
 }
 
 /** Fábrica injetada em `useSessao`: o hook não conhece implementação concreta. */
-export type FabricaTransporte = (modo: Modo, bordas?: Bordas) => Transporte;
+export type FabricaTransporte = (modo: Modo, bordas?: Bordas, usuario?: string) => Transporte;
 
 export class FalhaConexao extends Error {
   constructor(motivo: string) {

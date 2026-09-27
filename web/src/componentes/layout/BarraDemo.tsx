@@ -1,7 +1,7 @@
 // Barra do apresentador (FR-014, FR-015, FR-021, FR-023): mês de referência,
 // "Avançar um mês", modo de execução e cenários de borda do simulado.
 import { useId } from "react";
-import type { Bordas, Modo } from "../../agente/transporte";
+import type { Bordas, Modo, ResumoConversa } from "../../agente/transporte";
 import type { EstadoSessao } from "../../agente/tipos";
 import { CONFIG } from "../../config";
 import { mesAbrev } from "../../formatacao/formatar";
@@ -25,11 +25,37 @@ interface Props {
   onBordas: (bordas: Partial<Bordas>) => void;
   /** Persona logada no BFF (modo ao vivo com login). */
   persona?: { nome: string; onTrocar: () => void };
+  /** Conversas salvas da persona, mais recente primeiro (vazio no simulado). */
+  conversas: ResumoConversa[];
+  conversaAtual: string | null;
+  onConversa: (sessionId: string) => void;
+  onNovaConversa: () => void;
 }
 
-export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onBordas, persona }: Props) {
+/** Rótulo da conversa na lista: o objetivo, ou a data que o agente guardou. */
+function rotuloConversa(c: ResumoConversa, indice: number): string {
+  if (c.titulo) return c.titulo;
+  if (c.atualizadaEm === undefined) return `Conversa ${indice + 1}`;
+  return new Date(c.atualizadaEm).toLocaleString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+export function BarraDemo({
+  estado,
+  modo,
+  onModo,
+  onEnviar,
+  ocupado,
+  bordas,
+  onBordas,
+  persona,
+  conversas,
+  conversaAtual,
+  onConversa,
+  onNovaConversa,
+}: Props) {
   const idMotivo = useId();
   const idModo = useId();
+  const idConversa = useId();
   const motivo = motivoSemAvanco(estado);
   const ativas = BORDAS.filter((b) => bordas[b.chave]).length;
   return (
@@ -72,6 +98,34 @@ export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onB
               Trocar persona
             </button>
           </>
+        )}
+        {modo === "ao-vivo" && conversas.length > 0 && (
+          <>
+            <label htmlFor={idConversa} className="pe">
+              Conversa
+            </label>
+            <select
+              id={idConversa}
+              value={conversaAtual ?? ""}
+              disabled={ocupado}
+              onChange={(e) => e.target.value && e.target.value !== conversaAtual && onConversa(e.target.value)}
+            >
+              {/* A conversa aberta pode ser nova, ainda fora da lista salva. */}
+              {conversaAtual && !conversas.some((c) => c.sessionId === conversaAtual) && (
+                <option value={conversaAtual}>Conversa atual</option>
+              )}
+              {conversas.map((c, i) => (
+                <option key={c.sessionId} value={c.sessionId}>
+                  {rotuloConversa(c, i)}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        {modo === "ao-vivo" && (
+          <button type="button" className="btn-presenter" style={{ minHeight: 36 }} disabled={ocupado} onClick={onNovaConversa}>
+            Nova conversa
+          </button>
         )}
         {modo === "simulado" && (
           <details style={{ position: "relative" }}>

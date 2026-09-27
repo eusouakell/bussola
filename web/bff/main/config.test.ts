@@ -28,7 +28,7 @@ describe("loadConfig", () => {
       agentUseOidc: false,
       cookieName: "bussola_session",
       usersCacheTtlMs: 600_000,
-      sessionPolicy: { idleTtlMs: 1_800_000, absoluteTtlMs: 28_800_000, maxAgentSessions: 20 },
+      sessionPolicy: { idleTtlMs: 1_800_000, absoluteTtlMs: 28_800_000 },
       maxSessions: 500,
       rateLimit: {
         login: { maxFailures: 5, windowMs: 900_000 },
@@ -47,7 +47,6 @@ describe("loadConfig", () => {
         AUTH_COOKIE_NAME: "demo_session",
         AUTH_SESSION_IDLE_TTL_MS: "60000",
         AUTH_SESSION_TTL_MS: "120000",
-        AGENT_MAX_SESSIONS: "3",
         AUTH_MAX_SESSIONS: "10",
         AUTH_LOGIN_MAX_FAILURES: "2",
         AGENT_TIMEOUT_MS: "1000",
@@ -56,7 +55,7 @@ describe("loadConfig", () => {
     );
     expect(config).toMatchObject({
       cookieName: "demo_session",
-      sessionPolicy: { idleTtlMs: 60_000, absoluteTtlMs: 120_000, maxAgentSessions: 3 },
+      sessionPolicy: { idleTtlMs: 60_000, absoluteTtlMs: 120_000 },
       maxSessions: 10,
       agentTimeoutMs: 1000,
     });

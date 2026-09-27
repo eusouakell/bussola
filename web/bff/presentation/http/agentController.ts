@@ -1,10 +1,11 @@
-// Proxy estreito para o ADK: criar e ler sessão e rodar um turno. O
+// Proxy estreito para o ADK: criar, listar e ler sessão e rodar um turno. O
 // `id_usuario` vem da conta do cookie; do `/run_sse` só passa o texto.
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { exceptionName, type Logger } from "../../application/ports/logger.ts";
 import type { GetAgentSession } from "../../application/useCases/getAgentSession.ts";
+import type { ListAgentSessions } from "../../application/useCases/listAgentSessions.ts";
 import type { SendMessage } from "../../application/useCases/sendMessage.ts";
 import type { StartAgentSession } from "../../application/useCases/startAgentSession.ts";
 import type { CurrentSession } from "./currentSession.ts";
@@ -19,6 +20,7 @@ const RUN_BODY_LIMIT = 16 * 1024;
 export interface AgentControllerDeps {
   startSession: StartAgentSession;
   getSession: GetAgentSession;
+  listSessions: ListAgentSessions;
   sendMessage: SendMessage;
   currentSession: CurrentSession;
   agentApp: string;
@@ -41,6 +43,12 @@ export class AgentController {
     // O corpo só precisa ser JSON e é descartado: o state inicial vem da conta.
     await readJson(req, SESSION_BODY_LIMIT);
     sendJson(res, 200, await startSession.execute(session));
+  }
+
+  async listSessions(req: IncomingMessage, res: ServerResponse, app: string): Promise<void> {
+    const session = await this.deps.currentSession.require(req);
+    this.requireApp(app);
+    sendJson(res, 200, await this.deps.listSessions.execute(session));
   }
 
   async readSession(req: IncomingMessage, res: ServerResponse, app: string, id: string): Promise<void> {

@@ -42,26 +42,47 @@ async function body(req: IncomingMessage): Promise<unknown> {
   return text ? JSON.parse(text) : null;
 }
 
+/** Como o ADK: a sessão vive sob o `userId` e outro dono não a encontra. */
 function fakeAgent(): Server {
   let counter = 0;
+  const owners = new Map<string, string>();
   return createServer(async (req, res) => {
     const call = { method: req.method ?? "", url: req.url ?? "", body: await body(req) };
     agentCalls.push(call);
     const created = /^\/apps\/bussola_agent\/users\/([^/]+)\/sessions$/.exec(call.url);
     if (created && call.method === "POST") {
       counter += 1;
+      const userId = decodeURIComponent(created[1]);
       const state = (call.body as { state?: unknown }).state;
+      owners.set(`agente-${counter}`, userId);
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ id: `agente-${counter}`, userId: decodeURIComponent(created[1]), state, events: [] }));
+      res.end(JSON.stringify({ id: `agente-${counter}`, userId, state, events: [] }));
       return;
     }
-    const read = /^\/apps\/bussola_agent\/users\/[^/]+\/sessions\/([^/]+)$/.exec(call.url);
-    if (read && call.method === "GET") {
+    if (created && call.method === "GET") {
+      const userId = decodeURIComponent(created[1]);
+      const minhas = [...owners.entries()].filter(([, dono]) => dono === userId);
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ id: decodeURIComponent(read[1]), events: [] }));
+      res.end(JSON.stringify(minhas.map(([id], i) => ({ id, lastUpdateTime: i + 1, state: { id_usuario: ids[userId as keyof typeof ids] } }))));
+      return;
+    }
+    const read = /^\/apps\/bussola_agent\/users\/([^/]+)\/sessions\/([^/]+)$/.exec(call.url);
+    if (read && call.method === "GET") {
+      const [userId, sessionId] = [decodeURIComponent(read[1]), decodeURIComponent(read[2])];
+      if (owners.get(sessionId) !== userId) {
+        res.writeHead(404).end();
+        return;
+      }
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ id: sessionId, events: [] }));
       return;
     }
     if (call.url === "/run_sse" && call.method === "POST") {
+      const turn = call.body as { userId?: string; sessionId?: string };
+      if (owners.get(String(turn.sessionId)) !== turn.userId) {
+        res.writeHead(404).end();
+        return;
+      }
       res.writeHead(agentRunStatus, { "Content-Type": "text/event-stream" });
       res.end(agentRunStatus === 200 ? SSE : "falhou");
       return;
@@ -293,7 +314,11 @@ describe("BFF: proxy do agente", () => {
     const run = await post("/run_sse", runBody(sessionId), { Cookie: bianca });
     expect(read.status).toBe(404);
     expect(run.status).toBe(404);
-    expect(agentCalls).toEqual([]);
+    // A pergunta chega ao agente sempre com o login do cookie, que é quem
+    // decide a posse; o login de fernando nunca sai daqui.
+    expect(agentCalls.map((c) => c.url)).toEqual([`/apps/bussola_agent/users/bianca/sessions/${sessionId}`, "/run_sse"]);
+    expect(agentCalls[1].body).toMatchObject({ userId: "bianca", sessionId });
+    expect(JSON.stringify(agentCalls)).not.toContain("fernando");
     const own = await fetch(`${base}/apps/bussola_agent/users/x/sessions/${sessionId}`, { headers: { Cookie: fernando } });
     expect(own.status).toBe(200);
   });
@@ -307,6 +332,31 @@ describe("BFF: proxy do agente", () => {
     expect(await response.json()).toEqual({
       erro: { codigo: "AGENTE_INDISPONIVEL", mensagem: "O assistente não respondeu. Tente de novo." },
     });
+  });
+
+  it("lista as conversas salvas da persona do cookie, não as da URL", async () => {
+    const fernando = await login("fernando");
+    const primeira = await agentSession(fernando);
+    const segunda = await agentSession(fernando);
+    const bianca = await login("bianca");
+    const dela = await agentSession(bianca);
+    agentCalls.length = 0;
+
+    const resposta = await fetch(`${base}/apps/bussola_agent/users/fernando/sessions`, { headers: { Cookie: bianca } });
+    expect(resposta.status).toBe(200);
+    const conversas = (await resposta.json()) as { id: string; lastUpdateTime?: number }[];
+    expect(conversas.map((c) => c.id)).toEqual([dela]);
+    expect(conversas.map((c) => c.id)).not.toContain(primeira);
+    expect(conversas.map((c) => c.id)).not.toContain(segunda);
+    // O login da URL é decorativo: quem busca é o cookie.
+    expect(agentCalls.map((c) => c.url)).toEqual(["/apps/bussola_agent/users/bianca/sessions"]);
+    expect(JSON.stringify(conversas)).not.toContain(ids.fernando);
+  });
+
+  it("sem login, listar conversas é 401", async () => {
+    const response = await fetch(`${base}/apps/bussola_agent/users/fernando/sessions`);
+    expect(response.status).toBe(401);
+    expect(agentCalls).toEqual([]);
   });
 
   it("sem login, criar sessão do agente é 401", async () => {

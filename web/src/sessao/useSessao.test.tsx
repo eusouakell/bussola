@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { EstadoSessao, EventoAdk } from "../agente/tipos";
-import { FalhaConexao, type InicioSessao, type Modo, type Transporte } from "../agente/transporte";
+import { FalhaConexao, type InicioSessao, type Modo, type ResumoConversa, type Transporte } from "../agente/transporte";
 import { useSessao } from "./useSessao";
 
 const FALHA = "Não consegui falar com a Bússola agora.";
@@ -12,6 +12,8 @@ interface OpcoesFalso {
   turno?: Turno;
   iniciar?: () => Promise<InicioSessao>;
   ressincronizar?: () => Promise<EstadoSessao | null>;
+  /** Presente = o transporte sabe listar e retomar conversas salvas. */
+  salvas?: ResumoConversa[] | (() => Promise<ResumoConversa[]>);
 }
 
 /** Transporte em memória: registra os envios e delega o turno ao teste. */
@@ -20,12 +22,33 @@ class TransporteFalso implements Transporte {
   readonly textos: string[] = [];
   readonly sinais: (AbortSignal | undefined)[] = [];
   readonly ressincronizar?: () => Promise<EstadoSessao | null>;
+  readonly listar?: () => Promise<ResumoConversa[]>;
+  readonly retomar?: (sessionId: string) => Promise<InicioSessao>;
+  readonly esquecer?: () => void;
+  /** Conversas retomadas e esquecimentos, na ordem em que o hook pediu. */
+  readonly retomadas: string[] = [];
+  esquecida = false;
   private readonly opcoes: OpcoesFalso;
 
   constructor(modo: Modo, opcoes: OpcoesFalso) {
     this.modo = modo;
     this.opcoes = opcoes;
     this.ressincronizar = opcoes.ressincronizar;
+    if (!opcoes.salvas) return;
+    const salvas = opcoes.salvas;
+    this.listar = () => (typeof salvas === "function" ? salvas() : Promise.resolve(salvas));
+    this.retomar = (sessionId) => {
+      this.retomadas.push(sessionId);
+      return Promise.resolve({
+        sessionId,
+        estado: { estado_jornada: "ENTENDER" },
+        eventos: [{ author: "user", timestamp: 1_700_000_000, content: { role: "user", parts: [{ text: "Quero viajar" }] } }],
+        retomada: true,
+      });
+    };
+    this.esquecer = () => {
+      this.esquecida = true;
+    };
   }
 
   iniciar(): Promise<InicioSessao> {
@@ -87,7 +110,7 @@ describe("useSessao", () => {
     const { fabrica } = criarFabrica();
     const { result } = await montar(fabrica);
     expect(fabrica).toHaveBeenCalledTimes(1);
-    expect(fabrica).toHaveBeenCalledWith("simulado", { e3: false, e4: false, e5: false });
+    expect(fabrica).toHaveBeenCalledWith("simulado", { e3: false, e4: false, e5: false }, undefined);
     expect(result.current.pronta).toBe(true);
     expect(result.current.modo).toBe("simulado");
     expect(result.current.modelo.estado.estado_jornada).toBe("OBJETIVO");
@@ -225,7 +248,7 @@ describe("useSessao", () => {
 
     await agir(() => result.current.trocarModo("ao-vivo"));
     expect(fabrica).toHaveBeenCalledTimes(2);
-    expect(fabrica).toHaveBeenLastCalledWith("ao-vivo", { e3: false, e4: false, e5: false });
+    expect(fabrica).toHaveBeenLastCalledWith("ao-vivo", { e3: false, e4: false, e5: false }, undefined);
     expect(transportes.map((t) => t.modo)).toEqual(["simulado", "ao-vivo"]);
     expect(result.current.modo).toBe("ao-vivo");
     expect(result.current.pronta).toBe(true);
@@ -267,7 +290,7 @@ describe("useSessao", () => {
 
     await agir(() => result.current.reiniciar());
     expect(fabrica).toHaveBeenCalledTimes(2);
-    expect(fabrica).toHaveBeenLastCalledWith("simulado", { e3: true, e4: false, e5: false });
+    expect(fabrica).toHaveBeenLastCalledWith("simulado", { e3: true, e4: false, e5: false }, undefined);
     expect(result.current.modelo.itens).toEqual([]);
     expect(result.current.pronta).toBe(true);
   });
@@ -309,13 +332,98 @@ describe("useSessao", () => {
     rerender({ liberado: true });
     await agir();
     expect(fabrica).toHaveBeenCalledTimes(1);
-    expect(fabrica).toHaveBeenCalledWith("ao-vivo", { e3: false, e4: false, e5: false });
+    expect(fabrica).toHaveBeenCalledWith("ao-vivo", { e3: false, e4: false, e5: false }, undefined);
     expect(result.current.pronta).toBe(true);
 
     rerender({ liberado: false });
     await agir(() => result.current.trocarModo("simulado"));
     expect(fabrica).toHaveBeenCalledTimes(2);
-    expect(fabrica).toHaveBeenLastCalledWith("simulado", { e3: false, e4: false, e5: false });
+    expect(fabrica).toHaveBeenLastCalledWith("simulado", { e3: false, e4: false, e5: false }, undefined);
+    expect(result.current.pronta).toBe(true);
+  });
+
+  it("transporte sem conversas salvas não lista nada e continua funcionando", async () => {
+    const { fabrica, ultimo } = criarFabrica();
+    const { result } = await montar(fabrica);
+    expect(ultimo().listar).toBeUndefined();
+    expect(result.current.conversas).toEqual([]);
+    expect(result.current.conversaAtual).toBe("s-1");
+  });
+
+  it("abrirConversa retoma a conversa escolhida com o histórico dela", async () => {
+    const salvas: ResumoConversa[] = [
+      { sessionId: "s-9", atualizadaEm: 2, titulo: "Viagem" },
+      { sessionId: "s-1", atualizadaEm: 1 },
+    ];
+    const { fabrica, transportes, ultimo } = criarFabrica({ salvas });
+    const { result } = await montar(fabrica);
+    expect(result.current.conversas).toEqual(salvas);
+    expect(result.current.conversaAtual).toBe("s-1");
+
+    await agir(() => result.current.abrirConversa("s-9"));
+    expect(fabrica).toHaveBeenCalledTimes(2);
+    expect(transportes[1].retomadas).toEqual(["s-9"]);
+    expect(result.current.conversaAtual).toBe("s-9");
+    expect(result.current.modelo.estado.estado_jornada).toBe("ENTENDER");
+    // O histórico volta como mensagem do cliente, não como evento perdido.
+    expect(result.current.modelo.itens).toMatchObject([{ tipo: "mensagem_cliente", texto: "Quero viajar" }]);
+    expect(ultimo().esquecida).toBe(false);
+
+    // A conversa aberta segue sendo a lembrada: reiniciar não volta para a antiga.
+    await agir(() => result.current.reiniciar());
+    expect(transportes[2].retomadas).toEqual([]);
+    expect(result.current.conversaAtual).toBe("s-1");
+  });
+
+  it("novaConversa esquece a lembrada antes de recomeçar", async () => {
+    const { fabrica, transportes } = criarFabrica({ salvas: [{ sessionId: "s-1" }] });
+    const { result } = await montar(fabrica);
+    await agir(() => result.current.novaConversa());
+    expect(transportes[0].esquecida).toBe(true);
+    expect(fabrica).toHaveBeenCalledTimes(2);
+    expect(transportes[1].retomadas).toEqual([]);
+    expect(result.current.pronta).toBe(true);
+  });
+
+  it("falha ao listar não derruba a conversa", async () => {
+    const { fabrica } = criarFabrica({ salvas: () => Promise.reject(new FalhaConexao("rede")) });
+    const { result } = await montar(fabrica);
+    expect(result.current.pronta).toBe(true);
+    expect(result.current.conversas).toEqual([]);
+    expect(result.current.modelo.itens).toEqual([]);
+  });
+
+  it("trocar de modo limpa a conversa aberta e a lista de salvas", async () => {
+    let inicios = 0;
+    const { fabrica } = criarFabrica({
+      // O segundo transporte não responde: dá para ver o que a tela mostra no meio.
+      iniciar: () =>
+        ++inicios === 1
+          ? Promise.resolve({ sessionId: "s-1", estado: { estado_jornada: "OBJETIVO" }, eventos: [] })
+          : new Promise<InicioSessao>(() => {}),
+      salvas: [{ sessionId: "s-1" }],
+    });
+    const { result } = await montar(fabrica);
+    expect(result.current.conversas).toHaveLength(1);
+    expect(result.current.conversaAtual).toBe("s-1");
+
+    await agir(() => result.current.trocarModo("ao-vivo"));
+    expect(result.current.conversaAtual).toBeNull();
+    expect(result.current.conversas).toEqual([]);
+  });
+
+  it("trocar de persona recria o transporte com o novo usuário", async () => {
+    const { fabrica } = criarFabrica({ salvas: [{ sessionId: "s-1" }] });
+    const { result, rerender } = renderHook(({ usuario }) => useSessao("ao-vivo", fabrica, { usuario }), {
+      initialProps: { usuario: "fernando" },
+    });
+    await agir();
+    expect(fabrica).toHaveBeenLastCalledWith("ao-vivo", { e3: false, e4: false, e5: false }, "fernando");
+
+    rerender({ usuario: "bianca" });
+    await agir();
+    expect(fabrica).toHaveBeenCalledTimes(2);
+    expect(fabrica).toHaveBeenLastCalledWith("ao-vivo", { e3: false, e4: false, e5: false }, "bianca");
     expect(result.current.pronta).toBe(true);
   });
 

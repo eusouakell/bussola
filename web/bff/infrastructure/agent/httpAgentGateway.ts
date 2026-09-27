@@ -2,7 +2,7 @@
 // Run o agente é privado: cada chamada leva um ID token com audience = URL
 // base do serviço. Numa URL de tag (main---<serviço>) o Cloud Run recusa essa
 // audience (401), então `audience` passa a URL principal do serviço.
-import { AgentUnavailable } from "../../application/errors.ts";
+import { AgentUnavailable, NotFound } from "../../application/errors.ts";
 import type { AgentGateway, AgentSession, AgentTurn } from "../../application/ports/agentGateway.ts";
 import type { IdTokenProvider } from "../gcp/credentials.ts";
 
@@ -19,6 +19,10 @@ export interface HttpAgentGatewayOptions {
 }
 
 const APP_NAME = /^[A-Za-z_][A-Za-z0-9_]{0,63}$/;
+
+function isSession(value: unknown): value is AgentSession {
+  return typeof value === "object" && value !== null && typeof (value as { id?: unknown }).id === "string";
+}
 
 export class HttpAgentGateway implements AgentGateway {
   private readonly base: URL;
@@ -57,6 +61,15 @@ export class HttpAgentGateway implements AgentGateway {
     return this.session(response);
   }
 
+  async listSessions(userId: string): Promise<AgentSession[]> {
+    const response = await this.call(this.sessionsPath(userId), { method: "GET" });
+    if (!response.ok) throw new AgentUnavailable(`HTTP_${response.status}`);
+    const body = (await response.json().catch(() => null)) as unknown;
+    if (!Array.isArray(body)) throw new AgentUnavailable("LISTA_INVALIDA");
+    // Sessão sem `id` não serve para retomar nada: sai da lista em silêncio.
+    return body.filter((item): item is AgentSession => isSession(item));
+  }
+
   async streamRun(turn: AgentTurn, signal: AbortSignal): Promise<AsyncIterable<Uint8Array>> {
     const response = await this.call(
       "/run_sse",
@@ -75,6 +88,9 @@ export class HttpAgentGateway implements AgentGateway {
     );
     if (!response.ok || !response.body) {
       await response.body?.cancel().catch(() => {});
+      // O ADK procura a sessão por (app, userId, sessionId): 404 aqui é sessão
+      // inexistente ou de outra persona, e não o agente fora do ar.
+      if (response.status === 404) throw new NotFound();
       throw new AgentUnavailable(`HTTP_${response.status}`);
     }
     return response.body;
@@ -85,8 +101,8 @@ export class HttpAgentGateway implements AgentGateway {
   }
 
   private async session(response: Response): Promise<AgentSession> {
-    const body = (await response.json().catch(() => null)) as AgentSession | null;
-    if (!body || typeof body.id !== "string") throw new AgentUnavailable("SESSAO_SEM_ID");
+    const body = (await response.json().catch(() => null)) as unknown;
+    if (!isSession(body)) throw new AgentUnavailable("SESSAO_SEM_ID");
     return body;
   }
 

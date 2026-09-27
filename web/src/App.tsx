@@ -28,17 +28,21 @@ const CLIENTE_AUTH = new ClienteAuth();
 export function App() {
   // Servido pelo BFF, o modo ao vivo só abre sessão no agente depois do login.
   const auth = useAuth(CONFIG.login, CLIENTE_AUTH);
-  const sessao = useSessao(CONFIG.modo, criarTransporte, { aoVivoLiberado: auth.fase !== "anonimo" && auth.fase !== "verificando" });
+  const sessao = useSessao(CONFIG.modo, criarTransporte, {
+    aoVivoLiberado: auth.fase !== "anonimo" && auth.fase !== "verificando",
+    // A conversa lembrada é por persona: trocar de login não herda o chat da outra.
+    usuario: auth.persona?.login,
+  });
   const { modelo, modo, pronta, bordas } = sessao;
   const pedeLogin = modo === "ao-vivo" && (auth.fase === "anonimo" || auth.fase === "verificando");
   const desktop = useMidia("(min-width: 1024px)", true);
-  const sistemaEscuro = useMidia("(prefers-color-scheme: dark)", false);
-  const [tema, setTema] = useState<Tema | null>(null);
+  const [tema, setTema] = useState<Tema>("claro");
   const [painel, setPainel] = useState(true);
   const [folha, setFolha] = useState(false);
   const [vista, setVista] = useState<NomeVista | null>(null);
 
-  const escuro = tema ? tema === "escuro" : sistemaEscuro;
+  // O modo claro é o padrão da demo; o apresentador alterna na barra.
+  const escuro = tema === "escuro";
   const { estado, ocupado } = modelo;
   const jornada = estado.estado_jornada;
 
@@ -57,6 +61,17 @@ export function App() {
     void auth.sair().finally(sessao.reiniciar);
   };
   const abrirPlano = () => setVista("meu-plano");
+  // Trocar de conversa sai da vista do plano: o plano é o da conversa aberta.
+  const abrirConversa = (sessionId: string) => {
+    setFolha(false);
+    setVista(null);
+    sessao.abrirConversa(sessionId);
+  };
+  const novaConversa = () => {
+    setFolha(false);
+    setVista(null);
+    sessao.novaConversa();
+  };
 
   const barra = (
     <BarraDemo
@@ -68,6 +83,10 @@ export function App() {
       bordas={bordas}
       onBordas={sessao.configurarBordas}
       persona={auth.persona ? { nome: auth.persona.displayName, onTrocar: trocarPersona } : undefined}
+      conversas={sessao.conversas}
+      conversaAtual={sessao.conversaAtual}
+      onConversa={abrirConversa}
+      onNovaConversa={novaConversa}
     />
   );
 

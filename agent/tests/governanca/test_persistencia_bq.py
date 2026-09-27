@@ -17,6 +17,8 @@ from bussola_agent.persistencia import (
 )
 from bussola_agent.persistencia_bq import (
     PLAN_COLUMNS,
+    PLAN_INSERT,
+    PLAN_PARAM_TYPES,
     PLAN_QUERY,
     RegistroBigQuery,
     RegistryWriteError,
@@ -43,6 +45,8 @@ class FakeClient:
         return self.errors
 
     def query(self, query: str, job_config: Any = None, **kwargs: Any) -> Any:
+        if self.fail:
+            raise ConnectionError(f"sem rede para {job_config}")
         self.queries.append((query, job_config))
         rows = self.rows
 
@@ -62,6 +66,10 @@ def _registry(client: FakeClient, dataset: str = "bussola_app_dev") -> RegistroB
             "default_dataset": f"{project}.{ds}",
             "plano_id": plano_id,
         },
+        insert_config_factory=lambda project, ds, plano: {
+            "default_dataset": f"{project}.{ds}",
+            "plano": plano.model_dump(mode="json"),
+        },
     )
 
 
@@ -79,30 +87,40 @@ def _plan() -> Plano:
     )
 
 
+def _consent() -> Consentimento:
+    return Consentimento(
+        session_id="s-1", acao="criar_plano", decisao="aceito", texto_apresentado="t", ts=TS
+    )
+
+
 def test_plan_columns_match_the_model() -> None:
     assert PLAN_COLUMNS == tuple(Plano.model_fields)
     for column in PLAN_COLUMNS:
         assert column in PLAN_QUERY
+        assert column in PLAN_INSERT
+        assert f"@{column}" in PLAN_INSERT
     assert "@plano_id" in PLAN_QUERY
+    assert len(PLAN_PARAM_TYPES) == len(PLAN_COLUMNS)
 
 
-def test_insert_plan() -> None:
+def test_insert_plan_runs_the_constant_insert() -> None:
     client = FakeClient()
     plan = _plan()
     assert _registry(client).registrar_plano(plan) == plan.plano_id
-    table, rows, row_ids = client.inserts[0]
-    assert table == "projeto-teste.bussola_app_dev.planos"
-    assert rows[0]["id_usuario"] == ANCHOR and rows[0]["valor_alvo"] == 30000.0
-    assert rows[0]["criado_em"].startswith("2026-09-26T12:00:00")
-    assert row_ids == [f"{plan.plano_id}:{TS.isoformat()}"]
+    # Nada de streaming: o plano e lido de volta num turno seguinte.
+    assert client.inserts == []
+    [(query, config)] = client.queries
+    assert query == PLAN_INSERT
+    assert config["default_dataset"] == "projeto-teste.bussola_app_dev"
+    assert config["plano"]["id_usuario"] == ANCHOR
+    assert config["plano"]["valor_alvo"] == 30000.0
+    assert config["plano"]["criado_em"].startswith("2026-09-26T12:00:00")
 
 
 def test_insert_consent_event_and_follow_up() -> None:
     client = FakeClient()
     registry = _registry(client)
-    consent = Consentimento(
-        session_id="s", acao="criar_plano", decisao="aceito", texto_apresentado="t", ts=TS
-    )
+    consent = _consent()
     event = EventoAuditoria(
         session_id="s",
         estado="AGIR",
@@ -130,7 +148,7 @@ def test_insert_consent_event_and_follow_up() -> None:
 def test_errors_never_echo_values() -> None:
     client = FakeClient(errors=[{"index": 0, "errors": [{"message": f"bad {ANCHOR}"}]}])
     with pytest.raises(RegistryWriteError) as rejected:
-        _registry(client).registrar_plano(_plan())
+        _registry(client).registrar_consentimento(_consent())
     assert ANCHOR not in str(rejected.value)
 
     broken = FakeClient()
@@ -138,6 +156,7 @@ def test_errors_never_echo_values() -> None:
     with pytest.raises(RegistryWriteError) as failed:
         _registry(broken).registrar_plano(_plan())
     assert ANCHOR not in str(failed.value)
+    assert "planos" in str(failed.value)
 
 
 def test_wrong_row_type_is_refused() -> None:
@@ -145,13 +164,14 @@ def test_wrong_row_type_is_refused() -> None:
         _registry(FakeClient()).registrar_plano({"plano_id": "x"})  # type: ignore[arg-type]
 
 
-def test_get_plan_from_the_local_cache_without_a_query() -> None:
+def test_get_plan_from_the_local_cache_without_a_select() -> None:
     client = FakeClient()
     registry = _registry(client)
     plan = _plan()
     registry.registrar_plano(plan)
     assert registry.obter_plano(plan.plano_id) == plan
-    assert client.queries == []
+    # So o INSERT: o cache poupou o SELECT, que teria sido a segunda query.
+    assert [query for query, _ in client.queries] == [PLAN_INSERT]
 
 
 def test_get_plan_uses_the_constant_query_with_a_parameter() -> None:
@@ -170,6 +190,19 @@ def test_get_plan_missing_or_invalid() -> None:
     assert registry.obter_plano("nao-existe") is None
     assert registry.obter_plano("") is None
     assert len(client.queries) == 1
+
+
+def test_real_insert_config_is_parameterized() -> None:
+    plan = _plan().model_copy(update={"objetivo": "x'; DROP TABLE planos; --"})
+    config = persistencia_bq._plan_insert_config(PROJECT, "bussola_app_dev", plan)
+    assert config.default_dataset.dataset_id == "bussola_app_dev"
+    por_nome = {p.name: p for p in config.query_parameters}
+    assert set(por_nome) == set(PLAN_COLUMNS)
+    assert por_nome["objetivo"].value == "x'; DROP TABLE planos; --"
+    assert por_nome["objetivo"].type_ == "STRING"
+    assert (por_nome["valor_alvo"].type_, por_nome["valor_alvo"].value) == ("FLOAT64", 30000.0)
+    assert (por_nome["prazo_meses"].type_, por_nome["prazo_meses"].value) == ("INT64", 24)
+    assert por_nome["criado_em"].type_ == "TIMESTAMP"
 
 
 def test_real_query_config_is_parameterized() -> None:

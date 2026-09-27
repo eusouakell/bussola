@@ -42,6 +42,14 @@ USER bussola:bussola
 
 EXPOSE 8080
 
-# ADK Web UI em $PORT. Sessão, artefatos e memória em memória (mestre §13:
-# InMemorySessionService com max-instances=1); nada é gravado no disco da imagem.
-CMD ["sh", "-c", "exec adk web --host 0.0.0.0 --port \"${PORT:-8080}\" --session_service_uri memory:// --artifact_service_uri memory:// --memory_service_uri memory:// /app/agent"]
+# ADK Web UI em $PORT. Artefatos e memória sempre em memória; nada é gravado no
+# disco da imagem.
+#
+# A sessão é o histórico do chat, então o backend dela é escolha de deploy:
+# `ADK_SESSION_URI` (padrão `memory://`, como antes) troca o serviço de sessão
+# sem tocar no código. Um URI explícito vence a auto-configuração do ADK por
+# `GOOGLE_CLOUD_AGENT_ENGINE_ID`, e é por isso que ele passa a ser variável.
+#
+#   memory://               conversa morre no cold start (demo e dev)
+#   agentengine://<id>      Agent Engine (Vertex AI): conversa sobrevive
+CMD ["sh", "-c", "exec adk web --host 0.0.0.0 --port \"${PORT:-8080}\" --session_service_uri \"${ADK_SESSION_URI:-memory://}\" --artifact_service_uri memory:// --memory_service_uri memory:// /app/agent"]

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { account, ManualClock } from "../../test/helpers.ts";
 import { InMemorySessionRepository } from "./inMemorySessionRepository.ts";
 
-const policy = { idleTtlMs: 1000, absoluteTtlMs: 5000, maxAgentSessions: 2 };
+const policy = { idleTtlMs: 1000, absoluteTtlMs: 5000 };
 
 function repository(clock = new ManualClock()) {
   return new InMemorySessionRepository({ maxSessions: 3, policy, now: clock.now });

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bússola — Arquitetura da solução</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; }
+  body {
+    font-family: Verdana, Geneva, Tahoma, 'DejaVu Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .folha { width: 100%; max-width: 1120px; }
+  #diagrama {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: Verdana, Geneva, Tahoma, 'DejaVu Sans', sans-serif;
+    font-kerning: normal;
+    text-rendering: geometricPrecision;
+  }
+  #diagrama text { white-space: pre; }
+  @media print {
+    body { padding: 0; }
+    .folha { max-width: none; }
+  }
+</style>
+</head>
+<body>
+<main class="folha">
+<svg id="diagrama" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 1430" role="img" aria-labelledby="tituloSvg descSvg">
+<title id="tituloSvg">Bússola — Arquitetura da solução</title>
+<desc id="descSvg">Da conversa ao planejamento financeiro: Cliente, IA conversacional e Guardrails; Bússola Workspace com Agente Bússola, MCP, tools de consulta SQL, tools de busca RAG e base de conhecimento; BigQuery no Google Cloud Platform.</desc>
+<rect x="0" y="0" width="1120" height="1430" fill="#FFFFFF"/>
+<rect class="divisor" x="64" y="190" width="992" height="1.5" fill="#E2E8F0"/>
+<rect id="cliente" x="64.75" y="241.75" width="226.50" height="124.50" rx="16" fill="#F8FAFC" stroke="#D4DDE7" stroke-width="1.5"/>
+<rect id="ia" x="375.75" y="241.75" width="278.50" height="124.50" rx="16" fill="#F3F6FC" stroke="#C8D5EA" stroke-width="1.5"/>
+<rect id="guard" x="750.75" y="241.75" width="304.50" height="124.50" rx="16" fill="#F3F6FC" stroke="#C8D5EA" stroke-width="1.5"/>
+<rect id="ws" x="64.75" y="439.75" width="990.50" height="659.50" rx="24" fill="#FFFDFB" stroke="#F0C8A9" stroke-width="1.5"/>
+<rect id="agente" x="380.75" y="548.75" width="358.50" height="118.50" rx="16" fill="#FFF1E6" stroke="#EFA66B" stroke-width="1.5"/>
+<rect id="mcp" x="390.00" y="710.00" width="340.50" height="92.50" rx="16" fill="#182B45"/>
+<rect id="sql" x="120.75" y="870.75" width="358.50" height="98.50" rx="16" fill="#EDF4FF" stroke="#9FBBE4" stroke-width="1.5"/>
+<rect id="rag" x="640.75" y="870.75" width="358.50" height="98.50" rx="16" fill="#EAF7F5" stroke="#93C9C7" stroke-width="1.5"/>
+<rect id="kb" x="640.75" y="999.75" width="358.50" height="78.50" rx="14" fill="#F6FCFB" stroke="#9BCCCA" stroke-width="1.5"/>
+<rect id="gcp" x="64.75" y="1136.75" width="470.50" height="228.50" rx="22" fill="#F4F8FE" stroke="#C1D4EF" stroke-width="1.5"/>
+<g id="bigquery">
+<path d="M 119.50 1224.00 L 119.50 1332.00 A 180.50 13.50 0 0 0 480.50 1332.00 L 480.50 1224.00 Z" fill="#FFFFFF" stroke="#8FAFD9" stroke-width="1.5"/>
+<path d="M 119.50 1224.00 A 180.50 13.50 0 0 1 480.50 1224.00 A 180.50 13.50 0 0 1 119.50 1224.00 Z" fill="#FFFFFF" stroke="#8FAFD9" stroke-width="1.5"/>
+<path d="M 119.50 1224.00 A 180.50 13.50 0 0 0 480.50 1224.00" fill="none" stroke="#8FAFD9" stroke-width="1.5"/>
+</g>
+<rect id="pill_header" x="64.00" y="48.00" width="7.50" height="66.50" rx="3.75" fill="#E96B10"/>
+<rect id="pill_agente" x="398.00" y="570.00" width="5.50" height="76.00" rx="2.75" fill="#E96B10"/>
+<g id="conectores" stroke-linecap="butt" stroke-linejoin="miter">
+<path id="c_cli_ia" d="M 301.25 304.25 L 365.75 304.25" fill="none" stroke="#8190A5" stroke-width="2"/>
+<polygon points="292.25,304.25 301.25,299.50 301.25,309.00" fill="#8190A5"/>
+<polygon points="374.75,304.25 365.75,309.00 365.75,299.50" fill="#8190A5"/>
+<path id="c_ia_gd" d="M 664.25 304.25 L 740.75 304.25" fill="none" stroke="#8190A5" stroke-width="2"/>
+<polygon points="655.25,304.25 664.25,299.50 664.25,309.00" fill="#8190A5"/>
+<polygon points="749.75,304.25 740.75,309.00 740.75,299.50" fill="#8190A5"/>
+<path id="c_ia_ag" d="M 903.00 376.00 L 903.00 407.75 L 560.25 407.75 L 560.25 539.00" fill="none" stroke="#8190A5" stroke-width="2"/>
+<polygon points="903.00,367.00 907.75,376.00 898.25,376.00" fill="#8190A5"/>
+<polygon points="560.25,548.00 555.50,539.00 565.00,539.00" fill="#8190A5"/>
+<path id="c_ag_mcp" d="M 560.25 677.50 L 560.25 700.50" fill="none" stroke="#E96B10" stroke-width="2"/>
+<polygon points="560.25,668.50 565.00,677.50 555.50,677.50" fill="#E96B10"/>
+<polygon points="560.25,709.50 555.50,700.50 565.00,700.50" fill="#E96B10"/>
+<path id="c_mcp_sql" d="M 492.25 811.50 L 492.25 834.75 L 300.25 834.75 L 300.25 861.00" fill="none" stroke="#326BC5" stroke-width="2"/>
+<polygon points="492.25,802.50 497.00,811.50 487.50,811.50" fill="#326BC5"/>
+<polygon points="300.25,870.00 295.50,861.00 305.00,861.00" fill="#326BC5"/>
+<path id="c_mcp_rag" d="M 628.25 811.50 L 628.25 834.75 L 820.25 834.75 L 820.25 861.00" fill="none" stroke="#158185" stroke-width="2"/>
+<polygon points="628.25,802.50 633.00,811.50 623.50,811.50" fill="#158185"/>
+<polygon points="820.25,870.00 815.50,861.00 825.00,861.00" fill="#158185"/>
+<path id="c_sql_bq" d="M 300.25 979.00 L 300.25 1201.50" fill="none" stroke="#326BC5" stroke-width="2"/>
+<polygon points="300.25,970.00 305.00,979.00 295.50,979.00" fill="#326BC5"/>
+<polygon points="300.25,1210.50 295.50,1201.50 305.00,1201.50" fill="#326BC5"/>
+<path id="c_rag_kb" d="M 820.25 979.00 L 820.25 990.00" fill="none" stroke="#158185" stroke-width="2"/>
+<polygon points="820.25,970.00 825.00,979.00 815.50,979.00" fill="#158185"/>
+<polygon points="820.25,999.00 815.50,990.00 825.00,990.00" fill="#158185"/>
+</g>
+<circle id="dot_sql" cx="650.00" cy="1242.00" r="5.25" fill="#326BC5"/>
+<circle id="dot_rag" cx="650.00" cy="1286.00" r="5.25" fill="#158185"/>
+<g id="rotulos">
+<text id="t_eyebrow" x="87.85" y="59.80" text-anchor="start" font-size="13" font-weight="700" fill="#65758B">ARQUITETURA DA SOLUÇÃO</text>
+<text id="t_titulo" x="87.92" y="117.75" text-anchor="start" font-size="44" font-weight="700" fill="#182B45">Bússola</text>
+<text id="t_sub" x="64.05" y="160.37" text-anchor="start" font-size="20" font-weight="400" fill="#65758B">Da conversa ao planejamento financeiro</text>
+<text id="t_cli" x="177.33" y="287.18" text-anchor="middle" font-size="22" font-weight="700" fill="#182B45">Cliente</text>
+<text id="t_cli_s" x="178.44" y="332.90" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">Objetivos e contexto</text>
+<text id="t_ia" x="517.37" y="287.12" text-anchor="middle" font-size="22" font-weight="700" fill="#182B45">IA conversacional</text>
+<text id="t_ia_s" x="514.92" y="334.27" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">Conduz a conversa</text>
+<text id="t_gd" x="902.52" y="287.17" text-anchor="middle" font-size="22" font-weight="700" fill="#182B45">Guardrails</text>
+<text id="t_gd_s" x="902.05" y="333.40" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">Validação de entrada e saída</text>
+<text id="t_ws" x="92.11" y="482.27" text-anchor="start" font-size="15" font-weight="700" fill="#A75416">BÚSSOLA WORKSPACE</text>
+<text id="t_ws_s" x="91.80" y="510.20" text-anchor="start" font-size="16" font-weight="400" fill="#65758B">Agente, ferramentas e conhecimento</text>
+<text id="t_ag" x="558.62" y="592.96" text-anchor="middle" font-size="22" font-weight="700" fill="#9E4809">Agente Bússola</text>
+<text id="t_ag_s" x="559.97" y="637.40" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">Análise e planejamento</text>
+<text id="t_mcp" x="559.90" y="750.62" text-anchor="middle" font-size="26.5" font-weight="700" fill="#FFFFFF">MCP</text>
+<text id="t_mcp_s" x="559.62" y="780.27" text-anchor="middle" font-size="15" font-weight="400" fill="#D7E0ED">Acesso às ferramentas</text>
+<text id="t_sql" x="299.74" y="913.43" text-anchor="middle" font-size="22" font-weight="700" fill="#326BC5">Tools de consulta SQL</text>
+<text id="t_sql_s" x="299.77" y="950.27" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">Dados estruturados</text>
+<text id="t_rag" x="820.16" y="916.12" text-anchor="middle" font-size="22" font-weight="700" fill="#158185">Tools de busca RAG</text>
+<text id="t_rag_s" x="818.68" y="948.90" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">Recuperação de conhecimento</text>
+<text id="t_kb" x="818.48" y="1030.18" text-anchor="middle" font-size="19" font-weight="700" fill="#182B45">Base de conhecimento</text>
+<text id="t_kb_s" x="822.19" y="1059.48" text-anchor="middle" font-size="15" font-weight="400" fill="#65758B">BACEN · Planos e produtos Itaú</text>
+<text id="t_gcp" x="87.80" y="1172.61" text-anchor="start" font-size="14" font-weight="700" fill="#326BC5">Google Cloud Platform</text>
+<text id="t_bq" x="299.41" y="1270.43" text-anchor="middle" font-size="22" font-weight="700" fill="#182B45">BigQuery</text>
+<text id="t_bq_s" x="299.50" y="1317.76" text-anchor="middle" font-size="16" font-weight="400" fill="#65758B">Dados financeiros do cliente</text>
+<text id="t_lg" x="643.79" y="1208.30" text-anchor="start" font-size="13" font-weight="700" fill="#65758B">FONTES COMPLEMENTARES</text>
+<text id="t_lg1" x="671.95" y="1244.93" text-anchor="start" font-size="16" font-weight="400" fill="#182B45">SQL · Dados financeiros do cliente</text>
+<text id="t_lg2" x="671.94" y="1290.76" text-anchor="start" font-size="16" font-weight="400" fill="#182B45">RAG · Conhecimento documental</text>
+</g>
+</svg>
+</main>
+</body>
+</html>

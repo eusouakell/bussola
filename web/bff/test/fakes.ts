@@ -1,4 +1,5 @@
 // Dublês das portas para testar casos de uso sem infraestrutura.
+import { NotFound } from "../application/errors.ts";
 import type { AgentGateway, AgentSession, AgentTurn } from "../application/ports/agentGateway.ts";
 import type { LogFields, Logger } from "../application/ports/logger.ts";
 import type { LoginRateLimiter } from "../application/ports/loginRateLimiter.ts";
@@ -81,6 +82,7 @@ export class FakeRateLimiter implements LoginRateLimiter {
   }
 }
 
+/** Como o ADK, guarda a sessão sob o `userId`: só ele a encontra. */
 export class FakeAgentGateway implements AgentGateway {
   readonly created: { userId: string; state: Readonly<Record<string, unknown>> }[] = [];
   readonly turns: AgentTurn[] = [];
@@ -89,20 +91,32 @@ export class FakeAgentGateway implements AgentGateway {
 
   async createSession(userId: string, state: Readonly<Record<string, unknown>>): Promise<AgentSession> {
     this.counter += 1;
-    const session = { id: `agente-${this.counter}`, userId, state };
+    const session = { id: `agente-${this.counter}`, userId, state, lastUpdateTime: this.counter, events: [] };
     this.created.push({ userId, state });
-    this.sessions.set(session.id, session);
+    this.sessions.set(key(userId, session.id), session);
     return session;
   }
 
-  async getSession(_userId: string, sessionId: string): Promise<AgentSession | null> {
-    return this.sessions.get(sessionId) ?? null;
+  async getSession(userId: string, sessionId: string): Promise<AgentSession | null> {
+    return this.sessions.get(key(userId, sessionId)) ?? null;
+  }
+
+  async listSessions(userId: string): Promise<AgentSession[]> {
+    return [...this.sessions.entries()]
+      .filter(([chave]) => chave.startsWith(`${userId}\u0000`))
+      .map(([, session]) => session);
   }
 
   async streamRun(turn: AgentTurn): Promise<AsyncIterable<Uint8Array>> {
+    if (!this.sessions.has(key(turn.userId, turn.sessionId))) throw new NotFound();
     this.turns.push(turn);
     return events('data: {"ok":true}\n\n');
   }
+}
+
+/** `\u0000` não aparece num login nem num id de sessão. */
+function key(userId: string, sessionId: string): string {
+  return `${userId}\u0000${sessionId}`;
 }
 
 async function* events(...chunks: string[]): AsyncIterable<Uint8Array> {

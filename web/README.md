@@ -123,7 +123,7 @@ npm run bff                # ou, na raiz: make bff (lê ../.env se existir)
 | `AUTH_COOKIE_SECURE` | `TRUE` no Cloud Run | Cookie `__Host-` com `Secure` |
 | `AUTH_COOKIE_NAME` | `bussola_session` | Nome do cookie de sessão (com `Secure`, ganha o prefixo `__Host-`) |
 | `AUTH_SESSION_IDLE_TTL_MS`, `AUTH_SESSION_TTL_MS` | `1800000`, `28800000` | Inatividade e validade absoluta da sessão de login |
-| `AUTH_MAX_SESSIONS`, `AGENT_MAX_SESSIONS` | `500`, `20` | Sessões de login vivas no processo e sessões do agente por login |
+| `AUTH_MAX_SESSIONS` | `500` | Sessões de login vivas no processo |
 | `AUTH_LOGIN_MAX_FAILURES`, `AUTH_LOGIN_WINDOW_MS` | `5`, `900000` | Limite de tentativas por persona |
 | `AUTH_GLOBAL_MAX_FAILURES`, `AUTH_GLOBAL_WINDOW_MS` | `30`, `60000` | Limite de tentativas no processo |
 | `AUTH_LOGIN_MAX_CONCURRENT` | `8` | Logins simultâneos (scrypt é caro) |

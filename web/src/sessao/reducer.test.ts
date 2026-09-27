@@ -238,3 +238,80 @@ describe("reducerSessao", () => {
     expect(m.estado.estado_jornada).toBe("ENTENDER");
   });
 });
+
+describe("reducerSessao: conversa retomada", () => {
+  /** Histórico como o ADK devolve: só eventos finais, com timestamp em segundos. */
+  const historico: EventoAdk[] = [
+    { author: "user", timestamp: 1_700_000_000, content: { role: "user", parts: [{ text: "Quero viajar" }] } },
+    { author: "bussola", timestamp: 1_700_000_001, content: { parts: [{ text: "Vamos montar o plano." }] } },
+    { author: "user", timestamp: 1_700_000_002, content: { role: "user", parts: [{ text: "Tenho R$ 500 por mês" }] } },
+    { author: "bussola", timestamp: 1_700_000_003, content: { parts: [{ text: "Anotado." }] } },
+  ];
+
+  function abrir(eventos: EventoAdk[], retomada = false): ModeloSessao {
+    return rodar([{ tipo: "iniciada", estado: { estado_jornada: "OBJETIVO", ate_anomes: 202506 }, eventos, agora: AGORA, retomada }]);
+  }
+
+  function retomar(eventos: EventoAdk[]): ModeloSessao {
+    return abrir(eventos, true);
+  }
+
+  it("reconstrói as mensagens do cliente e da Bússola na ordem, com o horário original", () => {
+    const m = retomar(historico);
+    expect(m.itens.map((i) => i.tipo)).toEqual(["mensagem_cliente", "mensagem_agente", "mensagem_cliente", "mensagem_agente"]);
+    expect(m.itens.map((i) => (i.tipo === "mensagem_cliente" || i.tipo === "mensagem_agente" ? i.texto : null))).toEqual([
+      "Quero viajar",
+      "Vamos montar o plano.",
+      "Tenho R$ 500 por mês",
+      "Anotado.",
+    ]);
+    expect(m.itens[0].ts).toBe(1_700_000_000_000);
+    expect(m.itens.at(-1)).toMatchObject({ emStreaming: false });
+    expect(m.ocupado).toBe(false);
+  });
+
+  it("chaves não repetem: cada turno do histórico é um item distinto", () => {
+    const chaves = retomar(historico).itens.map((i) => i.chave);
+    expect(new Set(chaves).size).toBe(chaves.length);
+  });
+
+  it("sem retomada, o mesmo histórico ignora o que o cliente escreveu", () => {
+    const m = abrir(historico);
+    expect(m.itens.map((i) => i.tipo)).toEqual(["mensagem_agente", "mensagem_agente"]);
+  });
+
+  it("parcial que sobrou no histórico não duplica a resposta", () => {
+    const m = retomar([
+      { author: "user", timestamp: 1_700_000_000, content: { role: "user", parts: [{ text: "oi" }] } },
+      { author: "bussola", partial: true, timestamp: 1_700_000_001, content: { parts: [{ text: "Vamos" }] } },
+      { author: "bussola", timestamp: 1_700_000_001, content: { parts: [{ text: "Vamos montar o plano." }] } },
+    ]);
+    expect(m.itens).toMatchObject([
+      { tipo: "mensagem_cliente", texto: "oi" },
+      { tipo: "mensagem_agente", texto: "Vamos montar o plano.", emStreaming: false },
+    ]);
+  });
+
+  it("evento do cliente sem texto (ou só raciocínio) não cria mensagem vazia", () => {
+    const m = retomar([
+      { author: "user", timestamp: 1_700_000_000, content: { role: "user", parts: [] } },
+      { author: "user", timestamp: 1_700_000_001, content: { role: "user", parts: [{ text: "ruído", thought: true }] } },
+      { author: "user", timestamp: 1_700_000_002, content: { role: "user", parts: [{ text: "oi" }] } },
+    ]);
+    expect(m.itens).toMatchObject([{ tipo: "mensagem_cliente", texto: "oi" }]);
+  });
+
+  it("resposta de ferramenta do histórico continua virando card, não mensagem do cliente", () => {
+    const m = retomar([
+      { author: "user", timestamp: 1_700_000_000, content: { role: "user", parts: [{ text: "como estou?" }] } },
+      chamada("perfil_financeiro", "c1", { ate_anomes: 202506 }),
+      resposta("perfil_financeiro", "c1", perfil),
+    ]);
+    expect(m.itens.map((i) => i.tipo)).toEqual(["mensagem_cliente", "ferramenta", "card"]);
+  });
+
+  it("histórico vazio deixa a conversa como uma nova", () => {
+    expect(retomar([]).itens).toEqual([]);
+    expect(retomar([]).estado.estado_jornada).toBe("OBJETIVO");
+  });
+});

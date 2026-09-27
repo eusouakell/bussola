@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi, type Mock } from "vitest";
-import { ClienteAdk } from "./cliente-adk";
+import { ClienteAdk, memoriaLocal, type MemoriaConversa } from "./cliente-adk";
 import type { EventoAdk } from "./tipos";
 import { FalhaConexao } from "./transporte";
 
@@ -40,8 +40,22 @@ async function coletar(eventos: AsyncIterable<EventoAdk>): Promise<EventoAdk[]> 
   return saida;
 }
 
-function criar(f: FetchFalso, base?: string): ClienteAdk {
-  return new ClienteAdk({ app: APP, usuario: USUARIO, fetch: f, base });
+/** Memória sem `localStorage`: cada cliente do teste começa sem conversa lembrada. */
+function memoriaVolatil(inicial: string | null = null): MemoriaConversa {
+  let valor = inicial;
+  return {
+    ler: () => valor,
+    gravar: (sessionId) => {
+      valor = sessionId;
+    },
+    limpar: () => {
+      valor = null;
+    },
+  };
+}
+
+function criar(f: FetchFalso, base?: string, memoria: MemoriaConversa = memoriaVolatil()): ClienteAdk {
+  return new ClienteAdk({ app: APP, usuario: USUARIO, fetch: f, base, memoria });
 }
 
 /** Cliente com sessão `s-1` já criada; as próximas respostas vêm de `respostas`. */
@@ -59,13 +73,14 @@ async function comSessao(...respostas: (Response | Error)[]): Promise<{ cliente:
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  localStorage.clear();
 });
 
 describe("ClienteAdk.iniciar", () => {
   it("cria a sessão com POST {} e devolve id e state", async () => {
     const f = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-1", state: { estado_jornada: "OBJETIVO" } }));
     const inicio = await criar(f).iniciar();
-    expect(inicio).toEqual({ sessionId: "s-1", estado: { estado_jornada: "OBJETIVO" }, eventos: [] });
+    expect(inicio).toEqual({ sessionId: "s-1", estado: { estado_jornada: "OBJETIVO" }, eventos: [], retomada: false });
     expect(f).toHaveBeenCalledTimes(1);
     const [url, init] = f.mock.calls[0];
     expect(url).toBe(SESSOES);
@@ -113,6 +128,134 @@ describe("ClienteAdk.iniciar", () => {
   it("corpo que não é JSON vira FalhaConexao", async () => {
     const f = vi.fn<typeof fetch>().mockResolvedValueOnce(new Response("<html>proxy</html>", { status: 200 }));
     await expect(criar(f).iniciar()).rejects.toThrow(FalhaConexao);
+  });
+});
+
+describe("ClienteAdk: conversa lembrada", () => {
+  const HISTORICO = [
+    { author: "user", timestamp: 1_700_000_000, content: { role: "user", parts: [{ text: "Quero viajar" }] } },
+    { author: "bussola", timestamp: 1_700_000_001, content: { parts: [{ text: "Vamos montar o plano." }] } },
+  ];
+
+  it("com uma conversa lembrada, faz GET dela e devolve o histórico como retomada", async () => {
+    const f = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-7", state: { estado_jornada: "ENTENDER" }, events: HISTORICO }));
+    const inicio = await criar(f, undefined, memoriaVolatil("s-7")).iniciar();
+    expect(inicio).toEqual({
+      sessionId: "s-7",
+      estado: { estado_jornada: "ENTENDER" },
+      eventos: HISTORICO,
+      retomada: true,
+    });
+    expect(f).toHaveBeenCalledTimes(1);
+    expect(f.mock.calls[0][0]).toBe(`${SESSOES}/s-7`);
+  });
+
+  it("conversa lembrada que não existe mais (404) abre uma nova e esquece a antiga", async () => {
+    const f = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(json({ detail: "Not Found" }, 404))
+      .mockResolvedValueOnce(json({ id: "s-8" }));
+    const memoria = memoriaVolatil("s-7");
+    const inicio = await criar(f, undefined, memoria).iniciar();
+    expect(inicio).toMatchObject({ sessionId: "s-8", eventos: [], retomada: false });
+    expect(memoria.ler()).toBe("s-8");
+    expect(f.mock.calls.map((c) => c[0])).toEqual([`${SESSOES}/s-7`, SESSOES]);
+  });
+
+  it("lembra a conversa criada e retoma a mesma na recarga", async () => {
+    const memoria = memoriaVolatil();
+    const criando = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-9" }));
+    await criar(criando, undefined, memoria).iniciar();
+    expect(memoria.ler()).toBe("s-9");
+
+    const recarga = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-9", events: HISTORICO }));
+    const depois = await criar(recarga, undefined, memoria).iniciar();
+    expect(depois).toMatchObject({ sessionId: "s-9", retomada: true });
+    expect(depois.eventos).toHaveLength(2);
+  });
+
+  it("esquecer faz a próxima abertura criar conversa nova", async () => {
+    const memoria = memoriaVolatil();
+    const f = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-1" })).mockResolvedValueOnce(json({ id: "s-2" }));
+    const cliente = criar(f, undefined, memoria);
+    await cliente.iniciar();
+    cliente.esquecer();
+    expect(memoria.ler()).toBeNull();
+    await expect(coletar(cliente.enviar("oi"))).rejects.toThrow("sem sessão");
+    expect(await cliente.iniciar()).toMatchObject({ sessionId: "s-2", retomada: false });
+    expect(f.mock.calls.map((c) => c[0])).toEqual([SESSOES, SESSOES]);
+  });
+
+  it("sem memória injetada, guarda o id no localStorage por app e persona", async () => {
+    const f = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-5" }));
+    await new ClienteAdk({ app: APP, usuario: USUARIO, fetch: f }).iniciar();
+    expect(localStorage.getItem(`bussola.conversa.${APP}.${USUARIO}`)).toBe("s-5");
+    // Outra persona não herda a conversa: a chave é outra.
+    expect(localStorage.getItem(`bussola.conversa.${APP}.bianca`)).toBeNull();
+  });
+
+  it("memoriaLocal sobrevive a localStorage indisponível", () => {
+    const original = globalThis.localStorage;
+    Object.defineProperty(globalThis, "localStorage", {
+      configurable: true,
+      get() {
+        throw new Error("bloqueado");
+      },
+    });
+    try {
+      const memoria = memoriaLocal("bussola.conversa.x");
+      expect(memoria.ler()).toBeNull();
+      memoria.gravar("s-1");
+      expect(memoria.ler()).toBe("s-1");
+      memoria.limpar();
+      expect(memoria.ler()).toBeNull();
+    } finally {
+      Object.defineProperty(globalThis, "localStorage", { configurable: true, value: original });
+    }
+  });
+
+  it("retomar uma conversa específica traz o histórico e passa a ser a lembrada", async () => {
+    const memoria = memoriaVolatil("s-1");
+    const f = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ id: "s-3", state: {}, events: HISTORICO }));
+    const cliente = criar(f, undefined, memoria);
+    const inicio = await cliente.retomar("s-3");
+    expect(inicio).toMatchObject({ sessionId: "s-3", retomada: true });
+    expect(memoria.ler()).toBe("s-3");
+    expect(f.mock.calls[0][0]).toBe(`${SESSOES}/s-3`);
+  });
+
+  it("retomar conversa inexistente é FalhaConexao", async () => {
+    const f = vi.fn<typeof fetch>().mockResolvedValueOnce(json({ detail: "Not Found" }, 404));
+    await expect(criar(f).retomar("s-3")).rejects.toThrow(FalhaConexao);
+  });
+});
+
+describe("ClienteAdk.listar", () => {
+  it("devolve as conversas com horário em ms e o objetivo como título", async () => {
+    const f = vi.fn<typeof fetch>().mockResolvedValueOnce(
+      json([
+        { id: "s-2", lastUpdateTime: 1_700_000_100, state: { objetivo: { descricao: " Viagem ao Japão " } } },
+        { id: "s-1" },
+        { semId: true },
+      ]),
+    );
+    const conversas = await criar(f).listar();
+    expect(conversas).toEqual([
+      { sessionId: "s-2", atualizadaEm: 1_700_000_100_000, titulo: "Viagem ao Japão" },
+      { sessionId: "s-1", atualizadaEm: undefined, titulo: undefined },
+    ]);
+    expect(f.mock.calls[0][0]).toBe(SESSOES);
+  });
+
+  it("HTTP de erro, rede ou corpo que não é lista viram FalhaConexao", async () => {
+    await expect(criar(vi.fn<typeof fetch>().mockResolvedValueOnce(json({ detail: "x" }, 500))).listar()).rejects.toThrow(FalhaConexao);
+    await expect(criar(vi.fn<typeof fetch>().mockRejectedValueOnce(new TypeError("Failed to fetch"))).listar()).rejects.toThrow(
+      FalhaConexao,
+    );
+    await expect(criar(vi.fn<typeof fetch>().mockResolvedValueOnce(json({ sessions: [] }))).listar()).rejects.toThrow(FalhaConexao);
+    await expect(criar(vi.fn<typeof fetch>().mockResolvedValueOnce(new Response("nope", { status: 200 }))).listar()).rejects.toThrow(
+      FalhaConexao,
+    );
   });
 });
 

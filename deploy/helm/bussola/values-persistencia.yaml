@@ -1,0 +1,51 @@
+# Persistência real do agente (ciclo 011): planos, consentimentos, auditoria e
+# acompanhamento saem da memória do processo e vão para o BigQuery.
+#
+#   helm template bussola deploy/helm/bussola \
+#     -f deploy/helm/bussola/values-persistencia.yaml \
+#     --set release.tag=c011 --set release.revisionSuffix=c011-<sha>-01
+#
+# **Este overlay não foi aplicado.** Publicar é do ciclo 007, sempre em revisão
+# nova com tag c011 e 0% de tráfego, com smoke pela URL da tag antes de
+# qualquer promoção (docs/operacao.md). Ele se sobrepõe ao Plano B dos
+# values.yaml; para somar ao Plano A, passe os dois `-f`, este por último.
+#
+# O que muda, e por quê:
+#
+# 1. `serviceAccount`. A default de compute não tem nenhum papel de BigQuery
+#    (só artifactregistry.writer, logging.logWriter e storage.admin), então o
+#    agente com BUSSOLA_FAKES=FALSE falharia na primeira gravação. A
+#    squad-agent-sa já existe no projeto e já traz bigquery.jobUser — que o
+#    INSERT de `planos` e o SELECT de `obter_plano` exigem —, além de
+#    secretmanager.secretAccessor (gemini-api-key, bussola-auth-password-hash),
+#    run.invoker (BFF → agente) e aiplatform.user. Nada de IAM precisa ser
+#    criado: a conta que roda o deploy já tem iam.serviceAccountUser nela.
+#    Ainda assim, trocar a identidade de um serviço é decisão de operação, com
+#    confirmação humana antes de aplicar.
+#
+# 2. `BUSSOLA_FAKES: "FALSE"` no agente. No agente essa variável decide só uma
+#    coisa: RegistroEmMemoria ou RegistroBigQuery
+#    (agent/bussola_agent/persistencia_bq.py, `build_registry`). O mcp e o bff
+#    ficam em fakes de propósito — lá a chave significa outra coisa (fixtures
+#    de dados e de personas) e é de outro ciclo.
+#
+# Limites conhecidos, para não parecer que isto resolve tudo:
+#
+# - **A sessão do ADK continua em memória.** O `InMemorySessionService` morre no
+#   cold start (maxInstances 1 e escala a zero), e com ele o histórico do
+#   turno. Isso só sai com o backend de sessão do Agent Engine, que é o outro
+#   trilho do 011.
+# - O chart tem um `serviceAccount` único para os três serviços, então o mcp e o
+#   bff também passam a rodar com a squad-agent-sa, que tem bigquery.admin.
+#   Para a PoC é aceitável; separar por serviço é mudança de chart (007).
+# - `values-plan-a.yaml` aponta para `bussola-runtime@…`, que não existe no
+#   projeto. A squad-agent-sa cobre o mesmo papel, então o pedido 1 ao owner
+#   deixou de ser bloqueio.
+serviceAccount: squad-agent-sa@batalha-time-07-lkbv.iam.gserviceaccount.com
+
+services:
+  agent:
+    env:
+      # RegistroBigQuery em bussola_app (planos, consentimentos, auditoria,
+      # acompanhamento: as quatro tabelas já existem no dataset).
+      BUSSOLA_FAKES: "FALSE"

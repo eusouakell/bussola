@@ -5,7 +5,7 @@ import { account, ManualClock } from "../../test/helpers.ts";
 import { NotAuthenticated } from "../errors.ts";
 import { Authenticate } from "./authenticate.ts";
 
-const policy = { idleTtlMs: 1000, absoluteTtlMs: 5000, maxAgentSessions: 2 };
+const policy = { idleTtlMs: 1000, absoluteTtlMs: 5000 };
 
 describe("Authenticate", () => {
   it("resolve o token e renova a inatividade", async () => {

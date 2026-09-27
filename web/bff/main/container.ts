@@ -4,6 +4,7 @@
 import { exceptionName, type Logger } from "../application/ports/logger.ts";
 import { Authenticate } from "../application/useCases/authenticate.ts";
 import { GetAgentSession } from "../application/useCases/getAgentSession.ts";
+import { ListAgentSessions } from "../application/useCases/listAgentSessions.ts";
 import { ListPersonas } from "../application/useCases/listPersonas.ts";
 import { Login } from "../application/useCases/login.ts";
 import { Logout } from "../application/useCases/logout.ts";
@@ -76,8 +77,9 @@ export function buildContainer(config: BffConfig, logger: Logger): Bff {
   });
 
   const agentController = new AgentController({
-    startSession: new StartAgentSession({ agent, policy, logger }),
+    startSession: new StartAgentSession({ agent, logger }),
     getSession: new GetAgentSession(agent),
+    listSessions: new ListAgentSessions(agent),
     sendMessage: new SendMessage(agent),
     currentSession,
     agentApp: config.agentApp,
