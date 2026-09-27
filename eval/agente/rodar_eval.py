@@ -307,6 +307,11 @@ class TurnResult:
 class CaseResult:
     case: Case
     turns: list[TurnResult] = field(default_factory=list)
+    attempt: int = 1
+
+    @property
+    def unavailable(self) -> bool:
+        return any(t.unavailable for t in self.turns)
 
 
 def _final_text(events: list[Event]) -> str:
@@ -402,7 +407,8 @@ class Harness:
         self.logs.truncate()
         return counter
 
-    async def run_case(self, case: Case) -> CaseResult:
+    async def run_case(self, case: Case, pause: float = 0.0) -> CaseResult:
+        """Um caso numa sessão nova; ``pause`` segundos entre os turnos (cota do modelo)."""
         session = await self.runner.session_service.create_session(
             app_name=APP, user_id=USER, state=dict(case.state)
         )
@@ -410,7 +416,9 @@ class Harness:
         client_texts: list[str] = []
         case_tools_ok: set[str] = set()
         live = self.mode == MODE_LIVE
-        for turn in case.turns:
+        for index, turn in enumerate(case.turns):
+            if index and pause:
+                await asyncio.sleep(pause)
             if self.scripted is not None:
                 self.scripted.load(script_responses(turn.script))
             client_texts.append(turn.client)
@@ -536,7 +544,7 @@ def render_section(
         f"**sem fonte: {summary.unsupported}** ({pct:.0f}% com fonte).",
         f"- Expectativas cumpridas: {summary.expectations_ok} de {summary.expectations}"
         + (" (no ao vivo, relatadas sem reprovar o eval)." if mode == MODE_LIVE else "."),
-        f"- Resultado: **{'aprovado' if passed(mode, summary) else 'reprovado'}**.",
+        f"- Resultado: **{verdict(mode, summary)}**.",
         "",
         "| Caso | Turno | Ferramentas (ok) | Etapa | Números (ferr./sessão/sem fonte) "
         "| Blocos | Fonte | Expectativas não cumpridas |",
@@ -558,7 +566,8 @@ def render_section(
                 + " | ".join(
                     _cell(v)
                     for v in (
-                        result.case.id,
+                        result.case.id
+                        + (f" (tentativa {result.attempt})" if result.attempt > 1 else ""),
                         str(index),
                         tools,
                         turn.stage or "",
@@ -573,10 +582,20 @@ def render_section(
     return "\n".join(lines) + "\n"
 
 
-def passed(mode: str, summary: Summary) -> bool:
-    if mode == MODE_LIVE:
-        return summary.numbers_ok
-    return summary.numbers_ok and summary.expectations_ok == summary.expectations
+VERDICT_PASSED = "aprovado"
+VERDICT_FAILED = "reprovado"
+VERDICT_INCONCLUSIVE = "inconclusivo (modelo indisponível em parte dos turnos)"
+EXIT_CODES = {VERDICT_PASSED: 0, VERDICT_FAILED: 1, VERDICT_INCONCLUSIVE: 3}
+
+
+def verdict(mode: str, summary: Summary) -> str:
+    """Offline: números e expectativas. Ao vivo: números; turno sem modelo deixa inconclusivo."""
+    if not summary.numbers_ok:
+        return VERDICT_FAILED
+    if mode == MODE_OFFLINE:
+        ok = summary.expectations_ok == summary.expectations
+        return VERDICT_PASSED if ok else VERDICT_FAILED
+    return VERDICT_INCONCLUSIVE if summary.unavailable else VERDICT_PASSED
 
 
 def write_section(path: Path, mode: str, section: str) -> None:
@@ -609,8 +628,15 @@ async def run_eval(
     mcp_url: str | None = None,
     only: Sequence[str] = (),
     show: bool = False,
+    pause: float = 0.0,
+    attempts: int = 1,
+    retry_wait: float = 30.0,
 ) -> tuple[Summary, list[CaseResult]]:
-    """Roda o eval e grava a seção do modo em ``output`` (quando informado)."""
+    """Roda o eval e grava a seção do modo em ``output`` (quando informado).
+
+    Um caso com turno sem modelo (alta demanda) é refeito do zero, numa sessão
+    nova, até ``attempts`` vezes, esperando ``retry_wait`` segundos antes.
+    """
     ate_anomes, cases = load_cases(questions)
     selected = [c for c in cases if (mode == MODE_OFFLINE or c.live) and (not only or c.id in only)]
     with contextlib.ExitStack() as stack:
@@ -621,8 +647,16 @@ async def run_eval(
         harness = Harness(mode, url, ate_anomes)
         results = []
         for case in selected:
-            print(f"[eval] {case.id}", file=sys.stderr)
-            result = await harness.run_case(case)
+            for attempt in range(1, max(attempts, 1) + 1):
+                if attempt > 1:
+                    note = f"[eval] {case.id}: sem modelo; nova tentativa em {retry_wait:.0f} s"
+                    print(note, file=sys.stderr)
+                    await asyncio.sleep(retry_wait)
+                print(f"[eval] {case.id}", file=sys.stderr)
+                result = await harness.run_case(case, pause)
+                result.attempt = attempt
+                if not result.unavailable:
+                    break
             results.append(result)
             if show:
                 for index, turn in enumerate(result.turns, start=1):
@@ -643,6 +677,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--mostrar", action="store_true", help="imprime as respostas (não vão para o arquivo)"
     )
+    parser.add_argument("--pausa", type=float, default=None, help="segundos entre turnos")
+    parser.add_argument(
+        "--tentativas", type=int, default=None, help="tentativas por caso sem resposta do modelo"
+    )
+    parser.add_argument("--espera", type=float, default=45.0, help="segundos antes de refazer")
     args = parser.parse_args(argv)
     if args.modo == MODE_LIVE and not _live_credentials_ok():
         print(
@@ -652,15 +691,28 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return 2
     only = [c.strip() for c in args.casos.split(",") if c.strip()]
+    live = args.modo == MODE_LIVE
+    pause = args.pausa if args.pausa is not None else (5.0 if live else 0.0)
+    attempts = args.tentativas if args.tentativas is not None else (3 if live else 1)
     summary, _ = asyncio.run(
-        run_eval(args.modo, args.perguntas, args.saida, args.mcp_url, only, args.mostrar)
+        run_eval(
+            args.modo,
+            args.perguntas,
+            args.saida,
+            args.mcp_url,
+            only,
+            args.mostrar,
+            pause,
+            attempts,
+            args.espera,
+        )
     )
     print(
         f"[eval] {args.modo}: {summary.checked} números, {summary.unsupported} sem fonte; "
         f"expectativas {summary.expectations_ok}/{summary.expectations}.",
         file=sys.stderr,
     )
-    return 0 if passed(args.modo, summary) else 1
+    return EXIT_CODES[verdict(args.modo, summary)]
 
 
 if __name__ == "__main__":
