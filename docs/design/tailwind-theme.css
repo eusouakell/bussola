@@ -121,16 +121,15 @@
 .app[data-estado="orientar"]   { --amb-base:#FFFFFF; --amb-1:#FF6200; --amb-2:#FF6200; --amb-3:#F4F6F9; }
 .app[data-estado="agir"]       { --amb-base:#F4F6F9; --amb-1:#0F470C; --amb-2:#FF6200; --amb-3:#0F470C; }
 .app[data-estado="acompanhar"] { --amb-base:#FFFFFF; --amb-1:#FF6200; --amb-2:#FF6200; --amb-3:#FF6200; }
-.app.dark[data-estado="objetivo"]   { --amb-base:#02036C; --amb-1:#5C6B79; --amb-2:#FF6200; --amb-3:#02036C; }
-.app.dark[data-estado="entender"]   { --amb-base:#02036c; --amb-1:#5c6b79; --amb-2:#02036c; --amb-3:#5c6b79; }
-.app.dark[data-estado="antecipar"]  { --amb-base:#02036c; --amb-1:#5c6b79; --amb-2:#ff6200; --amb-3:#02036c; }
-.app.dark[data-estado="orientar"]   { --amb-base:#02036C; --amb-1:#FF6200; --amb-2:#FF6200; --amb-3:#5C6B79; }
-.app.dark[data-estado="agir"]       { --amb-base:#02036C; --amb-1:#0F470C; --amb-2:#FF6200; --amb-3:#0F470C; }
-.app.dark[data-estado="acompanhar"] { --amb-base:#02036c; --amb-1:#ff6200; --amb-2:#ff6200; --amb-3:#5c6b79; }
+.app.dark[data-estado="objetivo"]   { --amb-base:#15110E; --amb-1:#3B2819; --amb-2:#4A2C16; --amb-3:#2A211A; }
+.app.dark[data-estado="entender"]   { --amb-base:#141210; --amb-1:#2E2823; --amb-2:#3D2A1C; --amb-3:#24211E; }
+.app.dark[data-estado="antecipar"]  { --amb-base:#141111; --amb-1:#3A2819; --amb-2:#2E2440; --amb-3:#35271B; }
+.app.dark[data-estado="orientar"]   { --amb-base:#170F0A; --amb-1:#5A2E0E; --amb-2:#6B340A; --amb-3:#3A2414; }
+.app.dark[data-estado="agir"]       { --amb-base:#0F1310; --amb-1:#173A25; --amb-2:#4A2A12; --amb-3:#1C2E22; }
+.app.dark[data-estado="acompanhar"] { --amb-base:#161109; --amb-1:#5A3F0E; --amb-2:#5E300C; --amb-3:#3A2D14; }
 
 .ambient { position: absolute; inset: 0; overflow: hidden; z-index: 0; background: var(--amb-base); }
 .blob { position: absolute; border-radius: 50%; filter: blur(56px); will-change: transform; opacity: .22; }
-.app.dark .blob { opacity: .4; }
 .blob.b1 { width: 70%; height: 80%; left: -16%; top: -24%;
   background: radial-gradient(closest-side, var(--amb-1), transparent);
   animation: drift1 26s ease-in-out infinite alternate; }

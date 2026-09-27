@@ -289,7 +289,8 @@ até 5 minutos, e depois implementada como front web.
   - **Fundo ambiente:** um gradiente/mesh suave sobre `color.background.default`
     e `color.background.surface`, com blobs só de cores da paleta (laranja,
     azul marinho, cinza azulado e verde) em baixa opacidade, em movimento
-    lento (loop de 20–30 s, quase imperceptível).
+    lento (loop de 20–30 s, quase imperceptível). Vale para o modo claro; o
+    fundo escuro segue o que está em "Modo escuro".
   - **O fundo reage à jornada:** o tint muda sutilmente a cada estado do
     stepper. OBJETIVO/ENTENDER mais neutros (azul marinho e cinza azulado),
     ORIENTAR com mais laranja, AGIR com um toque de verde, ACOMPANHAR em laranja
@@ -315,7 +316,8 @@ até 5 minutos, e depois implementada como front web.
     aplique um scrim, e garanta contraste AA medido sobre o pior caso do
     fundo.
 - **Paleta (oficial Itaú PF).** **Toda cor do produto sai desta tabela**, com
-  transparência quando preciso (vidro, halos, sombras); nenhum outro tom:
+  transparência quando preciso (vidro, halos, sombras); nenhum outro tom,
+  **exceto** o fundo ambiente do modo escuro (ver "Modo escuro"):
 
   | Token semântico | Hex | Onde usar |
   |---|---|---|
@@ -359,7 +361,8 @@ até 5 minutos, e depois implementada como front web.
   - Cards de vidro entrando com fade + leve scale/blur-in, os cenários em
     sequência.
 - **Modo escuro:** desejável. Nele, o vidro é fumê (azul marinho translúcido,
-  `#02036C`), com o mesmo ambiente sobre essa base, só com cores da paleta.
+  `#02036C`). **Exceção à paleta:** o fundo ambiente do modo escuro mantém os
+  tons escuros quentes originais (decisão do time).
 - **Acessibilidade:**
   - Contraste AA.
   - Foco visível, com anel luminoso no vidro.
