@@ -1,9 +1,11 @@
 apiVersion: v2
 name: bussola
 description: >-
-  Serviços Cloud Run da Bússola (bussola-mcp e bussola-agent) como manifestos
-  Knative, renderizados com `helm template` e aplicados com
-  `gcloud run services replace`.
+  Serviços Cloud Run da Bússola (bussola-mcp, bussola-agent e bussola-bff) como
+  manifestos Knative, renderizados com `helm template` e aplicados com
+  `gcloud run services replace`. Modo deploy (revisão nova com 0% de tráfego)
+  e modo promoção (só tráfego, ciclo 007).
 type: application
-version: 0.1.0
-appVersion: "09aaeeb"
+version: 0.2.0
+# Commit da main mais recente entre as imagens vivas (agent eee18b6).
+appVersion: "eee18b6"

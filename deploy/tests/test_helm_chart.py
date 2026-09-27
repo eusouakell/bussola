@@ -7,64 +7,30 @@ do workflow de deploy com o chart. Não acessam rede nem GCP. Sem ``helm`` (ou
 """
 
 import json
-import shutil
-import subprocess
 from pathlib import Path
 from typing import Any
 
 import pytest
 import yaml
+from helm_render import (
+    CHART,
+    RELEASE,
+    ROOT,
+    WORKFLOWS,
+    RenderError,
+    env_of,
+    helm_template,
+    needs_helm,
+    needs_jq,
+    render,
+    run_jq,
+)
+from helm_render import merge as _merge
 
-ROOT = Path(__file__).resolve().parents[2]
-CHART = ROOT / "deploy" / "helm" / "bussola"
 TRAFFIC_FILTER = ROOT / "deploy" / "helm" / "traffic.jq"
-DEPLOY_WORKFLOW = ROOT / ".github" / "workflows" / "deploy.yml"
-RELEASE = {"release": {"tag": "c007", "revisionSuffix": "c007-01"}}
-
-needs_helm = pytest.mark.skipif(shutil.which("helm") is None, reason="helm não instalado")
-needs_jq = pytest.mark.skipif(shutil.which("jq") is None, reason="jq não instalado")
-
-
-class RenderError(Exception):
-    """``helm template`` falhou; a mensagem traz o stderr."""
-
-
-def _merge(base: dict[str, Any], extra: dict[str, Any]) -> dict[str, Any]:
-    merged = dict(base)
-    for key, value in extra.items():
-        if isinstance(value, dict) and isinstance(merged.get(key), dict):
-            merged[key] = _merge(merged[key], value)
-        else:
-            merged[key] = value
-    return merged
-
-
-def render(service: str, tmp_path: Path, overrides: dict[str, Any] | None = None) -> dict:
-    values = tmp_path / "values-test.yaml"
-    values.write_text(yaml.safe_dump(_merge(RELEASE, overrides or {})))
-    result = subprocess.run(
-        [
-            "helm",
-            "template",
-            "bussola",
-            str(CHART),
-            "-f",
-            str(values),
-            "--show-only",
-            f"templates/{service}-service.yaml",
-        ],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if result.returncode != 0:
-        raise RenderError(result.stderr)
-    return yaml.safe_load(result.stdout)
-
-
-def env_of(manifest: dict) -> dict[str, dict]:
-    container = manifest["spec"]["template"]["spec"]["containers"][0]
-    return {item["name"]: item for item in container["env"]}
+DEPLOY_WORKFLOW = WORKFLOWS / "deploy.yml"
+PLAN_A = CHART / "values-plan-a.yaml"
+PLAN_B = CHART / "values-plan-b.yaml"
 
 
 @needs_helm
@@ -168,7 +134,7 @@ def test_mcp_reads_bigquery_in_memory_mode(tmp_path):
 @needs_helm
 def test_image_accepts_tag_and_digest(tmp_path):
     digest = "sha256:" + "a" * 64
-    by_tag = render("agent", tmp_path)
+    by_tag = render("agent", tmp_path, {"services": {"agent": {"image": "09aaeeb"}}})
     by_digest = render("agent", tmp_path, {"services": {"agent": {"image": digest}}})
 
     image = by_tag["spec"]["template"]["spec"]["containers"][0]["image"]
@@ -228,15 +194,7 @@ def test_rendered_chart_has_no_literal_secret_values(tmp_path):
 
 def live_traffic(entries: list[dict], key: str, tag: str) -> dict[str, Any]:
     """Roda ``traffic.jq`` como o workflow, sobre um ``services describe`` fictício."""
-    described = json.dumps({"status": {"traffic": entries}})
-    result = subprocess.run(
-        ["jq", "--arg", "key", key, "--arg", "tag", tag, "-f", str(TRAFFIC_FILTER)],
-        input=described,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    return json.loads(result.stdout)
+    return run_jq(TRAFFIC_FILTER, {"status": {"traffic": entries}}, key=key, tag=tag)
 
 
 SERVING = {"revisionName": "bussola-agent-00001-mix", "percent": 100}
@@ -323,3 +281,114 @@ def test_deploy_workflow_matches_chart_values():
     for item in services:
         assert (ROOT / item["dockerfile"]).is_file()
         assert (CHART / "templates" / f"{item['key']}-service.yaml").is_file()
+
+
+# --- Estado vivo e overlays de plano (ciclo 007) ---
+
+
+def test_values_pin_images_by_digest():
+    values = yaml.safe_load((CHART / "values.yaml").read_text())
+
+    for service in values["services"].values():
+        assert str(service["image"]).startswith("sha256:"), service["name"]
+        assert len(service["image"]) == len("sha256:") + 64
+
+
+def test_values_traffic_is_live_traffic_without_the_rolling_main_tag():
+    values = yaml.safe_load((CHART / "values.yaml").read_text())
+
+    for service in values["services"].values():
+        serving = [entry for entry in service["traffic"] if entry["percent"] > 0]
+        assert len(serving) == 1 and serving[0]["percent"] == 100, service["name"]
+        tags = [entry.get("tag") for entry in service["traffic"] if entry.get("tag")]
+        assert "main" not in tags and len(tags) == len(set(tags)), service["name"]
+
+
+@needs_helm
+@pytest.mark.parametrize("service", ["agent", "mcp", "bff"])
+def test_default_values_render_a_main_release(service, tmp_path):
+    release = {"release": {"tag": "main", "revisionSuffix": "main-ccccccc-1"}}
+
+    traffic = render(service, tmp_path, release)["spec"]["traffic"]
+
+    assert traffic[-1]["tag"] == "main"
+    assert traffic[-1]["percent"] == 0
+
+
+@needs_helm
+def test_deploy_mode_renders_no_promotion_manifest(tmp_path):
+    with pytest.raises(RenderError, match="could not find template"):
+        helm_template("promotion.yaml", tmp_path, RELEASE)
+
+
+@needs_helm
+def test_plan_b_overlay_uses_gemini_api_key_by_reference(tmp_path):
+    agent = render("agent", tmp_path, values_files=(PLAN_B,))
+    mcp = render("mcp", tmp_path, values_files=(PLAN_B,))
+    env = env_of(agent)
+
+    assert env["GOOGLE_GENAI_USE_VERTEXAI"]["value"] == "FALSE"
+    assert env["GOOGLE_API_KEY"] == {
+        "name": "GOOGLE_API_KEY",
+        "valueFrom": {"secretKeyRef": {"name": "gemini-api-key", "key": "latest"}},
+    }
+    assert env_of(mcp)["BQ_MODO_LEITURA"]["value"] == "memoria"
+    assert env_of(mcp)["RAG_BACKEND"]["value"] == "lexico"
+    for manifest in (agent, mcp):
+        spec = manifest["spec"]["template"]["spec"]
+        assert spec["serviceAccountName"] == "1061873050224-compute@developer.gserviceaccount.com"
+
+
+@needs_helm
+def test_plan_b_overlay_matches_live_defaults(tmp_path):
+    for service in ("agent", "mcp", "bff"):
+        default = render(service, tmp_path)
+        plan_b = render(service, tmp_path, values_files=(PLAN_B,))
+        assert plan_b == default, service
+
+
+@needs_helm
+def test_plan_a_overlay_uses_vertex_without_api_key(tmp_path):
+    agent = render("agent", tmp_path, values_files=(PLAN_A,))
+    mcp = render("mcp", tmp_path, values_files=(PLAN_A,))
+    env = env_of(agent)
+
+    assert env["GOOGLE_GENAI_USE_VERTEXAI"]["value"] == "TRUE"
+    assert env["GOOGLE_CLOUD_LOCATION"]["value"] == "global"
+    assert "GOOGLE_API_KEY" not in env
+    assert env["MODEL_ARMOR_TEMPLATE"]["value"] == ""
+    assert env_of(mcp)["BQ_MODO_LEITURA"]["value"] == "query"
+    assert env_of(mcp)["RAG_BACKEND"]["value"] == "numpy"
+    for manifest in (agent, mcp):
+        spec = manifest["spec"]["template"]["spec"]
+        assert spec["serviceAccountName"] == (
+            "bussola-runtime@batalha-time-07-lkbv.iam.gserviceaccount.com"
+        )
+
+
+@needs_helm
+def test_plan_overlays_keep_new_revision_without_traffic(tmp_path):
+    for overlay in (PLAN_A, PLAN_B):
+        for service in ("agent", "mcp"):
+            traffic = render(service, tmp_path, values_files=(overlay,))["spec"]["traffic"]
+            assert traffic[-1]["percent"] == 0
+            assert sum(entry["percent"] for entry in traffic) == 100
+
+
+@needs_helm
+def test_plan_b_after_plan_a_restores_the_secret_reference(tmp_path):
+    env = env_of(render("agent", tmp_path, values_files=(PLAN_A, PLAN_B)))
+
+    assert env["GOOGLE_GENAI_USE_VERTEXAI"]["value"] == "FALSE"
+    assert env["GOOGLE_API_KEY"]["valueFrom"]["secretKeyRef"]["name"] == "gemini-api-key"
+
+
+@pytest.mark.parametrize("overlay", [PLAN_A, PLAN_B], ids=lambda p: p.name)
+def test_plan_overlays_never_carry_secret_values(overlay):
+    values = yaml.safe_load(overlay.read_text())
+
+    for service in values["services"].values():
+        for name in service.get("env", {}):
+            assert not any(word in name for word in ("KEY", "TOKEN", "SECRET", "PASSWORD"))
+        for ref in (service.get("secretEnv") or {}).values():
+            assert ref is None or set(ref) == {"secret", "version"}

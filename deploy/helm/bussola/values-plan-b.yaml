@@ -1,0 +1,29 @@
+# Plano B (ativo hoje): sem os pedidos 1 e 2 ao owner.
+#
+#   helm template bussola deploy/helm/bussola -f deploy/helm/bussola/values-plan-b.yaml ...
+#
+# - SA default de compute, com IAM por dataset (deploy/iam_datasets.sh);
+# - MCP lê o BigQuery por list_rows (sem bigquery.jobUser) e busca o RAG no
+#   índice léxico, sem embedding em tempo de execução;
+# - agente usa a Gemini API. A chave NUNCA é lida no deploy: o Cloud Run
+#   resolve o secretKeyRef em tempo de execução, e a SA precisa de
+#   roles/secretmanager.secretAccessor em gemini-api-key.
+#
+# Os values.yaml já são o Plano B. Este overlay existe para voltar do Plano A
+# de forma explícita. Publique sempre numa revisão com tag cNNN e 0% de
+# tráfego, rode o smoke pela URL da tag e só então promova (docs/operacao.md).
+serviceAccount: 1061873050224-compute@developer.gserviceaccount.com
+
+services:
+  mcp:
+    env:
+      BQ_MODO_LEITURA: memoria
+      RAG_BACKEND: lexico
+  agent:
+    env:
+      GOOGLE_GENAI_USE_VERTEXAI: "FALSE"
+      GOOGLE_CLOUD_LOCATION: global
+    secretEnv:
+      GOOGLE_API_KEY:
+        secret: gemini-api-key
+        version: latest

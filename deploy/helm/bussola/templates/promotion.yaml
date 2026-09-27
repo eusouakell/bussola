@@ -1,0 +1,3 @@
+{{- with .Values.promotion.service }}
+{{- include "bussola.promotion" (dict "root" $ "key" .) }}
+{{- end }}

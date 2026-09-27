@@ -1,0 +1,34 @@
+# Plano A: depende dos pedidos 1 (SA bussola-runtime com jobUser,
+# dataViewer e aiplatform.user) e 2 (Model Armor) ao owner
+# (specs/000-fundacao-contratos/pedidos-owner.md). Enquanto estiverem "A
+# enviar", este overlay só serve para renderizar e revisar.
+#
+#   helm template bussola deploy/helm/bussola -f deploy/helm/bussola/values-plan-a.yaml ...
+#
+# - SA própria de runtime, no lugar da default de compute;
+# - MCP lê o BigQuery por query (jobUser) e o RAG usa embeddings (numpy);
+# - agente usa o Gemini pelo Vertex AI, sem chave de API: o null remove o
+#   GOOGLE_API_KEY herdado dos values.yaml (Plano B).
+#
+# Publique numa revisão com tag cNNN e 0% de tráfego e rode o smoke pela URL
+# da tag antes de promover (docs/operacao.md). A SA nova precisa de
+# roles/run.invoker no bussola-mcp e no bussola-agent: mudança de IAM, com
+# confirmação humana.
+serviceAccount: bussola-runtime@batalha-time-07-lkbv.iam.gserviceaccount.com
+
+services:
+  mcp:
+    env:
+      BQ_MODO_LEITURA: query
+      RAG_BACKEND: numpy
+  agent:
+    env:
+      GOOGLE_GENAI_USE_VERTEXAI: "TRUE"
+      # O Flash validado no 000 só responde em global (Q-15 do 000).
+      GOOGLE_CLOUD_LOCATION: global
+      # Vazio = guardrails só por callbacks (005). Preencher com o template
+      # do pedido 2 (bussola-guard) quando o owner criar; confirmar o formato
+      # com o 005.
+      MODEL_ARMOR_TEMPLATE: ""
+    secretEnv:
+      GOOGLE_API_KEY: null

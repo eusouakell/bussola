@@ -15,6 +15,11 @@ imageRepository: us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes
 # nível de dataset e a chave do Gemini lida do Secret Manager.
 serviceAccount: 1061873050224-compute@developer.gserviceaccount.com
 
+# Espelha o estado vivo, conferido com `gcloud run services describe` em
+# 2026-09-26 (ciclo 007): imagens por digest, env, secretEnv e tráfego. É o
+# Plano B; os overlays values-plan-a.yaml e values-plan-b.yaml trocam o plano
+# (docs/operacao.md).
+
 # Revisão publicada neste deploy, sempre com 0% de tráfego. O workflow deploy
 # passa --set release.tag=main (push na main) ou cNNN (disparo manual) e
 # --set release.revisionSuffix=<tag>-<sha>-<tentativa>.
@@ -25,7 +30,9 @@ release:
 services:
   mcp:
     name: bussola-mcp
-    image: "09aaeeb" # tag ou digest (sha256:...) em imageRepository
+    # Tag ou digest (sha256:...) em imageRepository. Vivo: revisão
+    # bussola-mcp-main-1f2a380-local (tag main).
+    image: "sha256:90d0dfef5e25402fdcec0ac3ee3a9278ccbee4c75fff33b91d583c96b4b22aee"
     cpu: "1"
     memory: 512Mi
     maxInstances: 1
@@ -43,7 +50,10 @@ services:
     secretEnv: {}
     # Tráfego mantido; soma 100. O workflow deploy troca esta lista pelo
     # tráfego vivo do serviço (deploy/helm/traffic.jq). Ela vale só para
-    # renderizar fora do workflow. Só o 007 muda percentuais.
+    # renderizar fora do workflow. Só o 007 muda percentuais. Fica como o
+    # traffic.jq devolveria, sem a tag rolante `main`: com ela, o
+    # `helm template --set release.tag=main` falharia em todos os serviços,
+    # porque o Helm renderiza todos os templates.
     traffic:
       - revisionName: bussola-mcp-00001-cis
         percent: 100
@@ -51,7 +61,8 @@ services:
 
   agent:
     name: bussola-agent
-    image: "09aaeeb"
+    # Vivo: revisão bussola-agent-main-eee18b6-chips-local (tag main).
+    image: "sha256:d3d7e21e0545a628b2e5f9a9b9e5a0e5c65af83d8382d3d124c50fcb5f4ab8be"
     cpu: "1"
     memory: 1Gi
     maxInstances: 1
@@ -85,7 +96,8 @@ services:
   # limite de tentativas de login ficam em memória, daí uma instância só.
   bff:
     name: bussola-bff
-    image: "1f2a380-local"
+    # Vivo: revisão bussola-bff-main-9766008-foco-local (100%, tag main).
+    image: "sha256:366768c93ad67b374a6f4aaa5f5a14e29247971e99b19b48439523ac0f7ebbf6"
     cpu: "1"
     memory: 512Mi
     maxInstances: 1
@@ -106,8 +118,17 @@ services:
       AUTH_PASSWORD_HASH:
         secret: bussola-auth-password-hash
         version: latest
-    # Criado com `create: true` (deploy/helm/README.md); a primeira revisão
-    # ficou com 100%. Criar de novo exige --set services.bff.traffic=null.
+    # Criado com `create: true` (deploy/helm/README.md) e promovido depois.
+    # Criar de novo exige --set services.bff.traffic=null.
     traffic:
-      - revisionName: bussola-bff-main-1f2a380-local
+      - revisionName: bussola-bff-main-9766008-foco-local
         percent: 100
+
+# Modo promoção (ciclo 007): muda só o tráfego, sem revisão nova. Preenchido
+# pelo deploy/helm/promote.jq a partir do `services describe`; com
+# `service` vazio, o chart está no modo deploy (templates <serviço>-service).
+promotion:
+  service: ""
+  # main, cNNN, previous (rollback) ou nome de uma revisão no tráfego vivo.
+  target: ""
+  live: {}

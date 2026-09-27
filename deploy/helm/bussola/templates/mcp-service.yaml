@@ -1,1 +1,3 @@
+{{- if not .Values.promotion.service }}
 {{- include "bussola.cloudRunService" (dict "root" . "service" .Values.services.mcp) }}
+{{- end }}
