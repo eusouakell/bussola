@@ -245,11 +245,18 @@ body {
   .app { transition: none; }
 }
 
-/* foco visível em todo controle */
-.tokens :focus-visible {
+/* foco visível em todo controle; nos campos compostos (.field, .composer),
+   o anel contorna o componente inteiro, e não o input dentro dele. :has()
+   em vez de :focus-within: o botão dentro do campo mantém o anel próprio */
+.tokens :focus-visible,
+.tokens .field:has(input:focus-visible),
+.tokens .composer:has(input:focus-visible) {
   outline: none;
   box-shadow: 0 0 0 3px var(--amb-base, #fff), 0 0 0 6px rgba(255, 98, 0, 0.6), 0 0 22px rgba(255, 98, 0, 0.45) !important;
 }
+.tokens .field:has(input:focus-visible) { border-color: var(--accent); }
+.tokens .field input:focus-visible,
+.tokens .composer input:focus-visible { box-shadow: none !important; }
 
 /* ---------- tipografia ---------- */
 .num { font-variant-numeric: tabular-nums lining-nums; }
