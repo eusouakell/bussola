@@ -14,7 +14,9 @@
     "lint": "eslint . --max-warnings 0 && tsc -b --noEmit",
     "test": "vitest run",
     "fixtures": "tsx scripts/gerar-fixtures.ts",
-    "varrer": "tsx scripts/varrer-bundle.ts"
+    "varrer": "tsx scripts/varrer-bundle.ts",
+    "bff": "node --env-file-if-exists=../.env bff/main/index.ts",
+    "hash-password": "node bff/cli/hashPassword.ts"
   },
   "dependencies": {
     "@fontsource-variable/nunito-sans": "5.3.0",

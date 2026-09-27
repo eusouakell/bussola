@@ -37,7 +37,7 @@ test-bq:
 	cd agent && uv run pytest -m bq; s=$$?; [ $$s -eq 0 ] || [ $$s -eq 5 ]
 
 # --- Front web (ciclo 008). Node 24 + npm; sem rede depois do web-install. ---
-.PHONY: web-install web web-lint web-test web-build
+.PHONY: web-install web web-lint web-test web-build bff
 
 web-install:
 	cd web && npm ci --no-audit --no-fund
@@ -54,6 +54,10 @@ web-test:
 # Inclui a varredura do bundle (segredos, SQL, projeto, UUID completo).
 web-build:
 	cd web && npm run build
+
+# BFF (web/bff) em :8080; precisa de AUTH_PASSWORD_HASH (npm run hash-password).
+bff:
+	cd web && npm run bff
 
 # --- Deploy com Helm (templater para Cloud Run; sem GKE). ---
 .PHONY: helm-lint test-helm

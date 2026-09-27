@@ -39,6 +39,7 @@ Alvos do `Makefile` na raiz:
 | `make web-lint` | ESLint com `--max-warnings 0` e `tsc -b --noEmit` |
 | `make web-test` | Vitest (jsdom), sem rede |
 | `make web-build` | `tsc -b`, `vite build` e a varredura do bundle |
+| `make bff` | BFF em `:8080` ([BFF](#bff-webbff)) |
 
 ## Modos
 
@@ -66,6 +67,50 @@ Em dev, o Vite encaminha `/apps` e `/run_sse` para `http://localhost:8000`
 (`vite.config.ts`), então o navegador não fala direto com o ADK e não há
 CORS. O `id_usuario` e o mês de referência vêm do `session.state` do
 agente, nunca do front.
+
+## BFF (`web/bff`)
+
+Serviço Node 24 em TypeScript nativo, sem etapa de build, entre o front e o
+agente. Ele faz o login simulado por persona (os usuários de
+`bussola_dados.users` com uma senha padrão de teste), guarda a sessão num
+cookie HttpOnly e encaminha ao ADK só o texto do cliente, sempre na sessão
+do agente que pertence ao login. O front ainda não usa o BFF: a tela de
+login (`web/src/auth/`) está pendente.
+
+Camadas (Clean Architecture). A regra de dependência é conferida por
+`bff/architecture.test.ts`:
+
+| Pasta | Papel | Pode importar |
+|---|---|---|
+| `domain/` | Entidades e regras: `UserAccount`, `AuthSession`, `ChatMessage` | `domain` |
+| `application/` | Casos de uso (`Login`, `Authenticate`, `SendMessage`...) e portas | `domain`, `application` |
+| `infrastructure/` | Adaptadores: users (fixture ou BigQuery), scrypt, sessões em memória, agente HTTP, logs JSON | `domain`, `application`, `infrastructure` |
+| `presentation/http/` | Controllers, router, cookies, validação de pedido e cabeçalhos de segurança | `domain`, `application`, `presentation` |
+| `main/` | Configuração e composição (`container.ts`, `index.ts`) | tudo |
+| `cli/` | `hashPassword.ts` | `infrastructure`, `cli` |
+
+A senha padrão de teste **não** é versionada, nem mesmo em teste. O BFF só
+conhece o hash scrypt, que fica no `.env` local ou, no Cloud Run, no Secret
+Manager (`bussola-auth-password-hash`):
+
+```bash
+cd web
+npm run -s hash-password   # lê a senha sem eco e imprime AUTH_PASSWORD_HASH
+npm run bff                # ou, na raiz: make bff (lê ../.env se existir)
+```
+
+| Variável | Padrão | Para quê |
+|---|---|---|
+| `AUTH_PASSWORD_HASH` | obrigatória | Hash scrypt da senha padrão de teste |
+| `AUTH_ALLOWED_ORIGINS` | vazio | Origens aceitas em `POST`/`DELETE` (ex.: `http://localhost:5173`) |
+| `AUTH_COOKIE_SECURE` | `TRUE` no Cloud Run | Cookie `__Host-` com `Secure` |
+| `BUSSOLA_FAKES` | `TRUE` | Users da fixture (`USERS_FIXTURE`) em vez do BigQuery |
+| `USERS_FIXTURE` | `contracts/fixtures/bussola_dados/users.json` | Chega com o PR `contracts:` de `users`; até lá, aponte para um arquivo local |
+| `GOOGLE_CLOUD_PROJECT`, `BQ_DATASET_DADOS`, `BQ_TABLE_USERS` | `bussola_dados`, `users` | Leitura de users com `BUSSOLA_FAKES=FALSE` |
+| `AGENT_URL`, `AGENT_APP` | `http://localhost:8000`, `bussola_agent` | Agente ADK |
+| `AGENT_USE_OIDC` | `FALSE` | Token OIDC do metadata server (só no Cloud Run) |
+| `STATIC_DIR` | vazio | Serve o `dist/` do front (SPA) |
+| `PORT` | `8080` | Porta HTTP |
 
 ## Barra de demonstração
 
@@ -193,6 +238,7 @@ a coluna `gzip` do `vite build`, que não quebra o build sozinho.
 
 ```text
 web/
+├── bff/               # BFF em Clean Architecture (domain, application, infrastructure, presentation, main)
 ├── fixtures/          # goldens.json e roteiro-demo.json (gerados, versionados)
 ├── scripts/           # gerar-fixtures.ts, fixtures-lib.ts, varrer-bundle.ts
 └── src/
