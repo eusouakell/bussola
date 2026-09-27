@@ -112,3 +112,10 @@ A passagem para AGIR fica pronta para o 005 plugar o consentimento.
   orquestrador; o documento do ciclo diz `resultado.md`).
 - **D-07** Instrução como texto com placeholders do ADK (e não provider), para
   as extensões do 005/006 continuarem usando `{chave?}`.
+- **D-08** "E se eu guardar 300 a mais por mês?" (TS-03): `simular_objetivo`
+  recebe `aporte_mensal` absoluto e o contrato é congelado. O prompt manda
+  passar o aporte do caminho mostrado mais o acréscimo como argumento da
+  ferramenta; é a única soma permitida e nunca é exibida como resultado. O
+  valor mostrado vem do eco de `aporte_mensal` e do novo `prazo_meses` na
+  resposta, então o verificador de números aceita. Sem caminho claro, o
+  agente pergunta o total por mês.

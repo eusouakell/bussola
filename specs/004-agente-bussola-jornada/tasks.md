@@ -15,21 +15,21 @@ Legenda: `[x]` feito, `[ ]` pendente. Commits pequenos (`agent:`, `eval:`,
 
 ## Fase 2: núcleo da jornada
 
-- [ ] T010 `jornada/state_machine.py` (FR-007) + testes.
-- [ ] T011 `jornada/tool_results.py` (extração de envelope) + testes.
-- [ ] T012 `jornada/tools.py`: `registrar_objetivo`, `escolher_cenario`
+- [x] T010 `jornada/state_machine.py` (FR-007) + testes.
+- [x] T011 `jornada/tool_results.py` (extração de envelope) + testes.
+- [x] T012 `jornada/tools.py`: `registrar_objetivo`, `escolher_cenario`
   (FR-009, FR-010) + testes.
-- [ ] T013 `jornada/progress.py`: aplica resultado ao state, logs
+- [x] T013 `jornada/progress.py`: aplica resultado ao state, logs
   `estado_alterado` (FR-008, FR-013) + testes.
 
 ## Fase 3: escopo e fontes
 
-- [ ] T020 `escopo.py`: `initialize_session` (FR-011), `enforce_scope`
+- [x] T020 `escopo.py`: `initialize_session` (FR-011), `enforce_scope`
   (FR-012), `record_tool_result` (FR-013) + testes (controle → âncora).
 
 ## Fase 4: prompts
 
-- [ ] T030 `prompts/`: base pt-BR, estados, regras, catálogo embutido
+- [x] T030 `prompts/`: base pt-BR, estados, regras, catálogo embutido
   (FR-004, FR-005, FR-006) + testes (render, catálogo = contrato, recusas).
 
 ## Fase 5: resposta final
