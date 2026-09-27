@@ -98,3 +98,15 @@ def test_live_mode_accepts_a_later_stage(
     result = rodar_eval.TurnResult(client="", stage=stage)
     [(_, passed)] = rodar_eval.check_expectations({"estado_jornada": expected}, result, set(), live)
     assert passed is ok
+
+
+def test_live_without_answers_is_inconclusive(rodar_eval: ModuleType) -> None:
+    case = rodar_eval.Case(id="q2", title="", live=True, state={}, turns=[])
+    turn = rodar_eval.TurnResult(client="", unavailable=True)
+    result = rodar_eval.CaseResult(case=case, turns=[turn])
+
+    section = rodar_eval.render_section(rodar_eval.MODE_LIVE, [result], set(), "mock")
+    assert "nenhum Gemini respondeu" in section
+    assert "nenhum número nas respostas" in section and "100%" not in section
+    summary = rodar_eval.summarize([result])
+    assert rodar_eval.verdict(rodar_eval.MODE_LIVE, summary) == rodar_eval.VERDICT_INCONCLUSIVE

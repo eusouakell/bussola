@@ -434,7 +434,6 @@ class Harness:
             ]
             turn_result = TurnResult(client=turn.client)
             turn_result.latency_ms = int((time.monotonic() - started) * 1000)
-            self.model_versions.update(e.model_version for e in events if e.model_version)
             stored = await self.runner.session_service.get_session(
                 app_name=APP, user_id=USER, session_id=session.id
             )
@@ -448,6 +447,8 @@ class Harness:
             text = _final_text(events)
             turn_result.text = text
             turn_result.unavailable = text.strip() == CAPACITY_MESSAGE
+            if not turn_result.unavailable:  # só o modelo que respondeu vai ao relatório
+                self.model_versions.update(e.model_version for e in events if e.model_version)
             tool_evidence = evidence_from(
                 [o.envelope if o.envelope is not None else o.response for o in outcomes]
             )
@@ -523,7 +524,11 @@ def render_section(
     summary = summarize(results)
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
     supported = summary.checked - summary.unsupported
-    pct = 100.0 * supported / summary.checked if summary.checked else 100.0
+    share = (
+        f"{100.0 * supported / summary.checked:.0f}% com fonte"
+        if summary.checked
+        else "nenhum número nas respostas"
+    )
     unavailable = (
         f"; turnos sem resposta do modelo (alta demanda): {summary.unavailable}"
         if summary.unavailable
@@ -532,7 +537,7 @@ def render_section(
     model = (
         "roteiro de cada turno (`ScriptedLlm`)"
         if mode == MODE_OFFLINE
-        else ", ".join(f"`{v}`" for v in sorted(model_versions)) or "Gemini (versão não informada)"
+        else ", ".join(f"`{v}`" for v in sorted(model_versions)) or "nenhum Gemini respondeu"
     )
     lines = [
         f"## Modo {mode}",
@@ -541,7 +546,7 @@ def render_section(
         f"- Casos: {summary.cases}; turnos: {summary.turns}{unavailable}.",
         f"- Números verificados: {summary.checked}; com fonte na ferramenta do turno: "
         f"{summary.from_tools}; ditos pelo cliente ou no objetivo: {summary.from_session}; "
-        f"**sem fonte: {summary.unsupported}** ({pct:.0f}% com fonte).",
+        f"**sem fonte: {summary.unsupported}** ({share}).",
         f"- Expectativas cumpridas: {summary.expectations_ok} de {summary.expectations}"
         + (" (no ao vivo, relatadas sem reprovar o eval)." if mode == MODE_LIVE else "."),
         f"- Resultado: **{verdict(mode, summary)}**.",
