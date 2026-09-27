@@ -84,14 +84,20 @@ def fresh_agent(monkeypatch: pytest.MonkeyPatch) -> Callable[[], ModuleType]:
 
 
 def test_real_agent_loads_the_governance_package(fresh_agent: Callable[[], ModuleType]) -> None:
+    """Integrated with the 004 journey: its local tools and scope callback come first."""
     agent = fresh_agent().root_agent
     names = _names(agent.tools[1:])
-    assert names == ["solicitar_consentimento", *ACTIONS]
+    assert names == ["registrar_objetivo", "escolher_cenario", "solicitar_consentimento", *ACTIONS]
     assert "solicitar_consentimento" in agent.instruction
     after_model = callbacks.registrados("after_model")
     assert after_model[0].__name__ == "screen_output"
     assert after_model[-1] is respostas_rapidas.anexar
     assert [f.__name__ for f in callbacks.registrados("before_tool")] == [
+        "enforce_scope",
         "gate",
         "remember_tool_call",
+    ]
+    assert [f.__name__ for f in callbacks.registrados("after_tool")] == [
+        "record_tool_result",
+        "record_tool_call",
     ]

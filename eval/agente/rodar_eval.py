@@ -365,6 +365,13 @@ def check_expectations(
         checks.append(
             (f"recomendado {recommended}", result.metadata.get("recomendado") == recommended)
         )
+    guardrail = expect.get("guardrail")
+    if guardrail:
+        checks.append((f"guardrail {guardrail}", result.metadata.get("guardrail") == guardrail))
+    event = expect.get("evento")
+    if event:
+        logged = any(key.split(":", 1)[0] == event for key in result.events)
+        checks.append((f"evento {event}", logged))
     return checks
 
 

@@ -16,6 +16,7 @@ from types import ModuleType
 import pytest
 
 import bussola_agent
+from bussola_agent.extensoes import PACOTES_EXTENSAO
 from bussola_agent.logging_json import configurar_logging
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -39,8 +40,10 @@ def rodar_eval(monkeypatch: pytest.MonkeyPatch) -> Iterator[ModuleType]:
     for key in ENV_KEYS:
         monkeypatch.setenv(key, "")
         monkeypatch.delenv(key)
-    monkeypatch.delitem(sys.modules, "bussola_agent.agent", raising=False)
-    monkeypatch.delattr(bussola_agent, "agent", raising=False)
+    # Extension packages are imported again so they register in the clean registries.
+    for name in ("bussola_agent.agent", *PACOTES_EXTENSAO):
+        monkeypatch.delitem(sys.modules, name, raising=False)
+        monkeypatch.delattr(bussola_agent, name.rsplit(".", 1)[1], raising=False)
     spec = importlib.util.spec_from_file_location("rodar_eval", SCRIPT)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
