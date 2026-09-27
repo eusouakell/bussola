@@ -117,6 +117,56 @@ def test_same_scope_in_other_case_is_not_an_alert(capsys: pytest.CaptureFixture[
     assert _logs(capsys) == []
 
 
+def _com_objetivo(valor_alvo: Any) -> dict:
+    state = estado_inicial(ANCORA, 202506)
+    state["objetivo"] = {"tipo": "imovel", "descricao": "Entrada", "valor_alvo": valor_alvo}
+    return state
+
+
+@pytest.mark.parametrize("ferramenta", ["simular_objetivo", "comparar_cenarios", "planejar_marcos"])
+def test_other_target_value_leaves_as_the_registered_goal(
+    ferramenta: str, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """O modelo simula outro valor; a chamada sai com o objetivo registrado."""
+    state = _com_objetivo(18000.0)
+    args = {"valor_alvo": 30000.0, "prazo_meses": 24}
+    capsys.readouterr()
+    assert enforce_scope(tool=_tool(ferramenta), args=args, tool_context=_ctx(state)) is None
+    assert args["valor_alvo"] == 18000.0
+    assert args["prazo_meses"] == 24
+    [log] = _logs(capsys)
+    assert log["evento"] == "escopo_sobrescrito"
+    assert log["erro_codigo"] == "VALOR_ALVO_DIVERGENTE"
+    assert "30000" not in json.dumps(log) and "18000" not in json.dumps(log)
+
+
+def test_missing_target_value_is_filled_silently(capsys: pytest.CaptureFixture[str]) -> None:
+    state = _com_objetivo(18000.0)
+    args: dict = {"prazo_meses": 24}
+    capsys.readouterr()
+    enforce_scope(tool=_tool("simular_objetivo"), args=args, tool_context=_ctx(state))
+    assert args["valor_alvo"] == 18000.0
+    assert _logs(capsys) == []
+
+
+def test_same_target_value_as_text_is_not_an_alert(capsys: pytest.CaptureFixture[str]) -> None:
+    state = _com_objetivo(18000)
+    args = {"valor_alvo": "18000.00", "prazo_meses": 24}
+    capsys.readouterr()
+    enforce_scope(tool=_tool("comparar_cenarios"), args=args, tool_context=_ctx(state))
+    assert args["valor_alvo"] == 18000.0
+    assert _logs(capsys) == []
+
+
+@pytest.mark.parametrize("objetivo", [None, 0, -1, True, "muito"])
+def test_goal_without_a_valid_amount_keeps_what_the_model_sent(objetivo: Any) -> None:
+    """Antes de ``registrar_objetivo`` fechar o valor, o argumento do modelo vale."""
+    state = _com_objetivo(objetivo)
+    args = {"valor_alvo": 30000.0, "prazo_meses": 24}
+    enforce_scope(tool=_tool("simular_objetivo"), args=args, tool_context=_ctx(state))
+    assert args["valor_alvo"] == 30000.0
+
+
 def test_local_tools_are_not_touched() -> None:
     args = {"id_usuario": CONTROLE, "nome": "acelerado"}
     state = estado_inicial(ANCORA, 202506)

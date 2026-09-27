@@ -3,8 +3,10 @@
 - :func:`initialize_session` (``before_agent_callback``): fills the missing
   keys of contratos §6 from ``ANCHOR_USER_ID`` and ``REPLAY_START_ANOMES``.
 - :func:`enforce_scope` (``before_tool``, order 10): MCP tools always leave
-  with ``id_usuario`` and ``ate_anomes`` from ``session.state``. What the
-  model sent is ignored; a divergent id is logged without echoing it.
+  with ``id_usuario`` and ``ate_anomes`` from ``session.state``, and the tools
+  that take the goal amount leave with the ``valor_alvo`` that
+  ``registrar_objetivo`` recorded. What the model sent is ignored; a divergent
+  id is logged without echoing it.
 - :func:`record_tool_result` (``after_tool``, order 10): the ``fonte`` of MCP
   tools goes to ``ultimas_fontes`` and the journey advances
   (:mod:`bussola_agent.jornada.progress`).
@@ -21,6 +23,7 @@ from google.adk.tools.mcp_tool.mcp_tool import McpTool
 from bussola_agent.estado import (
     CHAVE_ATE_ANOMES,
     CHAVE_ID_USUARIO,
+    CHAVE_OBJETIVO,
     adicionar_fonte,
     estado_inicial,
 )
@@ -39,10 +42,18 @@ DEFAULT_ANCHOR_USER_ID = "36a21505-d6d4-42d3-b319-d51a133c7269"
 DEFAULT_REPLAY_START = 202506
 SCOPE_KEYS: tuple[str, ...] = (CHAVE_ID_USUARIO, CHAVE_ATE_ANOMES)
 
+# MCP tools that take the customer's goal amount (contratos §5). The goal is
+# registered by ``registrar_objetivo``; the model never restates it.
+KEY_TARGET_VALUE = "valor_alvo"
+TARGET_VALUE_TOOLS: frozenset[str] = frozenset(
+    {"simular_objetivo", "comparar_cenarios", "planejar_marcos"}
+)
+
 EVENT_SCOPE_OVERRIDDEN = "escopo_sobrescrito"
 EVENT_SCOPE_INVALID = "escopo_invalido"
 ERROR_DIVERGENT_USER = "ID_USUARIO_DIVERGENTE"
 ERROR_DIVERGENT_MONTH = "ATE_ANOMES_DIVERGENTE"
+ERROR_DIVERGENT_TARGET = "VALOR_ALVO_DIVERGENTE"
 
 _log = obter_logger(__name__)
 
@@ -108,8 +119,31 @@ def _same_month(sent: object, scoped: int) -> bool:
         return False
 
 
+def _registered_target(state: Any) -> float | None:
+    """``valor_alvo`` of the goal in ``session.state``, or ``None`` when unset."""
+    goal = state.get(CHAVE_OBJETIVO)
+    value = goal.get(KEY_TARGET_VALUE) if isinstance(goal, Mapping) else None
+    if isinstance(value, bool) or not isinstance(value, int | float) or value <= 0:
+        return None
+    return round(float(value), 2)
+
+
+def _same_target(sent: object, scoped: float) -> bool:
+    if isinstance(sent, bool):
+        return False
+    try:
+        return round(float(str(sent).strip()), 2) == scoped
+    except ValueError:
+        return False
+
+
 def enforce_scope(tool: Any, args: dict[str, Any], tool_context: Any) -> dict[str, Any] | None:
     """``before_tool`` order 10: overwrites the MCP scope in place with the state values.
+
+    ``id_usuario`` and ``ate_anomes`` always come from the state. For the tools
+    of :data:`TARGET_VALUE_TOOLS`, so does ``valor_alvo`` whenever the goal is
+    registered, so a simulation can never answer for an amount the customer did
+    not ask for. The amount itself is never logged (contratos §9).
 
     Returns the ``ENTRADA_INVALIDA`` envelope (the tool is skipped) when the
     state has no valid scope; otherwise ``None`` so the chain continues.
@@ -144,6 +178,19 @@ def enforce_scope(tool: Any, args: dict[str, Any], tool_context: Any) -> dict[st
                 "ate_anomes": scoped[CHAVE_ATE_ANOMES],
             },
         )
+    target = _registered_target(tool_context.state) if name in TARGET_VALUE_TOOLS else None
+    if target is not None:
+        sent_target = args.get(KEY_TARGET_VALUE)
+        if sent_target is not None and not _same_target(sent_target, target):
+            _log.warning(
+                "O modelo enviou outro valor_alvo; o objetivo registrado foi aplicado.",
+                extra={
+                    **base,
+                    "evento": EVENT_SCOPE_OVERRIDDEN,
+                    "erro_codigo": ERROR_DIVERGENT_TARGET,
+                },
+            )
+        scoped[KEY_TARGET_VALUE] = target
     args.update(scoped)
     return None
 
