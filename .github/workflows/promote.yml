@@ -1,0 +1,229 @@
+# Bússola: promover uma revisão no Cloud Run (ciclo 007, constituição X).
+#
+# Só este workflow (e o fluxo local equivalente em docs/operacao.md) move
+# tráfego. O ci.yml e o deploy.yml nunca mexem em percentuais: o deploy publica
+# a revisão com a tag `main` (ou cNNN) e 0% de tráfego.
+#
+# Mover tráfego exige confirmação humana, em duas camadas:
+#   1. quem dispara digita o nome do serviço no campo `confirm`;
+#   2. o job `promote` usa o environment `production`, que um admin do
+#      repositório configura com revisores obrigatórios e só a branch main.
+#      Sem essa configuração o GitHub cria o environment sem proteção
+#      (pendência registrada em docs/operacao.md).
+#
+# Passos: estado vivo (describe) → values (deploy/helm/promote.jq) →
+# `helm template --show-only templates/promotion.yaml` → replace com --dry-run
+# → replace → conferência (100% no alvo e nenhuma revisão nova). O manifesto
+# copia o spec.template vivo sem mudança e troca só o tráfego: 100% no alvo,
+# as tags vivas com 0% e a tag `previous` na revisão que servia.
+#
+# Rollback: rode de novo com target=previous (nova aprovação).
+#
+# Nada de IAM, ingress ou imagem muda aqui. Acesso ao GCP só por Workload
+# Identity Federation (pedido 5 ao owner), nunca por chave de SA.
+name: promote
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: "Serviço"
+        type: choice
+        options: [agent, mcp, bff]
+        required: true
+        default: agent
+      target:
+        description: "Quem recebe 100%: main, cNNN, previous (rollback) ou nome da revisão"
+        type: string
+        required: true
+        default: main
+      confirm:
+        description: "Confirmação humana: digite o nome do serviço (ex.: bussola-agent)"
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+# O mesmo grupo do deploy.yml: promoção e deploy nunca rodam juntos.
+concurrency:
+  group: deploy-gcp
+  cancel-in-progress: false
+
+# Espelham deploy/helm/bussola/values.yaml (conferido em deploy/tests).
+env:
+  GCP_PROJECT: batalha-time-07-lkbv
+  GCP_REGION: us-central1
+  CHART: deploy/helm/bussola
+
+jobs:
+  check:
+    name: conferir o pedido
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      service_name: ${{ steps.check.outputs.service_name }}
+    env:
+      KEY: ${{ inputs.service }}
+      TARGET: ${{ inputs.target }}
+      CONFIRM: ${{ inputs.confirm }}
+      REF: ${{ github.ref }}
+      GCP_WIF_PROVIDER: ${{ vars.GCP_WIF_PROVIDER }}
+      GCP_DEPLOY_SA: ${{ vars.GCP_DEPLOY_SA }}
+    steps:
+      - name: Serviço, alvo, confirmação e acesso ao GCP
+        id: check
+        run: |
+          set -euo pipefail
+          case "$KEY" in
+            mcp | agent | bff) ;;
+            *)
+              echo "::error title=Serviço inválido::Use mcp, agent ou bff."
+              exit 1
+              ;;
+          esac
+          service_name="bussola-$KEY"
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "::error title=Só a partir da main::Dispare a promoção na branch main (o chart usado é o da main)."
+            exit 1
+          fi
+          if ! printf '%s' "$TARGET" | grep -Eq '^(main|previous|c[0-9]{3}|bussola-(mcp|agent|bff)-[a-z0-9-]{1,50})$'; then
+            echo "::error title=Alvo inválido::Use main, previous, cNNN ou o nome de uma revisão."
+            exit 1
+          fi
+          case "$TARGET" in
+            bussola-*)
+              if [ "${TARGET#"$service_name"-}" = "$TARGET" ]; then
+                echo "::error title=Alvo de outro serviço::A revisão precisa ser de $service_name."
+                exit 1
+              fi
+              ;;
+          esac
+          if [ "$CONFIRM" != "$service_name" ]; then
+            echo "::error title=Confirmação não confere::Digite $service_name no campo confirm."
+            exit 1
+          fi
+          if [ -z "$GCP_WIF_PROVIDER" ] || [ -z "$GCP_DEPLOY_SA" ]; then
+            echo "::error title=Promoção sem acesso ao GCP::Defina GCP_WIF_PROVIDER e GCP_DEPLOY_SA (pedido 5 ao owner). Até lá, use o fluxo local de docs/operacao.md, com confirmação humana."
+            exit 1
+          fi
+          echo "service_name=$service_name" >> "$GITHUB_OUTPUT"
+
+  promote:
+    name: promover (aprovação no environment production)
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      KEY: ${{ inputs.service }}
+      TARGET: ${{ inputs.target }}
+      SERVICE_NAME: ${{ needs.check.outputs.service_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - uses: azure/setup-helm@v5
+        with:
+          version: v4.2.4
+
+      - name: Estado vivo do serviço
+        run: |
+          set -euo pipefail
+          gcloud run services describe "$SERVICE_NAME" --project "$GCP_PROJECT" \
+            --region "$GCP_REGION" --format=json > "$RUNNER_TEMP/before.json"
+          jq --arg key "$KEY" --arg target "$TARGET" -f deploy/helm/promote.jq \
+            "$RUNNER_TEMP/before.json" > "$RUNNER_TEMP/promotion.json"
+          jq -c '.promotion.live.traffic' "$RUNNER_TEMP/promotion.json"
+
+      - name: Manifesto de promoção (helm template)
+        run: |
+          set -euo pipefail
+          # As guardas do chart falham aqui, antes do GCP: tráfego dividido,
+          # alvo fora do tráfego vivo ou já com 100%, drift de public/ingress.
+          helm template bussola "$CHART" -f "$RUNNER_TEMP/promotion.json" \
+            --show-only templates/promotion.yaml > "$RUNNER_TEMP/promotion.yaml"
+          jq -r --arg t "$TARGET" \
+            'first(.status.traffic[] | select(.tag == $t) | .revisionName)
+              // first(.status.traffic[] | select(.revisionName == $t) | .revisionName)' \
+            "$RUNNER_TEMP/before.json" > "$RUNNER_TEMP/target-revision"
+          jq -r 'first(.status.traffic[] | select((.percent // 0) == 100) | .revisionName)' \
+            "$RUNNER_TEMP/before.json" > "$RUNNER_TEMP/current-revision"
+          echo "Alvo: $(cat "$RUNNER_TEMP/target-revision"); servindo: $(cat "$RUNNER_TEMP/current-revision")"
+
+      - name: Revisão alvo pronta
+        run: |
+          set -euo pipefail
+          target_revision=$(cat "$RUNNER_TEMP/target-revision")
+          ready=$(gcloud run revisions describe "$target_revision" --project "$GCP_PROJECT" \
+            --region "$GCP_REGION" --format=json \
+            | jq -r '[.status.conditions[] | select(.type == "Ready") | .status][0] // "Unknown"')
+          if [ "$ready" != "True" ]; then
+            echo "::error title=Revisão não está pronta::$target_revision (Ready=$ready). Rode o smoke pela URL da tag antes de promover."
+            exit 1
+          fi
+
+      - name: Validar no Cloud Run (dry-run)
+        run: |
+          gcloud run services replace "$RUNNER_TEMP/promotion.yaml" \
+            --project "$GCP_PROJECT" --region "$GCP_REGION" --dry-run
+
+      - name: Promover (mover tráfego)
+        run: |
+          gcloud run services replace "$RUNNER_TEMP/promotion.yaml" \
+            --project "$GCP_PROJECT" --region "$GCP_REGION"
+
+      - name: Conferir tráfego e revisões
+        run: |
+          set -euo pipefail
+          gcloud run services describe "$SERVICE_NAME" --project "$GCP_PROJECT" \
+            --region "$GCP_REGION" --format=json > "$RUNNER_TEMP/after.json"
+          target_revision=$(cat "$RUNNER_TEMP/target-revision")
+          current_revision=$(cat "$RUNNER_TEMP/current-revision")
+          serving='[.status.traffic[] | select((.percent // 0) > 0)]
+            | group_by(.revisionName)
+            | map({key: .[0].revisionName, value: (map(.percent) | add)})
+            | from_entries'
+          after=$(jq -cS "$serving" "$RUNNER_TEMP/after.json")
+          expected=$(jq -cnS --arg r "$target_revision" '{($r): 100}')
+          if [ "$after" != "$expected" ]; then
+            echo "::error title=Tráfego inesperado::esperado $expected, veio $after. Veja docs/operacao.md (rollback)."
+            exit 1
+          fi
+          latest_before=$(jq -r '.status.latestCreatedRevisionName' "$RUNNER_TEMP/before.json")
+          latest_after=$(jq -r '.status.latestCreatedRevisionName' "$RUNNER_TEMP/after.json")
+          if [ "$latest_before" != "$latest_after" ]; then
+            echo "::error title=Revisão nova criada::$latest_after (antes $latest_before). A promoção não deveria criar revisão; ela ficou com 0%."
+            exit 1
+          fi
+          {
+            echo "### $SERVICE_NAME promovido"
+            echo ""
+            echo "- 100% em \`$target_revision\`"
+            echo "- Tag \`previous\` em \`$current_revision\`"
+            echo "- Tráfego: \`$after\`"
+            echo "- Rollback: rode este workflow com service=$KEY e target=previous (nova aprovação)."
+            echo "- Smoke: \`make smoke\` (docs/operacao.md)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: BFF responde (GET público)
+        if: inputs.service == 'bff'
+        run: |
+          set -euo pipefail
+          url=$(jq -r '.status.url' "$RUNNER_TEMP/after.json")
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$url/auth/me")
+          if [ "$code" != "401" ]; then
+            echo "::error title=BFF fora do ar::GET /auth/me deu $code (esperado 401). Considere o rollback."
+            exit 1
+          fi

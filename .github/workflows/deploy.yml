@@ -222,5 +222,5 @@ jobs:
             echo "- Revisão: \`$SERVICE_NAME-$REVISION_SUFFIX\`, tag \`$RELEASE_TAG\`, 0% de tráfego"
             echo "- URL da tag: $url"
             echo "- Tráfego (inalterado): \`$after\`"
-            echo "- Promover é do ciclo 007, com confirmação humana."
+            echo "- Promover: workflow promote (environment production, confirmação humana)."
           } >> "$GITHUB_STEP_SUMMARY"
