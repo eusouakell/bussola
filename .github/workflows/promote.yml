@@ -87,7 +87,7 @@ jobs:
             echo "::error title=Só a partir da main::Dispare a promoção na branch main (o chart usado é o da main)."
             exit 1
           fi
-          if ! printf '%s' "$TARGET" | grep -Eq '^(main|previous|c[0-9]{3}|bussola-(mcp|agent|bff)-[a-z0-9-]{1,50})$'; then
+          if ! printf '%s' "$TARGET" | grep -Eq '^(main|previous|c[0-9]{3}(-[a-z]{1,10})?|bussola-(mcp|agent|bff)-[a-z0-9-]{1,50})$'; then
             echo "::error title=Alvo inválido::Use main, previous, cNNN ou o nome de uma revisão."
             exit 1
           fi

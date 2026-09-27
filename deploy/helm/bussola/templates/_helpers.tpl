@@ -29,8 +29,9 @@ confirmação humana.
 {{- $root := .root -}}
 {{- $svc := .service -}}
 {{- $tag := toString (required "release.tag é obrigatório (main ou cNNN)" $root.Values.release.tag) -}}
-{{- if not (regexMatch "^(main|c[0-9]{3})$" $tag) -}}
-{{- fail (printf "release.tag deve ser main ou cNNN, veio %q" $tag) -}}
+{{- /* cNNN-<rótulo> (ex.: c007-bad): revisão de teste de um ciclo, sempre 0%. */ -}}
+{{- if not (regexMatch "^(main|c[0-9]{3}(-[a-z]{1,10})?)$" $tag) -}}
+{{- fail (printf "release.tag deve ser main ou cNNN (ou cNNN-<rótulo>, ex.: c007-bad), veio %q" $tag) -}}
 {{- end -}}
 {{- $suffix := toString (required "release.revisionSuffix é obrigatório" $root.Values.release.revisionSuffix) -}}
 {{- if not (regexMatch "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$" $suffix) -}}

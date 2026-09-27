@@ -150,6 +150,9 @@ def test_image_accepts_tag_and_digest(tmp_path):
         ({"release": {"tag": ""}}, "release.tag é obrigatório"),
         ({"release": {"tag": "v7"}}, "release.tag deve ser main ou cNNN"),
         ({"release": {"tag": "main-2"}}, "release.tag deve ser main ou cNNN"),
+        ({"release": {"tag": "c007-"}}, "release.tag deve ser main ou cNNN"),
+        ({"release": {"tag": "c007-Bad"}}, "release.tag deve ser main ou cNNN"),
+        ({"release": {"tag": "c007-bad-2"}}, "release.tag deve ser main ou cNNN"),
         ({"release": {"revisionSuffix": ""}}, "release.revisionSuffix é obrigatório"),
         ({"release": {"revisionSuffix": "C007_01"}}, "release.revisionSuffix aceita só"),
         ({"release": {"revisionSuffix": "x" * 60}}, "mais de 63 caracteres"),
@@ -159,6 +162,26 @@ def test_image_accepts_tag_and_digest(tmp_path):
 def test_invalid_release_is_rejected(overrides, message, tmp_path):
     with pytest.raises(RenderError, match=message):
         render("agent", tmp_path, overrides)
+
+
+@needs_helm
+def test_bad_test_revision_goes_out_without_traffic(tmp_path):
+    # Cenário §7 do ciclo 007: c007-bad com MCP_USE_OIDC=FALSE (403 do MCP).
+    bad = {
+        "release": {"tag": "c007-bad", "revisionSuffix": "c007-bad-1"},
+        "services": {"agent": {"env": {"MCP_USE_OIDC": "FALSE"}}},
+    }
+
+    manifest = render("agent", tmp_path, bad)
+
+    traffic = manifest["spec"]["traffic"]
+    assert traffic[-1] == {
+        "revisionName": "bussola-agent-c007-bad-1",
+        "percent": 0,
+        "tag": "c007-bad",
+    }
+    assert [entry["percent"] for entry in traffic if entry["percent"]] == [100]
+    assert env_of(manifest)["MCP_USE_OIDC"] == {"name": "MCP_USE_OIDC", "value": "FALSE"}
 
 
 @needs_helm
