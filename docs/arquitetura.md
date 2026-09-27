@@ -1,17 +1,17 @@
 # Arquitetura da Bússola
 
-Este documento descreve a arquitetura de referência da PoC da Bússola para a Batalha de Agentes — Itaú x Google.
+Este documento descreve a arquitetura de referência da PoC da Bússola para a Batalha de Agentes.
 
 ## Visão geral
 
-A arquitetura combina uma interface conversacional na ia.i, orquestração agentic com Gemini/ADK, um agente de dados e conhecimento via MCP, dados sintéticos no BigQuery, RAG financeiro e controles de segurança, consentimento e observabilidade na GCP.
+A arquitetura combina uma interface conversacional no app do banco, orquestração agentic com Gemini/ADK, um agente de dados e conhecimento via MCP, dados sintéticos no BigQuery, RAG financeiro e controles de segurança, consentimento e observabilidade na GCP.
 
 ## Diagrama Mermaid — Arquitetura
 
 ```mermaid
 flowchart TB
-    usuario[Cliente na ia.i]
-    iai[ia.i<br/>Interface conversacional]
+    usuario[Cliente no app do banco]
+    iai[App do banco<br/>Interface conversacional]
     gateway[Camada de consentimento<br/>e autonomia governada]
     orchestrator[Orquestrador agentic<br/>Gemini + ADK]
     planner[Agente Bússola<br/>Planejamento por objetivos]
@@ -50,7 +50,7 @@ flowchart TB
 
 ## Componentes
 
-### ia.i
+### App do banco
 
 Canal de entrada da jornada. Recebe o objetivo do cliente em linguagem natural e devolve perguntas, diagnósticos, planos e próximos passos.
 

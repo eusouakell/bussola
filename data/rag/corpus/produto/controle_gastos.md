@@ -1,9 +1,9 @@
 ---
 titulo: Controle de Gastos
 tema: produto
-fonte_nome: Itaú Unibanco
-fonte_referencia: Controle de Gastos Itaú (página oficial)
-fonte_url: https://www.itau.com.br/controle-de-gastos
+fonte_nome: Catálogo de produtos
+fonte_referencia: Controle de Gastos (página oficial)
+fonte_url: https://exemplo.test/controle-de-gastos
 ---
 
 ## Controle de Gastos: o que é e para que serve

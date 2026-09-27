@@ -8,7 +8,7 @@ falei que queria juntar o valor, que era o que o agente precisava no momento, e 
 mandando só como exemplo, tenho que testar de outras formas pra ver se é um problema quando a pessoa ta falando o valor e o agente foca só nisso ‎<attached: 00003125-PHOTO-2026-09-27-00-24-59.jpg>
 ‎[27/09/26, 00:29:44] ~ Carlos Guevara: aqui ele ficou travado, se o usuario pede algo fora do parametro pro perfil do cliente, ele ta dando uma resposta generica ruim e fica preso num loop
 
-isso é um exemplo que mais de uma pessoa do itau falou
+isso é um exemplo que mais de uma pessoa do banco falou
 precisamos pensar numa forma melhor de endereçar esses pontos foras do loop
 
 nao tem problema fixar num ponto como ta, mas a resposta não ta boa ‎<attached: 00003128-PHOTO-2026-09-27-00-29-44.jpg>
@@ -22,7 +22,7 @@ falei que queria juntar o valor, que era o que o agente precisava no momento, e 
 mandando só como exemplo, tenho que testar de outras formas pra ver se é um problema quando a pessoa ta falando o valor e o agente foca só nisso ‎<attached: 00003125-PHOTO-2026-09-27-00-24-59.jpg>
 ‎[27/09/26, 00:29:44] ~ Carlos Guevara: aqui ele ficou travado, se o usuario pede algo fora do parametro pro perfil do cliente, ele ta dando uma resposta generica ruim e fica preso num loop
 
-isso é um exemplo que mais de uma pessoa do itau falou
+isso é um exemplo que mais de uma pessoa do banco falou
 precisamos pensar numa forma melhor de endereçar esses pontos foras do loop
 
 nao tem problema fixar num ponto como ta, mas a resposta não ta boa ‎<attached: 00003128-PHOTO-2026-09-27-00-29-44.jpg>
@@ -61,11 +61,11 @@ A resposta em texto depois tá boa. O problema é mais essa mensagem em laranja.
 ‎[27/09/26, 07:07:10] ~ Carlos Guevara: rolou um bug aqui hein ‎<attached: 00003154-PHOTO-2026-09-27-07-07-10.jpg>
 ‎[27/09/26, 07:07:10] ~ Carlos Guevara: ‎<attached: 00003155-PHOTO-2026-09-27-07-07-10.jpg>
 [27/09/26, 07:26:44] ~ Carlos Guevara: 1. Contexto — 0:00 a 0:20
-"Todo cliente do Itaú tem um sonho financeiro: comprar a casa, viajar, tirar uma dívida das costas, guardar pra aposentadoria. Não importa qual seja o sonho. O que muda de cliente pra cliente é o caminho até lá, e esse caminho tem obstáculos que a maioria enfrenta sozinha."
+"Todo cliente do banco tem um sonho financeiro: comprar a casa, viajar, tirar uma dívida das costas, guardar pra aposentadoria. Não importa qual seja o sonho. O que muda de cliente pra cliente é o caminho até lá, e esse caminho tem obstáculos que a maioria enfrenta sozinha."
 2. Dor do cliente — 0:20 a 0:40
 "84% dos brasileiros já tiveram a saúde mental afetada por causa de dinheiro. Isso inclui, provavelmente, alguém que você conhece. Não é falta de esforço: 9 em cada 10 pessoas estão tentando se organizar financeiramente. O que falta é a ferramenta, não a vontade."
 3. Solução — Visão — 0:40 a 1:00
-"É aqui que entra a Bussola, uma jornada da ia.i, não um agente separado dela. A Bussola junta as três coisas que faltavam pra você: os seus próprios dados, o conhecimento sobre gestão financeira, e pesquisa confiável sobre o seu sonho. Não importa qual seja esse sonho, a Bússola orienta você do primeiro passo até o destino final."
+"É aqui que entra a Bussola, uma jornada do app do banco, não um agente separado dele. A Bussola junta as três coisas que faltavam pra você: os seus próprios dados, o conhecimento sobre gestão financeira, e pesquisa confiável sobre o seu sonho. Não importa qual seja esse sonho, a Bússola orienta você do primeiro passo até o destino final."
 4. Solução — Experiência e Engajamento — 1:00 a 1:45
 "Deixa eu te mostrar com um exemplo real da nossa análise. Você diz pra Bussola: quero comprar um apartamento. A Bussola ENTENDE o seu perfil financeiro e descobre coisas que você não sabia sobre si. Ela ANTECIPA fatores relacionados aos seus hábitos financeiros, que podem ajudar você a atingir seu sonho. Ela ORIENTA, não com um plano fixo, mas apresentando alternativas que se adaptem ao seu perfil e faz de você o tomador da decisão do seu próprio caminho. Ela AGE, criando o plano, com a sua permissão, e permite que você ACOMPANHE esse plano de forma recorrente.
 5. Conclusão — 1:45 a 2:10
@@ -74,5 +74,5 @@ Bussola: seu objetivo aponta para o norte. I.a.i, vamos construir esse caminho j
 [27/09/26, 07:56:10] ~ Carlos Guevara: Acho ok, mas acho que isso pode vir depois da demo/parte 4.
 
 A mensagem seria algo do tipo:
- Um cliente que tem um sonho, e um plano, vai voltar mais vezes pro Itaú. Vai saber que o Itaú oferece outras soluções customizadas.
-Vai deixar de ser um cliente transacional, pagar fatura, fazer pix, pra um cliente engajado que dá preferência pro ecossistema financeiro do Itaú.
+ Um cliente que tem um sonho, e um plano, vai voltar mais vezes pro banco. Vai saber que o banco oferece outras soluções customizadas.
+Vai deixar de ser um cliente transacional, pagar fatura, fazer pix, pra um cliente engajado que dá preferência pro ecossistema financeiro do banco.

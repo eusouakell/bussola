@@ -24,7 +24,7 @@ export function MTopo({ atual, onBastidores, onMeuPlano, escuro, onTema }: Props
         </span>
         <span style={{ display: "flex", flexDirection: "column", lineHeight: 1.15, flex: "1 1 auto", minWidth: 0 }}>
           <span style={{ fontSize: 17, fontWeight: 900 }}>Bússola</span>
-          <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink-3)" }}>uma jornada da ia.i</span>
+          <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink-3)" }}>assistente financeiro</span>
         </span>
         <button type="button" className="icon-btn" aria-label="Meu plano" onClick={onMeuPlano} style={{ border: 0 }}>
           <Icone nome="alvo" />

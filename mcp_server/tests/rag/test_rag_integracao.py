@@ -109,7 +109,7 @@ def test_rag_backend_do_ambiente(monkeypatch: pytest.MonkeyPatch, env: str, expe
 
 def test_rag_backend_numpy_do_ambiente(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("RAG_BACKEND", "Numpy")
-    buscador = criar_buscador(embedder=_row_embedder("cofrinhos#1"))
+    buscador = criar_buscador(embedder=_row_embedder("reserva_objetivo#1"))
     assert isinstance(buscador, BuscadorNumpy)
     assert isinstance(buscador, BuscadorContexto)
 
@@ -125,7 +125,7 @@ def test_rag_backend_invalido(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_numpy_recusa_subir_com_modelo_divergente(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("EMBEDDING_MODEL", "text-embedding-005")
     with pytest.raises(InvalidIndexError):
-        criar_buscador("numpy", embedder=_row_embedder("cofrinhos#1"))
+        criar_buscador("numpy", embedder=_row_embedder("reserva_objetivo#1"))
 
 
 def test_assinatura_de_buscar_segue_a_porta() -> None:
@@ -158,10 +158,10 @@ def test_fluxo_sem_resultado_traz_aviso() -> None:
 
 
 def test_fluxo_da_ferramenta_com_numpy() -> None:
-    buscador = criar_buscador("numpy", embedder=_row_embedder("cofrinhos#1"))
+    buscador = criar_buscador("numpy", embedder=_row_embedder("reserva_objetivo#1"))
     envelope = _tool(buscador, _args("Onde guardo o dinheiro da entrada?", k=3))
     trechos = envelope["dados"]["trechos"]
-    assert trechos[0]["trecho_id"] == "cofrinhos#1"
+    assert trechos[0]["trecho_id"] == "reserva_objetivo#1"
     assert trechos[0]["score"] == pytest.approx(1.0, abs=1e-3)
 
     filtered = _tool(buscador, _args("Onde guardo?", k=5, tema="norma_bacen"))

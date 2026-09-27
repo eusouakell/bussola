@@ -1,9 +1,9 @@
 ---
 titulo: Consórcio de Veículos
 tema: produto
-fonte_nome: Itaú Unibanco
-fonte_referencia: Consórcios Itaú (página oficial)
-fonte_url: https://www.itau.com.br/consorcios
+fonte_nome: Catálogo de produtos
+fonte_referencia: Consórcios (página oficial)
+fonte_url: https://exemplo.test/consorcios
 ---
 
 ## Consórcio de Veículos: o que é e para que serve

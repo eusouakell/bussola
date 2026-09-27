@@ -72,7 +72,7 @@ def test_product_catalog_copy_matches_the_contract() -> None:
 
 def test_simulable_products() -> None:
     assert catalogo.simulable_product("credito_imobiliario").nome
-    assert catalogo.simulable_product(" Cofrinhos ").produto_id == "cofrinhos"
+    assert catalogo.simulable_product(" Reserva_Objetivo ").produto_id == "reserva_objetivo"
     assert catalogo.simulable_product("cdb_renda_fixa") is None  # acao_simulada = false
     assert catalogo.simulable_product("emprestimo_pessoal") is None
     assert catalogo.simulable_product(None) is None

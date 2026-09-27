@@ -6,7 +6,7 @@
       "runtimeExecutable": "sh",
       "runtimeArgs": [
         "-c",
-        "cd /Users/mrlopito/Documents/desenv/itau/busssola/web && AUTH_PASSWORD_HASH=\"$(head -c 24 /dev/urandom | base64 | npm run -s hash-password)\" STATIC_DIR=/Users/mrlopito/Documents/desenv/itau/busssola/web/dist USERS_FIXTURE=/Users/mrlopito/Documents/desenv/itau/busssola/web/fixtures/users.json PORT=8787 BUSSOLA_FAKES=TRUE exec node bff/main/index.ts"
+        "cd ${workspaceFolder}/web && AUTH_PASSWORD_HASH=\"$(head -c 24 /dev/urandom | base64 | npm run -s hash-password)\" STATIC_DIR=${workspaceFolder}/web/dist USERS_FIXTURE=${workspaceFolder}/web/fixtures/users.json PORT=8787 BUSSOLA_FAKES=TRUE exec node bff/main/index.ts"
       ],
       "port": 8787
     }

@@ -221,7 +221,7 @@ Enquanto 003–006 não estão em `main`, o front roda sobre fixtures e um
 - Forma exata do resultado de `solicitar_consentimento`, `criar_plano`,
   `avancar_mes` e `status_plano` (definida em 005/006). O front usa as
   formas descritas nos contextos 005 e 006 e tolera campos extras.
-- Brand kit oficial ia.i/Itaú: se chegar, prevalece sobre acento e
+- Brand kit oficial do banco: se chegar, prevalece sobre acento e
   tipografia.
 
 ## 11. Rastreabilidade

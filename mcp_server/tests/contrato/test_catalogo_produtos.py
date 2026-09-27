@@ -21,7 +21,7 @@ DIR_CONTRATOS = Path(__file__).resolve().parents[3] / "contracts"
 
 # produto_id → acao_simulada (docs/catalogo/ §2, recorte do MVP).
 PRODUTOS_MVP: dict[str, bool] = {
-    "cofrinhos": True,
+    "reserva_objetivo": True,
     "controle_gastos": True,
     "credito_imobiliario": True,
     "consorcio_imoveis": True,

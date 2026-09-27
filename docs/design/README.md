@@ -1,4 +1,4 @@
-# Design · Bússola na ia.i
+# Design · Bússola
 
 Resultado do [prompt do Claude Design](./prompt-claude-design-chat.md)
 (Dynamic Glass, Tailwind CSS v4).
@@ -16,12 +16,12 @@ copy e estados. Para ver as telas, abra o canvas.
 
 ## Direção adotada
 
-- **App primeiro.** A Bússola abre como jornada dentro da ia.i. Os frames
+- **App primeiro.** A Bússola abre como jornada dentro do app do banco. Os frames
   390 px são o roteiro principal da demo; a versão 1440 px ficou como
   secundária (telão e web). O prompt original tratava o desktop como
   principal.
 - **Tipografia:** Nunito Sans (texto) e JetBrains Mono (Bastidores, IDs).
-  Se o brand kit oficial ia.i/Itaú chegar, ele prevalece sobre acento e
+  Se o brand kit oficial do banco chegar, ele prevalece sobre acento e
   tipografia.
 - **Acento:** `#FF6200`, com `#FF6200` no CTA e `#FF6200` para texto sobre
   claro.

@@ -100,7 +100,7 @@ def test_ambiguous_thousands_have_two_readings() -> None:
 
 
 def test_links_ordinals_and_codes_are_ignored() -> None:
-    text = "Resolução nº 8, 1º passo, F4, https://www.itau.com.br/x/2025/cdb"
+    text = "Resolução nº 8, 1º passo, F4, https://exemplo.test/x/2025/cdb"
     assert [c.token for c in extract_numbers(text)] == ["8"]
 
 

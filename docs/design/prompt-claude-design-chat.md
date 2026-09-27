@@ -1,13 +1,13 @@
 # Prompt — Claude Design · Interface do chat agêntico da Bússola
 
 > **Como usar:** copie tudo abaixo da linha `PROMPT` e cole no Claude Design.
-> Se o hackathon tiver brand kit oficial (ia.i/Itaú), anexe junto: ele
+> Se o hackathon tiver brand kit oficial do banco, anexe junto: ele
 > prevalece sobre a §8.
 >
 > **Estilo:** Dynamic Glass (glassmorphism dinâmico) implementado com
 > **Tailwind CSS v4**. Ver §8 e §11.
 >
-> **Premissas:** assume **front próprio no estilo ia.i** (decisão Q4 do
+> **Premissas:** assume **front próprio no estilo do app do banco** (decisão Q4 do
 > [contexto mestre](../contexto-spec-master.md) §20 ainda em aberto). Os
 > números são **placeholders coerentes entre si**. Na PoC, eles vêm das
 > ferramentas MCP ([contratos](../ciclos/contratos.md) §5).
@@ -19,11 +19,10 @@
 
 ## PROMPT
 
-Desenhe a interface do **chat agêntico da Bússola**, uma jornada da **ia.i**
-(assistente de IA do Itaú) que transforma um objetivo financeiro em um plano
-executável. É a PoC do nosso time para a **Batalha de Agentes — Itaú x
-Google**. A interface será apresentada ao vivo para a banca, em uma demo de
-até 5 minutos, e depois implementada como front web.
+Desenhe a interface do **chat agêntico da Bússola**, uma jornada do **app do banco**
+que transforma um objetivo financeiro em um plano executável. É a PoC do
+nosso time para a **Batalha de Agentes**. A interface será apresentada ao
+vivo para a banca, em uma demo de até 5 minutos, e depois implementada como front web.
 
 ### 1. Contexto do produto
 
@@ -44,7 +43,7 @@ até 5 minutos, e depois implementada como front web.
 
 1. **Fluxo desktop (1440 px):** um frame por momento do roteiro da §6, na
    ordem da demo. Esses frames são projetados no telão.
-2. **Fluxo mobile (390 px):** versões das telas-chave. A ia.i vive no app, e
+2. **Fluxo mobile (390 px):** versões das telas-chave. O app do banco é o canal, e
    as telas-chave são boas-vindas, diagnóstico, cenários, consentimento e
    acompanhamento.
 3. **Folha de componentes** com variantes e estados (padrão, carregando,
@@ -83,7 +82,7 @@ até 5 minutos, e depois implementada como front web.
 
 **Desktop:**
 
-- **Header:** marca Bússola (um ícone de bússola discreto) com "na ia.i",
+- **Header:** marca Bússola (um ícone de bússola discreto) com "assistente financeiro",
   avatar e nome do cliente (Fernando), selo "Dados sintéticos" e um toggle
   "Bastidores".
 - **Stepper da jornada** fixo no topo da conversa, com 6 waypoints.
@@ -146,7 +145,7 @@ até 5 minutos, e depois implementada como front web.
 
 **F1 · Boas-vindas (estado vazio)**
 
-- Agente: "Oi, Fernando! Eu sou a Bússola, da ia.i. Qual objetivo você quer
+- Agente: "Oi, Fernando! Eu sou a Bússola, seu assistente financeiro. Qual objetivo você quer
   tirar do papel?"
 - Sugestões: "Quero comprar meu primeiro apartamento", "Quero viajar no ano
   que vem", "Quero fazer uma pós", "Quero organizar minhas dívidas".
@@ -315,7 +314,7 @@ até 5 minutos, e depois implementada como front web.
     muito transparente. Quando o fundo competir, aumente a opacidade ou
     aplique um scrim, e garanta contraste AA medido sobre o pior caso do
     fundo.
-- **Paleta (oficial Itaú PF).** **Toda cor do produto sai desta tabela**, com
+- **Paleta do produto.** **Toda cor do produto sai desta tabela**, com
   transparência quando preciso (vidro, halos, sombras); nenhum outro tom,
   **exceto** o fundo ambiente do modo escuro (ver "Modo escuro"):
 
@@ -385,7 +384,7 @@ até 5 minutos, e depois implementada como front web.
 
 ### 10. Não fazer
 
-- Não criar produtos, taxas ou condições comerciais reais do Itaú.
+- Não criar produtos, taxas ou condições comerciais reais do banco.
 - Não mostrar SQL, nomes de projeto GCP ou IDs completos de cliente. Se
   precisar, mascare: `36a2…7269`.
 - Não colocar botões de contratação, transferência ou investimento real.

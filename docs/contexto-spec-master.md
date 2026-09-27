@@ -16,8 +16,8 @@
 
 ## §1 Propósito
 
-Construir a PoC da **Bússola** para a Batalha de Agentes — Itaú x Google (Grupo
-07, Sala 215): uma jornada agentic da ia.i que parte de um objetivo financeiro
+Construir a PoC da **Bússola** para a Batalha de Agentes (Grupo
+07, Sala 215): uma jornada agentic que parte de um objetivo financeiro
 declarado pelo cliente e o transforma em plano executável, seguindo
 `OBJETIVO → ENTENDER → ANTECIPAR → ORIENTAR → AGIR → ACOMPANHAR`.
 
@@ -142,7 +142,7 @@ Somente estes serviços são permitidos:
 ## §7 Arquitetura alvo (ajustada às restrições)
 
 ```text
-[Canal "ia.i" da PoC: chat web]  ──►  [Serviço Bússola — Cloud Run]
+[Canal do banco na PoC: chat web]  ──►  [Serviço Bússola — Cloud Run]
                                         ├─ Guardrails de entrada/saída
                                         │    (Model Armor se liberado; senão callbacks ADK + safety settings)
                                         ├─ Agente Bússola (ADK + Gemini Flash) — estados da jornada
@@ -586,8 +586,8 @@ papéis atuais do time:
 - integração com Open Finance no MVP (fica como evolução);
 - promessa de aprovação de crédito;
 - substituição de assessoria humana em casos regulados;
-- integração com o app ia.i real (a PoC simula o canal);
-- catálogo real de produtos Itaú com taxas/condições (o catálogo curado de
+- integração com o app real do banco (a PoC simula o canal);
+- catálogo real de produtos do banco com taxas/condições (o catálogo curado de
   `docs/catalogo/` só descreve produtos e aponta a fonte oficial; as APIs
   públicas de dados abertos ficam fora);
 - banco transacional, agendamento gerenciado, tracing distribuído (todos
@@ -623,7 +623,7 @@ Não avançar para Open Finance, contratação real ou canais além da demo: iss
   catálogo PF de [`docs/catalogo/`](./catalogo/README.md) (recorte de 8
   produtos no MVP, sem taxas), no tema `produto` (§9).
 - **Q4.** Canal da demo: ADK Web UI publicada no Cloud Run (mais rápido) ou
-  front de chat próprio no estilo ia.i.
+  front de chat próprio no estilo do app do banco.
 - **Q5.** ~~Papel exato do Antigravity~~ **Respondida em parte:** o
   desenvolvimento é no Claude Code e o Antigravity opera o produto pronto
   (§14). Ainda em aberto: as credenciais GCP no Antigravity são as mesmas

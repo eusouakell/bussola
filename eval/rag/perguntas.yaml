@@ -104,7 +104,7 @@ perguntas:
   - id: p19
     tipo: produto
     pergunta: Onde guardo o dinheiro da entrada?
-    esperados: [cofrinhos#1]
+    esperados: [reserva_objetivo#1]
 
   - id: p20
     tipo: produto

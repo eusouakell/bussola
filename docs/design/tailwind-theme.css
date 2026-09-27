@@ -5,8 +5,8 @@
    (canvas/Tokens.dc.html, seção "Handoff Tailwind v4").
    Ponto de partida para web/src/app.css no ciclo 007 (§5.3).
 
-   Cores dos tokens trocadas pelos códigos exatos da paleta
-   Itaú PF (brand.primary #FF6200, text.primary #02036C, etc.);
+   Cores dos tokens trocadas pelos códigos exatos da paleta do
+   produto (brand.primary #FF6200, text.primary #02036C, etc.);
    as sem equivalente na paleta ficaram como estavam.
    As seções 1 e 2 vêm da folha, sem outra alteração. A seção 3
    completa o ambiente com os 6 estados (claro e escuro) e os

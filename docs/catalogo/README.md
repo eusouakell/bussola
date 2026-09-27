@@ -1,11 +1,11 @@
-# Catálogo PF Itaú · camada de produtos da Bússola
+# Catálogo PF · camada de produtos da Bússola
 
 Responde à Q3 do [contexto mestre](../contexto-spec-master.md) §20: há um
 conteúdo curto de produtos, fornecido pelo time, e o agente pode citá-lo.
 
-- **Fonte:** [`catalogo-pf-itau.csv`](./catalogo-pf-itau.csv), planilha
-  "05 — Catálogo PF Itaú — Product Layer Bussola", 20 linhas, recebida em
-  26/09/2026. Mantida como recebida; não edite aqui, substitua o arquivo.
+- **Fonte:** [`catalogo-pf.csv`](./catalogo-pf.csv), 20 linhas, recebida
+  do time em 26/09/2026. Nomes de produto e links são genéricos: a PoC não
+  cita nenhuma instituição real.
 - **Contrato:** o subconjunto do MVP (§2) vira
   `contracts/catalogo_produtos.json` no ciclo 000
   ([contratos.md §3](../ciclos/contratos.md)).
@@ -36,12 +36,12 @@ taxa e não depende de chamada de rede em tempo de execução.
 
 | `produto_id` | Produto | Uso no MVP | Onde aparece na jornada |
 |---|---|---|---|
-| `cofrinhos` | Cofrinhos | RAG + ação | AGIR: separar o aporte do cenário escolhido numa meta |
+| `reserva_objetivo` | Reserva por objetivo | RAG + ação | AGIR: separar o aporte do cenário escolhido numa meta |
 | `controle_gastos` | Controle de Gastos | RAG + ação | AGIR e ACOMPANHAR: limite nas categorias dos cortes sugeridos |
 | `credito_imobiliario` | Crédito Imobiliário | RAG + ação | ORIENTAR: caminho com financiamento depois da entrada. Sem parcela calculada, sem promessa de aprovação |
 | `consorcio_imoveis` | Consórcio de Imóveis | RAG + ação | ORIENTAR: alternativa quando o prazo é flexível. Explica sorteio e lance |
 | `consorcio_veiculos` | Consórcio de Veículos | RAG + ação | ORIENTAR, quando o objetivo é um carro |
-| `renegociacao` | Renegociação Itaú | RAG + ação | ENTENDER: juros e parcelas pesam antes de acelerar o objetivo |
+| `renegociacao` | Renegociação de dívidas | RAG + ação | ENTENDER: juros e parcelas pesam antes de acelerar o objetivo |
 | `cdb_renda_fixa` | CDB / renda fixa | Só RAG | ORIENTAR: educação sobre prazo e liquidez da reserva |
 | `lci_lca` | LCI / LCA | Só RAG | ORIENTAR: educação sobre prazo, liquidez e tributação |
 
@@ -59,7 +59,7 @@ taxa e não depende de chamada de rede em tempo de execução.
 | Produto | Motivo |
 |---|---|
 | Open Finance | Não objetivo do mestre §18. No design aparece só como card desabilitado "em breve" |
-| Cartões PF / rotativo, Contas PF / tarifas, Empréstimos PF, Financiamentos PF | Dependem das APIs públicas `api.itau/open-banking/opendata-*`: trazem taxas e tarifas (§18) e criam dependência de rede na demo. Evolução natural da camada |
+| Cartões PF / rotativo, Contas PF / tarifas, Empréstimos PF, Financiamentos PF | Dependem das APIs públicas `api.exemplo.test/open-banking/opendata-*`: trazem taxas e tarifas (§18) e criam dependência de rede na demo. Evolução natural da camada |
 | Empréstimo pessoal, Consignado CLT, Crédito com Garantia de Imóvel, Crédito para Investidores, Crédito Sob Medida | Crédito não é atalho para o objetivo, e a elegibilidade depende de dados que a base não tem (margem, garantia, patrimônio, contratos) |
 | Limite Garantido, Simular Compra Futura | Não servem à jornada de objetivo; risco de incentivar endividamento |
 

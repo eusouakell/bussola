@@ -5,7 +5,7 @@ import { brl, meses, mesExtenso, percentual, periodo } from "../formatacao/forma
 import type { EstadoJornada } from "../agente/tipos";
 import type { TipoObjetivo } from "./intencoes";
 
-export const SAUDACAO = "Oi, Fernando! Eu sou a Bússola, da ia.i. Qual objetivo você quer tirar do papel?";
+export const SAUDACAO = "Oi, Fernando! Eu sou a Bússola, seu assistente financeiro. Qual objetivo você quer tirar do papel?";
 
 export const SUGESTOES_INICIAIS = [
   "Quero comprar meu primeiro apartamento",
@@ -96,8 +96,8 @@ export function foraDoEscopo2(estado: EstadoJornada): string {
 }
 
 const FORA_DO_ESCOPO_FINAL = [
-  "Vou ficar no que faço bem, que é o seu plano. Para outros assuntos, o app do Itaú tem os canais de atendimento. Quando quiser, é só me dizer o seu objetivo.",
-  "Sigo por aqui, à sua disposição para o seu plano. Os outros temas ficam melhor com o atendimento do app do Itaú. Quando você quiser retomar a meta, eu continuo aqui.",
+  "Vou ficar no que faço bem, que é o seu plano. Para outros assuntos, o app do banco tem os canais de atendimento. Quando quiser, é só me dizer o seu objetivo.",
+  "Sigo por aqui, à sua disposição para o seu plano. Os outros temas ficam melhor com o atendimento do app do banco. Quando você quiser retomar a meta, eu continuo aqui.",
 ];
 
 /** Terceira vez em diante: encerra o assunto e aponta o atendimento humano, sem repetir a frase. */

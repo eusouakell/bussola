@@ -159,7 +159,7 @@ exatas de `contratos.md` §3.
       valor, para `ate_anomes = 202506` e `202512`.
   - As premissas de demo são INFERRED: entrada de R$ 60.000 em 24 meses; a
     pergunta "+R$ 300/mês" soma 300 ao aporte do cenário equilibrado.
-  - A 8ª pergunta (produtos Itaú) não é numérica. Fica registrada como
+  - A 8ª pergunta (produtos do banco) não é numérica. Fica registrada como
     respondida pelo catálogo curado (`docs/catalogo/`, RAG do 002), sem
     taxas.
 - [ ] Testes unitários de simulação com casos conhecidos e bordas:

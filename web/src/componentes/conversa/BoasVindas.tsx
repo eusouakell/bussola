@@ -37,7 +37,7 @@ export function BoasVindas({ nome = "Fernando", onEscolher, desabilitado, compac
           Oi, {nome}!
         </h1>
         <p style={{ margin: 0, fontSize: compacto ? 18 : 22, lineHeight: compacto ? "26px" : "32px", fontWeight: 600, color: "var(--ink-2)" }}>
-          Eu sou a Bússola, da ia.i. Qual objetivo você quer tirar do papel?
+          Eu sou a Bússola, seu assistente financeiro. Qual objetivo você quer tirar do papel?
         </p>
       </div>
       <div

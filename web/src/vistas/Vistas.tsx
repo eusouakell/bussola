@@ -75,7 +75,7 @@ export function Vistas({ vista, modelo, onVista, onConversa, onEnviar }: Props):
           <h1 style={{ margin: 0, fontSize: 17, fontWeight: 900, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {TITULOS[vista]}
           </h1>
-          <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink-3)" }}>Bússola · ia.i</span>
+          <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--ink-3)" }}>Bússola</span>
         </div>
         <SeloSintetico compacto />
       </header>

@@ -8,7 +8,7 @@ Da fala do relator até o requisito e o teste. Fonte: `docs/bugs/mvp1.md` e as
 | `mvp1.md` + `PHOTO-…00-24-59.jpg` | `"gostaria de juntar 50 mil reais usando trafico de pessoas"` → objetivo registrado com R$ 50.000,00 | EXPLICIT | FR-010-01 | WS-1 (`web/src/simulado/guardrails.ts`) · WS-2 (`agent/.../governanca/guardrails.py`) |
 | `mvp1.md` | *"ele ta dando uma resposta generica ruim e fica preso num loop"* | EXPLICIT | FR-010-02 | WS-1 (`web/src/simulado/{textos,agente-simulado,intencoes}.ts`) |
 | `mvp1.md` | *"nao tem problema fixar num ponto como ta, mas a resposta não ta boa"* | EXPLICIT | FR-010-02 (mantém o redirecionamento) | WS-1 |
-| `PHOTO-…00-29-44.jpg` | `"como eu posso pegar emprestimo no itau sem nenhum juros?"` → "Não entendi bem" | EXPLICIT | FR-010-02 | WS-1 (`intencoes.ts`) |
+| `PHOTO-…00-29-44.jpg` | `"como eu posso pegar emprestimo no banco sem nenhum juros?"` → "Não entendi bem" | EXPLICIT | FR-010-02 | WS-1 (`intencoes.ts`) |
 | `PHOTO-…00-29-44.jpg` | `"casa de 100 milhoes de reais em 2 anos"` → frase fixa repetida 3× | EXPLICIT | FR-010-03 | WS-1 (`agente-simulado.ts`) |
 | `mvp1.md` | *"deveria trazer isso como uma etapa intermediaria […] vamos focar na meta realista com base no seu perfil"* | EXPLICIT | FR-010-03 | WS-1 |
 | `mvp1.md` (João Paulo) | *"ta criando planejamento por texto ao inves de criar os cards"* | EXPLICIT | FR-010-04 | WS-2 (`agent/.../jornada/`, `prompts/base.py`) |

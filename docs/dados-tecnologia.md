@@ -1,6 +1,6 @@
 # Dados e Tecnologia
 
-Este documento descreve a camada de dados e tecnologia da PoC da Bússola para a Batalha de Agentes — Itaú x Google.
+Este documento descreve a camada de dados e tecnologia da PoC da Bússola para a Batalha de Agentes.
 
 ## 1. Dados financeiros e contexto do cliente
 
@@ -19,7 +19,7 @@ Um agente especializado funciona como ponte entre a experiência conversacional 
 - "O objetivo cabe no prazo desejado?"
 - "Como o prazo muda se ele economizar mais R$ 300 por mês?"
 - "Há dívidas que reduzem a capacidade de realizar o objetivo?"
-- "Quais produtos do Itaú são adequados para este objetivo?"
+- "Quais produtos do banco são adequados para este objetivo?"
 
 O agente MCP traduz essas necessidades para consultas às fontes adequadas, sem expor SQL ou detalhes de infraestrutura ao agente conversacional.
 
@@ -29,13 +29,13 @@ O agente MCP combina duas classes de informação.
 
 **Dados estruturados**, no BigQuery, são usados para números e cálculos relacionados ao cliente: renda, gastos, capacidade de poupança, saldo, dívidas, reserva, histórico e projeções.
 
-**RAG financeiro**, por outro lado, fornece conhecimento atualizado sobre: produtos Itaú, jornadas, regras de elegibilidade, características de investimentos, crédito imobiliário, consórcio, políticas, educação financeira e informações de mercado relevantes.
+**RAG financeiro**, por outro lado, fornece conhecimento atualizado sobre: produtos do banco, jornadas, regras de elegibilidade, características de investimentos, crédito imobiliário, consórcio, políticas, educação financeira e informações de mercado relevantes.
 
 Assim, condições comerciais e regras de produto não ficam hardcoded na aplicação, e cada recomendação pode ser explicada com base na fonte consultada.
 
-## 4. Agente Conversacional — ia.i + Gemini / ADK
+## 4. Agente Conversacional — app do banco + Gemini / ADK
 
-A ia.i conduz toda a experiência com o cliente, seguindo a jornada:
+O app do banco conduz toda a experiência com o cliente, seguindo a jornada:
 
 ```text
 OBJETIVO -> ENTENDER -> ANTECIPAR -> ORIENTAR -> AGIR -> ACOMPANHAR

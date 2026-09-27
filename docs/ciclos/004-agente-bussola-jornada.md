@@ -61,7 +61,7 @@ consentimento.
 
 ### 3.2 Prompts (`agent/bussola_agent/prompts/`, pt-BR)
 
-- **Persona:** Bússola, jornada da ia.i. Tom de educação financeira
+- **Persona:** Bússola, jornada do app do banco. Tom de educação financeira
   (Resolução Conjunta nº 8) e Responsible AI.
 - **Estado atual** injetado na instrução (`{estado_jornada}`, `{objetivo}`)
   e comportamento por estado conforme a tabela do mestre §4.
@@ -208,7 +208,7 @@ consentimento.
   guardrails de texto (005).
 - `avancar_mes` e acompanhamento (006).
 - Canal, IAM e deploy final (007).
-- Front próprio estilo ia.i (Q4; `docs/design/` é referência de P2).
+- Front próprio estilo do app do banco (Q4; `docs/design/` é referência de P2).
 
 ## 10. Questões em aberto
 

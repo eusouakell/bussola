@@ -120,7 +120,7 @@ root_agent = Agent(
     name=NOME_AGENTE,
     model=criar_modelo(os.getenv("BUSSOLA_MODEL") or MODELO_PADRAO),
     description=(
-        "Bússola, da jornada ia.i: ajuda o cliente a transformar um objetivo financeiro "
+        "Bússola, do app do banco: ajuda o cliente a transformar um objetivo financeiro "
         "em plano, com números das ferramentas MCP."
     ),
     instruction=prompts.build_instruction(instrucoes()),

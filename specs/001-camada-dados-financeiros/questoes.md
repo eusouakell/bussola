@@ -16,4 +16,4 @@ revisão humana.
 | Q-08 | Faixa de renda da coorte | Pela renda média dos meses `≤ ate_anomes` (`metricas.income_band`), com os limites do 000 (3k/6k/10k/20k) | INFERRED | 003 |
 | Q-09 | `web/fixtures/goldens.json` é cópia dos goldens | O 001 não edita `web/`. Depois das fixtures v1, o dono do web roda `npm run fixtures` | EXPLICIT (propriedade) | Web |
 | Q-10 | `make fixtures` (000) regenera as fixtures provisórias e sobrescreveria as v1 | Novo alvo `make fixtures-v1` (acréscimo ao Makefile). `make fixtures` fica como está; o README do 000 pode apontar para o novo alvo depois do merge | INFERRED | 000/007 |
-| Q-11 | Pergunta 8 (produtos Itaú) | Não é numérica. É respondida pelo catálogo curado (`docs/catalogo/`, tema `produto` do RAG do 002), sem taxas | EXPLICIT | 002 |
+| Q-11 | Pergunta 8 (produtos do banco) | Não é numérica. É respondida pelo catálogo curado (`docs/catalogo/`, tema `produto` do RAG do 002), sem taxas | EXPLICIT | 002 |

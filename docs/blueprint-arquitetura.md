@@ -10,7 +10,7 @@ recursos e esquemas de tabela são **propostas** para a fase de `plan`.
 ```mermaid
 flowchart TB
     subgraph L1["Camada 1 — Canal (experiência da demo)"]
-        chat["Chat da demo<br/>simula o canal ia.i"]
+        chat["Chat da demo<br/>simula o canal do banco"]
         replay_ui["Controle de replay<br/>'avançar um mês'"]
     end
 

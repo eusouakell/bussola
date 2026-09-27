@@ -339,7 +339,7 @@ async def simular_contratacao(tipo_produto: str, tool_context: ToolContext) -> d
     """Simula a contratação de um produto do catálogo, sem contratar. Ação sensível.
 
     Só funciona depois que o cliente autorizou com sim (solicitar_consentimento).
-    Aceita só produto_id do catálogo com simulação disponível: cofrinhos,
+    Aceita só produto_id do catálogo com simulação disponível: reserva_objetivo,
     controle_gastos, credito_imobiliario, consorcio_imoveis, consorcio_veiculos
     ou renegociacao. Não traz taxas nem condições.
 

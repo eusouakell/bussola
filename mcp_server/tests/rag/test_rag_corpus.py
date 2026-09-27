@@ -197,12 +197,12 @@ def test_dado_de_cliente_ou_identificador_e_recusado(
 def product_catalog() -> list[ProdutoCatalogo]:
     return [
         ProdutoCatalogo(
-            produto_id="cofrinhos",
-            nome="Cofrinhos",
+            produto_id="reserva_objetivo",
+            nome="Reserva por objetivo",
             categoria="Metas & reserva",
             uso="Criar meta e acompanhar objetivo",
             cuidado="Não citar rentabilidade",
-            fonte_oficial="https://www.itau.com.br/cofrinhos",
+            fonte_oficial="https://exemplo.test/reserva-objetivo",
             acao_simulada=True,
         )
     ]
@@ -210,10 +210,10 @@ def product_catalog() -> list[ProdutoCatalogo]:
 
 def _product_doc(document: MakeDoc, text: str, url: str | None) -> str:
     return document(
-        "Cofrinhos",
+        "Reserva por objetivo",
         "produto",
-        [("Cofrinhos: o que é", text)],
-        source_name="Itaú Unibanco",
+        [("Reserva por objetivo: o que é", text)],
+        source_name="Catálogo de produtos",
         source_reference="Página oficial do produto",
         source_url=url,
     )
@@ -225,8 +225,10 @@ def test_produto_valido(
     add_doc(
         tmp_path,
         "produto",
-        "cofrinhos",
-        _product_doc(document, "Separa dinheiro por meta.", "https://www.itau.com.br/cofrinhos"),
+        "reserva_objetivo",
+        _product_doc(
+            document, "Separa dinheiro por meta.", "https://exemplo.test/reserva-objetivo"
+        ),
     )
     assert validate_corpus(tmp_path, product_catalog) == []
 
@@ -243,7 +245,7 @@ def test_produto_nao_pode_ter_taxa_nem_valor(
     add_doc(
         tmp_path,
         "produto",
-        "cofrinhos",
+        "reserva_objetivo",
         _product_doc(document, text, product_catalog[0].fonte_oficial),
     )
     _one_problem(validate_corpus(tmp_path, product_catalog), f"taxa ou valor ({marker!r})")
@@ -252,14 +254,16 @@ def test_produto_nao_pode_ter_taxa_nem_valor(
 def test_produto_exige_fonte_url_igual_ao_catalogo(
     tmp_path: Path, document: MakeDoc, add_doc: AddDoc, product_catalog: list[ProdutoCatalogo]
 ) -> None:
-    add_doc(tmp_path, "produto", "cofrinhos", _product_doc(document, "Separa dinheiro.", None))
+    add_doc(
+        tmp_path, "produto", "reserva_objetivo", _product_doc(document, "Separa dinheiro.", None)
+    )
     _one_problem(validate_corpus(tmp_path, product_catalog), "tema produto exige fonte_url")
 
     add_doc(
         tmp_path,
         "produto",
-        "cofrinhos",
-        _product_doc(document, "Separa dinheiro.", "https://www.exemplo.com/cofrinhos"),
+        "reserva_objetivo",
+        _product_doc(document, "Separa dinheiro.", "https://www.exemplo.com/reserva-objetivo"),
     )
     _one_problem(validate_corpus(tmp_path, product_catalog), "difere da fonte oficial do catálogo")
 
@@ -271,11 +275,11 @@ def test_produto_fora_do_catalogo_e_catalogo_sem_documento(
         tmp_path,
         "produto",
         "poupanca-magica",
-        _product_doc(document, "Produto inventado.", "https://www.itau.com.br/x"),
+        _product_doc(document, "Produto inventado.", "https://exemplo.test/x"),
     )
     problems = validate_corpus(tmp_path, product_catalog)
     _one_problem(problems, "produto/poupanca-magica.md: produto fora de contracts/")
-    _one_problem(problems, "produto/cofrinhos.md: produto do catálogo sem documento")
+    _one_problem(problems, "produto/reserva_objetivo.md: produto do catálogo sem documento")
 
 
 # --- corpus real ---------------------------------------------------------------

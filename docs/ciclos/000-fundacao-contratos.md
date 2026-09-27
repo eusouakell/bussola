@@ -125,7 +125,7 @@ build → push → Cloud Run. Por fim, formaliza os pedidos ao owner.
     os substitui.
 - **`contracts/fixtures/rag/trechos_exemplo.json`:** trechos curados do
   corpus de conhecimento (lista de `TrechoCorpus`), nos temas `norma_bacen`,
-  `credito`, `boas_praticas` e `produto` (`cofrinhos`, com `fonte.url`).
+  `credito`, `boas_praticas` e `produto` (`reserva_objetivo`, com `fonte.url`).
 - **`mcp_server/bussola_mcp/server.py` (mock):**
   - FastMCP em streamable HTTP, `/mcp`, `0.0.0.0:$PORT`;
   - registra as 7 ferramentas P0 e `resumo_mes`, com as assinaturas exatas

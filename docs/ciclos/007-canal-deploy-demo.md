@@ -106,7 +106,7 @@ Também entrega o runbook que permite **operar o produto pelo Antigravity**:
   usar `--allow-unauthenticated` **só** no agente, **nunca** no MCP.
 - **Sem invoker público:** `gcloud run services proxy bussola-agent
   --region us-central1 --port 8080` na máquina da demo.
-- **Front próprio no estilo ia.i (`docs/design/`):** fora deste ciclo, a
+- **Front próprio no estilo do app do banco (`docs/design/`):** fora deste ciclo, a
   menos que a Q4 seja fechada a favor dele **antes do merge do 000**.
   Nesse caso:
   - `web/` entra no mapa de contratos §1 como dono 007, via PR
@@ -259,7 +259,7 @@ Também entrega o runbook que permite **operar o produto pelo Antigravity**:
 ## 9. Fora de escopo
 
 - Código do MCP e do agente.
-- Front próprio estilo ia.i (P2).
+- Front próprio estilo do app do banco (P2).
 - Cloud Scheduler, Workflows ou tracing (bloqueados).
 - Criação de SA, bucket ou Model Armor. Esses são pedidos ao owner (§16).
 

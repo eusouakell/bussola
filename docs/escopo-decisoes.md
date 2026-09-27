@@ -2,7 +2,7 @@
 
 ## Escopo confirmado
 
-A Bússola é uma jornada agentic da ia.i orientada a objetivos financeiros.
+A Bússola é uma jornada agentic orientada a objetivos financeiros.
 
 O escopo da PoC contempla:
 
@@ -46,5 +46,5 @@ A demonstração deve deixar claro que a Bússola:
 - propõe ações concretas;
 - respeita consentimento e governança;
 - acompanha a evolução do plano;
-- conecta objetivos humanos ao ecossistema Itaú.
+- conecta objetivos humanos ao ecossistema do banco.
 

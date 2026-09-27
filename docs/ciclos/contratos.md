@@ -159,10 +159,10 @@ Recorte do MVP de [`docs/catalogo/`](../catalogo/README.md) §2. Lista de
 objetos:
 
 ```json
-{"produto_id": "cofrinhos", "nome": "Cofrinhos", "categoria": "Metas & reserva",
+{"produto_id": "reserva_objetivo", "nome": "Reserva por objetivo", "categoria": "Metas & reserva",
  "uso": "Criar meta/reserva e acompanhar objetivo",
  "cuidado": "Não hardcodar rentabilidade se não consultada em fonte atual",
- "fonte_oficial": "https://feito.itau.com.br/…", "acao_simulada": true}
+ "fonte_oficial": "https://exemplo.test/…", "acao_simulada": true}
 ```
 
 - Modelo: `ProdutoCatalogo` em `bussola_mcp/contratos.py`.
@@ -668,7 +668,7 @@ prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
     devolve `INDISPONIVEL`.
 - `rag/trechos_exemplo.json`: amostra curada à mão do corpus de
   conhecimento (lista de `TrechoCorpus`, cobrindo os três temas e ao menos
-  um trecho `produto`: `cofrinhos`, com `fonte.url`). Não é gerada por
+  um trecho `produto`: `reserva_objetivo`, com `fonte.url`). Não é gerada por
   `gerar_fixtures.py`, que também não a apaga.
 - Formato: cada arquivo de tabela, `usuarios.json` e `rag/trechos_exemplo.json`
   é uma **lista JSON** de objetos; cada golden é um envelope JSON (Q-11 do

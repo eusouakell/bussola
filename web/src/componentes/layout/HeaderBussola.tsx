@@ -23,7 +23,7 @@ export function HeaderBussola({ bastidores, onBastidores, escuro, onTema, onMeuP
       </span>
       <span style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
         <span style={{ fontSize: 20, fontWeight: 900 }}>Bússola</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--ink-3)" }}>na ia.i</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--ink-3)" }}>assistente financeiro</span>
       </span>
       <span style={{ flex: "1 1 auto" }} />
       <SeloSintetico />

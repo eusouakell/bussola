@@ -290,7 +290,7 @@ describe("BUG-02: fora do escopo escalona em vez de repetir", () => {
 
   it("pergunta sobre empréstimo sem juros é tratada como dúvida de crédito", () => {
     const motor = motorAte(1);
-    const eventos = motor.turno("como eu posso pegar emprestimo no itau sem nenhum juros?");
+    const eventos = motor.turno("como eu posso pegar emprestimo no banco sem nenhum juros?");
     expect(textos(eventos)[0]).toBe(T.DUVIDA_CREDITO);
     expect(textos(eventos)[0]).not.toBe(T.NAO_ENTENDI);
     expect(eventos.at(-1)?.customMetadata?.bussola?.respostas_rapidas).toEqual([T.R_FINANCIAMENTO, T.R_CONTINUAR]);

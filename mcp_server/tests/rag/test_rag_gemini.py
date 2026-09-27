@@ -40,4 +40,4 @@ def test_embedding_real_da_pergunta() -> None:
 
 def test_busca_real_com_numpy() -> None:
     result = BuscadorNumpy().buscar("Onde guardo o dinheiro da entrada?", 3)
-    assert "cofrinhos#1" in [t.trecho_id for t in result]
+    assert "reserva_objetivo#1" in [t.trecho_id for t in result]

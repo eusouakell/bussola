@@ -118,7 +118,7 @@ ferramentas determinísticas.
     no `lexico` e score abaixo do limiar no `numpy`;
   - nenhum trecho `produto` contém `%`, `a.a.`, `a.m.` ou `R$`.
 - **Perguntas de produto:** 2 ou mais no `perguntas.yaml`, ex.: "onde guardo
-  o dinheiro da entrada?" espera `cofrinhos`.
+  o dinheiro da entrada?" espera `reserva_objetivo`.
 
 ## 4. Propriedade (escreve só aqui)
 

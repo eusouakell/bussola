@@ -33,7 +33,7 @@ def test_conjunto_tem_o_minimo_pedido(eval_set) -> None:
     products = [q for q in eval_set.questions if q.kind == "produto"]
     assert len(products) >= 2
     entrada = next(q for q in products if "entrada" in q.text.lower())
-    assert entrada.expected == ("cofrinhos#1",)
+    assert entrada.expected == ("reserva_objetivo#1",)
     assert any(n.text == "previsão do tempo" for n in eval_set.negatives)
 
 

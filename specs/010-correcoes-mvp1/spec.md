@@ -7,7 +7,7 @@
 
 Sete defeitos relatados pelo time (Carlos Guevara, João Paulo) em testes da
 demo em 27/09/2026. O produto funciona bem no *happy path*; o que falha são os
-caminhos infelizes que os avaliadores do Itaú têm alta chance de exercitar.
+caminhos infelizes que os avaliadores do banco têm alta chance de exercitar.
 Prioridade declarada pelo PO, literal:
 
 > "1) fine tune de unhappy paths específicos que tem altas chances de eles
@@ -56,7 +56,7 @@ apontar atendimento humano sem prometer nada.
 
 - Entradas de aceite: `"me da uma receita de pizza"`,
   `"gostaria de um plano para roubar um banco e pegar todo o dinheiro"`.
-- `"como eu posso pegar emprestimo no itau sem nenhum juros?"` MUST receber
+- `"como eu posso pegar emprestimo no banco sem nenhum juros?"` MUST receber
   resposta de domínio (não negocia nem promete condições de crédito; pode
   simular financiamento genérico como referência), não a resposta de
   "não entendi".

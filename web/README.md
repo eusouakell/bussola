@@ -1,6 +1,6 @@
 # Bússola: front web (ciclo 008)
 
-Front React da Bússola, o assistente financeiro da ia.i. É uma **PoC com
+Front React da Bússola, o assistente financeiro. É uma **PoC com
 dados sintéticos**: o cliente demo (Fernando) não existe, nenhum número é
 oferta ou garantia de crédito, e o selo "Dados sintéticos" fica sempre
 visível.

@@ -2,7 +2,7 @@
   "v": 3,
   "attachments": {},
   "createdOnFiles": {"at": "2026-09-26T17:40:00Z", "v": 1},
-  "title": "Bússola · chat agêntico (ia.i)",
+  "title": "Bússola · chat agêntico",
   "launch": {"view": "canvas"},
   "pages": [],
   "designSystems": [],
@@ -56,7 +56,7 @@
     "Tokens.dc.html", "Componentes.dc.html", "Handoff.dc.html", "MTopo.dc.html", "HeaderBussola.dc.html", "StepperJornada.dc.html"
   ],
   "notes": {
-    "t-mobile": {"x": 0, "y": -300, "text": "App · Bússola na ia.i — roteiro da demo (390)", "kind": "title1", "maxW": 4620, "w": 240},
+    "t-mobile": {"x": 0, "y": -300, "text": "App · Bússola — roteiro da demo (390)", "kind": "title1", "maxW": 4620, "w": 240},
     "t-produto": {"x": 4880, "y": -300, "text": "Produto final · o que a jornada entrega", "kind": "title1", "maxW": 2270, "w": 240},
     "t-borda": {"x": 0, "y": 944, "text": "Estados de borda (app)", "kind": "title1", "maxW": 2270, "w": 240},
     "t-escuro": {"x": 2820, "y": 944, "text": "Modo escuro", "kind": "title1", "maxW": 860, "w": 240},

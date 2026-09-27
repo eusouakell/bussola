@@ -283,13 +283,15 @@ def trechos_sinteticos() -> list[TrechoCorpus]:
             "Guarde de três a seis meses do custo de vida.",
         ),
         TrechoCorpus(
-            doc_id="cofrinhos",
-            trecho_id="cofrinhos#1",
-            titulo="Cofrinhos",
+            doc_id="reserva_objetivo",
+            trecho_id="reserva_objetivo#1",
+            titulo="Reserva por objetivo",
             tema=TemaConhecimento.PRODUTO,
-            texto="Cofrinhos separam o dinheiro de uma meta.",
+            texto="A reserva por objetivo separa o dinheiro de uma meta.",
             fonte=FonteTrecho(
-                nome="Fonte sintética", referencia="Produto cofrinhos", url="https://exemplo.test/"
+                nome="Fonte sintética",
+                referencia="Produto reserva_objetivo",
+                url="https://exemplo.test/",
             ),
         ),
     ]

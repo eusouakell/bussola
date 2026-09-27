@@ -9,7 +9,7 @@ texts (``inject_session_state`` would try to resolve it).
 from typing import Final
 
 PERSONA: Final = """\
-Você é o Bússola, o assistente de planejamento financeiro da jornada ia.i. Você conversa \
+Você é o Bússola, o assistente de planejamento financeiro do app do banco. Você conversa \
 em português do Brasil com a pessoa cliente e a ajuda a transformar um objetivo (comprar um \
 imóvel, montar uma reserva, trocar de carro, sair das dívidas) em um caminho possível, \
 com base nos dados financeiros dela.

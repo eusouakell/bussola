@@ -38,7 +38,7 @@ def _ids(envelope):
         ("juros do rotativo do cartão", None, ["teto-juros#1", "rotativo#1", "cet#1"]),
         ("O que é o CET?", None, ["cet#1"]),
         ("minhas dívidas", "credito", ["registrato#1"]),
-        ("dinheiro da meta", "produto", ["cofrinhos#1"]),
+        ("dinheiro da meta", "produto", ["reserva_objetivo#1"]),
     ],
 )
 async def test_trechos_esperados_no_corpus_sintetico(fixtures_sinteticas, pergunta, tema, esperado):

@@ -1,13 +1,13 @@
 # Ficha de Submissão — Parte 1 do Projeto
 
-**Batalha de Agentes — Itaú x Google**  
+**Batalha de Agentes**  
 **Versão alinhada ao case oficial — 26/09/2026**
 
 ## Nome do agente
 
 # Bússola
 
-**Uma jornada da ia.i que transforma sonhos e objetivos financeiros em planos executáveis.**
+**Uma jornada que transforma sonhos e objetivos financeiros em planos executáveis.**
 
 ## Equipe
 
@@ -44,7 +44,7 @@ Fernando, 30 anos, quer comprar seu primeiro apartamento.
 
 ### Gatilhos de uso
 
-O cliente abre a ia.i e diz:
+O cliente abre o app do banco e diz:
 
 - "Quero comprar um apartamento. O que eu preciso fazer para conseguir?"
 - "Quero viajar no ano que vem. Quanto preciso guardar?"
@@ -56,7 +56,7 @@ A Bússola usa os dados disponíveis e pergunta apenas o que não consegue infer
 
 ### Proposta de valor
 
-A Bússola completa a jornada da ia.i transformando dados financeiros em contexto, contexto em previsão e previsão em plano executável.
+A Bússola completa a jornada do cliente transformando dados financeiros em contexto, contexto em previsão e previsão em plano executável.
 
 O agente guia o cliente por uma sequência simples:
 
@@ -88,7 +88,7 @@ A Bússola não é apenas um chatbot financeiro. Ela funciona como uma jornada a
 
 ## Arquitetura proposta
 
-A solução usa a ia.i como interface de conversa e o Gemini/ADK como base de orquestração agentic. Um agente de dados e conhecimento acessa ferramentas via MCP, combinando dados sintéticos no BigQuery com RAG financeiro.
+A solução usa o app do banco como interface de conversa e o Gemini/ADK como base de orquestração agentic. Um agente de dados e conhecimento acessa ferramentas via MCP, combinando dados sintéticos no BigQuery com RAG financeiro.
 
 A camada de execução roda em Cloud Run, com segredos no Secret Manager, proteção de entrada e saída por Model Armor e rastreabilidade via Cloud Logging.
 
@@ -103,6 +103,6 @@ Ao final da experiência, o cliente sai com:
 - cenários possíveis;
 - plano financeiro mensal;
 - próximos passos priorizados;
-- recomendações conectadas ao ecossistema Itaú;
-- acompanhamento contínuo pela ia.i.
+- recomendações conectadas ao ecossistema do banco;
+- acompanhamento contínuo pelo app do banco.
 

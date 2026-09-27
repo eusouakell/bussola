@@ -102,4 +102,4 @@ def test_indice_versionado_nao_responde_fora_do_dominio() -> None:
 
 def test_indice_versionado_responde_pergunta_de_produto() -> None:
     result = BuscadorLexico().buscar("Onde guardo o dinheiro da entrada?", 3)
-    assert "cofrinhos#1" in [t.trecho_id for t in result]
+    assert "reserva_objetivo#1" in [t.trecho_id for t in result]

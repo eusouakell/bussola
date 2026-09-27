@@ -1,8 +1,8 @@
 # Bússola
 
-**Uma jornada agentic da ia.i que transforma sonhos e objetivos financeiros em planos executáveis.**
+**Uma jornada agentic que transforma sonhos e objetivos financeiros em planos executáveis.**
 
-Bússola é uma proposta para a **Batalha de Agentes — Itaú x Google**. O agente parte de um objetivo declarado pelo cliente, entende sua situação financeira, antecipa cenários, orienta a tomada de decisão, aciona próximos passos com consentimento e acompanha a evolução até a realização do objetivo.
+Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um objetivo declarado pelo cliente, entende sua situação financeira, antecipa cenários, orienta a tomada de decisão, aciona próximos passos com consentimento e acompanha a evolução até a realização do objetivo.
 
 ## Norte do produto
 
@@ -24,7 +24,7 @@ OBJETIVO -> ENTENDER -> ANTECIPAR -> ORIENTAR -> AGIR -> ACOMPANHAR
 
 ## Escopo da PoC
 
-A PoC demonstra Fernando, 30 anos, cliente pessoa física, usando a ia.i para planejar a compra do primeiro apartamento.
+A PoC demonstra Fernando, 30 anos, cliente pessoa física, usando o app do banco para planejar a compra do primeiro apartamento.
 
 A Bússola deve:
 
@@ -40,7 +40,7 @@ A Bússola deve:
 
 ## Stack de referência
 
-- **Experiência:** ia.i.
+- **Experiência:** app do banco (chat web).
 - **Orquestração agentic:** Gemini e ADK.
 - **Dados sintéticos:** BigQuery.
 - **Conhecimento:** RAG financeiro com políticas, produtos, regras e conteúdos de educação financeira.

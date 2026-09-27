@@ -1667,16 +1667,16 @@
       "trecho_id": "comprometimento-renda#1"
     },
     {
-      "doc_id": "cofrinhos",
+      "doc_id": "reserva_objetivo",
       "fonte": {
-        "nome": "Itaú Unibanco",
-        "referencia": "Cofrinhos Itaú (página oficial)",
-        "url": "https://feito.itau.com.br/cofrinhos-itau-seu-dinheiro-a-servico-dos-seus-sonhos"
+        "nome": "Catálogo de produtos",
+        "referencia": "Reserva por objetivo (página oficial)",
+        "url": "https://exemplo.test/reserva-objetivo"
       },
       "tema": "produto",
-      "texto": "Os Cofrinhos servem para separar dinheiro para um objetivo, como a entrada de um imóvel, e acompanhar quanto já foi guardado até a meta. A rentabilidade não é fixa: confira as condições atuais na página oficial antes de decidir onde guardar.",
-      "titulo": "Cofrinhos",
-      "trecho_id": "cofrinhos#1"
+      "texto": "A reserva por objetivo serve para separar dinheiro para um objetivo, como a entrada de um imóvel, e acompanhar quanto já foi guardado até a meta. A rentabilidade não é fixa: confira as condições atuais na página oficial antes de decidir onde guardar.",
+      "titulo": "Reserva por objetivo",
+      "trecho_id": "reserva_objetivo#1"
     }
   ]
 }

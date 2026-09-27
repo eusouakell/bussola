@@ -12,7 +12,7 @@ OBJETIVO -> ENTENDER -> ANTECIPAR -> ORIENTAR -> AGIR -> ACOMPANHAR
 sequenceDiagram
     autonumber
     actor Cliente
-    participant IAI as ia.i
+    participant IAI as App do banco
     participant Bussola as Agente Bússola
     participant Dados as Agente de dados/conhecimento via MCP
     participant BQ as BigQuery sintético
