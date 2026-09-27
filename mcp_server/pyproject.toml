@@ -9,12 +9,14 @@ dependencies = [
     "google-cloud-bigquery>=3.45",
     "numpy>=2.5",
     "uvicorn>=0.54",
+    "google-genai>=2.25.0",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=9.1",
     "pytest-asyncio>=1.4",
+    "pyyaml>=6.0.3",
     "ruff>=0.16",
 ]
 
@@ -36,4 +38,7 @@ select = ["E", "F", "I", "UP", "B"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-markers = ["bq: depende de BigQuery real (make test-bq)"]
+markers = [
+    "bq: depende de BigQuery real (make test-bq)",
+    "gemini: chama a API real de embedding do Gemini (fora do make test)",
+]
