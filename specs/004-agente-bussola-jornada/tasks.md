@@ -40,7 +40,7 @@ Legenda: `[x]` feito, `[ ]` pendente. Commits pequenos (`agent:`, `eval:`,
 
 ## Fase 6: agente
 
-- [ ] T050 `agent.py` da jornada (FR-001, FR-002, FR-003);
+- [x] T050 `agent.py` da jornada (FR-001, FR-002, FR-003);
   `tests/contrato/test_agent_hello.py` atualizado.
 - [ ] T051 Integração roteirizada OBJETIVO → ORIENTAR → AGIR contra o mock
   MCP real (AC-07).

@@ -19,9 +19,9 @@ from google.adk.tools.mcp_tool.mcp_toolset import McpToolset
 from google.genai import errors, types
 
 import bussola_agent
-from bussola_agent import callbacks, extensoes
+from bussola_agent import callbacks, escopo, extensoes
 from bussola_agent.estado import CHAVES
-from bussola_agent.jornada import respostas_rapidas
+from bussola_agent.jornada import annotations, number_check, respostas_rapidas
 from bussola_agent.mcp_conexao import URL_PADRAO
 from bussola_agent.resilient_model import NonStreamingModel, capacity_error_response
 
@@ -49,11 +49,12 @@ def test_root_agent_padrao(importar_de_novo: Callable[[], ModuleType]) -> None:
     modulo = importar_de_novo()
     agente = modulo.root_agent
     assert isinstance(agente, Agent)
-    assert agente.name == "bussola_hello"
+    assert agente.name == "bussola"
     assert isinstance(agente.model, FallbackModel)
     assert agente.model.model == "gemini-3.8-flash"
     assert _cadeia(agente.model) == ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash"]
-    [toolset] = agente.tools
+    toolset, *locais = agente.tools
+    assert [f.__name__ for f in locais] == ["registrar_objetivo", "escolher_cenario"]
     assert isinstance(toolset, McpToolset)
     assert toolset.connection_params.url == URL_PADRAO
     assert toolset.header_provider is None
@@ -115,10 +116,14 @@ def test_callbacks_instalados(importar_de_novo: Callable[[], ModuleType]) -> Non
     assert agente.after_tool_callback is callbacks.after_tool
     assert agente.before_agent_callback is modulo.inicializar_sessao
     assert agente.on_model_error_callback is capacity_error_response
-    assert callbacks.registrados("after_model") == [respostas_rapidas.anexar]
-    assert all(
-        callbacks.registrados(f) == [] for f in ("before_model", "before_tool", "after_tool")
-    )
+    assert callbacks.registrados("after_model") == [
+        number_check.check_numbers,
+        annotations.annotate,
+        respostas_rapidas.anexar,
+    ]
+    assert callbacks.registrados("before_tool") == [escopo.enforce_scope]
+    assert callbacks.registrados("after_tool") == [escopo.record_tool_result]
+    assert callbacks.registrados("before_model") == []
 
 
 def test_carregar_extensoes_e_chamado(
@@ -150,7 +155,7 @@ def test_extensoes_entram_no_root_agent(
     )
     agente = importar_de_novo().root_agent
     assert isinstance(agente.tools[0], McpToolset)
-    assert [f.__name__ for f in agente.tools[1:]] == ["solicitar_consentimento"]
+    assert [f.__name__ for f in agente.tools[3:]] == ["solicitar_consentimento"]
     assert agente.instruction.rstrip().endswith("Peça consentimento antes de agir.")
 
 
@@ -173,7 +178,7 @@ def test_agent_loader_do_adk(
     importar_de_novo()
     agente = AgentLoader(str(DIR_AGENTES)).load_agent("bussola_agent")
     assert isinstance(agente, Agent)
-    assert agente.name == "bussola_hello"
+    assert agente.name == "bussola"
     assert agente is sys.modules["bussola_agent.agent"].root_agent
 
 

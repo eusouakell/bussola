@@ -123,3 +123,14 @@ A passagem para AGIR fica pronta para o 005 plugar o consentimento.
   valor mostrado vem do eco de `aporte_mensal` e do novo `prazo_meses` na
   resposta, então o verificador de números aceita. Sem caminho claro, o
   agente pergunta o total por mês.
+- **D-09** O agente passa a se chamar `bussola` (era `bussola_hello`). O nome
+  só aparece como `author` dos eventos; o front não filtra por ele e o
+  `app_name` continua `bussola_agent` (diretório). `inicializar_sessao`,
+  `ANCHOR_PADRAO` e `REPLAY_START_PADRAO` continuam em `agent.py` como nomes
+  de compatibilidade para a documentação e os testes de contrato.
+- **D-10** Chips por etapa (FR-015): exemplo só em OBJETIVO; em ANTECIPAR,
+  "Me mostra os caminhos" mesmo que `comparar_cenarios` já tenha rodado antes
+  (troca de objetivo); em ORIENTAR, "Quero o caminho {recomendado}" (só com
+  nome fixo de cenário) e "Quero outro caminho"; em AGIR e ACOMPANHAR o campo
+  fica ausente e valem os chips de 005/006 ou do front. Sem `estado_jornada`
+  no state, as regras antigas continuam (testes do hello intactos).
