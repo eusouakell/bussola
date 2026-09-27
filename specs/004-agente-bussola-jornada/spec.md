@@ -134,3 +134,9 @@ A passagem para AGIR fica pronta para o 005 plugar o consentimento.
   nome fixo de cenário) e "Quero outro caminho"; em AGIR e ACOMPANHAR o campo
   fica ausente e valem os chips de 005/006 ou do front. Sem `estado_jornada`
   no state, as regras antigas continuam (testes do hello intactos).
+- **D-11** Chamadas paralelas de ferramentas (por exemplo, perfil e
+  capacidade no mesmo turno) gravam `ultimas_fontes` em deltas separados. O
+  ADK 2.10 reaplica a última escrita de listas no evento juntado, então
+  nenhuma fonte se perde e o guarda ENTENDER → ANTECIPAR continua certo.
+  Não há correção própria; um teste de integração com chamadas que terminam
+  fora de ordem falha se uma atualização do ADK voltar a perder a fonte.

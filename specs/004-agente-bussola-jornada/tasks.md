@@ -42,8 +42,8 @@ Legenda: `[x]` feito, `[ ]` pendente. Commits pequenos (`agent:`, `eval:`,
 
 - [x] T050 `agent.py` da jornada (FR-001, FR-002, FR-003);
   `tests/contrato/test_agent_hello.py` atualizado.
-- [ ] T051 Integração roteirizada OBJETIVO → ORIENTAR → AGIR contra o mock
-  MCP real (AC-07).
+- [x] T051 Integração roteirizada OBJETIVO → ORIENTAR → AGIR contra o mock
+  MCP real (AC-07); chamadas paralelas fora de ordem (D-11).
 
 ## Fase 7: eval e rastreabilidade
 
