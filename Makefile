@@ -54,3 +54,15 @@ web-test:
 # Inclui a varredura do bundle (segredos, SQL, projeto, UUID completo).
 web-build:
 	cd web && npm run build
+
+# --- Deploy com Helm (templater para Cloud Run; sem GKE). ---
+.PHONY: helm-lint test-helm
+
+HELM_CHART := deploy/helm/bussola
+
+helm-lint:
+	helm lint $(HELM_CHART) --set release.tag=c999 --set release.revisionSuffix=lint
+
+# Renderiza o chart e valida as regras de plataforma (sem rede, sem GCP).
+test-helm:
+	cd agent && uv run pytest ../deploy/tests -p no:cacheprovider

@@ -1,0 +1,80 @@
+# Estado desejado dos serviços Cloud Run da Bússola.
+#
+# Não há `helm install` no GCP: a org policy bloqueia o GKE. O chart só
+# renderiza os manifestos Knative, e o `gcloud run services replace` aplica
+# (deploy/helm/README.md).
+
+project:
+  id: batalha-time-07-lkbv
+  number: "1061873050224"
+  region: us-central1
+
+imageRepository: us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes
+
+# Identidade dos dois serviços. Plano B: SA default de compute, com IAM em
+# nível de dataset e a chave do Gemini lida do Secret Manager.
+serviceAccount: 1061873050224-compute@developer.gserviceaccount.com
+
+# Revisão publicada neste deploy, sempre com 0% de tráfego. O workflow deploy
+# passa --set release.tag=main (push na main) ou cNNN (disparo manual) e
+# --set release.revisionSuffix=<tag>-<sha>-<tentativa>.
+release:
+  tag: ""
+  revisionSuffix: ""
+
+services:
+  mcp:
+    name: bussola-mcp
+    image: "09aaeeb" # tag ou digest (sha256:...) em imageRepository
+    cpu: "1"
+    memory: 512Mi
+    maxInstances: 1
+    env:
+      GOOGLE_CLOUD_PROJECT: batalha-time-07-lkbv
+      GOOGLE_CLOUD_LOCATION: us-central1
+      EMBEDDING_MODEL: gemini-embedding-001
+      RAG_BACKEND: lexico
+      BQ_DATASET_DADOS: bussola_dados
+      # Plano B: list_rows, sem bigquery.jobUser na SA (contratos §4).
+      BQ_MODO_LEITURA: memoria
+      # TRUE até o RepositorioBigQuery (001) e o servidor real (003) chegarem em main.
+      BUSSOLA_FAKES: "TRUE"
+      LOG_LEVEL: INFO
+    secretEnv: {}
+    # Tráfego mantido; soma 100. O workflow deploy troca esta lista pelo
+    # tráfego vivo do serviço (deploy/helm/traffic.jq). Ela vale só para
+    # renderizar fora do workflow. Só o 007 muda percentuais.
+    traffic:
+      - revisionName: bussola-mcp-00001-cis
+        percent: 100
+        tag: c000
+
+  agent:
+    name: bussola-agent
+    image: "09aaeeb"
+    cpu: "1"
+    memory: 1Gi
+    maxInstances: 1
+    env:
+      GOOGLE_CLOUD_PROJECT: batalha-time-07-lkbv
+      GOOGLE_CLOUD_LOCATION: global
+      # Plano B: Gemini API com a chave do Secret Manager (secretEnv).
+      GOOGLE_GENAI_USE_VERTEXAI: "FALSE"
+      BUSSOLA_MODEL: gemini-3.8-flash
+      MCP_URL: https://bussola-mcp-wimifi56uq-uc.a.run.app/mcp
+      MCP_USE_OIDC: "TRUE"
+      ANCHOR_USER_ID: 36a21505-d6d4-42d3-b319-d51a133c7269
+      REPLAY_START_ANOMES: "202506"
+      BQ_DATASET_APP: bussola_app
+      BUSSOLA_FAKES: "TRUE"
+      LOG_LEVEL: INFO
+    # Lidos pelo Cloud Run em tempo de execução; a SA precisa de
+    # roles/secretmanager.secretAccessor no segredo.
+    secretEnv:
+      GOOGLE_API_KEY:
+        secret: gemini-api-key
+        version: latest
+    traffic:
+      - revisionName: bussola-agent-00001-mix
+        percent: 100
+        tag: c000
