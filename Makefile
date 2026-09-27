@@ -133,3 +133,9 @@ smoke:
 
 eval-seguranca:
 	cd agent && BUSSOLA_FAKES=TRUE uv run python ../eval/seguranca/rodar_eval.py
+
+# --- Eval do acompanhamento (ciclo 006). Offline: fixtures + LLM roteirizado, sem rede. ---
+.PHONY: eval-acompanhamento
+
+eval-acompanhamento:
+	cd agent && uv run ruff check ../eval/acompanhamento && uv run ruff format --check ../eval/acompanhamento && BUSSOLA_FAKES=TRUE PYTHONWARNINGS=ignore::UserWarning uv run python ../eval/acompanhamento/rodar_eval.py
