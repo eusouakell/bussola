@@ -379,9 +379,24 @@ Códigos de erro:
 | `cenarios` | último `dados` de `comparar_cenarios` | 004 |
 | `cenario_escolhido` | str \| None | 004 |
 | `ultimas_fontes` | list[`fonte`] | 004 |
-| `consentimentos` | `{acao: {consent_id, status: pendente \| aceito \| recusado, ts}}` | 005 |
+| `consentimentos` | `{acao: {consent_id, status: pendente \| aceito \| recusado, ts, resumo?, invocation_id?, usado?}}` (opcionais: acréscimo do 005, ver abaixo) | 005 |
 | `plano_id` | str \| None | 005 |
 | `acompanhamento` | list[resultado mensal] | 006 |
+
+Campos opcionais da entrada de `consentimentos` (acréscimo do 005):
+
+- `resumo`: o texto curto do pedido, o mesmo devolvido por
+  `solicitar_consentimento`;
+- `invocation_id`: só enquanto `pendente`. A leitura só decide numa mensagem
+  do cliente de outra invocação;
+- `usado`: `true` depois que o gate liberou a execução. O `status` continua
+  `aceito` (o front mantém "Autorizado"), mas o gate exige `aceito` **sem**
+  `usado`. O consentimento vale para uma execução e é consumido no gate,
+  antes dela;
+- `ts`: ISO 8601 em UTC, do pedido e depois da decisão.
+
+No máximo um pedido fica `pendente`: um novo `solicitar_consentimento` remove
+os outros pendentes.
 
 ### Encadeador de callbacks (`agent/bussola_agent/callbacks.py`, 000)
 
@@ -430,6 +445,8 @@ Ordens reservadas:
   sensível chamada sem consentimento `aceito` recebe do gate o resultado
   `{"erro": {"codigo": "CONSENTIMENTO_NECESSARIO", "mensagem": "..."}}`.
   Esse código é local do agente, não do MCP.
+  `compartilhar_dados` sempre devolve o erro local `NAO_PERMITIDO`
+  (acréscimo do 005).
 - **ACOMPANHAR:** `avancar_mes()` e `status_plano()` (006). Erros locais do
   agente: `SEM_PLANO_ATIVO` (sem `plano_id` no state) e `FIM_DO_REPLAY`
   (`ate_anomes` já em 202512).
@@ -462,6 +479,9 @@ def limpar() -> None: ...                                       # só testes (Q-
   prompt base.
 - Ordens de instrução reservadas: 004 usa 0–49, 005 usa 50–69 e 006 usa
   70–89.
+- Testes (acréscimo do 005): a fixture `criar_extensao` do
+  `agent/tests/conftest.py` tem prioridade sobre o pacote real, e a fixture
+  `sem_extensoes` simula a ausência de `governanca` e `acompanhamento`.
 
 ### Persistência (`agent/bussola_agent/persistencia.py`, 000)
 

@@ -34,8 +34,9 @@ def test_pacotes_do_contrato() -> None:
     assert PACOTES_EXTENSAO == ("bussola_agent.governanca", "bussola_agent.acompanhamento")
 
 
+@pytest.mark.usefixtures("sem_extensoes")
 def test_carregar_sem_pacotes_nao_falha() -> None:
-    """AC-09: governanca e acompanhamento ainda não existem."""
+    """AC-09: governanca e acompanhamento ausentes (simulado com ``sem_extensoes``)."""
     for nome in PACOTES_EXTENSAO:
         assert importlib.util.find_spec(nome) is None
     carregar_extensoes()

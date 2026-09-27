@@ -25,6 +25,10 @@ from bussola_agent.jornada import annotations, number_check, respostas_rapidas
 from bussola_agent.mcp_conexao import URL_PADRAO
 from bussola_agent.resilient_model import NonStreamingModel, capacity_error_response
 
+# Os testes do hello olham o agente sem as extensões reais (005, 006). Com
+# ``criar_extensao``, o pacote falso volta a ser importável.
+pytestmark = pytest.mark.usefixtures("sem_extensoes")
+
 ANCORA = "36a21505-d6d4-42d3-b319-d51a133c7269"
 CONTROLE = "31e94f2f-1463-49f9-a41a-b3f220ed976a"
 DIR_AGENTES = Path(__file__).resolve().parents[2]  # agent/

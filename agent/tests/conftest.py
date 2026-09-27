@@ -11,7 +11,10 @@
   credenciais locais e pode consultar o metadata server do GCE.
 - ``criar_extensao``: cria pacotes de extensão (``governanca``,
   ``acompanhamento``) num diretório temporário visível como
-  ``bussola_agent.<nome>`` e os descarrega no fim do teste.
+  ``bussola_agent.<nome>`` e os descarrega no fim do teste. O diretório
+  temporário tem prioridade sobre os pacotes reais (acréscimo do 005).
+- ``sem_extensoes``: simula a ausência dos pacotes de extensão, mesmo quando o
+  pacote real existe (acréscimo do 005).
 """
 
 import importlib
@@ -131,12 +134,13 @@ def criar_extensao(
 ) -> Iterator[Callable[[str, str], Path]]:
     """Fábrica ``criar_extensao(nome, codigo)`` de pacotes ``bussola_agent.<nome>``.
 
-    O diretório temporário é acrescentado ao ``__path__`` de ``bussola_agent``;
-    o ``__init__.py`` do pacote recebe ``codigo``.
+    O diretório temporário entra **na frente** do ``__path__`` de
+    ``bussola_agent``, para o pacote falso ter prioridade sobre o real; o
+    ``__init__.py`` do pacote recebe ``codigo``.
     """
     raiz = tmp_path / "extensoes"
     raiz.mkdir()
-    monkeypatch.setattr(bussola_agent, "__path__", [*bussola_agent.__path__, str(raiz)])
+    monkeypatch.setattr(bussola_agent, "__path__", [str(raiz), *bussola_agent.__path__])
     _descarregar_extensoes()
 
     def criar(nome: str, codigo: str) -> Path:
@@ -147,4 +151,19 @@ def criar_extensao(
         return pacote
 
     yield criar
+    _descarregar_extensoes()
+
+
+@pytest.fixture
+def sem_extensoes() -> Iterator[None]:
+    """Simula a ausência de ``governanca`` e ``acompanhamento`` (acréscimo do 005).
+
+    ``sys.modules[nome] = None`` faz ``importlib.util.find_spec`` devolver
+    ``None`` e o ``import`` falhar, como se o pacote não existisse. Os pacotes
+    são descarregados antes e depois do teste.
+    """
+    _descarregar_extensoes()
+    for nome in PACOTES_EXTENSAO:
+        sys.modules[nome] = None  # type: ignore[assignment]
+    yield
     _descarregar_extensoes()
