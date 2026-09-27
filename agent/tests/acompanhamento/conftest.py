@@ -3,7 +3,8 @@
 - Todo teste deste diretório recebe o marcador ``extensoes_reais``: o pacote
   ``bussola_agent.acompanhamento`` é importado na coleta e precisa manter a
   identidade do módulo (portas e registros) durante o teste.
-- As portas do 006 voltam ao padrão antes e depois de cada teste.
+- As portas do 006 e o registro do processo (``persistencia_bq``) voltam ao
+  padrão antes e depois de cada teste.
 - ``mcp``, ``gateway`` e ``registry`` ligam os fakes às portas.
 """
 
@@ -12,6 +13,7 @@ from pathlib import Path
 
 import pytest
 
+from bussola_agent import persistencia_bq
 from bussola_agent.acompanhamento import ports
 from bussola_agent.acompanhamento.fakes import FixtureMcp, FixtureMcpGateway
 from bussola_agent.persistencia import RegistroEmMemoria
@@ -28,8 +30,10 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 @pytest.fixture(autouse=True)
 def default_ports() -> Iterator[None]:
     ports.reset()
+    persistencia_bq.set_default_registry(None)
     yield
     ports.reset()
+    persistencia_bq.set_default_registry(None)
 
 
 @pytest.fixture

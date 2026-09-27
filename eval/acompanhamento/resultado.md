@@ -2,8 +2,8 @@
 
 Gerado por `make eval-acompanhamento`. Offline: fixtures de `contracts/fixtures/`,
 LLM roteirizado (`ScriptedLlm`), `InMemoryRunner` do ADK, sem rede, GCP ou
-modelo real. O 004 (escopo) e o 005 (consentimento) são simulados até
-chegarem em `main`.
+modelo real. O agente tem a composição de produção: escopo e verificação
+de números do 004, consentimento, guardrails e auditoria do 005.
 
 **Resultado: 51/51 verificações ok** (aprovado).
 
@@ -28,14 +28,19 @@ calculado pelo eval sem passar pela ferramenta. Tolerância de 10% do planejado.
 Em 202507 o cliente adota a rota A com consentimento; de 202508 em diante o
 planejado é o aporte da rota A.
 
-## Auditoria (registro em memória)
+## Auditoria (registro em memória, compartilhado por 005 e 006)
 
 | Evento | Quantidade |
 |---|---:|
 | `acompanhamento_mes_avancado` | 6 |
+| `consentimento_decidido` | 1 |
+| `consentimento_solicitado` | 1 |
 | `desvio_detectado` | 2 |
+| `estado_alterado` | 1 |
+| `ferramenta_chamada` | 10 |
 | `plano_ajustado` | 1 |
 | `rota_recalculada` | 2 |
+| `sessao_iniciada` | 1 |
 
 ## Verificações
 
@@ -88,10 +93,10 @@ planejado é o aporte da rota A.
 | Cliente de controle: DADOS_INSUFICIENTES | DADOS_INSUFICIENTES | DADOS_INSUFICIENTES | sim |
 | Cliente de controle: corte mantido | 202506 | 202506 | sim |
 | Cliente de controle: texto é a mensagem da ferramenta | O mock só tem respostas do cliente âncora. | O mock só tem respostas do cliente âncora. | sim |
-| Ajuste sem consentimento (gate simulado do 005) | CONSENTIMENTO_NECESSARIO | CONSENTIMENTO_NECESSARIO | sim |
-| Ajuste sem consentimento (gate simulado do 005): plano mantido | plano-inicial | plano-inicial | sim |
-| Ajuste sem consentimento (guarda local do 006) | CONSENTIMENTO_NECESSARIO | CONSENTIMENTO_NECESSARIO | sim |
-| Ajuste sem consentimento (guarda local do 006): plano mantido | plano-inicial | plano-inicial | sim |
+| Ajuste sem consentimento (gate do 005) | CONSENTIMENTO_NECESSARIO | CONSENTIMENTO_NECESSARIO | sim |
+| Ajuste sem consentimento (gate do 005): plano mantido | plano-inicial | plano-inicial | sim |
+| Ajuste sem consentimento (guarda local do 006, sem o 005) | CONSENTIMENTO_NECESSARIO | CONSENTIMENTO_NECESSARIO | sim |
+| Ajuste sem consentimento (guarda local do 006, sem o 005): plano mantido | plano-inicial | plano-inicial | sim |
 
 ## Respostas ao cliente (LLM roteirizado, números das ferramentas)
 

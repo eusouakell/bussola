@@ -4,16 +4,18 @@
   (``resumo_mes`` e ``simular_objetivo``). O adaptador padrão,
   :class:`McpToolGateway`, usa ``mcp_conexao.chamar_ferramenta``, que força
   ``id_usuario`` e ``ate_anomes`` a partir do state recebido.
-- O registro é a porta ``persistencia.RegistroApp`` do 000. O padrão é um
-  ``RegistroEmMemoria`` único por processo. O 005 (ou quem montar o agente)
-  liga o ``RegistroBigQuery`` com :func:`configure_registry`.
+- O registro é a porta ``persistencia.RegistroApp`` do 000. O padrão é
+  :func:`bussola_agent.persistencia_bq.default_registry`, o mesmo registro do
+  processo usado pelo 005: ``RegistroEmMemoria`` com ``BUSSOLA_FAKES=TRUE`` e
+  ``RegistroBigQuery`` em produção. :func:`configure_registry` troca o
+  registro só no 006 (testes).
 """
 
 from collections.abc import Mapping
 from typing import Any, Protocol, runtime_checkable
 
-from bussola_agent import mcp_conexao
-from bussola_agent.persistencia import RegistroApp, RegistroEmMemoria
+from bussola_agent import mcp_conexao, persistencia_bq
+from bussola_agent.persistencia import RegistroApp
 
 TOOL_MONTHLY_SUMMARY = "resumo_mes"
 TOOL_SIMULATE_GOAL = "simular_objetivo"
@@ -55,7 +57,6 @@ class McpToolGateway:
 
 _gateway: McpGateway | None = None
 _registry: RegistroApp | None = None
-_default_registry: RegistroEmMemoria | None = None
 
 
 def configure_gateway(gateway: McpGateway | None) -> None:
@@ -69,7 +70,7 @@ def get_gateway() -> McpGateway:
 
 
 def configure_registry(registry: RegistroApp | None) -> None:
-    """Troca o registro da aplicação (``None`` volta ao ``RegistroEmMemoria`` padrão)."""
+    """Troca o registro da aplicação (``None`` volta ao registro do processo)."""
     global _registry
     if registry is not None and not isinstance(registry, RegistroApp):
         raise TypeError("O registro deve implementar persistencia.RegistroApp.")
@@ -77,17 +78,11 @@ def configure_registry(registry: RegistroApp | None) -> None:
 
 
 def get_registry() -> RegistroApp:
-    global _default_registry
-    if _registry is not None:
-        return _registry
-    if _default_registry is None:
-        _default_registry = RegistroEmMemoria()
-    return _default_registry
+    return _registry if _registry is not None else persistencia_bq.default_registry()
 
 
 def reset() -> None:
-    """Volta aos adaptadores padrão, com um registro em memória novo. Só para testes."""
-    global _gateway, _registry, _default_registry
+    """Volta aos adaptadores padrão (o registro do processo é o do ``persistencia_bq``)."""
+    global _gateway, _registry
     _gateway = None
     _registry = None
-    _default_registry = None

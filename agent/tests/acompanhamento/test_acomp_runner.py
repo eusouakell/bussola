@@ -1,15 +1,15 @@
 """Conversa completa no ADK: ``InMemoryRunner`` + ``ScriptedLlm`` + MCP de fixtures (integração).
 
-O agente é montado como o hello (``INSTRUCAO_BASE`` + instruções das
-extensões, ferramentas das extensões e os 4 agregados de callbacks). O 004 e o
-005 ainda não estão em ``main``, então o escopo (``before_tool`` 10) e o
-consentimento (``solicitar_consentimento`` e ``before_tool`` 20) são as
-simulações de :mod:`bussola_agent.acompanhamento.fakes`. O transporte MCP é o
+O agente é montado como o ``root_agent`` do 004 (prompt base + instruções das
+extensões, ferramentas locais e das extensões e os 4 agregados de callbacks),
+com a composição real: escopo e verificação de números do 004, consentimento,
+guardrails e auditoria do 005 e o acompanhamento do 006. O transporte MCP é o
 de fixtures: nada sai da máquina e nenhum modelo real é chamado.
 """
 
 import importlib
 import sys
+from collections.abc import Iterator
 from typing import Any
 
 import pytest
@@ -17,8 +17,7 @@ import pytest
 import bussola_agent
 import bussola_agent.acompanhamento as acompanhamento
 import bussola_agent.agent  # noqa: F401  (primeiro import fora dos testes, como em produção)
-from bussola_agent import extensoes, mcp_conexao
-from bussola_agent.acompanhamento import ports
+from bussola_agent import extensoes, mcp_conexao, persistencia_bq
 from bussola_agent.acompanhamento.fakes import (
     CONTROL_USER_ID,
     Call,
@@ -28,7 +27,7 @@ from bussola_agent.acompanhamento.fakes import (
     build_conversation,
     command_router,
     fake_transport,
-    install_simulated_journey,
+    install_journey,
     numbers_in_text,
     periods_in,
     plan_state,
@@ -37,7 +36,17 @@ from bussola_agent.acompanhamento.fakes import (
 )
 from bussola_agent.acompanhamento.plan_context import CONTEXT_KEY
 from bussola_agent.acompanhamento.tools import GOVERNANCE_PACKAGE
-from bussola_agent.persistencia import RegistroEmMemoria
+from bussola_agent.governanca import audit, consent, guardrails, services
+from bussola_agent.governanca.clock import FixedClock
+from bussola_agent.governanca.guardrails import RuleScreener
+from bussola_agent.persistencia import RegistroEmMemoria, TipoEvento
+
+FOLLOW_UP_EVENTS = {
+    TipoEvento.ACOMPANHAMENTO_MES_AVANCADO.value,
+    TipoEvento.DESVIO_DETECTADO.value,
+    TipoEvento.ROTA_RECALCULADA.value,
+    TipoEvento.PLANO_AJUSTADO.value,
+}
 
 
 @pytest.fixture
@@ -48,17 +57,29 @@ def transport(monkeypatch: pytest.MonkeyPatch) -> FixtureMcp:
 
 
 @pytest.fixture
+def registry(monkeypatch: pytest.MonkeyPatch) -> Iterator[RegistroEmMemoria]:
+    """Registro do processo único para 005 e 006, relógio fixo e só as regras locais."""
+    monkeypatch.delenv("MODEL_ARMOR_TEMPLATE", raising=False)
+    shared = RegistroEmMemoria()
+    persistencia_bq.set_default_registry(shared)
+    services.configure(clock=FixedClock(), screener=RuleScreener())
+    consent.reset_used_ids()
+    audit.reset()
+    guardrails.reset()
+    yield shared
+    services.reset()
+    consent.reset_used_ids()
+    audit.reset()
+    guardrails.reset()
+
+
+@pytest.fixture
 def no_governance(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delitem(sys.modules, GOVERNANCE_PACKAGE, raising=False)
 
 
-@pytest.fixture
-def simulated_journey() -> None:
-    install_simulated_journey()
-
-
-async def _conversation(state: dict[str, Any]) -> Conversation:
-    acompanhamento.register()
+async def _conversation(state: dict[str, Any], *, governance: bool = True) -> Conversation:
+    install_journey(governance=governance)
     return await build_conversation(state)
 
 
@@ -68,13 +89,10 @@ def _assert_faithful(turn: Turn) -> None:
     assert unbacked_numbers(turn) == [], turn.text
 
 
-pytestmark = pytest.mark.usefixtures("transport", "no_governance")
+pytestmark = pytest.mark.usefixtures("transport", "registry")
 
 
-@pytest.mark.usefixtures("simulated_journey")
-async def test_replay_conversation_from_june_to_september() -> None:
-    registry = RegistroEmMemoria()
-    ports.configure_registry(registry)
+async def test_replay_conversation_from_june_to_september(registry: RegistroEmMemoria) -> None:
     chat = await _conversation(plan_state())
 
     # 1. O front envia TEXTO_AVANCAR; o modelo tenta um escopo falso, que é ignorado.
@@ -98,7 +116,7 @@ async def test_replay_conversation_from_june_to_september() -> None:
     assert "autorização" in second.text
     assert second.state["plano_id"] == "plano-inicial"
 
-    # 3. "sim" aceita o consentimento; argumentos extras do modelo são descartados.
+    # 3. "sim" aceita o consentimento (005); argumentos extras do modelo são descartados.
     adjust = Call("ajustar_plano", {"rota": "A", "plano_id": "outro", "consent_id": "falso"})
     third = await chat.say("sim", adjust, render_tool_answer)
     (name, envelope), *_ = third.responses
@@ -135,12 +153,16 @@ async def test_replay_conversation_from_june_to_september() -> None:
     assert context["planos"] == ["plano-inicial", third.state["plano_id"]]
     assert [h["anomes"] for h in status.state["acompanhamento"]] == [202507, 202508, 202509]
     events = [e.tipo_evento.value for e in registry.eventos]
-    assert events[:3] == ["acompanhamento_mes_avancado", "desvio_detectado", "rota_recalculada"]
-    assert "plano_ajustado" in events
-    assert events.count("acompanhamento_mes_avancado") == 3
+    follow_up = [e for e in events if e in FOLLOW_UP_EVENTS]
+    assert follow_up[:3] == ["acompanhamento_mes_avancado", "desvio_detectado", "rota_recalculada"]
+    assert "plano_ajustado" in follow_up
+    assert follow_up.count("acompanhamento_mes_avancado") == 3
+    # O mesmo registro recebe a trilha do 005: pedido e decisão do consentimento.
+    assert {"consentimento_solicitado", "consentimento_decidido"} <= set(events)
+    (decision,) = registry.consentimentos
+    assert (decision.acao, decision.decisao) == ("ajustar_plano", "aceito")
 
 
-@pytest.mark.usefixtures("simulated_journey")
 async def test_no_tool_response_reveals_a_month_after_the_cut() -> None:
     chat = await _conversation(plan_state())
     for expected_cut in (202507, 202508, 202509):
@@ -150,7 +172,6 @@ async def test_no_tool_response_reveals_a_month_after_the_cut() -> None:
             assert max(periods_in(envelope)) <= expected_cut
 
 
-@pytest.mark.usefixtures("simulated_journey")
 async def test_the_model_sees_the_006_instructions_and_the_three_tools() -> None:
     chat = await _conversation(plan_state())
     await chat.say("Ver status do plano", command_router, render_tool_answer)
@@ -162,7 +183,6 @@ async def test_the_model_sees_the_006_instructions_and_the_three_tools() -> None
     assert {"avancar_mes", "status_plano", "ajustar_plano"} <= declared
 
 
-@pytest.mark.usefixtures("simulated_journey")
 async def test_the_consent_gate_blocks_ajustar_plano_without_consent() -> None:
     chat = await _conversation(plan_state())
     await chat.say("avançar um mês", command_router, render_tool_answer)
@@ -172,8 +192,9 @@ async def test_the_consent_gate_blocks_ajustar_plano_without_consent() -> None:
     assert turn.state["plano_id"] == "plano-inicial"
 
 
+@pytest.mark.usefixtures("no_governance")
 async def test_the_local_guard_blocks_ajustar_plano_while_005_is_absent() -> None:
-    chat = await _conversation(plan_state())
+    chat = await _conversation(plan_state(), governance=False)
     await chat.say("avançar um mês", command_router, render_tool_answer)
     turn = await chat.say("rota A", Call("ajustar_plano", {"rota": "A"}), render_tool_answer)
     (_, envelope), *_ = turn.responses

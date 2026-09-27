@@ -7,7 +7,7 @@ O transporte MCP (``mcp_conexao._chamar_mcp``) é trocado por
 
 import pytest
 
-from bussola_agent import mcp_conexao
+from bussola_agent import mcp_conexao, persistencia_bq
 from bussola_agent.acompanhamento import ports
 from bussola_agent.acompanhamento.fakes import (
     ANCHOR_USER_ID,
@@ -70,9 +70,15 @@ def test_registry_port_rejects_objects_that_are_not_a_registry() -> None:
         ports.configure_registry(object())  # type: ignore[arg-type]
 
 
-def test_default_registry_is_one_in_memory_instance_until_reset() -> None:
+def test_default_registry_is_the_process_registry_shared_with_005() -> None:
     first = ports.get_registry()
     assert isinstance(first, RegistroEmMemoria)
-    assert ports.get_registry() is first
+    assert first is persistencia_bq.default_registry() is ports.get_registry()
+
+
+def test_a_configured_registry_wins_until_reset() -> None:
+    own = RegistroEmMemoria()
+    ports.configure_registry(own)
+    assert ports.get_registry() is own
     ports.reset()
-    assert ports.get_registry() is not first
+    assert ports.get_registry() is persistencia_bq.default_registry()

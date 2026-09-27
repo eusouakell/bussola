@@ -67,7 +67,7 @@ def test_action_tools_do_not_take_scope_arguments() -> None:
 
 @pytest.fixture
 def fresh_agent(monkeypatch: pytest.MonkeyPatch) -> Callable[[], ModuleType]:
-    """Imports ``bussola_agent.agent`` and the real governance package from scratch."""
+    """Imports ``bussola_agent.agent`` and the real extension packages from scratch."""
     monkeypatch.setenv("ADK_DISABLE_LOAD_DOTENV", "TRUE")
     for key in ("BUSSOLA_MODEL", "MCP_URL", "ANCHOR_USER_ID", "REPLAY_START_ANOMES"):
         monkeypatch.delenv(key, raising=False)
@@ -75,7 +75,8 @@ def fresh_agent(monkeypatch: pytest.MonkeyPatch) -> Callable[[], ModuleType]:
     def load() -> ModuleType:
         callbacks.limpar()
         extensoes.limpar()
-        monkeypatch.delitem(sys.modules, "bussola_agent.governanca", raising=False)
+        for name in extensoes.PACOTES_EXTENSAO:
+            monkeypatch.delitem(sys.modules, name, raising=False)
         monkeypatch.delitem(sys.modules, "bussola_agent.agent", raising=False)
         monkeypatch.delattr(bussola_agent, "agent", raising=False)
         return importlib.import_module("bussola_agent.agent")
@@ -84,10 +85,19 @@ def fresh_agent(monkeypatch: pytest.MonkeyPatch) -> Callable[[], ModuleType]:
 
 
 def test_real_agent_loads_the_governance_package(fresh_agent: Callable[[], ModuleType]) -> None:
-    """Integrated with the 004 journey: its local tools and scope callback come first."""
+    """Integrated with the 004 journey (first) and the 006 follow-up (last)."""
     agent = fresh_agent().root_agent
     names = _names(agent.tools[1:])
-    assert names == ["registrar_objetivo", "escolher_cenario", "solicitar_consentimento", *ACTIONS]
+    assert names == [
+        "registrar_objetivo",
+        "escolher_cenario",
+        "solicitar_consentimento",
+        *ACTIONS,
+        "avancar_mes",
+        "status_plano",
+        "ajustar_plano",
+    ]
+    assert extensoes.ferramentas_sensiveis() == {*ACTIONS, "ajustar_plano"}
     assert "solicitar_consentimento" in agent.instruction
     after_model = callbacks.registrados("after_model")
     assert after_model[0].__name__ == "screen_output"

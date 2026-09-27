@@ -35,9 +35,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-import bussola_agent.acompanhamento as acompanhamento
 import bussola_agent.agent  # noqa: F401  (efeitos do primeiro import antes de fixar os registros)
-from bussola_agent import callbacks, extensoes, mcp_conexao
+from bussola_agent import callbacks, extensoes, mcp_conexao, persistencia_bq
 from bussola_agent.acompanhamento import ports
 from bussola_agent.acompanhamento.desvio import compute_deviation
 from bussola_agent.acompanhamento.envelopes import WARNING_LOCAL_ROUTE
@@ -51,7 +50,7 @@ from bussola_agent.acompanhamento.fakes import (
     build_conversation,
     command_router,
     fake_transport,
-    install_simulated_journey,
+    install_journey,
     numbers_in_text,
     periods_in,
     plan_state,
@@ -60,6 +59,8 @@ from bussola_agent.acompanhamento.fakes import (
 )
 from bussola_agent.acompanhamento.money import format_brl, money
 from bussola_agent.acompanhamento.tools import GOVERNANCE_PACKAGE
+from bussola_agent.governanca import services
+from bussola_agent.governanca.guardrails import RuleScreener
 from bussola_agent.logging_json import configurar_logging
 from bussola_agent.persistencia import RegistroEmMemoria
 
@@ -126,28 +127,36 @@ def fixture_sobra(anomes: int) -> float:
 
 
 @contextmanager
-def offline_session(*, simulate_journey: bool = True) -> Iterator[tuple[FixtureMcp, Any]]:
-    """Registros conhecidos (006 + simulações do 004/005) e MCP de fixtures.
+def offline_session(*, governance: bool = True) -> Iterator[tuple[FixtureMcp, Any]]:
+    """Composição real (004 + 005 + 006), registro do processo em memória e MCP de fixtures.
 
-    Restaura o transporte MCP e as portas ao sair. O eval fixa a composição
-    para medir o 006 isolado enquanto 004 e 005 não estão em ``main``.
+    O guardrail de entrada usa só as regras locais (sem Model Armor). Com
+    ``governance=False``, o pacote do 005 sai de ``sys.modules`` durante a
+    sessão, para medir a guarda local do ``ajustar_plano``. Ao sair, restaura
+    o transporte MCP, os registros, os serviços do 005 e ``sys.modules``.
     """
     fixture_mcp = FixtureMcp()
     registry = RegistroEmMemoria()
     original_transport = mcp_conexao._chamar_mcp
+    governance_module = sys.modules.get(GOVERNANCE_PACKAGE)
     callbacks.limpar()
     extensoes.limpar()
-    acompanhamento.register()
-    if simulate_journey:
-        install_simulated_journey()
+    if not governance:
+        sys.modules.pop(GOVERNANCE_PACKAGE, None)
+    install_journey(governance=governance)
     ports.reset()
-    ports.configure_registry(registry)
+    persistencia_bq.set_default_registry(registry)
+    services.configure(screener=RuleScreener())
     mcp_conexao._chamar_mcp = fake_transport(fixture_mcp)
     try:
         yield fixture_mcp, registry
     finally:
         mcp_conexao._chamar_mcp = original_transport
+        if governance_module is not None:
+            sys.modules[GOVERNANCE_PACKAGE] = governance_module
         ports.reset()
+        services.reset()
+        persistencia_bq.set_default_registry(None)
         callbacks.limpar()
         extensoes.limpar()
 
@@ -343,11 +352,8 @@ async def edge_cases(report: Report) -> None:
                 f"{name}: texto é a mensagem da ferramenta", error.get("mensagem"), turn.text
             )
 
-    for label, simulate in (("gate simulado do 005", True), ("guarda local do 006", False)):
-        if not simulate and GOVERNANCE_PACKAGE in sys.modules:
-            report.check("Guarda local (005 presente: adiada ao 005)", "adiada", "adiada")
-            continue
-        with offline_session(simulate_journey=simulate):
+    for label, governance in (("gate do 005", True), ("guarda local do 006, sem o 005", False)):
+        with offline_session(governance=governance):
             chat = await build_conversation(plan_state())
             await chat.say(ADVANCE, command_router, render_tool_answer)
             turn = await chat.say(
@@ -389,8 +395,8 @@ def render_result(report: Report) -> str:
         "",
         "Gerado por `make eval-acompanhamento`. Offline: fixtures de `contracts/fixtures/`,",
         "LLM roteirizado (`ScriptedLlm`), `InMemoryRunner` do ADK, sem rede, GCP ou",
-        "modelo real. O 004 (escopo) e o 005 (consentimento) são simulados até",
-        "chegarem em `main`.",
+        "modelo real. O agente tem a composição de produção: escopo e verificação",
+        "de números do 004, consentimento, guardrails e auditoria do 005.",
         "",
         f"**Resultado: {passed}/{len(report.checks)} verificações ok**"
         f" ({'aprovado' if report.ok else 'reprovado'}).",
@@ -421,7 +427,7 @@ def render_result(report: Report) -> str:
         "Em 202507 o cliente adota a rota A com consentimento; de 202508 em diante o",
         "planejado é o aporte da rota A.",
         "",
-        "## Auditoria (registro em memória)",
+        "## Auditoria (registro em memória, compartilhado por 005 e 006)",
         "",
         "| Evento | Quantidade |",
         "|---|---:|",

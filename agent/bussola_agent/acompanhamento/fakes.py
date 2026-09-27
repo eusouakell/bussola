@@ -10,17 +10,17 @@
   ``CallToolResult`` como o do servidor real (``structuredContent`` + JSON).
 - :class:`ScriptedLlm` é um ``BaseLlm`` roteirizado para o ``InMemoryRunner``.
 - :func:`plan_state` e :func:`tool_context` montam a sessão de um plano ativo
-  (como o 004/005 deixariam) para testes e eval.
+  (como o 004/005 deixam) para testes e eval.
 - :func:`command_router` e :func:`render_tool_answer` são o "cérebro"
   determinístico do :class:`ScriptedLlm`: comando do cliente vira chamada de
   ferramenta, e a resposta usa só os números devolvidos pela ferramenta.
-- :func:`solicitar_consentimento`, :func:`accept_pending_consent`,
-  :func:`consent_gate` e :func:`scope_override` simulam o 005 e o 004 enquanto
-  eles não estão em ``main``.
-- :func:`build_conversation` monta o agente como o hello (instrução base +
-  extensões, ferramentas das extensões e os 4 agregados) num
-  ``InMemoryRunner`` com o :class:`ScriptedLlm`; :class:`Conversation` roda
-  os turnos. É o mesmo arnês na integração e no eval.
+- :func:`install_journey` registra a composição real: consentimento e
+  governança do 005, acompanhamento do 006 e as cadeias do 004.
+- :func:`build_conversation` monta o agente como o ``root_agent`` do 004
+  (prompt base + extensões, ferramentas locais e das extensões e os 4
+  agregados) num ``InMemoryRunner`` com o :class:`ScriptedLlm`;
+  :class:`Conversation` roda os turnos. É o mesmo arnês na integração e no
+  eval.
 """
 
 import copy
@@ -44,13 +44,11 @@ from bussola_agent import callbacks, extensoes, mcp_conexao
 from bussola_agent.acompanhamento.money import format_brl, format_months
 from bussola_agent.acompanhamento.ports import TOOL_MONTHLY_SUMMARY, TOOL_SIMULATE_GOAL
 from bussola_agent.acompanhamento.routes import SimulationRequest, simulate_locally
+from bussola_agent.acompanhamento.tools import GOVERNANCE_PACKAGE
 from bussola_agent.estado import (
     ANOMES_MAX,
-    CHAVE_ATE_ANOMES,
     CHAVE_CENARIO_ESCOLHIDO,
     CHAVE_CENARIOS,
-    CHAVE_CONSENTIMENTOS,
-    CHAVE_ID_USUARIO,
     CHAVE_OBJETIVO,
     CHAVE_PLANO_ID,
     anomes_valido,
@@ -449,69 +447,27 @@ def numbers_in(value: Any) -> set[float]:
 
 
 # ---------------------------------------------------------------------------
-# Simulações do 004 (escopo) e do 005 (consentimento)
+# Composição da jornada (004 + 005 + 006)
 # ---------------------------------------------------------------------------
 
-ACCEPT_WORDS = ("sim", "aceito", "pode seguir")
 
+def install_journey(*, governance: bool = True) -> None:
+    """Registra a composição de produção depois de ``callbacks.limpar()``.
 
-async def solicitar_consentimento(acao: str, resumo: str, tool_context: Any) -> dict[str, Any]:
-    """Pede o consentimento do cliente para uma ação sensível (simulação do 005)."""
-    consents = dict(tool_context.state.get(CHAVE_CONSENTIMENTOS) or {})
-    consents[acao] = {"consent_id": None, "status": "pendente", "ts": None}
-    tool_context.state[CHAVE_CONSENTIMENTOS] = consents
-    return {
-        "dados": {"acao": acao, "resumo": resumo, "status": "pendente"},
-        "fonte": {"ferramenta": "solicitar_consentimento", "tabelas": [], "periodo": None},
-        "avisos": [],
-    }
+    Mesma ordem do primeiro import de ``bussola_agent.agent``: os pacotes de
+    extensão (005, se ``governance``, e 006) e depois as cadeias do 004
+    (``registrar_callbacks``). Com ``governance=False`` o chamador tira o 005
+    de ``sys.modules``, e o ``ajustar_plano`` usa a guarda local.
+    """
+    import importlib
 
+    from bussola_agent import acompanhamento
+    from bussola_agent.agent import registrar_callbacks
 
-def accept_pending_consent(callback_context: Any, llm_request: LlmRequest) -> None:
-    """``before_model`` (20): "sim" do cliente aceita o consentimento pendente (simulação)."""
-    if last_user_text(llm_request).casefold().rstrip(".!") not in ACCEPT_WORDS:
-        return None
-    state = callback_context.state
-    consents = dict(state.get(CHAVE_CONSENTIMENTOS) or {})
-    pending = [
-        a for a, e in consents.items() if isinstance(e, Mapping) and e.get("status") == "pendente"
-    ]
-    for acao in pending:
-        consents[acao] = {"consent_id": f"consent-{acao}", "status": "aceito", "ts": "simulado"}
-    if pending:
-        state[CHAVE_CONSENTIMENTOS] = consents
-    return None
-
-
-def consent_gate(tool: Any, args: dict[str, Any], tool_context: Any) -> dict[str, Any] | None:
-    """``before_tool`` (20): ferramenta sensível sem consentimento aceito não roda (simulação)."""
-    if getattr(tool, "name", None) not in extensoes.ferramentas_sensiveis():
-        return None
-    consents = tool_context.state.get(CHAVE_CONSENTIMENTOS) or {}
-    entry = consents.get(tool.name) if isinstance(consents, Mapping) else None
-    if isinstance(entry, Mapping) and entry.get("status") == "aceito":
-        return None
-    return {
-        "erro": {
-            "codigo": "CONSENTIMENTO_NECESSARIO",
-            "mensagem": "Essa ação precisa da sua autorização antes de seguir.",
-        }
-    }
-
-
-def scope_override(tool: Any, args: dict[str, Any], tool_context: Any) -> None:
-    """``before_tool`` (10): sobrescreve o escopo com o ``session.state`` (simulação do 004)."""
-    state = tool_context.state
-    args[CHAVE_ID_USUARIO] = state.get(CHAVE_ID_USUARIO)
-    args[CHAVE_ATE_ANOMES] = state.get(CHAVE_ATE_ANOMES)
-    return None
-
-
-def install_simulated_journey() -> None:
-    """Registra o escopo do 004 (``before_tool`` 10) e o consentimento do 005 (20)."""
-    callbacks.registrar("before_tool", scope_override, 10)
-    callbacks.registrar("before_tool", consent_gate, 20)
-    callbacks.registrar("before_model", accept_pending_consent, 20)
+    if governance:
+        importlib.import_module(GOVERNANCE_PACKAGE).register()
+    acompanhamento.register()
+    registrar_callbacks()
 
 
 # ---------------------------------------------------------------------------
@@ -563,15 +519,22 @@ class Conversation:
 
 
 async def build_conversation(state: dict[str, Any]) -> Conversation:
-    """Agente com o esqueleto do hello e as extensões registradas, sobre ``state``."""
-    from bussola_agent.agent import INSTRUCAO_BASE, inicializar_sessao
+    """Agente montado como o ``root_agent`` do 004, com o :class:`ScriptedLlm`, sobre ``state``.
+
+    Instrução, ferramentas locais da jornada, ferramentas das extensões e os 4
+    agregados de callbacks são os de produção; só o ``McpToolset`` fica de
+    fora (as ferramentas do 006 chamam o MCP por ``mcp_conexao``).
+    """
+    from bussola_agent import prompts
+    from bussola_agent.agent import inicializar_sessao
+    from bussola_agent.jornada.tools import escolher_cenario, registrar_objetivo
 
     llm = ScriptedLlm()
     agent = Agent(
         name="bussola_acompanhamento_offline",
         model=llm,
-        instruction=f"{INSTRUCAO_BASE}\n{extensoes.instrucoes()}\n",
-        tools=[*extensoes.ferramentas(), solicitar_consentimento],
+        instruction=prompts.build_instruction(extensoes.instrucoes()),
+        tools=[registrar_objetivo, escolher_cenario, *extensoes.ferramentas()],
         before_agent_callback=inicializar_sessao,
         before_model_callback=callbacks.before_model,
         after_model_callback=callbacks.after_model,
