@@ -62,6 +62,13 @@ PARAMETROS_ESPERADOS: dict[str, dict[str, tuple[set[str], Any]]] = {
     },
     "resumo_mes": {"anomes": ({"integer"}, OBRIGATORIO)},
     "referencia_coorte": {"categoria": ({"string"}, OBRIGATORIO)},
+    "planejar_marcos": {
+        "valor_alvo": ({"number"}, OBRIGATORIO),
+        "prazo_meses": ({"integer"}, OBRIGATORIO),
+        "prioridade": ({"string", "null"}, None),
+        # Ao contrário de simular_objetivo, o padrão é True (specs/009 Q-009-3).
+        "usar_saldo_atual": ({"boolean"}, True),
+    },
 }
 
 # Argumentos mínimos válidos (além de id_usuario e ate_anomes) por ferramenta.
@@ -71,6 +78,7 @@ ARGUMENTOS_MINIMOS: dict[str, dict[str, Any]] = {
     BUSCA: {"pergunta": "Como funciona o rotativo do cartão?"},
     "resumo_mes": {"anomes": 202503},
     "referencia_coorte": {"categoria": "Lazer"},
+    "planejar_marcos": {"valor_alvo": 300000.0, "prazo_meses": 24},
 }
 
 RESTRICOES_DE_FAIXA = {
@@ -244,6 +252,9 @@ class CalculosFixos:
 
     def referencia_coorte(self, *args: Any) -> Computation:
         return self._responder("referencia_coorte", *args)
+
+    def planejar_marcos(self, *args: Any) -> Computation:
+        return self._responder("planejar_marcos", *args)
 
 
 class RepositorioSempreExiste:

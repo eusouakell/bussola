@@ -109,5 +109,7 @@ def test_real_agent_loads_the_governance_package(fresh_agent: Callable[[], Modul
     ]
     assert [f.__name__ for f in callbacks.registrados("after_tool")] == [
         "record_tool_result",
+        # Ordem 30 (009): grava `marcos` no state a partir de `planejar_marcos`.
+        "gravar_marcos",
         "record_tool_call",
     ]

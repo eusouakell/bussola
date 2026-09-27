@@ -1,7 +1,7 @@
 """MCP tools of the Bússola, one module per tool (contratos §5, cycle 003).
 
 Each module exposes ``NAME``, ``compute(deps, entrada) -> Computation`` and
-``register(server, runner)``. :func:`register_all` registers the 9 tools of
+``register(server, runner)``. :func:`register_all` registers the 10 tools of
 ``contratos.FERRAMENTAS`` on a FastMCP server with the injected ports.
 """
 
@@ -16,6 +16,7 @@ from bussola_mcp.ferramentas import (
     dividas_e_parcelas,
     oportunidades_corte,
     perfil_financeiro,
+    planejar_marcos,
     referencia_coorte,
     resumo_mes,
     simular_objetivo,
@@ -33,6 +34,7 @@ TOOL_MODULES: tuple[ModuleType, ...] = (
     buscar_contexto_financeiro,
     resumo_mes,
     referencia_coorte,
+    planejar_marcos,
 )
 
 

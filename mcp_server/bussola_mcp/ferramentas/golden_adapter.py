@@ -279,3 +279,22 @@ class GoldenFixtureComputations:
             periodo=Periodo(inicio=min(months), fim=ate_anomes),
             avisos=(COHORT_WARNING,),
         )
+
+    def planejar_marcos(
+        self,
+        id_usuario: str,
+        ate_anomes: int,
+        valor_alvo: float,
+        prazo_meses: int,
+        prioridade: str | None,
+        usar_saldo_atual: bool,
+    ) -> Computation:
+        """Sempre pelo domínio: o 009 não tem golden gravado para nenhum cliente.
+
+        ``gerar_fixtures.py`` grava goldens só das ferramentas de
+        ``FERRAMENTAS_GOLDEN``, e ``planejar_marcos`` não está entre elas, então
+        aqui não há corte nem entrada canônica a servir.
+        """
+        return self.domain.planejar_marcos(
+            id_usuario, ate_anomes, valor_alvo, prazo_meses, prioridade, usar_saldo_atual
+        )

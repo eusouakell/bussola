@@ -56,6 +56,8 @@ FERRAMENTAS_MCP: tuple[str, ...] = (
     "comparar_cenarios",
     "buscar_contexto_financeiro",
     "resumo_mes",
+    # Acréscimo do 009: marcos intermediários quando o objetivo não cabe.
+    "planejar_marcos",
 )
 
 # Mesmos códigos de ``bussola_mcp.contratos`` (o agente não depende do MCP).

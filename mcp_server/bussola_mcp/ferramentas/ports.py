@@ -70,7 +70,9 @@ class FinancialComputations(Protocol):
     - ``simular_objetivo`` → ``simulacao.aporte_para_prazo`` (``prazo_meses``
       given) or ``simulacao.prazo_para_meta`` (``aporte_mensal`` given; a
       computed term above 360 months raises ``DomainError(PRAZO_IMPLAUSIVEL)``);
-    - ``comparar_cenarios`` → ``simulacao.gerar_cenarios``.
+    - ``comparar_cenarios`` → ``simulacao.gerar_cenarios``;
+    - ``planejar_marcos`` → ``marcos.contexto_de_perfil`` + ``marcos.planejar``
+      sobre as linhas do repositório (ciclo 009).
 
     Inputs arrive already validated by the ``Entrada*`` models. Every read is
     scoped by ``id_usuario`` and cut at ``ate_anomes``.
@@ -102,6 +104,16 @@ class FinancialComputations(Protocol):
 
     def referencia_coorte(
         self, id_usuario: str, ate_anomes: int, categoria: str
+    ) -> Computation: ...
+
+    def planejar_marcos(
+        self,
+        id_usuario: str,
+        ate_anomes: int,
+        valor_alvo: float,
+        prazo_meses: int,
+        prioridade: str | None,
+        usar_saldo_atual: bool,
     ) -> Computation: ...
 
 

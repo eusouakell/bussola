@@ -98,7 +98,7 @@ async def test_list_tools_e_chamada_via_streamable_http(servidor_http):
     )
     assert inicio.serverInfo.name == "bussola-mcp"
     assert {f.name for f in ferramentas} == set(FERRAMENTAS)
-    assert len(ferramentas) == 9
+    assert len(ferramentas) == 10
     assert resultado.isError is False
     arquivo = DIR_OFICIAL / "ferramentas" / arquivo_golden("perfil_financeiro", 202512)
     assert resultado.structuredContent == json.loads(arquivo.read_text(encoding="utf-8"))
@@ -145,5 +145,5 @@ async def test_como_no_make_mcp_fakes_e_port_sem_fixtures(tmp_path):
             f"http://{HOST}:{porta}/mcp",
             [("capacidade_poupanca", {"id_usuario": ID_ANCORA, "ate_anomes": 202506})],
         )
-    assert len(ferramentas) == 9
+    assert len(ferramentas) == 10
     assert resultado.structuredContent["fonte"]["periodo"]["fim"] == 202506

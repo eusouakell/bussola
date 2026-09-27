@@ -18,7 +18,8 @@ Failure mapping (the tool runner turns both into the error envelope):
 from collections.abc import Callable
 from pathlib import Path
 
-from bussola_mcp.dominio import metricas
+from bussola_mcp.contratos import CodigoErro, Periodo, RegrasMarco
+from bussola_mcp.dominio import marcos, metricas
 from bussola_mcp.dominio.interfaces import RepositorioFinanceiro
 from bussola_mcp.dominio.metricas import MetricError, MetricResult
 from bussola_mcp.dominio.repositorio_bq import RepositoryUnavailableError
@@ -104,6 +105,43 @@ class DomainComputations:
     def referencia_coorte(self, id_usuario: str, ate_anomes: int, categoria: str) -> Computation:
         return _to_computation(
             lambda: metricas.referencia_coorte(self.repository, id_usuario, ate_anomes, categoria)
+        )
+
+    def planejar_marcos(
+        self,
+        id_usuario: str,
+        ate_anomes: int,
+        valor_alvo: float,
+        prazo_meses: int,
+        prioridade: str | None,
+        usar_saldo_atual: bool,
+    ) -> Computation:
+        """Marcos intermediários do ciclo 009 sobre as linhas já filtradas pelo corte.
+
+        ``dominio/marcos.py`` é puro (sem I/O), então a leitura do repositório e o
+        mapeamento de falhas ficam aqui, como nas demais ferramentas.
+        """
+        regras = RegrasMarco(usar_saldo_atual=usar_saldo_atual)
+        try:
+            perfil = self.repository.perfil_mensal(id_usuario, ate_anomes)
+            if not perfil:
+                raise DomainError(CodigoErro.DADOS_INSUFICIENTES)
+            parcelas = self.repository.parcelas(id_usuario, ate_anomes)
+        except RepositoryUnavailableError as exc:
+            raise BackendUnavailable() from exc
+        contexto = marcos.contexto_de_perfil(perfil, parcelas, regras)
+        dados = marcos.planejar(
+            valor_alvo=valor_alvo,
+            prazo_meses=prazo_meses,
+            contexto=contexto,
+            regras=regras,
+            prioridade=prioridade,
+        )
+        periodo = Periodo(inicio=min(linha.anomes for linha in perfil), fim=ate_anomes)
+        return Computation(
+            dados=dados,
+            periodo=periodo,
+            avisos=tuple(marcos.avisos_do_plano(contexto, regras, dados)),
         )
 
 

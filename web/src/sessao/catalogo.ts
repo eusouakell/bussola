@@ -18,6 +18,7 @@ export const CATALOGO: Record<string, EntradaCatalogo> = {
   referencia_coorte: { legivel: "Referência de pessoas parecidas", tag: "diagnostico" },
   simular_objetivo: { legivel: "Simulação do objetivo", tag: "simulacao", card: "CardSimulacao" },
   comparar_cenarios: { legivel: "Comparação de cenários", tag: "recomendacao", card: "ComparadorCenarios" },
+  planejar_marcos: { legivel: "Marcos do objetivo", tag: "recomendacao", card: "CardMarcos" },
   buscar_contexto_financeiro: {
     legivel: "Base de conhecimento",
     tag: "recomendacao",

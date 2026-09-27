@@ -8,6 +8,7 @@ import { Icone } from "../base/Icone";
 import { CardConsentimento } from "../cards/CardConsentimento";
 import { CardDiagnostico } from "../cards/CardDiagnostico";
 import { CardDividas } from "../cards/CardDividas";
+import { CardMarcos } from "../cards/CardMarcos";
 import { CardObjetivo } from "../cards/CardObjetivo";
 import { CardOportunidadesCorte } from "../cards/CardOportunidadesCorte";
 import { CardPlano } from "../cards/CardPlano";
@@ -99,6 +100,8 @@ export function Conversa({ itens, estado, ocupado, lento, onEnviar, onRepetir, o
         return <CardSimulacao item={item} />;
       case "ComparadorCenarios":
         return <ComparadorCenarios item={item} onEnviar={onEnviar} ocupado={ocupado} cenarioEscolhido={estado.cenario_escolhido} />;
+      case "CardMarcos":
+        return <CardMarcos item={item} />;
       case "ExplicacaoRecomendacao":
         return <ExplicacaoRecomendacao item={item} />;
       case "CardObjetivo":

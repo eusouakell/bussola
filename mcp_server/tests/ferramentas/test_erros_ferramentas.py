@@ -37,7 +37,13 @@ from bussola_mcp.ferramentas.golden_adapter import (
 )
 from bussola_mcp.ferramentas.ports import DomainError, ToolDependencies
 
-GOLDEN_P0 = tuple(f for f in FERRAMENTAS_CLIENTE if f not in ("resumo_mes", "referencia_coorte"))
+# ``planejar_marcos`` (009) não tem golden gravado: ``gerar_fixtures.py`` só grava
+# os de ``FERRAMENTAS_GOLDEN``, e ela calcula sempre pelo domínio.
+GOLDEN_P0 = tuple(
+    f
+    for f in FERRAMENTAS_CLIENTE
+    if f not in ("resumo_mes", "referencia_coorte", "planejar_marcos")
+)
 SEGREDO = "SELECT * FROM `batalha-time-07-lkbv.bussola_dados.x` Bearer ya29.segredo"
 
 

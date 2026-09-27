@@ -30,6 +30,7 @@ def test_chaves_do_contrato() -> None:
         "consentimentos",
         "plano_id",
         "acompanhamento",
+        "marcos",
     )
     assert estado.CHAVE_ID_USUARIO == "id_usuario"
     assert estado.CHAVE_ATE_ANOMES == "ate_anomes"
@@ -57,7 +58,7 @@ def test_estado_inicial() -> None:
     assert inicial["ultimas_fontes"] == []
     assert inicial["consentimentos"] == {}
     assert inicial["acompanhamento"] == []
-    for chave in ("objetivo", "cenarios", "cenario_escolhido", "plano_id"):
+    for chave in ("objetivo", "cenarios", "cenario_escolhido", "plano_id", "marcos"):
         assert inicial[chave] is None
 
 

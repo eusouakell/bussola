@@ -1,6 +1,6 @@
-# Spec — Ciclo 009: correções dos unhappy paths do MVP1
+# Spec — Ciclo 010: correções dos unhappy paths do MVP1
 
-**Branch:** `009-correcoes-mvp1` · **Entrada:** `docs/bugs/mvp1.md` + 6 capturas
+**Branch:** `009-correcoes-mvp1` (renumerado para 010 na integração: o PR #3 declarou o 009) · **Entrada:** `docs/bugs/mvp1.md` + 6 capturas
 **Status:** implementado · **Modo:** Spec Master turbo, Team Mode, 4 workstreams paralelos
 
 ## 1. Por que este ciclo existe
@@ -33,7 +33,7 @@ mock do ciclo 000 (`deploy/helm/bussola/values.yaml:56-58`). As revisões de
 
 ## 3. Requisitos funcionais
 
-### FR-009-01 — Recusar atividade ilícita antes de extrair valores
+### FR-010-01 — Recusar atividade ilícita antes de extrair valores
 
 Quando a mensagem do cliente descreve atividade ilegal, a Bússola MUST recusar
 e MUST NOT registrar objetivo, extrair valor ou avançar a jornada, mesmo que a
@@ -47,7 +47,7 @@ frase contenha um valor monetário válido.
   `"fui vitima de fraude"`, `"quero me proteger de golpe"` são legítimos.
 - O texto MUST ser pt-BR, sem sermão e sem jargão.
 
-### FR-009-02 — Resposta fora de escopo que não se repete
+### FR-010-02 — Resposta fora de escopo que não se repete
 
 Para entradas fora do escopo, a Bússola MUST redirecionar ao seu domínio (o PO
 aprovou "fixar num ponto") e MUST NOT emitir duas respostas idênticas
@@ -61,7 +61,7 @@ apontar atendimento humano sem prometer nada.
   simular financiamento genérico como referência), não a resposta de
   "não entendi".
 
-### FR-009-03 — Meta fora do perfil vira etapa intermediária
+### FR-010-03 — Meta fora do perfil vira etapa intermediária
 
 Quando a meta pedida não cabe na capacidade de poupança do cliente, a Bússola
 MUST registrar o objetivo pedido, MUST apresentar os números reais (aporte
@@ -82,7 +82,7 @@ Enquadramento pedido pelo PO, literal:
   secundária.
 - `"100 milhoes"` MUST ser lido como 100.000.000 (hoje é lido como 100).
 
-### FR-009-04 — Não afirmar ação sem chamar a ferramenta
+### FR-010-04 — Não afirmar ação sem chamar a ferramenta
 
 O agente MUST NOT afirmar em texto que registrou objetivo, simulou, comparou
 caminhos ou criou plano sem ter chamado a ferramenta correspondente no mesmo
@@ -94,7 +94,7 @@ turno — porque o card só nasce de uma `functionResponse`
 - Nos demais estados, a omissão MUST ser detectada e registrada em log
   estruturado, sem vazar prompt nem texto do cliente.
 
-### FR-009-05 — Persona não-âncora recebe diagnóstico
+### FR-010-05 — Persona não-âncora recebe diagnóstico
 
 Um cliente com histórico disponível MUST receber diagnóstico calculado, mesmo
 não sendo a persona âncora. `DADOS_INSUFICIENTES` MUST ser reservado ao caso
@@ -106,7 +106,7 @@ honesto: nenhum mês de `perfil_mensal` até o corte.
   errado e não resolveria** (`data/sql/perfil_mensal.sql:31-32` limita todo
   mundo a 12 meses).
 
-### FR-009-06 — Avisos: sem jargão e sem repetição
+### FR-010-06 — Avisos: sem jargão e sem repetição
 
 - Nenhum aviso ao cliente MUST conter "mock", `valor_alvo=`, `prazo_meses=` ou
   `anomes` cru. Avisos de demonstração MUST ser honestos e em linguagem de
@@ -118,7 +118,7 @@ honesto: nenhum mês de `perfil_mensal` até o corte.
 - Avisos de negócio reais ("Saldo ficou negativo em 2 meses do período.")
   MUST continuar visíveis como alerta.
 
-### FR-009-07 — Fallback de capacidade que protege a marca
+### FR-010-07 — Fallback de capacidade que protege a marca
 
 A mensagem de esgotamento de capacidade MUST assumir a responsabilidade sem
 culpar volume de uso, explicar a escolha de não entregar resposta pela metade,

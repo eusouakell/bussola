@@ -181,6 +181,8 @@ def _todas_chamadas() -> list[tuple[str, dict[str, object]]]:
         ("resumo_mes", argumentos("resumo_mes")),
         ("referencia_coorte", argumentos("referencia_coorte")),
         (BUSCA, argumentos(BUSCA, pergunta="Como funciona o rotativo do cartão?")),
+        # 009: sem golden gravado, calcula pelo domínio — mas o envelope é o mesmo contrato.
+        ("planejar_marcos", argumentos("planejar_marcos")),
     ]
     return chamadas
 
@@ -204,10 +206,16 @@ async def test_todo_sucesso_traz_dados_e_fonte_completos():
 
 
 async def test_valores_brl_com_no_maximo_duas_casas():
+    # ``regras`` (009) são premissas versionadas — frações e contagens, não valores
+    # do cliente —, e ``fracao_reserva_parcial`` é 1/3 de propósito. O único valor em
+    # BRL de lá é conferido à parte, em test_regras_de_marco_em_brl_tem_duas_casas.
+    SEM_BRL = {"regras"}
+
     def numeros(valor):
         if isinstance(valor, dict):
-            for item in valor.values():
-                yield from numeros(item)
+            for chave, item in valor.items():
+                if chave not in SEM_BRL:
+                    yield from numeros(item)
         elif isinstance(valor, list):
             for item in valor:
                 yield from numeros(item)
@@ -221,6 +229,14 @@ async def test_valores_brl_com_no_maximo_duas_casas():
             envelope = await chamar(cliente, ferramenta, args)
             for numero in numeros(envelope["dados"]):
                 assert round(numero, 2) == numero, (ferramenta, numero)
+
+
+async def test_regras_de_marco_em_brl_tem_duas_casas():
+    """O único valor em BRL de ``dados.regras`` do 009 segue a regra das 2 casas."""
+    async with sessao(DIR_OFICIAL) as cliente:
+        envelope = await chamar(cliente, "planejar_marcos", argumentos("planejar_marcos"))
+    piso = envelope["dados"]["regras"]["piso_valor_marco"]
+    assert round(piso, 2) == piso
 
 
 async def test_controle_existe_nas_fixtures_oficiais():

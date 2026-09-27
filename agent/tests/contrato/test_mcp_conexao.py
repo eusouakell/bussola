@@ -61,6 +61,7 @@ ARGS_MINIMOS: dict[str, dict[str, Any]] = {
     "comparar_cenarios": {"valor_alvo": 30000.0, "prazo_meses": 24},
     "buscar_contexto_financeiro": {"pergunta": "O que é o CET?"},
     "resumo_mes": {"anomes": 202506},
+    "planejar_marcos": {"valor_alvo": 300000.0, "prazo_meses": 24},
 }
 
 
@@ -207,7 +208,7 @@ async def test_toolset_lista_as_ferramentas_do_servidor(mock_vazio: str) -> None
     nomes = {f.name for f in ferramentas}
     assert set(FERRAMENTAS_MCP) <= nomes
     assert "referencia_coorte" in nomes
-    assert len(ferramentas) == 9
+    assert len(ferramentas) == 10
 
 
 async def test_toolset_com_filtro(mock_vazio: str) -> None:
@@ -297,7 +298,7 @@ async def test_header_oidc_no_mock_real_com_cache(
         segunda = await toolset.get_tools(readonly_context=contexto)
     finally:
         await toolset.close()
-    assert len(primeira) == len(segunda) == 9
+    assert len(primeira) == len(segunda) == 10
     assert pedidos == [mock_vazio.removesuffix("/mcp")]
 
 
