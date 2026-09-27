@@ -80,6 +80,8 @@ def test_catalog_render_has_no_rates_or_conditions() -> None:
         "vem de uma ferramenta chamada neste turno",
         "Fonte: perfil financeiro, jan–jun/2025",
         "Não faça contas",
+        "quantos meses passam do prazo",
+        "O recomendado é sempre o caminho viável",
         "simular_objetivo com aporte_mensal",
         "Nunca prometa nem garanta aprovação de crédito",
         "Nunca contrate, compre, invista",
