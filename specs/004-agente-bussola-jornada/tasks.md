@@ -51,4 +51,4 @@ Legenda: `[x]` feito, `[ ]` pendente. Commits pequenos (`agent:`, `eval:`,
   alvo no `Makefile` (FR-017); offline também no `make test`
   (`tests/jornada/test_eval_offline.py`).
 - [x] T061 Rodar eval offline e ao vivo; `eval/agente/RESULTADOS.md`.
-- [ ] T062 `traceability.md`; `make lint` e `make test` verdes.
+- [x] T062 `traceability.md`; `make lint` e `make test` verdes.
