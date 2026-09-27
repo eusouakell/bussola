@@ -1,76 +1,127 @@
-# Bússola: CD preparado (Q-18 do 000). Disparo manual. Roda o CI, faz build e
-# push das imagens e publica revisões com --tag cNNN, sem tráfego, pelos
-# scripts de deploy/. Acesso ao GCP só por Workload Identity Federation
-# (constituição VII): nenhuma chave de SA no GitHub.
+# Bússola: CD com Helm (Q-18 do 000). Todo push na main (merge ou commit
+# direto, trunk-based) roda o CI e, verde, publica mcp e agent no Cloud Run:
 #
-# Travado até o owner criar o WIF (pedido 5 de specs/000-*/pedidos-owner.md) e
-# alguém definir as variáveis do repositório (ou do environment gcp):
+#   1. build linux/amd64 e push para o Artifact Registry `agentes`;
+#   2. lê o tráfego vivo do serviço (deploy/helm/traffic.jq);
+#   3. `helm template` gera o manifesto Knative, com a imagem por digest;
+#   4. `gcloud run services replace`, primeiro com --dry-run.
+#
+# A revisão nova sai com 0% de tráfego e a tag `main` (URL main---<serviço>),
+# que sempre aponta para a última revisão da main. Um disparo manual pode usar
+# a tag cNNN de um ciclo. Nenhum passo move tráfego ou altera IAM: promover é
+# do ciclo 007, com confirmação humana (constituição X). O último passo confere
+# que os percentuais continuam os mesmos.
+#
+# Acesso ao GCP só por Workload Identity Federation (constituição VII), nunca
+# por chave de SA. Até o owner criar o WIF (pedido 5 de
+# specs/000-*/pedidos-owner.md), o push na main só roda o CI e avisa que o
+# deploy foi pulado. Para liberar, defina as variáveis do repositório:
 #   GCP_WIF_PROVIDER    projects/<número>/locations/global/workloadIdentityPools/<pool>/providers/<provider>
 #   GCP_DEPLOY_SA       e-mail da SA de deploy
-#   BUSSOLA_SA_RUNTIME  opcional; bussola-runtime no Plano A (padrão: SA default de compute)
-#
-# Mover tráfego e mudar IAM ficam fora deste workflow: são do ciclo 007, com
-# confirmação humana (constituição X).
 name: deploy
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
-      servico:
-        description: "Serviço (ambos = mcp e depois agent)"
+      service:
+        description: "Serviço (both = mcp e depois agent)"
         type: choice
-        options: [ambos, mcp, agent]
-        default: ambos
+        options: [both, mcp, agent]
+        default: both
       tag:
-        description: "Tag da revisão no Cloud Run (cNNN, ex.: c003)"
+        description: "Tag da revisão: main ou cNNN de um ciclo (ex.: c003)"
         type: string
         required: true
-        default: c000
-      llm:
-        description: "LLM do agente: vertex (Plano A) ou gemini-api (Plano B)"
-        type: choice
-        options: [vertex, gemini-api]
-        default: vertex
+        default: main
 
 permissions:
   contents: read
 
+# Um deploy por vez. Com pushes seguidos, o último na fila substitui os
+# anteriores ainda não iniciados.
 concurrency:
   group: deploy-gcp
   cancel-in-progress: false
+
+# Espelham deploy/helm/bussola/values.yaml (conferido em deploy/tests).
+env:
+  GCP_PROJECT: batalha-time-07-lkbv
+  GCP_REGION: us-central1
+  IMAGE_REPOSITORY: us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes
+  CHART: deploy/helm/bussola
+  SERVICES: >-
+    [{"key": "mcp", "name": "bussola-mcp", "dockerfile": "mcp_server/Dockerfile"},
+    {"key": "agent", "name": "bussola-agent", "dockerfile": "agent/Dockerfile"}]
 
 jobs:
   ci:
     uses: ./.github/workflows/ci.yml
 
-  publicar:
-    name: build, push e revisão sem tráfego
-    needs: ci
+  plan:
+    name: plano do deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      enabled: ${{ steps.plan.outputs.enabled }}
+      tag: ${{ steps.plan.outputs.tag }}
+      services: ${{ steps.plan.outputs.services }}
+    env:
+      GCP_WIF_PROVIDER: ${{ vars.GCP_WIF_PROVIDER }}
+      GCP_DEPLOY_SA: ${{ vars.GCP_DEPLOY_SA }}
+      EVENT: ${{ github.event_name }}
+      ONLY: ${{ inputs.service }}
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - name: Tag, serviços e acesso ao GCP
+        id: plan
+        run: |
+          set -euo pipefail
+          # No push não há inputs: todos os serviços, tag main.
+          ONLY="${ONLY:-both}"
+          RELEASE_TAG="${RELEASE_TAG:-main}"
+          if ! printf '%s' "$RELEASE_TAG" | grep -Eq '^(main|c[0-9]{3})$'; then
+            echo "::error title=Tag inválida::Use main ou cNNN (ex.: c003)."
+            exit 1
+          fi
+          if [ -z "$GCP_WIF_PROVIDER" ] || [ -z "$GCP_DEPLOY_SA" ]; then
+            if [ "$EVENT" = "workflow_dispatch" ]; then
+              echo "::error title=Deploy sem acesso ao GCP::Defina as variáveis do repositório GCP_WIF_PROVIDER e GCP_DEPLOY_SA (pedido 5 ao owner). O deploy não usa chave de SA."
+              exit 1
+            fi
+            echo "::warning title=Deploy pulado::Sem GCP_WIF_PROVIDER e GCP_DEPLOY_SA (pedido 5 ao owner). Só o CI rodou."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          services=$(jq -c --arg only "$ONLY" \
+            'map(select($only == "both" or .key == $only))' <<< "$SERVICES")
+          {
+            echo "enabled=true"
+            echo "tag=$RELEASE_TAG"
+            echo "services=$services"
+          } >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: publicar ${{ matrix.service.name }} (tag ${{ needs.plan.outputs.tag }}, 0% de tráfego)
+    needs: [ci, plan]
+    if: needs.plan.outputs.enabled == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: gcp
     permissions:
       contents: read
       id-token: write
+    strategy:
+      fail-fast: true
+      max-parallel: 1 # mcp antes do agent
+      matrix:
+        service: ${{ fromJSON(needs.plan.outputs.services) }}
     env:
-      GCP_WIF_PROVIDER: ${{ vars.GCP_WIF_PROVIDER }}
-      GCP_DEPLOY_SA: ${{ vars.GCP_DEPLOY_SA }}
-      BUSSOLA_SA_RUNTIME: ${{ vars.BUSSOLA_SA_RUNTIME }}
-      SERVICO: ${{ inputs.servico }}
-      TAG_REVISAO: ${{ inputs.tag }}
-      LLM: ${{ inputs.llm }}
+      KEY: ${{ matrix.service.key }}
+      SERVICE_NAME: ${{ matrix.service.name }}
+      RELEASE_TAG: ${{ needs.plan.outputs.tag }}
     steps:
-      - name: Conferir WIF e tag
-        run: |
-          if [ -z "$GCP_WIF_PROVIDER" ] || [ -z "$GCP_DEPLOY_SA" ]; then
-            echo "::error title=CD sem acesso ao GCP::Defina GCP_WIF_PROVIDER e GCP_DEPLOY_SA (pedido 5 ao owner, Q-18 do 000). O CD não usa chave de SA."
-            exit 1
-          fi
-          if ! printf '%s' "$TAG_REVISAO" | grep -Eq '^c[0-9]{3}(-[a-z0-9]+)*$'; then
-            echo "::error title=Tag inválida::Use cNNN com sufixos opcionais em minúsculas, ex.: c003 ou c003-rc1."
-            exit 1
-          fi
-
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
@@ -82,36 +133,92 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v3
 
+      - uses: azure/setup-helm@v5
+        with:
+          version: v4.2.4
+
       - uses: docker/setup-buildx-action@v4
 
       - name: Credencial do Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker "${IMAGE_REPOSITORY%%/*}" --quiet
 
-      - name: Tag da imagem (SHA curto)
-        run: echo "IMAGEM=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
-
-      - name: Build e push do MCP
-        if: inputs.servico != 'agent'
-        run: deploy/build_push.sh mcp "$IMAGEM"
-
-      - name: Build e push do agente
-        if: inputs.servico != 'mcp'
-        run: deploy/build_push.sh agent "$IMAGEM"
-
-      - name: Revisão do MCP
-        if: inputs.servico != 'agent'
-        run: deploy/deploy.sh mcp --tag "$TAG_REVISAO" --imagem "$IMAGEM"
-
-      - name: Revisão do agente
-        if: inputs.servico != 'mcp'
-        run: deploy/deploy.sh agent --tag "$TAG_REVISAO" --imagem "$IMAGEM" --llm "$LLM"
-
-      - name: Resumo
+      - name: Identificação da revisão
         run: |
+          short_sha="${GITHUB_SHA::7}"
           {
-            echo "### Deploy $SERVICO"
+            echo "SHORT_SHA=$short_sha"
+            echo "REVISION_SUFFIX=$RELEASE_TAG-$short_sha-$GITHUB_RUN_ATTEMPT"
+          } >> "$GITHUB_ENV"
+
+      - name: Build e push da imagem
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ matrix.service.dockerfile }}
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ${{ env.IMAGE_REPOSITORY }}/${{ matrix.service.name }}:${{ env.SHORT_SHA }}
+          cache-from: type=gha,scope=${{ matrix.service.key }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service.key }}
+
+      - name: Tráfego vivo do serviço
+        run: |
+          set -euo pipefail
+          if ! gcloud run services describe "$SERVICE_NAME" --project "$GCP_PROJECT" \
+              --region "$GCP_REGION" --format=json > "$RUNNER_TEMP/before.json"; then
+            echo "::error title=Serviço não encontrado::$SERVICE_NAME precisa existir. A criação (primeira revisão com tráfego) é manual e do 007."
+            exit 1
+          fi
+          jq --arg key "$KEY" --arg tag "$RELEASE_TAG" -f deploy/helm/traffic.jq \
+            "$RUNNER_TEMP/before.json" > "$RUNNER_TEMP/traffic.json"
+          jq -c ".services.$KEY.traffic" "$RUNNER_TEMP/traffic.json"
+
+      - name: Manifesto Knative (helm template)
+        env:
+          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          set -euo pipefail
+          helm template bussola "$CHART" \
+            -f "$RUNNER_TEMP/traffic.json" \
+            --set "release.tag=$RELEASE_TAG" \
+            --set "release.revisionSuffix=$REVISION_SUFFIX" \
+            --set "services.$KEY.image=$IMAGE_DIGEST" \
+            --show-only "templates/$KEY-service.yaml" > "$RUNNER_TEMP/service.yaml"
+
+      - name: Validar no Cloud Run (dry-run)
+        run: |
+          gcloud run services replace "$RUNNER_TEMP/service.yaml" \
+            --project "$GCP_PROJECT" --region "$GCP_REGION" --dry-run
+
+      - name: Publicar revisão sem tráfego
+        run: |
+          gcloud run services replace "$RUNNER_TEMP/service.yaml" \
+            --project "$GCP_PROJECT" --region "$GCP_REGION"
+
+      - name: Conferir que o tráfego não mudou
+        run: |
+          set -euo pipefail
+          gcloud run services describe "$SERVICE_NAME" --project "$GCP_PROJECT" \
+            --region "$GCP_REGION" --format=json > "$RUNNER_TEMP/after.json"
+          serving='[.status.traffic[] | select((.percent // 0) > 0)]
+            | group_by(.revisionName)
+            | map({key: .[0].revisionName, value: (map(.percent) | add)})
+            | from_entries'
+          before=$(jq -cS "$serving" "$RUNNER_TEMP/before.json")
+          after=$(jq -cS "$serving" "$RUNNER_TEMP/after.json")
+          if [ "$before" != "$after" ]; then
+            echo "::error title=Tráfego mudou::antes $before, depois $after. Avise o 007."
+            exit 1
+          fi
+          url=$(jq -r --arg tag "$RELEASE_TAG" \
+            '[.status.traffic[] | select(.tag == $tag) | .url][0] // "-"' "$RUNNER_TEMP/after.json")
+          {
+            echo "### $SERVICE_NAME"
             echo ""
-            echo "- Imagem: \`$IMAGEM\`"
-            echo "- Revisão: tag \`$TAG_REVISAO\`, sem tráfego em serviço existente."
-            echo "- Mover tráfego é do ciclo 007, com confirmação humana."
+            echo "- Revisão: \`$SERVICE_NAME-$REVISION_SUFFIX\`, tag \`$RELEASE_TAG\`, 0% de tráfego"
+            echo "- URL da tag: $url"
+            echo "- Tráfego (inalterado): \`$after\`"
+            echo "- Promover é do ciclo 007, com confirmação humana."
           } >> "$GITHUB_STEP_SUMMARY"

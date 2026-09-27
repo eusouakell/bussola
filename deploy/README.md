@@ -30,22 +30,24 @@ deploy/iam_datasets.sh --aplicar         # só com confirmação humana
 
 | Workflow | Disparo | O que faz |
 |---|---|---|
-| `.github/workflows/ci.yml` | `pull_request`, `push` na `main` | `make lint` + `make test` com `BUSSOLA_FAKES=TRUE`, sem GCP |
-| `.github/workflows/deploy.yml` | Manual (Actions → deploy → Run workflow) | CI, depois `build_push.sh` + `deploy.sh --tag cNNN` (sem tráfego) |
+| `.github/workflows/ci.yml` | Push em branch que não é a `main` e todo `pull_request` | `make lint` + `make test` (fake, sem GCP), front web e BFF (`web-lint`, `web-test`, `web-build`) e chart Helm (`helm-lint`, `test-helm`) |
+| `.github/workflows/deploy.yml` | Todo push na `main`; manual para tag `cNNN` | CI e depois deploy com Helm: revisão nova com tag `main` e 0% de tráfego ([helm/README.md](helm/README.md)) |
 
-O `deploy.yml` autentica só por Workload Identity Federation e fica travado
-até existirem as variáveis do repositório (ou do environment `gcp`):
+O `deploy.yml` autentica só por Workload Identity Federation. Sem as
+variáveis do repositório abaixo, o push na `main` roda só o CI e o deploy é
+pulado com aviso:
 
 - `GCP_WIF_PROVIDER`: nome completo do provider, criado pelo owner (pedido
   5 de `specs/000-fundacao-contratos/pedidos-owner.md`);
-- `GCP_DEPLOY_SA`: e-mail da SA de deploy;
-- `BUSSOLA_SA_RUNTIME` (opcional): `bussola-runtime` no Plano A.
+- `GCP_DEPLOY_SA`: e-mail da SA de deploy.
 
-Disparo pela linha de comando:
+A SA de runtime e o plano do LLM ficam em `helm/bussola/values.yaml`.
+Mudar um deles é um commit na `main`, não um parâmetro do workflow.
 
-```bash
-gh workflow run deploy.yml -f servico=ambos -f tag=c000 -f llm=vertex
-```
+Os scripts `build_push.sh` e `deploy.sh` são o caminho antigo, do 000.
+Ficam só para emergência até a emenda da constituição
+(`specs/000-fundacao-contratos/proposta-constituicao.md`) ser aprovada. O
+workflow não os usa.
 
 Nenhum workflow move tráfego ou altera IAM. A promoção é do 007.
 

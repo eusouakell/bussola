@@ -1,8 +1,10 @@
 """Pipelines do GitHub Actions (Q-18 do 000; constituição VII e X).
 
-CI com ``make lint`` e ``make test`` em modo fake. CD só por Workload Identity
-Federation, sem chave de SA, sem mover tráfego, sem mexer em IAM e sem
-interpolar entrada do disparo direto no shell.
+CI com ``make lint`` e ``make test`` em modo fake, em todo push de branch que
+não é a main e em todo PR. CD com Helm a cada push na main, depois do CI, só
+por Workload Identity Federation, sem chave de SA, sem mover tráfego, sem
+mexer em IAM e sem interpolar entrada do disparo direto no shell. Trunk-based
+e deploy com Helm: specs/000-fundacao-contratos/proposta-constituicao.md.
 """
 
 import re
@@ -30,6 +32,10 @@ def _texto(caminho: Path) -> str:
     return caminho.read_text(encoding="utf-8")
 
 
+def _gatilhos(texto: str) -> str:
+    return texto.split("\non:", 1)[1].split("\npermissions:", 1)[0]
+
+
 def test_existem_ci_e_deploy():
     assert CI.is_file()
     assert DEPLOY.is_file()
@@ -44,21 +50,33 @@ def test_ci_roda_make_lint_e_make_test_em_modo_fake():
     assert "workflow_call" in texto  # o deploy reaproveita o CI
 
 
-def test_deploy_so_por_disparo_manual_e_depois_do_ci():
+def test_ci_roda_em_push_de_branch_e_em_pr():
+    gatilhos = _gatilhos(_texto(CI))
+    assert re.findall(r"^  ([a-z_]+):", gatilhos, re.MULTILINE) == [
+        "push",
+        "pull_request",
+        "workflow_call",
+    ]
+    assert re.search(r"^    branches-ignore: \[main\]$", gatilhos, re.MULTILINE)
+
+
+def test_deploy_a_cada_push_na_main_e_depois_do_ci():
     texto = _texto(DEPLOY)
-    gatilhos = texto.split("\non:", 1)[1].split("\npermissions:", 1)[0]
-    assert re.findall(r"^  ([a-z_]+):", gatilhos, re.MULTILINE) == ["workflow_dispatch"]
+    gatilhos = _gatilhos(texto)
+    assert re.findall(r"^  ([a-z_]+):", gatilhos, re.MULTILINE) == ["push", "workflow_dispatch"]
+    assert re.search(r"^    branches: \[main\]$", gatilhos, re.MULTILINE)
     assert "uses: ./.github/workflows/ci.yml" in texto
-    assert re.search(r"^\s*needs: ci\s*$", texto, re.MULTILINE)
+    assert re.search(r"^\s*needs: \[ci, [a-z_-]+\]\s*$", texto, re.MULTILINE)
 
 
-def test_deploy_usa_wif_e_os_scripts_de_deploy():
+def test_deploy_usa_wif_e_helm_sem_scripts():
     texto = _texto(DEPLOY)
     assert "google-github-actions/auth@" in texto
     assert "workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}" in texto
     assert "id-token: write" in texto
-    assert "deploy/build_push.sh" in texto
-    assert re.search(r'deploy/deploy\.sh \w+ --tag "\$TAG_REVISAO"', texto)
+    assert "helm template" in texto
+    assert re.search(r"gcloud run services replace .*--dry-run", texto, re.DOTALL)
+    assert not re.search(r"deploy/\w+\.sh|gcloud run deploy", texto)
 
 
 @pytest.mark.parametrize("caminho", _workflows(), ids=lambda p: p.name)

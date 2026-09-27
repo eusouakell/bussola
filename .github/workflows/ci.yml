@@ -1,11 +1,13 @@
-# Bússola: CI (Q-18 do 000). make lint + make test em modo fake, sem rede
-# para o GCP e sem credencial. Também é chamado pelo deploy.yml antes do build.
+# Bússola: CI (Q-18 do 000). Roda em todo push de branch que não é a main e em
+# todo pull request. Na main, quem chama é o deploy.yml, antes do build: um
+# merge só publica com o CI verde. Tudo em modo fake, sem rede para o GCP e sem
+# credencial.
 name: ci
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches-ignore: [main]
+  pull_request:
   workflow_call:
 
 permissions:
@@ -38,3 +40,57 @@ jobs:
 
       - name: make test
         run: make test
+
+  web:
+    name: front web e BFF (lint, testes e build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: make web-install
+        run: make web-install
+
+      - name: make web-lint
+        run: make web-lint
+
+      - name: make web-test
+        run: make web-test
+
+      # Inclui a varredura do bundle (segredos, SQL, projeto, UUID completo).
+      - name: make web-build
+        run: make web-build
+
+  helm:
+    name: chart Helm (lint e testes)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: azure/setup-helm@v5
+        with:
+          version: v4.2.4
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.12"
+          enable-cache: true
+          cache-dependency-glob: "**/uv.lock"
+
+      - name: make helm-lint
+        run: make helm-lint
+
+      # Renderiza o chart, valida as regras de plataforma e o filtro de tráfego.
+      - name: make test-helm
+        run: make test-helm
