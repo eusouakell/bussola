@@ -1,0 +1,18 @@
+# Contexto de build = raiz do repositório (ver web/Dockerfile).
+# Lista de permissões: tudo fica de fora, exceto o que a imagem do BFF usa.
+*
+!web/
+!contracts/env.example
+
+# Dependências e artefatos locais: o build instala e gera de novo.
+web/node_modules
+web/dist
+**/.DS_Store
+web/Dockerfile
+web/Dockerfile.dockerignore
+
+# Segredos e configuração local: nunca entram na imagem.
+**/.env
+**/.env.*
+**/*.pem
+**/*-key.json

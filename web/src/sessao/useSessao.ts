@@ -36,7 +36,19 @@ export interface Sessao {
   configurarBordas: (bordas: Partial<Bordas>) => void;
 }
 
-export function useSessao(modoInicial: Modo = CONFIG.modo, fabrica: typeof criarTransporte = criarTransporte): Sessao {
+export interface OpcoesSessao {
+  /**
+   * `false` segura o modo ao vivo até o login no BFF: nenhuma sessão é criada
+   * no agente. O simulado não depende disso.
+   */
+  aoVivoLiberado?: boolean;
+}
+
+export function useSessao(
+  modoInicial: Modo = CONFIG.modo,
+  fabrica: typeof criarTransporte = criarTransporte,
+  { aoVivoLiberado = true }: OpcoesSessao = {},
+): Sessao {
   const [modo, setModo] = useState<Modo>(modoInicial);
   const [geracao, setGeracao] = useState(0);
   const [bordas, setBordas] = useState<Bordas>(SEM_BORDAS);
@@ -46,7 +58,10 @@ export function useSessao(modoInicial: Modo = CONFIG.modo, fabrica: typeof criar
   const bordasRef = useRef<Bordas>(SEM_BORDAS);
   const ocupadoRef = useRef(false);
 
+  const aguardando = modo === "ao-vivo" && !aoVivoLiberado;
+
   useEffect(() => {
+    if (aguardando) return;
     let viva = true;
     const t = fabrica(modo, bordasRef.current);
     transporte.current = t;
@@ -62,7 +77,7 @@ export function useSessao(modoInicial: Modo = CONFIG.modo, fabrica: typeof criar
       controle.current?.abort();
       if (transporte.current === t) transporte.current = null;
     };
-  }, [modo, geracao, fabrica]);
+  }, [modo, geracao, fabrica, aguardando]);
 
   const enviar = useCallback((texto: string) => {
     const limpo = texto.trim();

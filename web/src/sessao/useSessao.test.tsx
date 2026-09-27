@@ -272,6 +272,28 @@ describe("useSessao", () => {
     expect(result.current.pronta).toBe(true);
   });
 
+  it("ao vivo sem login não cria sessão; o login libera e o simulado não espera", async () => {
+    const { fabrica } = criarFabrica();
+    const { result, rerender } = renderHook(({ liberado }) => useSessao("ao-vivo", fabrica, { aoVivoLiberado: liberado }), {
+      initialProps: { liberado: false },
+    });
+    await agir();
+    expect(fabrica).not.toHaveBeenCalled();
+    expect(result.current.pronta).toBe(false);
+
+    rerender({ liberado: true });
+    await agir();
+    expect(fabrica).toHaveBeenCalledTimes(1);
+    expect(fabrica).toHaveBeenCalledWith("ao-vivo", { e3: false, e4: false, e5: false });
+    expect(result.current.pronta).toBe(true);
+
+    rerender({ liberado: false });
+    await agir(() => result.current.trocarModo("simulado"));
+    expect(fabrica).toHaveBeenCalledTimes(2);
+    expect(fabrica).toHaveBeenLastCalledWith("simulado", { e3: false, e4: false, e5: false });
+    expect(result.current.pronta).toBe(true);
+  });
+
   it("desmontar aborta o turno em andamento", async () => {
     const { fabrica, ultimo } = criarFabrica({ turno: ateAbortar });
     const { result, unmount } = await montar(fabrica);

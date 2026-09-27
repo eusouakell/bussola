@@ -12,6 +12,7 @@ export interface BffConfig {
   cookieSecure: boolean;
   allowedOrigins: string[];
   agentUrl: string;
+  agentAudience: string;
   agentApp: string;
   agentUseOidc: boolean;
   staticDir?: string;
@@ -62,6 +63,11 @@ export function loadConfig(env: NodeJS.ProcessEnv, defaults: { usersFixture: str
   const project = env.GOOGLE_CLOUD_PROJECT ?? "";
   if (!fakes && !project) throw new ConfigError("GOOGLE_CLOUD_PROJECT é obrigatório com BUSSOLA_FAKES=FALSE");
 
+  const agentUrl = env.AGENT_URL || "http://localhost:8000";
+  if (!URL.canParse(agentUrl)) throw new ConfigError("AGENT_URL inválida");
+  const agentAudience = env.AGENT_AUDIENCE || new URL(agentUrl).origin;
+  if (!URL.canParse(agentAudience)) throw new ConfigError("AGENT_AUDIENCE inválida");
+
   return {
     port,
     fakes,
@@ -71,7 +77,8 @@ export function loadConfig(env: NodeJS.ProcessEnv, defaults: { usersFixture: str
     passwordHash,
     cookieSecure: flag(env.AUTH_COOKIE_SECURE, onCloudRun),
     allowedOrigins: origins(env.AUTH_ALLOWED_ORIGINS),
-    agentUrl: env.AGENT_URL || "http://localhost:8000",
+    agentUrl,
+    agentAudience,
     agentApp: env.AGENT_APP || "bussola_agent",
     agentUseOidc,
     staticDir: env.STATIC_DIR || undefined,

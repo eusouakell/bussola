@@ -23,6 +23,7 @@ describe("loadConfig", () => {
       cookieSecure: false,
       allowedOrigins: [],
       agentUrl: "http://localhost:8000",
+      agentAudience: "http://localhost:8000",
       agentApp: "bussola_agent",
       agentUseOidc: false,
     });
@@ -38,6 +39,16 @@ describe("loadConfig", () => {
     expect(config.fakes).toBe(false);
   });
 
+  it("audience do agente: origem de AGENT_URL, ou AGENT_AUDIENCE para URL de tag", () => {
+    const tag = "https://main---bussola-agent.example.run.app";
+    expect(loadConfig({ AUTH_PASSWORD_HASH: hash, AGENT_URL: `${tag}/` }, defaults).agentAudience).toBe(tag);
+    const config = loadConfig(
+      { AUTH_PASSWORD_HASH: hash, AGENT_URL: tag, AGENT_AUDIENCE: "https://bussola-agent.example.run.app" },
+      defaults,
+    );
+    expect(config).toMatchObject({ agentUrl: tag, agentAudience: "https://bussola-agent.example.run.app" });
+  });
+
   it("sem AUTH_PASSWORD_HASH, falha sem citar valores", () => {
     expect(() => loadConfig({}, defaults)).toThrow(ConfigError);
     expect(() => loadConfig({ AUTH_PASSWORD_HASH: "senha-em-claro" }, defaults)).toThrow(
@@ -51,6 +62,8 @@ describe("loadConfig", () => {
     [{ AUTH_ALLOWED_ORIGINS: "http://localhost:5173/caminho" }, "AUTH_ALLOWED_ORIGINS"],
     [{ AUTH_COOKIE_SECURE: "sim" }, "TRUE ou FALSE"],
     [{ PORT: "0" }, "PORT"],
+    [{ AGENT_URL: "bussola-agent" }, "AGENT_URL"],
+    [{ AGENT_AUDIENCE: "bussola-agent" }, "AGENT_AUDIENCE"],
   ])("recusa %j", (env, message) => {
     expect(() => loadConfig({ AUTH_PASSWORD_HASH: hash, ...env }, defaults)).toThrow(message);
   });

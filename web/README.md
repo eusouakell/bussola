@@ -47,6 +47,7 @@ Alvos do `Makefile` na raiz:
 |---|---|---|
 | `VITE_BUSSOLA_MODO` | `simulado` ou `ao-vivo` | `simulado` |
 | `VITE_ADK_APP` | nome do app no ADK | `bussola_agent` |
+| `VITE_BUSSOLA_LOGIN` | `TRUE` liga a tela de login do BFF no modo ao vivo | desligado |
 
 As variáveis valem na linha de comando (`VITE_BUSSOLA_MODO=ao-vivo npm run
 dev`) ou em `web/.env.local`, que não é versionado. Tudo que começa com
@@ -74,8 +75,11 @@ Serviço Node 24 em TypeScript nativo, sem etapa de build, entre o front e o
 agente. Ele faz o login simulado por persona (os usuários de
 `bussola_dados.users` com uma senha padrão de teste), guarda a sessão num
 cookie HttpOnly e encaminha ao ADK só o texto do cliente, sempre na sessão
-do agente que pertence ao login. O front ainda não usa o BFF: a tela de
-login (`web/src/auth/`) está pendente.
+do agente que pertence ao login. Com `VITE_BUSSOLA_LOGIN=TRUE`, o modo ao
+vivo abre a tela de login (`web/src/auth/`): o apresentador escolhe a persona,
+digita a senha padrão e só então a sessão do agente é criada. "Trocar
+persona", na barra de demonstração, faz logout e volta para essa tela. O modo
+simulado não pede login.
 
 Camadas (Clean Architecture). A regra de dependência é conferida por
 `bff/architecture.test.ts`:
@@ -108,9 +112,28 @@ npm run bff                # ou, na raiz: make bff (lê ../.env se existir)
 | `USERS_FIXTURE` | `contracts/fixtures/bussola_dados/users.json` | Chega com o PR `contracts:` de `users`; até lá, aponte para um arquivo local |
 | `GOOGLE_CLOUD_PROJECT`, `BQ_DATASET_DADOS`, `BQ_TABLE_USERS` | `bussola_dados`, `users` | Leitura de users com `BUSSOLA_FAKES=FALSE` |
 | `AGENT_URL`, `AGENT_APP` | `http://localhost:8000`, `bussola_agent` | Agente ADK |
+| `AGENT_AUDIENCE` | origem de `AGENT_URL` | Audience do ID token. Com `AGENT_URL` numa URL de tag (`main---…`), use a URL principal do agente: o Cloud Run recusa a da tag |
 | `AGENT_USE_OIDC` | `FALSE` | Token OIDC do metadata server (só no Cloud Run) |
 | `STATIC_DIR` | vazio | Serve o `dist/` do front (SPA) |
 | `PORT` | `8080` | Porta HTTP |
+
+### Imagem e Cloud Run
+
+`web/Dockerfile` gera a imagem do serviço `bussola-bff`, com o contexto na
+raiz do repositório porque a varredura do bundle lê `contracts/env.example`.
+O build roda `npm run build` com `VITE_BUSSOLA_MODO=ao-vivo` e
+`VITE_BUSSOLA_LOGIN=TRUE`. O runtime leva só o BFF, o `dist/` e
+`fixtures/users.json` (espelho da tabela `users`), sem `node_modules`, e roda
+como o usuário `node`.
+
+```bash
+docker buildx build --platform linux/amd64 -f web/Dockerfile -t bussola-bff .
+```
+
+O deploy segue o chart Helm (`services.bff` em
+`deploy/helm/bussola/values.yaml`; ver `deploy/helm/README.md`). O serviço é
+público e chama a revisão da tag `main` do agente com ID token da SA de
+compute. No Cloud Run, `/healthz` é um caminho reservado do Google (404).
 
 ## Barra de demonstração
 

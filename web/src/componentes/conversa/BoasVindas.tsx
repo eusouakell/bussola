@@ -5,12 +5,14 @@ import { Icone, type NomeIcone } from "../base/Icone";
 const ICONES: NomeIcone[] = ["casa", "aviao", "capelo", "lista"];
 
 interface Props {
+  /** Nome da persona logada (ao vivo pelo BFF); sem login, o cliente demo. */
+  nome?: string;
   onEscolher: (texto: string) => void;
   desabilitado: boolean;
   compacto?: boolean;
 }
 
-export function BoasVindas({ onEscolher, desabilitado, compacto }: Props) {
+export function BoasVindas({ nome = "Fernando", onEscolher, desabilitado, compacto }: Props) {
   return (
     <div
       className="enter"
@@ -32,7 +34,7 @@ export function BoasVindas({ onEscolher, desabilitado, compacto }: Props) {
       </span>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <h1 style={{ margin: 0, fontSize: compacto ? 32 : 44, lineHeight: compacto ? "38px" : "50px", fontWeight: 900, letterSpacing: "-.02em" }}>
-          Oi, Fernando!
+          Oi, {nome}!
         </h1>
         <p style={{ margin: 0, fontSize: compacto ? 18 : 22, lineHeight: compacto ? "26px" : "32px", fontWeight: 600, color: "var(--ink-2)" }}>
           Eu sou a Bússola, da ia.i. Qual objetivo você quer tirar do papel?

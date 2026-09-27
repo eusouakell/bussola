@@ -55,6 +55,7 @@ export function buildContainer(config: BffConfig, logger: Logger): Bff {
   const sessions = new InMemorySessionRepository({ maxSessions: 500, policy: SESSION_POLICY });
   const agent = new HttpAgentGateway({
     baseUrl: config.agentUrl,
+    audience: config.agentAudience,
     app: config.agentApp,
     idTokens: config.agentUseOidc && metadata ? metadata : undefined,
   });

@@ -31,9 +31,11 @@ interface Props {
   ocupado: boolean;
   bordas: Bordas;
   onBordas: (bordas: Partial<Bordas>) => void;
+  /** Persona logada no BFF (modo ao vivo com login). */
+  persona?: { nome: string; onTrocar: () => void };
 }
 
-export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onBordas }: Props) {
+export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onBordas, persona }: Props) {
   const idMotivo = useId();
   const idModo = useId();
   const motivo = motivoSemAvanco(estado);
@@ -71,6 +73,14 @@ export function BarraDemo({ estado, modo, onModo, onEnviar, ocupado, bordas, onB
           <option value="simulado">Simulado</option>
           <option value="ao-vivo">Ao vivo (ADK)</option>
         </select>
+        {modo === "ao-vivo" && persona && (
+          <>
+            <span style={{ fontSize: 13.5, fontWeight: 800 }}>Persona: {persona.nome}</span>
+            <button type="button" className="btn-presenter" style={{ minHeight: 36 }} disabled={ocupado} onClick={persona.onTrocar}>
+              Trocar persona
+            </button>
+          </>
+        )}
         {modo === "simulado" && (
           <details style={{ position: "relative" }}>
             <summary className="btn-presenter" style={{ minHeight: 36, listStyle: "none" }}>

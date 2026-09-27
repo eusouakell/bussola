@@ -1,6 +1,7 @@
 // Gateway HTTP para a API do ADK (`adk web` / `get_fast_api_app`). No Cloud
 // Run o agente é privado: cada chamada leva um ID token com audience = URL
-// base do serviço.
+// base do serviço. Numa URL de tag (main---<serviço>) o Cloud Run recusa essa
+// audience (401), então `audience` passa a URL principal do serviço.
 import { AgentUnavailable } from "../../application/errors.ts";
 import type { AgentGateway, AgentSession, AgentTurn } from "../../application/ports/agentGateway.ts";
 import type { IdTokenProvider } from "../gcp/credentials.ts";
@@ -9,6 +10,8 @@ type Fetch = typeof fetch;
 
 export interface HttpAgentGatewayOptions {
   baseUrl: string;
+  /** Padrão: origem de `baseUrl`. */
+  audience?: string;
   app: string;
   idTokens?: IdTokenProvider;
   fetch?: Fetch;
@@ -19,6 +22,7 @@ const APP_NAME = /^[A-Za-z_][A-Za-z0-9_]{0,63}$/;
 
 export class HttpAgentGateway implements AgentGateway {
   private readonly base: URL;
+  private readonly audience: string;
   private readonly app: string;
   private readonly idTokens?: IdTokenProvider;
   private readonly fetch: Fetch;
@@ -27,6 +31,7 @@ export class HttpAgentGateway implements AgentGateway {
   constructor(options: HttpAgentGatewayOptions) {
     this.base = new URL(options.baseUrl);
     if (!["http:", "https:"].includes(this.base.protocol)) throw new Error("AGENT_URL deve ser http(s)");
+    this.audience = options.audience ?? this.base.origin;
     if (!APP_NAME.test(options.app)) throw new Error("AGENT_APP inválido");
     this.app = options.app;
     this.idTokens = options.idTokens;
@@ -89,7 +94,7 @@ export class HttpAgentGateway implements AgentGateway {
   private async call(path: string, init: RequestInit, signal?: AbortSignal): Promise<Response> {
     const headers = new Headers(init.headers);
     if (init.body) headers.set("Content-Type", "application/json");
-    if (this.idTokens) headers.set("Authorization", `Bearer ${await this.idTokens.idToken(this.base.origin)}`);
+    if (this.idTokens) headers.set("Authorization", `Bearer ${await this.idTokens.idToken(this.audience)}`);
     const url = new URL(path.replace(/^\//, ""), this.base.href.endsWith("/") ? this.base : `${this.base.href}/`);
     try {
       return await this.fetch(url, {

@@ -2,6 +2,9 @@
 // conversa, stepper, composer, Bastidores com a barra do apresentador e as
 // vistas do plano (P1–P5), sem roteador.
 import { useState } from "react";
+import { TelaLogin } from "./auth/TelaLogin";
+import { ClienteAuth } from "./auth/clienteAuth";
+import { useAuth } from "./auth/useAuth";
 import { BoasVindas } from "./componentes/conversa/BoasVindas";
 import { Conversa } from "./componentes/conversa/Conversa";
 import { StepperJornada } from "./componentes/jornada/StepperJornada";
@@ -12,15 +15,21 @@ import { Composer } from "./componentes/layout/Composer";
 import { HeaderBussola } from "./componentes/layout/HeaderBussola";
 import { MTopo } from "./componentes/layout/MTopo";
 import { useMidia } from "./componentes/layout/useMidia";
+import { CONFIG } from "./config";
 import { sugestoesDoComposer } from "./sessao/sugestoes";
-import { useSessao } from "./sessao/useSessao";
+import { criarTransporte, useSessao } from "./sessao/useSessao";
 import { Vistas, type NomeVista } from "./vistas/Vistas";
 
 type Tema = "claro" | "escuro";
 
+const CLIENTE_AUTH = new ClienteAuth();
+
 export function App() {
-  const sessao = useSessao();
+  // Servido pelo BFF, o modo ao vivo só abre sessão no agente depois do login.
+  const auth = useAuth(CONFIG.login, CLIENTE_AUTH);
+  const sessao = useSessao(CONFIG.modo, criarTransporte, { aoVivoLiberado: auth.fase !== "anonimo" && auth.fase !== "verificando" });
   const { modelo, modo, pronta, bordas } = sessao;
+  const pedeLogin = modo === "ao-vivo" && (auth.fase === "anonimo" || auth.fase === "verificando");
   const desktop = useMidia("(min-width: 1024px)", true);
   const sistemaEscuro = useMidia("(prefers-color-scheme: dark)", false);
   const [tema, setTema] = useState<Tema | null>(null);
@@ -41,6 +50,11 @@ export function App() {
     enviar(texto);
   };
   const alternarTema = () => setTema(escuro ? "claro" : "escuro");
+  const trocarPersona = () => {
+    setFolha(false);
+    setVista(null);
+    void auth.sair().finally(sessao.reiniciar);
+  };
   const abrirPlano = () => setVista("meu-plano");
 
   const barra = (
@@ -52,10 +66,15 @@ export function App() {
       ocupado={ocupado}
       bordas={bordas}
       onBordas={sessao.configurarBordas}
+      persona={auth.persona ? { nome: auth.persona.displayName, onTrocar: trocarPersona } : undefined}
     />
   );
 
-  const principal = vista ? (
+  const principal = pedeLogin ? (
+    auth.fase === "verificando" ? null : (
+      <TelaLogin cliente={CLIENTE_AUTH} onEntrar={auth.entrar} onModoSimulado={() => sessao.trocarModo("simulado")} compacto={!desktop} />
+    )
+  ) : vista ? (
     <Vistas vista={vista} modelo={modelo} onVista={setVista} onConversa={() => setVista(null)} onEnviar={enviar} />
   ) : (
     <>
@@ -72,7 +91,7 @@ export function App() {
         onEnviar={enviar}
         onRepetir={sessao.repetir}
         onModoSimulado={modo === "ao-vivo" ? () => sessao.trocarModo("simulado") : undefined}
-        vazio={<BoasVindas onEscolher={enviar} desabilitado={!pronta || ocupado} compacto={!desktop} />}
+        vazio={<BoasVindas nome={modo === "ao-vivo" ? auth.persona?.displayName : undefined} onEscolher={enviar} desabilitado={!pronta || ocupado} compacto={!desktop} />}
       />
       <Composer
         sugestoes={sugestoesDoComposer(modelo)}

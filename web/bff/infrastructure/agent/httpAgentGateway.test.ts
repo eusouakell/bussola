@@ -6,7 +6,10 @@ import { HttpAgentGateway } from "./httpAgentGateway.ts";
 
 type Call = [URL, RequestInit];
 
-function gateway(response: () => Response, options: { idTokens?: { idToken: (a: string) => Promise<string> } } = {}) {
+function gateway(
+  response: () => Response,
+  options: { idTokens?: { idToken: (a: string) => Promise<string> }; audience?: string } = {},
+) {
   const fetch = vi.fn<(...args: Call) => Promise<Response>>(async () => response());
   const agent = new HttpAgentGateway({
     baseUrl: "https://bussola-agent.example.run.app",
@@ -63,6 +66,16 @@ describe("HttpAgentGateway", () => {
     await agent.createSession("fernando", {});
     expect(idToken).toHaveBeenCalledWith("https://bussola-agent.example.run.app");
     expect(new Headers(fetch.mock.calls[0][1].headers).get("Authorization")).toBe("Bearer id-token");
+  });
+
+  it("com audience explícita (URL de tag), o token usa a URL principal do serviço", async () => {
+    const idToken = vi.fn(async () => "id-token");
+    const { agent } = gateway(() => Response.json({ id: "s1" }), {
+      idTokens: { idToken },
+      audience: "https://bussola-agent-principal.example.run.app",
+    });
+    await agent.createSession("fernando", {});
+    expect(idToken).toHaveBeenCalledWith("https://bussola-agent-principal.example.run.app");
   });
 
   it("erro HTTP ou de rede vira AgentUnavailable com código curto", async () => {
