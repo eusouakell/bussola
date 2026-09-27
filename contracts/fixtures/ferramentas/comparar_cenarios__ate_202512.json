@@ -27,7 +27,7 @@
         "viavel": true
       },
       {
-        "aporte_mensal": 2287.22,
+        "aporte_mensal": 2277.07,
         "cortes_sugeridos": [
           {
             "macro": "Restaurantes",
@@ -48,11 +48,6 @@
             "macro": "Viagens",
             "micro": "Outros gastos de viagem",
             "valor_mensal": 16.24
-          },
-          {
-            "macro": "Transporte publico",
-            "micro": "Passagem de onibus",
-            "valor_mensal": 10.15
           },
           {
             "macro": "Lazer",
@@ -90,7 +85,6 @@
           "Exige reduzir R$ 88/mês em Compras.",
           "Exige reduzir R$ 50/mês em Assinaturas.",
           "Exige reduzir R$ 16/mês em Outros gastos de viagem.",
-          "Exige reduzir R$ 10/mês em Passagem de onibus.",
           "Exige reduzir R$ 7/mês em Outros entretenimentos.",
           "Exige reduzir R$ 7/mês em Eletronicos.",
           "Exige reduzir R$ 6/mês em Outras comidas e bebidas.",

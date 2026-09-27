@@ -65,7 +65,7 @@
     "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
     "juros": 70.15,
     "renda": 7864.76,
-    "saldo_final": 16539.13,
+    "saldo_final": 15854.09,
     "saldo_inicial": 11857.51,
     "saldo_maximo": 16609.28,
     "saldo_minimo": 9879.92,
@@ -78,7 +78,7 @@
     "juros": 39.44,
     "renda": 5194.7,
     "saldo_final": 17048.19,
-    "saldo_inicial": 15947.55,
+    "saldo_inicial": 15854.09,
     "saldo_maximo": 17627.03,
     "saldo_minimo": 15255.68,
     "sobra": 144.39
@@ -89,8 +89,8 @@
     "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
     "juros": 58.71,
     "renda": 8036.63,
-    "saldo_final": 22458.66,
-    "saldo_inicial": 17080.93,
+    "saldo_final": 21828.28,
+    "saldo_inicial": 17048.19,
     "saldo_maximo": 22517.37,
     "saldo_minimo": 17048.19,
     "sobra": 3281.4
@@ -102,7 +102,7 @@
     "juros": 51.49,
     "renda": 10415.61,
     "saldo_final": 28136.75,
-    "saldo_inicial": 21834.06,
+    "saldo_inicial": 21828.28,
     "saldo_maximo": 30235.65,
     "saldo_minimo": 21828.28,
     "sobra": 4968.74
@@ -114,7 +114,7 @@
     "juros": 159.43,
     "renda": 10643.42,
     "saldo_final": 34962.27,
-    "saldo_inicial": 28218.35,
+    "saldo_inicial": 28136.75,
     "saldo_maximo": 36062.19,
     "saldo_minimo": 28136.75,
     "sobra": 5827.88
@@ -126,7 +126,7 @@
     "juros": 29.24,
     "renda": 10812.15,
     "saldo_final": 40585.89,
-    "saldo_inicial": 34995.99,
+    "saldo_inicial": 34962.27,
     "saldo_maximo": 41436.2,
     "saldo_minimo": 34909.73,
     "sobra": 4748.58
@@ -137,7 +137,7 @@
     "id_usuario": "31e94f2f-1463-49f9-a41a-b3f220ed976a",
     "juros": 104.13,
     "renda": 5724.56,
-    "saldo_final": 43456.78,
+    "saldo_final": 43325.52,
     "saldo_inicial": 40585.89,
     "saldo_maximo": 43710.69,
     "saldo_minimo": 38853.25,
@@ -161,8 +161,8 @@
     "id_usuario": "36a21505-d6d4-42d3-b319-d51a133c7269",
     "juros": 88.25,
     "renda": 5550.27,
-    "saldo_final": 4782.63,
-    "saldo_inicial": 1288.69,
+    "saldo_final": 4583.13,
+    "saldo_inicial": 1220.38,
     "saldo_maximo": 4782.63,
     "saldo_minimo": -516.78,
     "sobra": 2511.77
@@ -174,7 +174,7 @@
     "juros": 0.0,
     "renda": 7398.4,
     "saldo_final": 8290.71,
-    "saldo_inicial": 4790.29,
+    "saldo_inicial": 4583.13,
     "saldo_maximo": 9534.35,
     "saldo_minimo": 4520.38,
     "sobra": 2467.12
@@ -186,7 +186,7 @@
     "juros": 147.61,
     "renda": 8409.42,
     "saldo_final": 14262.66,
-    "saldo_inicial": 8311.76,
+    "saldo_inicial": 8290.71,
     "saldo_maximo": 14597.11,
     "saldo_minimo": 7943.42,
     "sobra": 4992.52
@@ -210,7 +210,7 @@
     "juros": 0.0,
     "renda": 6958.94,
     "saldo_final": 17652.15,
-    "saldo_inicial": 16106.27,
+    "saldo_inicial": 16085.22,
     "saldo_maximo": 18703.94,
     "saldo_minimo": 13931.16,
     "sobra": 527.17
@@ -234,7 +234,7 @@
     "juros": 113.4,
     "renda": 8401.94,
     "saldo_final": 25228.44,
-    "saldo_inicial": 20419.76,
+    "saldo_inicial": 20402.83,
     "saldo_maximo": 26397.96,
     "saldo_minimo": 20324.61,
     "sobra": 4218.74
@@ -258,7 +258,7 @@
     "juros": 0.0,
     "renda": 9185.15,
     "saldo_final": 36020.16,
-    "saldo_inicial": 29612.6,
+    "saldo_inicial": 29573.67,
     "saldo_maximo": 36641.92,
     "saldo_minimo": 29573.67,
     "sobra": 5812.02
@@ -282,7 +282,7 @@
     "juros": 115.79,
     "renda": 7603.54,
     "saldo_final": 47597.68,
-    "saldo_inicial": 44441.24,
+    "saldo_inicial": 44420.19,
     "saldo_maximo": 49320.95,
     "saldo_minimo": 43744.56,
     "sobra": 1509.25

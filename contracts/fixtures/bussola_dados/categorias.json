@@ -174,7 +174,7 @@
     "micro": "Outros emprestimos"
   },
   {
-    "corte_max_pct": 0.3,
+    "corte_max_pct": 0.2,
     "discricionaria": true,
     "macro": "Lazer",
     "micro": "Associacoes e clubes"
@@ -228,14 +228,14 @@
     "micro": "Videogames"
   },
   {
-    "corte_max_pct": 0.0,
-    "discricionaria": false,
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
     "macro": "Lojas e sites",
     "micro": "Artigos esportivos"
   },
   {
-    "corte_max_pct": 0.0,
-    "discricionaria": false,
+    "corte_max_pct": 0.2,
+    "discricionaria": true,
     "macro": "Lojas e sites",
     "micro": "Brinquedos e artigos infantis"
   },
@@ -252,8 +252,8 @@
     "micro": "Manutencao da casa"
   },
   {
-    "corte_max_pct": 0.0,
-    "discricionaria": false,
+    "corte_max_pct": 0.3,
+    "discricionaria": true,
     "macro": "Lojas e sites",
     "micro": "Moveis e decoracao"
   },
@@ -456,7 +456,7 @@
     "micro": "Outras comidas e bebidas"
   },
   {
-    "corte_max_pct": 0.3,
+    "corte_max_pct": 0.2,
     "discricionaria": true,
     "macro": "Restaurantes",
     "micro": "Padaria"
@@ -504,8 +504,8 @@
     "micro": "Transporte por app"
   },
   {
-    "corte_max_pct": 0.2,
-    "discricionaria": true,
+    "corte_max_pct": 0.0,
+    "discricionaria": false,
     "macro": "Transporte publico",
     "micro": "Passagem de onibus"
   },
@@ -564,7 +564,7 @@
     "micro": "Seguro de automovel"
   },
   {
-    "corte_max_pct": 0.3,
+    "corte_max_pct": 0.2,
     "discricionaria": true,
     "macro": "Viagens",
     "micro": "Compra de moedas"

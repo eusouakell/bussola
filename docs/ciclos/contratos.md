@@ -542,6 +542,30 @@ Geradas pelo 000 com `data/scripts/gerar_fixtures.py`, por SQL de referência
 direto no extrato. São **provisórias**: quando as tabelas oficiais estiverem
 prontas, o 001 regenera as fixtures a partir delas (PR `contracts:`).
 
+**Fixtures v1 (001).** O conjunto versionado agora sai de `make fixtures-v1`
+(`data/scripts/build_dados.py --fixtures contracts/fixtures`), que só lê
+`bussola_dados`:
+
+- as linhas de âncora e controle vêm do `RepositorioBigQuery` (modo `query`,
+  corte 202512, com a recorrência de `recorrentes` reaplicada até o corte);
+  `categorias` e `referencia_coorte` vêm inteiras;
+- os goldens saem de `metricas.<ferramenta>` sobre um `RepositorioFake`
+  dessas mesmas linhas, com as entradas acima (`oportunidades_corte` com
+  `top_n=10`; `simular_objetivo` e `comparar_cenarios` com a entrada
+  canônica; `resumo_mes__AAAAMM` com `ate_anomes = AAAAMM`). O teste
+  `tests/dados/test_fixtures_v1.py` confere que golden = métrica sobre as
+  linhas versionadas;
+- `bussola_dados/users.json` (personas do 008) e `rag/` não são tocados;
+- diferenças para o provisório: o seed de `categorias` muda 7 pares
+  (plan.md D-06 do 001), e "Passagem de onibus" deixa de ser discricionária.
+  Com isso, `oportunidades_corte` e `comparar_cenarios` mudam nos dois cortes
+  (no acelerado de 202506, aporte 1.660,85 e prazo 19). Em `perfil_mensal`,
+  `saldo_inicial` passa a ser o `saldo_final` do mês anterior (D-03 do 001),
+  o que muda `saldo_inicial`/`saldo_final` em alguns meses dos dois usuários.
+  Os demais goldens e as outras colunas ficam iguais;
+- `make fixtures` ainda gera o conjunto provisório e sobrescreve o v1. Use
+  só `make fixtures-v1` daqui em diante.
+
 - `usuarios.json`: âncora `36a21505-d6d4-42d3-b319-d51a133c7269` e controle
   `31e94f2f-1463-49f9-a41a-b3f220ed976a`. O controle serve aos testes
   negativos de escopo.

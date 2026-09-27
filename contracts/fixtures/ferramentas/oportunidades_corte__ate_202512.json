@@ -35,14 +35,6 @@
         "micro": "Outros gastos de viagem"
       },
       {
-        "criterio": "Categoria discricionária: corte de até 20% da média mensal no período.",
-        "discricionaria": true,
-        "economia_potencial_mensal": 10.15,
-        "macro": "Transporte publico",
-        "media_mensal": 50.75,
-        "micro": "Passagem de onibus"
-      },
-      {
         "criterio": "Categoria discricionária: corte de até 30% da média mensal no período.",
         "discricionaria": true,
         "economia_potencial_mensal": 7.4,
