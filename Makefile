@@ -9,15 +9,19 @@ endif
 
 MCP_PORT ?= 8080
 AGENT_PORT ?= 8000
+# shellcheck do sistema (o runner ubuntu do CI já tem); sem ele, o shellcheck-py pelo uvx.
+SHELLCHECK ?= $(shell command -v shellcheck 2>/dev/null || echo "uvx --from shellcheck-py==0.11.0.1 shellcheck")
 
 test:
 	cd mcp_server && BUSSOLA_FAKES=TRUE uv run pytest -m "not bq"
 	cd agent && BUSSOLA_FAKES=TRUE uv run pytest -m "not bq"
+	cd agent && BUSSOLA_FAKES=TRUE uv run pytest ../deploy/tests -p no:cacheprovider
 
 lint:
 	cd mcp_server && uv run ruff check . ../data/scripts && uv run ruff format --check . ../data/scripts
 	cd agent && uv run ruff check . ../deploy && uv run ruff format --check . ../deploy
 	cd agent && uv run ruff check ../eval/agente && uv run ruff format --check ../eval/agente
+	$(SHELLCHECK) deploy/*.sh
 
 format:
 	cd mcp_server && uv run ruff check --fix . ../data/scripts && uv run ruff format . ../data/scripts
@@ -89,3 +93,12 @@ eval-agente:
 
 eval-agente-ao-vivo:
 	cd agent && GOOGLE_GENAI_USE_VERTEXAI=FALSE GOOGLE_API_KEY="$$(gcloud secrets versions access latest --secret=gemini-api-key --project $${GOOGLE_CLOUD_PROJECT:-batalha-time-07-lkbv})" uv run python ../eval/agente/rodar_eval.py --modo ao-vivo
+
+# --- Smoke de produção (ciclo 007). Só leitura; precisa de gcloud autenticado e
+# roles/iam.serviceAccountTokenCreator na SA. Ex.: make smoke SMOKE_ARGS="--tag c007".
+.PHONY: smoke
+
+SMOKE_ARGS ?=
+
+smoke:
+	cd agent && uv run python ../deploy/smoke.py $(SMOKE_ARGS)

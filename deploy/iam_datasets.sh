@@ -101,11 +101,14 @@ printf '%s' "${SA}" | grep -Eq '^[a-z0-9][a-z0-9.-]*@[a-z0-9.-]+\.gserviceaccoun
 
 MEMBRO="serviceAccount:${SA}"
 
+# As crases são identificadores do BigQuery DCL, não substituição de comando.
 dcl_grant() {
+  # shellcheck disable=SC2016
   printf 'GRANT `%s` ON SCHEMA `%s.%s` TO "%s"' "$2" "${PROJETO}" "$1" "${MEMBRO}"
 }
 
 dcl_revoke() {
+  # shellcheck disable=SC2016
   printf 'REVOKE `%s` ON SCHEMA `%s.%s` FROM "%s"' "$2" "${PROJETO}" "$1" "${MEMBRO}"
 }
 
