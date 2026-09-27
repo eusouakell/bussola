@@ -21,6 +21,7 @@ from google.genai import errors, types
 import bussola_agent
 from bussola_agent import callbacks, extensoes
 from bussola_agent.estado import CHAVES
+from bussola_agent.jornada import respostas_rapidas
 from bussola_agent.mcp_conexao import URL_PADRAO
 
 ANCORA = "36a21505-d6d4-42d3-b319-d51a133c7269"
@@ -106,6 +107,10 @@ def test_callbacks_instalados(importar_de_novo: Callable[[], ModuleType]) -> Non
     assert agente.before_tool_callback is callbacks.before_tool
     assert agente.after_tool_callback is callbacks.after_tool
     assert agente.before_agent_callback is modulo.inicializar_sessao
+    assert callbacks.registrados("after_model") == [respostas_rapidas.anexar]
+    assert all(
+        callbacks.registrados(f) == [] for f in ("before_model", "before_tool", "after_tool")
+    )
 
 
 def test_carregar_extensoes_e_chamado(

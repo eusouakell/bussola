@@ -3,9 +3,11 @@
 - Ferramentas: o ``McpToolset`` do ``bussola-mcp`` mais as ferramentas
   registradas pelas extensões.
 - Instrução: um texto base mínimo em pt-BR, mais os trechos das extensões.
-- Callbacks: os 4 agregados de :mod:`bussola_agent.callbacks` (no 000, as
-  cadeias estão vazias) e um ``before_agent_callback`` que preenche o escopo
-  da sessão com ``ANCHOR_USER_ID`` e ``REPLAY_START_ANOMES`` quando ausente.
+- Callbacks: os 4 agregados de :mod:`bussola_agent.callbacks` e um
+  ``before_agent_callback`` que preenche o escopo da sessão com
+  ``ANCHOR_USER_ID`` e ``REPLAY_START_ANOMES`` quando ausente. A única cadeia
+  preenchida aqui é ``after_model``, com as respostas rápidas de
+  :mod:`bussola_agent.jornada.respostas_rapidas`.
 - Modelo: ``BUSSOLA_MODEL`` seguido dos outros Flash verificados pelo smoke,
   com uma retentativa por modelo. Um 503 de demanda alta ou um 429 passa para
   o próximo da cadeia antes da primeira resposta, em vez de derrubar o turno.
@@ -25,6 +27,7 @@ from google.genai import types
 from bussola_agent import callbacks
 from bussola_agent.estado import CHAVE_ATE_ANOMES, CHAVE_ID_USUARIO, estado_inicial
 from bussola_agent.extensoes import carregar_extensoes, ferramentas, instrucoes
+from bussola_agent.jornada import respostas_rapidas
 from bussola_agent.logging_json import configurar_logging, obter_logger
 from bussola_agent.mcp_conexao import criar_toolset
 
@@ -112,6 +115,7 @@ def _instrucao() -> str:
 
 
 carregar_extensoes()
+callbacks.registrar("after_model", respostas_rapidas.anexar, respostas_rapidas.ORDEM)
 
 root_agent = Agent(
     name=NOME_AGENTE,
