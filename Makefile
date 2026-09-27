@@ -17,10 +17,12 @@ test:
 lint:
 	cd mcp_server && uv run ruff check . ../data/scripts && uv run ruff format --check . ../data/scripts
 	cd agent && uv run ruff check . ../deploy && uv run ruff format --check . ../deploy
+	cd agent && uv run ruff check ../eval/agente && uv run ruff format --check ../eval/agente
 
 format:
 	cd mcp_server && uv run ruff check --fix . ../data/scripts && uv run ruff format . ../data/scripts
 	cd agent && uv run ruff check --fix . ../deploy && uv run ruff format . ../deploy
+	cd agent && uv run ruff check --fix ../eval/agente && uv run ruff format ../eval/agente
 
 mcp:
 	cd mcp_server && BUSSOLA_FAKES=$${BUSSOLA_FAKES:-TRUE} PORT=$(MCP_PORT) uv run python -m bussola_mcp.server
@@ -76,3 +78,14 @@ helm-lint:
 # Renderiza o chart e valida as regras de plataforma (sem rede, sem GCP).
 test-helm:
 	cd agent && uv run pytest ../deploy/tests -p no:cacheprovider
+
+# --- Eval do agente (ciclo 004): números com fonte (AC-08). ---
+# Offline: roteiro no lugar do modelo, mock do 000 local (também roda no make test).
+# Ao vivo: Gemini real; a chave é lida do Secret Manager na hora e nunca impressa.
+.PHONY: eval-agente eval-agente-ao-vivo
+
+eval-agente:
+	cd agent && uv run python ../eval/agente/rodar_eval.py --modo offline
+
+eval-agente-ao-vivo:
+	cd agent && GOOGLE_GENAI_USE_VERTEXAI=FALSE GOOGLE_API_KEY="$$(gcloud secrets versions access latest --secret=gemini-api-key --project $${GOOGLE_CLOUD_PROJECT:-batalha-time-07-lkbv})" uv run python ../eval/agente/rodar_eval.py --modo ao-vivo

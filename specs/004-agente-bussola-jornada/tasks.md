@@ -47,7 +47,8 @@ Legenda: `[x]` feito, `[ ]` pendente. Commits pequenos (`agent:`, `eval:`,
 
 ## Fase 7: eval e rastreabilidade
 
-- [ ] T060 `eval/agente/perguntas.yaml` + `rodar_eval.py` (offline e ao vivo),
-  alvo no `Makefile` (FR-017).
+- [x] T060 `eval/agente/perguntas.yaml` + `rodar_eval.py` (offline e ao vivo),
+  alvo no `Makefile` (FR-017); offline também no `make test`
+  (`tests/jornada/test_eval_offline.py`).
 - [ ] T061 Rodar eval offline e ao vivo; `eval/agente/RESULTADOS.md`.
 - [ ] T062 `traceability.md`; `make lint` e `make test` verdes.
