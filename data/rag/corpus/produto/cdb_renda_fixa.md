@@ -3,7 +3,7 @@ titulo: CDB / renda fixa
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: CDB (página oficial)
-fonte_url: https://exemplo.test/investimentos/tipos-de-investimentos/cdb/
+fonte_url: https://www.itau.com.br/investimentos/tipos-de-investimentos/cdb/
 ---
 
 ## CDB e renda fixa: o que é e para que serve

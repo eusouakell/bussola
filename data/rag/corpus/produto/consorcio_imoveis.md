@@ -3,7 +3,7 @@ titulo: Consórcio de Imóveis
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: Consórcios (página oficial)
-fonte_url: https://exemplo.test/consorcios
+fonte_url: https://www.itau.com.br/consorcios
 ---
 
 ## Consórcio de Imóveis: o que é e para que serve

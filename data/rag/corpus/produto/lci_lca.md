@@ -3,7 +3,7 @@ titulo: LCI / LCA
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: Tipos de investimentos (página oficial)
-fonte_url: https://exemplo.test/investimentos/tipos-de-investimentos/
+fonte_url: https://www.itau.com.br/investimentos/tipos-de-investimentos/
 ---
 
 ## LCI e LCA: o que é e para que serve

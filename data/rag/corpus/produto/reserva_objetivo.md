@@ -3,7 +3,7 @@ titulo: Reserva por objetivo
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: Reserva por objetivo (página oficial)
-fonte_url: https://exemplo.test/reserva-objetivo
+fonte_url: https://feito.itau.com.br/cofrinhos-itau-seu-dinheiro-a-servico-dos-seus-sonhos
 ---
 
 ## Reserva por objetivo: o que é e para que serve

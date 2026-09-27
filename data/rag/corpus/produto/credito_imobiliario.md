@@ -3,7 +3,7 @@ titulo: Crédito Imobiliário
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: Crédito Imobiliário (página oficial)
-fonte_url: https://exemplo.test/emprestimos-financiamentos/credito-imobiliario
+fonte_url: https://www.itau.com.br/emprestimos-financiamentos/credito-imobiliario
 ---
 
 ## Crédito Imobiliário: o que é e para que serve

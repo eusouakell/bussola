@@ -3,7 +3,7 @@ titulo: Renegociação de dívidas
 tema: produto
 fonte_nome: Catálogo de produtos
 fonte_referencia: Renegociação de dívidas (página oficial)
-fonte_url: https://exemplo.test/renegociacao
+fonte_url: https://www.itau.com.br/renegociacao
 ---
 
 ## Renegociação de dívidas: o que é e para que serve
