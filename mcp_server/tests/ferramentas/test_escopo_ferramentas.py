@@ -19,8 +19,9 @@ from apoio_ferramentas import (
 )
 
 from bussola_mcp.contratos import ID_ANCORA, ID_CONTROLE, id_usuario_valido
+from bussola_mcp.dominio import metricas
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.ferramentas.fixture_backends import FixtureRepository, FixtureSearcher
-from bussola_mcp.ferramentas.golden_adapter import GoldenFixtureComputations
 from bussola_mcp.ferramentas.ports import ToolDependencies
 
 OUTRO = {ID_ANCORA: ID_CONTROLE, ID_CONTROLE: ID_ANCORA}
@@ -31,7 +32,7 @@ def _deps(fixtures, buscador=None):
     return ToolDependencies(
         repository=repositorio,
         searcher=buscador or FixtureSearcher(fixtures),
-        computations=GoldenFixtureComputations(fixtures, repositorio),
+        computations=DomainComputations(repositorio),
     )
 
 
@@ -67,27 +68,31 @@ async def test_saidas_nunca_citam_o_outro_cliente(fixtures_sinteticas, id_usuari
 
 
 async def test_controle_nao_recebe_os_numeros_do_ancora(fixtures_sinteticas):
-    """Vale para qualquer adaptador: hoje o controle recebe erro (D-06), depois do 001
-    recebe os próprios números, nunca os do âncora."""
+    """O controle recebe os próprios números, nunca os do âncora.
+
+    ``referencia_coorte`` fica de fora: é agregada por faixa de renda, sem dado
+    individual, e dois clientes da mesma faixa recebem a mesma referência.
+    """
     async with sessao(fixtures_sinteticas) as cliente:
-        for ferramenta in FERRAMENTAS_CLIENTE:
+        for ferramenta in (f for f in FERRAMENTAS_CLIENTE if f != "referencia_coorte"):
             ancora = await chamar(cliente, ferramenta, argumentos(ferramenta, ID_ANCORA))
             controle = await chamar(cliente, ferramenta, argumentos(ferramenta, ID_CONTROLE))
             assert "dados" in ancora, ferramenta
             assert controle.get("dados") != ancora["dados"], ferramenta
 
 
-async def test_referencia_coorte_usa_a_faixa_de_cada_cliente(fixtures_sinteticas):
-    """Nas fixtures sintéticas, âncora em 6k_10k e controle em 3k_6k."""
+@pytest.mark.parametrize("id_usuario", [ID_ANCORA, ID_CONTROLE])
+async def test_referencia_coorte_usa_a_faixa_de_cada_cliente(fixtures_sinteticas, id_usuario):
+    """A faixa vem da renda média do próprio cliente no corte (a mesma do perfil)."""
     async with sessao(fixtures_sinteticas) as cliente:
-        ancora = await chamar(
-            cliente, "referencia_coorte", argumentos("referencia_coorte", ID_ANCORA)
+        perfil = await chamar(
+            cliente, "perfil_financeiro", argumentos("perfil_financeiro", id_usuario)
         )
-        controle = await chamar(
-            cliente, "referencia_coorte", argumentos("referencia_coorte", ID_CONTROLE)
+        coorte = await chamar(
+            cliente, "referencia_coorte", argumentos("referencia_coorte", id_usuario)
         )
-    assert ancora["dados"]["faixa_renda"] == "6k_10k"
-    assert controle["dados"]["faixa_renda"] == "3k_6k"
+    faixa = metricas.income_band(perfil["dados"]["renda_media"])
+    assert coorte["dados"]["faixa_renda"] == faixa
 
 
 @pytest.mark.parametrize("id_usuario", [ID_ANCORA, ID_CONTROLE])

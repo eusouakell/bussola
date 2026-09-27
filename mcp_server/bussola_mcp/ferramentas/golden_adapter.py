@@ -1,10 +1,11 @@
 """Provisional ``FinancialComputations`` adapter backed by the golden fixtures.
 
-Cycle 001 (``dominio/metricas.py`` and ``dominio/simulacao.py``) is not in
-``main`` yet. Until it is, this adapter serves the golden envelopes of
-``contracts/fixtures/ferramentas/`` (contratos §8). It computes nothing: it
-only picks the golden that matches the request, without leaking data after
-the cut or data of another client (decisions D-03 to D-06 of the spec).
+No longer wired: since cycle 001 merged, ``computations.build_computations``
+returns ``DomainComputations`` in every mode. This adapter only remains for the
+tests of its own rules (D-03 to D-06 of the spec) until it is removed. It
+serves the golden envelopes of ``contracts/fixtures/ferramentas/``
+(contratos §8) and computes nothing: it only picks the golden that matches the
+request, without leaking data after the cut or data of another client.
 
 Rules:
 

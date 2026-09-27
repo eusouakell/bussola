@@ -237,7 +237,11 @@ async def test_fixtures_vazias_devolvem_indisponivel_do_mock(
 async def test_escopo_do_state_prevalece_no_mock_real(
     mock_com_usuarios: str, espiao_transporte: list[dict[str, Any]]
 ) -> None:
-    """O modelo pede o âncora, mas o ``state`` é do controle: o mock vê o controle."""
+    """O modelo pede o âncora, mas o ``state`` é do controle: o mock vê o controle.
+
+    Sem as tabelas no diretório de fixtures, o domínio (001) responde
+    ``INDISPONIVEL`` para qualquer cliente; o que importa é o argumento enviado.
+    """
     args_do_modelo = {"id_usuario": ANCORA, "ate_anomes": 202512}
     envelope = await chamar_ferramenta(
         "perfil_financeiro",
@@ -245,7 +249,7 @@ async def test_escopo_do_state_prevalece_no_mock_real(
         estado_inicial(CONTROLE, 202506),
         url=mock_com_usuarios,
     )
-    assert _codigo(envelope) == "DADOS_INSUFICIENTES"
+    assert _codigo(envelope) == ERRO_INDISPONIVEL
     assert espiao_transporte[0]["argumentos"] == {"id_usuario": CONTROLE, "ate_anomes": 202506}
     assert args_do_modelo == {"id_usuario": ANCORA, "ate_anomes": 202512}
 

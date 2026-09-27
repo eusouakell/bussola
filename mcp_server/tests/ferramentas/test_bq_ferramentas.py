@@ -38,7 +38,7 @@ repositorio_bq = pytest.importorskip(
 MODOS = ("query", "memoria")
 ENTRADA_GOLDEN = {
     "oportunidades_corte": {"top_n": 10},
-    "simular_objetivo": {"valor_alvo": 30000.0, "prazo_meses": 24},
+    "simular_objetivo": {"valor_alvo": 30000.0, "prazo_meses": 24, "aporte_mensal": None},
     "comparar_cenarios": {"valor_alvo": 30000.0, "prazo_meses": 24},
 }
 

@@ -45,7 +45,7 @@ async def test_cenario_do_ciclo_60_mil_em_24_meses_usa_o_dominio():
         envelope = await chamar(
             cliente,
             "simular_objetivo",
-            argumentos("simular_objetivo", valor_alvo=60000.0, prazo_meses=24),
+            argumentos("simular_objetivo", valor_alvo=60000.0, prazo_meses=24, aporte_mensal=None),
         )
     assert "erro" not in envelope
     dados = envelope["dados"]

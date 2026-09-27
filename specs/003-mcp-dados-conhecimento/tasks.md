@@ -61,4 +61,4 @@ offline no `make test`. Os `@pytest.mark.bq` ficam fora.
 ## Pendentes fora deste ciclo
 
 - [ ] T031 Publicar a revisão `c003` (`--no-traffic`): orquestrador
-- [ ] T032 Troca pós-001 em `ferramentas/computations.py` e `make test-bq` real (plan.md)
+- [x] T032 Troca pós-001 em `ferramentas/computations.py` (`DomainComputations`) e `make test-bq` real: goldens v1 reproduzidos nos modos `query` e `memoria`
