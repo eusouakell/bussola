@@ -48,18 +48,21 @@ Nada da linha de corte foi usado, então não há `corte.md`.
 
 ```text
 agent/bussola_agent/acompanhamento/
-  __init__.py      register() idempotente (ferramentas + instruções)
+  __init__.py      register() idempotente (ferramentas + instruções); FREE_TOOLS, SENSITIVE_TOOLS
   desvio.py        TOLERANCE, compute_deviation, baseline_by_macro, deviation_category
-  money.py         money(): arredondamento half-up com 2 casas
-  periods.py       next_month, months_between
-  progress.py      compute_progress (acumulado, restante, percentual, meses)
-  routes.py        simulate_locally, response_matches, build_routes
-  ports.py         McpGateway (Protocol), McpToolGateway, configure/get gateway e registry
-  plan_context.py  ActivePlan e resolve_active_plan (contexto > registro > state)
-  audit.py         record_event, log_event (campos §9)
+  money.py         money() (half-up, 2 casas), format_brl, format_months (texto pt-BR)
+  periods.py       next_month, months_between, month_range
+  progress.py      accumulated, compute_progress (acumulado, restante, percentual, meses)
+  routes.py        simulate_locally, response_matches, resolve_simulation, build_routes
+  ports.py         McpGateway (Protocol), McpToolGateway, configure/get gateway e registry, reset
+  plan_context.py  ActivePlan, resolve_active_plan (contexto > registro > state), lineage, history_for
+  envelopes.py     códigos e mensagens de erro/aviso pt-BR, error(), within_cut()
+  audit.py         record_event, record_follow_up, suggested_action (logs só com campos §9)
   tools.py         avancar_mes, status_plano, ajustar_plano
-  instructions.py  INSTRUCTIONS [(ordem, texto)], ordens 70–89
-  fakes.py         FixtureMcp (espelho do mock), FixtureMcpGateway, ScriptedLlm
+  instructions.py  INSTRUCTIONS [(ordem, texto)], ordens 70, 75, 80 e 85
+  fakes.py         FixtureMcp (espelho do mock), FixtureMcpGateway, fake_transport, ScriptedLlm,
+                   jornada simulada do 004/005 (escopo, solicitar_consentimento, gate) e o
+                   harness Conversation/build_conversation usado pela integração e pelo eval
 ```
 
 ### Fluxo de `avancar_mes`
@@ -125,8 +128,13 @@ ajustados herdam o início da linhagem.
   - escopo do adaptador real (`_chamar_mcp` substituído);
   - registro com o marcador `extensoes_reais`.
 - **Integração**:
-  - `InMemoryRunner` com o LLM roteirizado, de 202506 a 202508;
-  - escopo (004) e gate/consentimento (005) simulados;
-  - corte temporal verificado em todos os envelopes.
+  - `InMemoryRunner` com o LLM roteirizado, de 202506 a 202509, incluindo o
+    texto `"avançar um mês"` do front e o pedido de status;
+  - escopo (004) e gate/consentimento (005) simulados em `fakes.py`;
+  - corte temporal verificado em todos os envelopes;
+  - fidelidade: todo número citado no texto final aparece em algum envelope
+    do turno.
 - **Eval**: `eval/acompanhamento/rodar_eval.py` (`make eval-acompanhamento`)
-  gera `resultado.md`. Um teste roda a mesma função.
+  cobre de 202506 a 202512 e os casos de borda, e gera `resultado.md` e
+  `RESULTADOS.md`. `tests/acompanhamento/test_acomp_eval.py` roda a mesma
+  função em `make test`.

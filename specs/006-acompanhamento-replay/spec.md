@@ -144,7 +144,8 @@ acumulado, o percentual, o restante, o último status e o histórico.
 - **FR-013**: Logs JSON só com campos de §9. Sem prompt nem texto de
   lançamentos.
 - **FR-014**: Eval offline em `eval/acompanhamento/`: 202506 → 202509 com
-  desvio, recálculo, ajuste e auditoria.
+  desvio, recálculo, ajuste e auditoria (o roteiro implementado vai até
+  202512 e cobre também `FIM_DO_REPLAY` e os casos de borda).
 - **FR-015**: Testes de unidade e de integração (`InMemoryRunner` + LLM fake
   roteirizado + MCP fake no transporte), todos offline no `make test`.
 - **FR-016**: Os testes de contrato do 000 continuam descrevendo o agente
