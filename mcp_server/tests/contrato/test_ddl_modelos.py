@@ -13,11 +13,13 @@ from typing import Any, Union, get_args, get_origin
 import pytest
 from pydantic import BaseModel
 
-from bussola_mcp.contratos import MODELOS_TABELA
+from bussola_mcp.contratos import MODELOS_TABELA, SUPPORT_TABLE_MODELS
 
 DIR_BIGQUERY = Path(__file__).resolve().parents[3] / "contracts" / "bigquery"
 ARQUIVOS_DDL = ("bussola_dados.sql",)
 DATASETS = tuple(arquivo.removesuffix(".sql") for arquivo in ARQUIVOS_DDL)
+# Métricas (MODELOS_TABELA) + tabelas de apoio, como bussola_dados.users.
+MODELOS_DDL = {**MODELOS_TABELA, **SUPPORT_TABLE_MODELS}
 
 TIPOS_ESCALARES: dict[Any, str] = {
     str: "STRING",
@@ -102,13 +104,14 @@ def ddl() -> dict[str, dict[str, tuple[str, bool]]]:
 
 def test_mesmas_tabelas(ddl):
     assert {nome.split(".")[0] for nome in ddl} == set(DATASETS)
-    assert set(ddl) == set(MODELOS_TABELA)
+    assert set(ddl) == set(MODELOS_DDL)
+    assert not set(MODELOS_TABELA) & set(SUPPORT_TABLE_MODELS)
 
 
-@pytest.mark.parametrize("tabela", sorted(MODELOS_TABELA))
+@pytest.mark.parametrize("tabela", sorted(MODELOS_DDL))
 def test_colunas_tipos_e_nulidade(ddl, tabela):
     no_ddl = ddl[tabela]
-    no_modelo = colunas_do_modelo(MODELOS_TABELA[tabela])
+    no_modelo = colunas_do_modelo(MODELOS_DDL[tabela])
     assert list(no_ddl) == list(no_modelo), "nomes ou ordem das colunas divergem"
     for coluna, (tipo_ddl, anulavel_ddl) in no_ddl.items():
         tipo_modelo, anulavel_modelo = no_modelo[coluna]
@@ -125,7 +128,7 @@ def test_colunas_de_bussola_dados_sao_obrigatorias(ddl):
 def test_rag_nao_tem_tabela_no_bigquery():
     """O corpus de conhecimento fica no repositório (Q-17)."""
     assert not (DIR_BIGQUERY / "bussola_rag.sql").exists()
-    assert not [t for t in MODELOS_TABELA if t.startswith("bussola_rag.")]
+    assert not [t for t in MODELOS_DDL if t.startswith("bussola_rag.")]
 
 
 def test_parser_do_ddl(tmp_path):

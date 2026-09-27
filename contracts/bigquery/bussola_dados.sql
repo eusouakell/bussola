@@ -68,3 +68,13 @@ CREATE TABLE IF NOT EXISTS bussola_dados.referencia_coorte (
   mediana FLOAT64 NOT NULL,
   qtd_usuarios INT64 NOT NULL
 );
+
+-- Personas do login simulado (web/bff). Uma linha por massa sintética; sem senha
+-- nem hash (o hash fica só no Secret Manager). Carga: data/scripts/build_dados.py.
+CREATE TABLE IF NOT EXISTS bussola_dados.users (
+  login STRING NOT NULL,
+  id_usuario STRING NOT NULL,
+  display_name STRING NOT NULL,
+  summary STRING NOT NULL,
+  featured BOOL NOT NULL
+);

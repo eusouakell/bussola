@@ -59,6 +59,7 @@ def test_parse_bussola_dados() -> None:
         "bussola_dados.parcelas",
         "bussola_dados.categorias",
         "bussola_dados.referencia_coorte",
+        "bussola_dados.users",
     ]
     perfil = tabelas["bussola_dados.perfil_mensal"].colunas
     assert len(perfil) == 10
@@ -194,7 +195,7 @@ def test_plano_cria_os_tres_datasets() -> None:
     plano = ddl.montar_plano()
     assert list(dict.fromkeys(i.dataset for i in plano)) == DATASETS
     assert [i.alvo for i in plano if i.tipo == "schema"] == DATASETS
-    assert len(plano) == 3 + 7 + 4 + 4
+    assert len(plano) == 3 + 8 + 4 + 4
     app = {i.tabela: i.colunas for i in plano if i.dataset == "bussola_app" and i.tabela}
     dev = {i.tabela: i.colunas for i in plano if i.dataset == "bussola_app_dev" and i.tabela}
     assert dev == app
@@ -349,7 +350,7 @@ def test_aplica_com_cliente_falso(
     assert ddl.main([], criar_cliente=fabrica) == 0
     ((projeto, cliente),) = clientes
     assert projeto == "projeto-teste"
-    assert len(cliente.queries) == 18
+    assert len(cliente.queries) == 19
     assert all(loc == "us-central1" for _, loc in cliente.queries)
     assert all(re.match(r"CREATE (SCHEMA|TABLE) IF NOT EXISTS ", sql) for sql, _ in cliente.queries)
     assert "sem divergência" in capsys.readouterr().out
@@ -367,4 +368,4 @@ def test_schema_divergente_e_reportado_sem_alterar(capsys: pytest.CaptureFixture
     assert "bussola_app_dev.planos: coluna session_id ausente na tabela" in erro
     assert "bussola_dados.categorias: não encontrado após aplicar o DDL" in erro
     assert "nada foi alterado" in erro
-    assert len(cliente.queries) == 18  # só os CREATE ... IF NOT EXISTS do plano
+    assert len(cliente.queries) == 19  # só os CREATE ... IF NOT EXISTS do plano

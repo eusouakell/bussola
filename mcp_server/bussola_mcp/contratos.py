@@ -236,6 +236,30 @@ MODELOS_TABELA: dict[str, type[_Modelo]] = {
     "bussola_dados.referencia_coorte": RefCoorte,
 }
 
+
+# §3 personas do login simulado (web/bff; carga por data/scripts/build_dados.py)
+
+
+class UserPersona(_Modelo):
+    """Linha de ``bussola_dados.users``: persona sintética do login simulado.
+
+    Sem senha nem hash (o hash fica só no Secret Manager). ``id_usuario`` existe no
+    extrato e é UUID v4 em minúsculas; o navegador só conhece ``login``.
+    """
+
+    login: str
+    id_usuario: str
+    display_name: str
+    summary: str
+    featured: bool
+
+
+# Tabelas de apoio (fora das métricas e das fixtures de ferramenta). O teste DDL ↔
+# Pydantic compara o DDL com a união de MODELOS_TABELA e SUPPORT_TABLE_MODELS.
+SUPPORT_TABLE_MODELS: dict[str, type[_Modelo]] = {
+    "bussola_dados.users": UserPersona,
+}
+
 # ---------------------------------------------------------------------------
 # §5 envelopes
 # ---------------------------------------------------------------------------

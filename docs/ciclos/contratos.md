@@ -139,6 +139,7 @@ dois (Q-10 do 000).
 | `parcelas` | `id_usuario STRING, anomes INT64, descr STRING, macro STRING, parcela_atual INT64, parcela_total INT64, vlr FLOAT64` | Substitui `parcelas_dividas`. Juros ficam em `perfil_mensal.juros`. |
 | `categorias` | `macro STRING, micro STRING, discricionaria BOOL, corte_max_pct FLOAT64` | Seed versionado em `data/sql/`. Base de `oportunidades_corte`. |
 | `referencia_coorte` | `faixa_renda STRING, macro STRING, media FLOAT64, mediana FLOAT64, qtd_usuarios INT64` | Agregado (P1). Faixas: `ate_3k`, `3k_6k`, `6k_10k`, `10k_20k`, `acima_20k`. |
+| `users` | `login STRING, id_usuario STRING, display_name STRING, summary STRING, featured BOOL` | Personas do login simulado (`web/bff`). Tabela de apoio, fora das métricas: modelo `UserPersona` em `SUPPORT_TABLE_MODELS`. Fonte: `contracts/fixtures/bussola_dados/users.json`, igual a `web/fixtures/users.json`. Carga por `data/scripts/build_dados.py`, que confere cada `id_usuario` (UUID v4 em minúsculas) no extrato. Regras de linha de `web/bff/domain/userAccount.ts`. **Sem senha nem hash** (o hash fica só no Secret Manager). |
 
 `capacidade_poupanca` **não é tabela**: é calculada em
 `dominio/metricas.py` a partir de `perfil_mensal` filtrado por `ate_anomes`.
