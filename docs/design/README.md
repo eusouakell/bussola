@@ -23,7 +23,7 @@ copy e estados. Para ver as telas, abra o canvas.
 - **Tipografia:** Nunito Sans (texto) e JetBrains Mono (Bastidores, IDs).
   Se o brand kit oficial ia.i/Itaú chegar, ele prevalece sobre acento e
   tipografia.
-- **Acento:** `#EC7000`, com `#DB6600` no CTA e `#A84F00` para texto sobre
+- **Acento:** `#FF6200`, com `#FF6200` no CTA e `#FF6200` para texto sobre
   claro.
 
 ## Frames

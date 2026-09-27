@@ -179,7 +179,7 @@ até 5 minutos, e depois implementada como front web.
   - Gasto médio: R$ 4.615
   - **Sobra média: R$ 2.836/mês**, com sparkline de 6 meses
   - Saldo mín −R$ 2.072 · máx R$ 49.321
-  - Aviso âmbar: "Seu saldo ficou negativo em 1 mês do período."
+  - Aviso (laranja): "Seu saldo ficou negativo em 1 mês do período."
 - Maiores gastos: Aluguel R$ 1.077 · Comer fora R$ 364 · Assinaturas
   R$ 101.
 - `CardDividas`: "Sem financiamentos ativos · juros pagos ≈ R$ 61/mês."
@@ -286,13 +286,15 @@ até 5 minutos, e depois implementada como front web.
 - **Linguagem visual: Dynamic Glass.** Glassmorphism dinâmico, na linha do
   Liquid Glass: camadas translúcidas com desfoque de fundo que flutuam sobre
   um ambiente vivo.
-  - **Fundo ambiente:** um gradiente/mesh suave e quente, com blobs laranja,
-    pêssego e areia, em movimento lento (loop de 20–30 s, quase
-    imperceptível).
+  - **Fundo ambiente:** um gradiente/mesh suave sobre `color.background.default`
+    e `color.background.surface`, com blobs só de cores da paleta (laranja,
+    azul marinho, cinza azulado e verde) em baixa opacidade, em movimento
+    lento (loop de 20–30 s, quase imperceptível).
   - **O fundo reage à jornada:** o tint muda sutilmente a cada estado do
-    stepper. OBJETIVO/ENTENDER mais neutros, ORIENTAR mais quente, AGIR com
-    um toque de verde, ACOMPANHAR âmbar em caso de desvio. As superfícies de
-    vidro herdam esse tint, e é isso que torna o vidro "dinâmico".
+    stepper. OBJETIVO/ENTENDER mais neutros (azul marinho e cinza azulado),
+    ORIENTAR com mais laranja, AGIR com um toque de verde, ACOMPANHAR em laranja
+    em caso de desvio. As superfícies de vidro herdam esse tint, e é isso que
+    torna o vidro "dinâmico".
   - **Hierarquia de vidro em 3 níveis:**
     1. *Chrome*: header, stepper, composer, barra de demo e painel
        Bastidores. É o vidro mais transparente e flutuante.
@@ -305,24 +307,42 @@ até 5 minutos, e depois implementada como front web.
     - Brilho interno sutil e sombra difusa colorida pelo tint.
     - Leve highlight que acompanha o cursor nos cards clicáveis (cenários,
       CTAs).
-  - **Mensagens do cliente** são pílulas de vidro tingidas de laranja. As
-    do agente ficam direto sobre o card de vidro, sem balão pesado.
+  - **Mensagens do cliente** são pílulas de vidro tingidas de
+    `color.brand.primary` (laranja), com texto em `color.text.primary`. As do
+    agente ficam direto sobre o card de vidro, sem balão pesado.
   - **Legibilidade vence o efeito.** Texto e números nunca ficam sobre vidro
     muito transparente. Quando o fundo competir, aumente a opacidade ou
     aplique um scrim, e garanta contraste AA medido sobre o pior caso do
     fundo.
-- **Paleta:**
-  - Acento laranja do ecossistema Itaú/ia.i (ex. `#EC7000`), usado com
-    parcimônia: CTA primário, estado atual do stepper, selo "Recomendado".
-  - Neutros quentes. O "fundo" é o ambiente em gradiente descrito acima.
-  - Estados semânticos: verde para viável, sucesso e consentimento aceito;
-    âmbar para aviso e desvio leve; vermelho só para erro e desvio grave.
+- **Paleta (oficial Itaú PF).** **Toda cor do produto sai desta tabela**, com
+  transparência quando preciso (vidro, halos, sombras); nenhum outro tom:
+
+  | Token semântico | Hex | Onde usar |
+  |---|---|---|
+  | `color.brand.primary` | `#FF6200` | Laranja principal: CTA primário, estado atual do stepper, selo "Recomendado", destaques de valor e de transação, avisos e desvio leve |
+  | `color.brand.secondary` | `#02036C` | Azul marinho: header, cards de alta relevância, sombras, base do modo escuro |
+  | `color.background.default` | `#FFFFFF` | Fundo principal das telas |
+  | `color.background.surface` | `#F4F6F9` | Cinza claro dos cards e blocos |
+  | `color.text.primary` | `#02036C` | Títulos, números-chave, valores e labels principais |
+  | `color.text.secondary` | `#5C6B79` | Textos de apoio, datas, descrições secundárias |
+  | `color.feedback.success` | `#0F470C` | Viável, sucesso, consentimento aceito, saldo positivo |
+  | `color.feedback.error` | `#E60000` | Erro e desvio grave |
+
+  - **Contraste medido (WCAG 2.x):** `text.primary` sobre branco 17,0:1;
+    `text.secondary` 5,5:1; `feedback.success` 10,9:1; `feedback.error` 4,8:1.
+    Branco sobre `#FF6200` dá só **3,0:1**: serve para texto grande (≥ 24 px,
+    ou ≥ 18,66 px em negrito), ícones e componentes de UI; texto normal sobre
+    laranja usa `#02036C` (5,7:1). Nunca use laranja para texto corrido.
+  - A paleta não tem âmbar, violeta, petróleo nem tons de modo escuro: aviso e
+    desvio leve usam o laranja; no modo escuro, o que ficaria ilegível sobre o
+    azul marinho usa `#FFFFFF`/`#F4F6F9` e o significado fica no ícone e no
+    rótulo.
 - **Tags semânticas**, cada uma com cor e ícone próprios, para nunca depender
   só de cor:
-  - Diagnóstico: azul-petróleo
-  - Simulação: violeta
-  - Recomendação: laranja
-  - Ação: verde com ícone de escudo
+  - Diagnóstico: `color.brand.secondary` (azul marinho)
+  - Simulação: `color.text.secondary` (cinza azulado)
+  - Recomendação: `color.brand.primary` (laranja)
+  - Ação: `color.feedback.success` (verde) com ícone de escudo
 - **Tipografia:**
   - Sans-serif humanista.
   - **Algarismos tabulares** em todos os valores.
@@ -338,8 +358,8 @@ até 5 minutos, e depois implementada como front web.
     novo estado (~600 ms).
   - Cards de vidro entrando com fade + leve scale/blur-in, os cenários em
     sequência.
-- **Modo escuro:** desejável. Nele, o vidro é fumê (preto translúcido), com
-  o mesmo ambiente em tons mais profundos.
+- **Modo escuro:** desejável. Nele, o vidro é fumê (azul marinho translúcido,
+  `#02036C`), com o mesmo ambiente sobre essa base, só com cores da paleta.
 - **Acessibilidade:**
   - Contraste AA.
   - Foco visível, com anel luminoso no vidro.
@@ -377,17 +397,18 @@ A implementação usa **Tailwind CSS (v4)**. Desenhe pensando nisso:
 
 - **Tokens como tema Tailwind.** Entregue os tokens prontos para um bloco
   `@theme` (CSS variables):
-  - cores: acento, neutros, semânticas, tags e os tints por estado da
-    jornada;
+  - cores: só os 8 tokens da paleta oficial (§8), as tags e os tints por
+    estado da jornada, todos escolhidos entre elas;
   - raios, sombras e tipografia;
   - níveis de blur.
-  - Nomes sugeridos: `--color-accent`, `--color-tag-diagnostico`,
-    `--color-tint-orientar`, `--radius-card`, `--blur-glass`.
+  - Nomes sugeridos: `--color-accent` (`#FF6200`), `--color-ink` (`#02036C`),
+    `--color-tag-diagnostico`, `--color-tint-orientar`, `--radius-card`,
+    `--blur-glass`.
 - **Receitas de vidro como utilitários.** Para cada nível da hierarquia de
   vidro (chrome, card, consentimento), especifique a combinação em classes
   Tailwind, claro e escuro. Exemplo de formato:
   - chrome: `bg-white/40 backdrop-blur-2xl backdrop-saturate-150 border
-    border-white/50 shadow-[…] dark:bg-black/30 dark:border-white/10`;
+    border-white/50 shadow-[…] dark:bg-ink/30 dark:border-white/10`;
   - card: `bg-white/75 backdrop-blur-xl …`.
   - Proponha nomes de utilitários customizados (`@utility glass-chrome`,
     `glass-card`, `glass-consent`) para o time reutilizar.
