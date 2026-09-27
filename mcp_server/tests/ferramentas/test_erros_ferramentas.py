@@ -19,6 +19,7 @@ from apoio_ferramentas import (
     argumentos,
     chamar,
     codigo,
+    deps_golden,
     sessao,
 )
 
@@ -59,7 +60,8 @@ def _reescrever_tabela(fixtures: Path, tabela: str, filtro) -> None:
 
 
 async def _codigo_de(fixtures: Path, ferramenta: str, args: dict, deps=None) -> dict:
-    async with sessao(fixtures, deps) as cliente:
+    """Sem ``deps``, usa o adaptador de golden explícito (regras D-04 a D-06)."""
+    async with sessao(deps=deps or deps_golden(fixtures)) as cliente:
         return await chamar(cliente, ferramenta, args)
 
 

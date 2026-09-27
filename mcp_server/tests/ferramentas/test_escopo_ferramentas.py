@@ -9,6 +9,7 @@ import json
 import pytest
 from apoio_ferramentas import (
     BUSCA,
+    FERRAMENTAS_CLIENTE,
     TODAS,
     BuscadorEspiao,
     RepositorioEspiao,
@@ -65,13 +66,15 @@ async def test_saidas_nunca_citam_o_outro_cliente(fixtures_sinteticas, id_usuari
             assert id_usuario not in texto, ferramenta
 
 
-async def test_controle_nao_recebe_os_golden_do_ancora(fixtures_sinteticas):
+async def test_controle_nao_recebe_os_numeros_do_ancora(fixtures_sinteticas):
+    """Vale para qualquer adaptador: hoje o controle recebe erro (D-06), depois do 001
+    recebe os próprios números, nunca os do âncora."""
     async with sessao(fixtures_sinteticas) as cliente:
-        for ferramenta in TODAS:
-            if ferramenta in (BUSCA, "referencia_coorte"):
-                continue
-            envelope = await chamar(cliente, ferramenta, argumentos(ferramenta, ID_CONTROLE))
-            assert "dados" not in envelope, ferramenta
+        for ferramenta in FERRAMENTAS_CLIENTE:
+            ancora = await chamar(cliente, ferramenta, argumentos(ferramenta, ID_ANCORA))
+            controle = await chamar(cliente, ferramenta, argumentos(ferramenta, ID_CONTROLE))
+            assert "dados" in ancora, ferramenta
+            assert controle.get("dados") != ancora["dados"], ferramenta
 
 
 async def test_referencia_coorte_usa_a_faixa_de_cada_cliente(fixtures_sinteticas):

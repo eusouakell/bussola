@@ -11,6 +11,7 @@ from apoio_ferramentas import (
     DIR_OFICIAL,
     argumentos,
     chamar,
+    deps_golden,
     ler_golden,
     sessao,
 )
@@ -69,7 +70,7 @@ async def test_resumo_mes_nao_depende_do_corte_quando_o_mes_esta_disponivel():
 @pytest.mark.parametrize("ferramenta", FERRAMENTAS_GOLDEN)
 async def test_corte_intermediario_serve_o_golden_de_202506_com_aviso(ferramenta):
     """Decisão D-04: 202507–202511 → golden de 202506, período até 202506 e aviso."""
-    async with sessao(DIR_OFICIAL) as cliente:
+    async with sessao(deps=deps_golden(DIR_OFICIAL)) as cliente:
         envelope = await chamar(cliente, ferramenta, _argumentos_golden(ferramenta, 202509))
     golden = ler_golden(DIR_OFICIAL, arquivo_golden(ferramenta, 202506))
     assert envelope["dados"] == golden["dados"]
@@ -99,7 +100,7 @@ async def test_oportunidades_top_n_padrao_e_5():
 @pytest.mark.parametrize("ferramenta", ["simular_objetivo", "comparar_cenarios"])
 async def test_simulacao_com_entrada_nao_canonica_traz_aviso(ferramenta):
     """Decisão D-05: enquanto o 001 não chega, a resposta é a canônica e o aviso diz isso."""
-    async with sessao(DIR_OFICIAL) as cliente:
+    async with sessao(deps=deps_golden(DIR_OFICIAL)) as cliente:
         envelope = await chamar(
             cliente,
             ferramenta,

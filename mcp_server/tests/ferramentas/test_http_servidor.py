@@ -20,11 +20,14 @@ from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 
 from bussola_mcp.contratos import FERRAMENTAS, ID_ANCORA, arquivo_golden
+from bussola_mcp.dominio.fakes import dir_fixtures_padrao
 
 DIR_MCP_SERVER = Path(__file__).resolve().parents[2]
 HOST = "127.0.0.1"
 ESPERA_SUBIDA_S = 30.0
 ESPERA_DESCIDA_S = 10.0
+# Fixtures oficiais: os golden valem para qualquer adaptador de cálculo (antes e depois do 001).
+DIR_OFICIAL = dir_fixtures_padrao()
 
 
 def _porta_livre() -> int:
@@ -68,11 +71,11 @@ def _subir(argumentos_extra: list[str], ambiente: dict[str, str], log: Path) -> 
 
 
 @pytest.fixture
-def servidor_http(fixtures_sinteticas: Path, tmp_path: Path) -> Iterator[tuple[str, Path]]:
-    """Servidor com ``--fixtures`` sintéticas: URL do MCP e arquivo de saída."""
+def servidor_http(tmp_path: Path) -> Iterator[tuple[str, Path]]:
+    """Servidor com ``--fixtures`` oficiais: URL do MCP e arquivo de saída."""
     porta = _porta_livre()
     log = tmp_path / "servidor.log"
-    argumentos = ["--port", str(porta), "--fixtures", str(fixtures_sinteticas)]
+    argumentos = ["--port", str(porta), "--fixtures", str(DIR_OFICIAL)]
     with _subir(argumentos, dict(os.environ), log) as processo:
         _esperar_porta(processo, porta, log)
         yield f"http://{HOST}:{porta}/mcp", log
@@ -88,7 +91,7 @@ async def _conversar(url: str, chamadas: list[tuple[str, dict]]):
     return inicio, ferramentas, resultados
 
 
-async def test_list_tools_e_chamada_via_streamable_http(servidor_http, fixtures_sinteticas):
+async def test_list_tools_e_chamada_via_streamable_http(servidor_http):
     url, _ = servidor_http
     inicio, ferramentas, (resultado,) = await _conversar(
         url, [("perfil_financeiro", {"id_usuario": ID_ANCORA, "ate_anomes": 202512})]
@@ -97,7 +100,7 @@ async def test_list_tools_e_chamada_via_streamable_http(servidor_http, fixtures_
     assert {f.name for f in ferramentas} == set(FERRAMENTAS)
     assert len(ferramentas) == 9
     assert resultado.isError is False
-    arquivo = fixtures_sinteticas / "ferramentas" / arquivo_golden("perfil_financeiro", 202512)
+    arquivo = DIR_OFICIAL / "ferramentas" / arquivo_golden("perfil_financeiro", 202512)
     assert resultado.structuredContent == json.loads(arquivo.read_text(encoding="utf-8"))
 
 

@@ -14,6 +14,7 @@ from apoio_ferramentas import (
     argumentos,
     capturar_logs,
     chamar,
+    deps_golden,
     linhas_json,
     sessao,
 )
@@ -34,7 +35,7 @@ def _chamadas(linhas):
 
 async def _rodar(fixtures, pares, deps=None):
     with capturar_logs() as buffer:
-        async with sessao(fixtures, deps) as cliente:
+        async with sessao(deps=deps or deps_golden(fixtures)) as cliente:
             envelopes = [await chamar(cliente, f, a) for f, a in pares]
     return envelopes, linhas_json(buffer)
 
