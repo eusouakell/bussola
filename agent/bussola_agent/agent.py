@@ -9,8 +9,11 @@
   preenchida aqui é ``after_model``, com as respostas rápidas de
   :mod:`bussola_agent.jornada.respostas_rapidas`.
 - Modelo: ``BUSSOLA_MODEL`` seguido dos outros Flash verificados pelo smoke,
-  com uma retentativa por modelo. Um 503 de demanda alta ou um 429 passa para
-  o próximo da cadeia antes da primeira resposta, em vez de derrubar o turno.
+  com uma retentativa por modelo, cada um chamado sem streaming
+  (:mod:`bussola_agent.resilient_model`). Um 429 ou 5xx, antes ou durante a
+  geração, passa para o próximo da cadeia em vez de derrubar o turno. Com a
+  cadeia esgotada, o ``on_model_error_callback`` responde com uma mensagem de
+  alta demanda em pt-BR.
 
 O 004 substitui este arquivo pelo agente da jornada, mantendo o mesmo
 esqueleto (``carregar_extensoes()`` antes de montar o ``root_agent``).
@@ -30,6 +33,7 @@ from bussola_agent.extensoes import carregar_extensoes, ferramentas, instrucoes
 from bussola_agent.jornada import respostas_rapidas
 from bussola_agent.logging_json import configurar_logging, obter_logger
 from bussola_agent.mcp_conexao import criar_toolset
+from bussola_agent.resilient_model import build_fallback_chain, capacity_error_response
 
 NOME_AGENTE = "bussola_hello"
 MODELO_PADRAO = "gemini-3.8-flash"
@@ -101,12 +105,14 @@ async def inicializar_sessao(callback_context: Any) -> None:
 def criar_modelo(principal: str) -> FallbackModel:
     """``principal`` e os demais Flash, nessa ordem, cada um com ``RETENTATIVA``.
 
-    O ``FallbackModel`` só troca de modelo antes da primeira resposta do turno,
-    então um streaming já iniciado nunca mistura dois modelos. Construir não
-    acessa a rede: o cliente do genai nasce na primeira chamada.
+    O ``FallbackModel`` só troca de modelo antes da primeira resposta do turno.
+    Por isso cada Gemini é chamado sem streaming (``NonStreamingModel``): um
+    erro de capacidade no meio da geração acontece antes de qualquer resposta
+    e ainda cai para o próximo modelo. Construir não acessa a rede: o cliente
+    do genai nasce na primeira chamada.
     """
     nomes = [principal, *(m for m in MODELOS_FLASH if m != principal)]
-    return FallbackModel(models=[Gemini(model=n, retry_options=RETENTATIVA) for n in nomes])
+    return build_fallback_chain([Gemini(model=n, retry_options=RETENTATIVA) for n in nomes])
 
 
 def _instrucao() -> str:
@@ -124,6 +130,7 @@ root_agent = Agent(
     instruction=_instrucao(),
     tools=[criar_toolset(), *ferramentas()],
     before_agent_callback=inicializar_sessao,
+    on_model_error_callback=capacity_error_response,
     before_model_callback=callbacks.before_model,
     after_model_callback=callbacks.after_model,
     before_tool_callback=callbacks.before_tool,

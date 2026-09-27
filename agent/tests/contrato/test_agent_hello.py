@@ -23,6 +23,7 @@ from bussola_agent import callbacks, extensoes
 from bussola_agent.estado import CHAVES
 from bussola_agent.jornada import respostas_rapidas
 from bussola_agent.mcp_conexao import URL_PADRAO
+from bussola_agent.resilient_model import NonStreamingModel, capacity_error_response
 
 ANCORA = "36a21505-d6d4-42d3-b319-d51a133c7269"
 CONTROLE = "31e94f2f-1463-49f9-a41a-b3f220ed976a"
@@ -69,9 +70,12 @@ def test_modelo_principal_repetido_nao_duplica_a_cadeia(
 ) -> None:
     modelo = importar_de_novo().criar_modelo("gemini-3.7-flash")
     assert _cadeia(modelo) == ["gemini-3.7-flash", "gemini-3.8-flash", "gemini-3.5-flash"]
-    for gemini in modelo.models:
+    for embrulho in modelo.models:
+        assert isinstance(embrulho, NonStreamingModel)
+        gemini = embrulho.delegate
         assert isinstance(gemini, Gemini)
         assert gemini.retry_options is not None and gemini.retry_options.attempts == 2
+    assert {429, 503} <= modelo.retriable_status_codes
 
 
 async def test_503_de_demanda_alta_passa_para_o_proximo_flash(
@@ -80,9 +84,11 @@ async def test_503_de_demanda_alta_passa_para_o_proximo_flash(
     """O 503 que derrubava o turno no Cloud Run agora cai para o próximo modelo."""
     modelo = importar_de_novo().root_agent.model
     chamados: list[str] = []
+    com_streaming: list[bool] = []
 
     async def gerar(self: Gemini, llm_request: LlmRequest, stream: bool = False):  # noqa: ANN202
         chamados.append(llm_request.model or "")
+        com_streaming.append(stream)
         if self.model == "gemini-3.8-flash":
             erro = {"error": {"code": 503, "message": "high demand", "status": "UNAVAILABLE"}}
             raise errors.ServerError(503, erro)
@@ -96,6 +102,7 @@ async def test_503_de_demanda_alta_passa_para_o_proximo_flash(
     respostas = [r async for r in modelo.generate_content_async(pedido, stream=True)]
 
     assert chamados == ["gemini-3.8-flash", "gemini-3.7-flash"]
+    assert com_streaming == [False, False]
     assert [r.content.parts[0].text for r in respostas] == ["ok"]
 
 
@@ -107,6 +114,7 @@ def test_callbacks_instalados(importar_de_novo: Callable[[], ModuleType]) -> Non
     assert agente.before_tool_callback is callbacks.before_tool
     assert agente.after_tool_callback is callbacks.after_tool
     assert agente.before_agent_callback is modulo.inicializar_sessao
+    assert agente.on_model_error_callback is capacity_error_response
     assert callbacks.registrados("after_model") == [respostas_rapidas.anexar]
     assert all(
         callbacks.registrados(f) == [] for f in ("before_model", "before_tool", "after_tool")
