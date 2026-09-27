@@ -1,8 +1,12 @@
 # deploy/
 
-Scripts de plataforma do ciclo 000 (projeto `batalha-time-07-lkbv`,
-`us-central1`). Todos rodam com as credenciais do integrante (ADC) e têm
-`--help`.
+Plataforma da Bússola (projeto `batalha-time-07-lkbv`, `us-central1`).
+
+- **Caminho atual:** chart Helm em [`helm/`](helm/README.md) e o smoke de
+  produção (`smoke.py`).
+- **Operação passo a passo:** [docs/operacao.md](../docs/operacao.md).
+- **Scripts do ciclo 000:** rodam com as credenciais do integrante (ADC) e
+  têm `--help`.
 
 | Script | O que faz | Efeito no GCP |
 |---|---|---|
@@ -10,6 +14,8 @@ Scripts de plataforma do ciclo 000 (projeto `batalha-time-07-lkbv`,
 | `build_push.sh <mcp\|agent> [tag]` | Build `linux/amd64` e push para `us-central1-docker.pkg.dev/batalha-time-07-lkbv/agentes/<serviço>` | Push de imagem |
 | `deploy.sh <mcp\|agent> [--tag cNNN]` | `gcloud run deploy` privado | Revisão nova sem tráfego (`--tag cNNN --no-traffic`). Só a criação do serviço recebe tráfego |
 | `iam_datasets.sh [--aplicar]` | Plano B: papéis BigQuery por dataset para a SA default de compute | Simulação por padrão. Aplica só com `--aplicar` e o nome do projeto digitado |
+| `smoke.py` (`make smoke`) | Smoke de produção (ciclo 007): `tools/list` no MCP, uma pergunta ao agente que exige `perfil_financeiro` e `GET /` e `/auth/me` no BFF. ID token por impersonação, com audience = URL principal; nunca impresso | Leitura. Cria e apaga uma sessão de teste no agente (chama o Gemini) |
+| `helm/traffic.jq`, `helm/promote.jq` | Filtros `jq`: o estado vivo do serviço vira values do chart, para deploy (tráfego mantido) ou promoção | Nenhum (só transformam JSON) |
 
 ## Ordem de uso (T038)
 
@@ -32,10 +38,11 @@ deploy/iam_datasets.sh --aplicar         # só com confirmação humana
 |---|---|---|
 | `.github/workflows/ci.yml` | Push em branch que não é a `main` e todo `pull_request` | `make lint` + `make test` (fake, sem GCP), front web e BFF (`web-lint`, `web-test`, `web-build`) e chart Helm (`helm-lint`, `test-helm`) |
 | `.github/workflows/deploy.yml` | Todo push na `main`; manual para tag `cNNN` | CI e depois deploy com Helm: revisão nova com tag `main` e 0% de tráfego ([helm/README.md](helm/README.md)) |
+| `.github/workflows/promote.yml` | Só manual (`workflow_dispatch`), na `main` | Move tráfego: 100% para `main`, `cNNN`, uma revisão ou `previous` (rollback). Confirmação digitada + aprovação no environment `production` ([promoção](helm/README.md#promoção-e-rollback)) |
 
-O `deploy.yml` autentica só por Workload Identity Federation. Sem as
-variáveis do repositório abaixo, o push na `main` roda só o CI e o deploy é
-pulado com aviso:
+O `deploy.yml` e o `promote.yml` autenticam só por Workload Identity
+Federation. Sem as variáveis do repositório abaixo, o push na `main` roda só
+o CI (o deploy é pulado com aviso) e o `promote.yml` falha na conferência:
 
 - `GCP_WIF_PROVIDER`: nome completo do provider, criado pelo owner (pedido
   5 de `specs/000-fundacao-contratos/pedidos-owner.md`);
@@ -54,17 +61,22 @@ Ficam só para emergência até a emenda da constituição
 (`specs/000-fundacao-contratos/proposta-constituicao.md`) ser aprovada. O
 workflow não os usa.
 
-Nenhum workflow move tráfego ou altera IAM. A promoção é do 007. O
-`public: true` do `bff` está declarado no chart; o `replace` só o mantém.
+Só o `promote.yml` (e o fluxo local equivalente de
+[operacao.md §8](../docs/operacao.md#8-promoção-e-rollback)) move tráfego.
+O `ci.yml` e o `deploy.yml` não mexem em percentuais. Nenhum workflow altera
+IAM. O `public: true` do `bff` está declarado no chart; o `replace` só o
+mantém.
 
 ## Regras
 
-- Mover tráfego (`gcloud run services update-traffic`) é do ciclo 007 e pede
-  confirmação humana. Nenhum script daqui faz isso.
+- Mover tráfego pede confirmação humana e só acontece pela promoção do
+  chart (`promote.yml` ou o fluxo local de `docs/operacao.md` §8). Nenhum
+  script daqui roda `update-traffic`.
 - Mudança de IAM pede confirmação humana. `deploy.sh` só passa
   `--no-allow-unauthenticated` na criação do serviço e não toca na política
   depois; `iam_datasets.sh` só muda IAM de dataset, nunca do projeto.
-- Segredos só pelo Secret Manager (`--set-secrets`). Nenhum script imprime ou
-  grava chave.
+- Segredos só pelo Secret Manager (`secretEnv` no chart, `--set-secrets`
+  nos scripts antigos). Nenhum script imprime ou grava chave ou token; o
+  `smoke.py` guarda o ID token só em memória e redige a saída.
 - SA de runtime: padrão = SA default de compute (Plano B). Para o Plano A:
   `BUSSOLA_SA_RUNTIME=bussola-runtime deploy/deploy.sh ...`.

@@ -49,6 +49,68 @@ A Bússola deve:
 - **Segurança:** Model Armor, Secret Manager, controles de consentimento e autonomia governada.
 - **Observabilidade:** Cloud Logging.
 
+## Como rodar local / publicar
+
+Pré-requisitos: [`uv`](https://docs.astral.sh/uv/), Node 24 (front), `jq` e
+`helm` v4 (deploy). Os dados são sintéticos. Segredos só no `.env` local
+(não versionado) ou no Secret Manager, nunca no repositório.
+
+### Local, com dados fake
+
+```bash
+cp contracts/env.example .env   # ajuste; o .env não é versionado
+make mcp     # MCP em http://localhost:8080/mcp (BUSSOLA_FAKES=TRUE)
+make agent   # ADK Web em http://localhost:8000, falando com o MCP local
+make lint && make test          # o que o CI roda; sem rede e sem GCP
+```
+
+Com `BUSSOLA_FAKES=TRUE`, ferramentas e persistência usam fakes e
+`contracts/fixtures/`, sem BigQuery. O LLM do `make agent` ainda precisa de
+credencial: ADC do Vertex (`gcloud auth application-default login`) ou
+`GOOGLE_API_KEY` no `.env` (Plano B).
+
+O front (ciclo 008):
+
+```bash
+make web-install && make web    # http://localhost:5173
+```
+
+Na barra "Modo demonstração", o `Simulado` roda sem rede. O `Ao vivo (ADK)`
+usa o `make agent` pelo proxy do Vite. O BFF (`make bff`) precisa de
+`AUTH_PASSWORD_HASH` no `.env` ([web/README.md](web/README.md#bff-webbff)).
+
+### Local, com GCP
+
+1. Autentique: `gcloud auth login` e `gcloud auth application-default login`.
+2. No `.env`, use `BUSSOLA_FAKES=FALSE` e escolha o plano do LLM:
+   - Plano A: `GOOGLE_GENAI_USE_VERTEXAI=TRUE`;
+   - Plano B: `FALSE` + `GOOGLE_API_KEY` no `.env`.
+3. Rode `make mcp` e `make agent`.
+
+Os testes contra o BigQuery real: `make test-bq` (gravam só em
+`bussola_app_dev`).
+
+### Publicar no Cloud Run
+
+O deploy é o chart Helm `deploy/helm/bussola`, usado só como templater e
+aplicado com `gcloud run services replace`. Não existe GKE. A revisão nova
+sai **sempre com tag e 0% de tráfego**. Só a promoção move tráfego, com
+confirmação humana.
+
+| Passo | Como |
+|---|---|
+| Publicar (tag `main` ou `cNNN`, 0%) | Push na `main` → `.github/workflows/deploy.yml`. Sem WIF: fluxo local de [operacao.md §3](docs/operacao.md#3-deploy-de-uma-versão-nova) |
+| Testar a revisão pela tag | `make smoke SMOKE_ARGS="--tag cNNN --only agent"` ([operacao.md §4](docs/operacao.md#4-smoke)) |
+| Promover ou voltar | `.github/workflows/promote.yml` (aprovação no environment `production`) ou o fluxo local de [operacao.md §8](docs/operacao.md#8-promoção-e-rollback) |
+| Conferir produção | `make smoke` |
+
+Mais detalhes:
+
+- operação, logs, auditoria, rollback e Plano B: [docs/operacao.md](docs/operacao.md);
+- roteiro da demo (≤ 5 min): [docs/roteiro-demo.md](docs/roteiro-demo.md);
+- chart e guardas: [deploy/helm/README.md](deploy/helm/README.md);
+- operação por agente (Antigravity): [AGENTS.md](AGENTS.md).
+
 ## Documentação
 
 - [Ficha de submissão](./docs/ficha-submissao.md)
