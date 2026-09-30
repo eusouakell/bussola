@@ -4,6 +4,12 @@
 
 Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um objetivo declarado pelo cliente, entende sua situação financeira, antecipa cenários, orienta a tomada de decisão, aciona próximos passos com consentimento e acompanha a evolução até a realização do objetivo.
 
+## Colaboração e autoria
+
+Bússola foi desenvolvida em equipe para a **Batalha de Agentes — Itaú × Google**. **Victor Lopes ([theguitarvity](https://github.com/theguitarvity)) originou e liderou o repositório e a implementação técnica.**
+
+Este é o fork de Kell Bonassoli e registra sua participação no projeto, especialmente na camada de estratégia, contexto, pesquisa, Responsible AI, narrativa e materiais compartilhados. O enquadramento do produto e os materiais de apoio foram desenvolvidos colaborativamente pela equipe. Este fork não representa uma reivindicação de autoria técnica exclusiva de Kell.
+
 ## Norte do produto
 
 O cliente não começa escolhendo um produto bancário. Ele começa com uma intenção humana:
@@ -111,6 +117,26 @@ Mais detalhes:
 - chart e guardas: [deploy/helm/README.md](deploy/helm/README.md);
 - operação por agente (Antigravity): [AGENTS.md](AGENTS.md).
 
+## Arquitetura de contexto
+
+O projeto também oferece um caso aplicado para estudar como agentes dependem de camadas distintas de contexto:
+
+```text
+OBJETIVO DO USUÁRIO
+→ SAÚDE FINANCEIRA
+→ DADOS CONHECIDOS vs INFERIDOS
+→ CENÁRIOS DETERMINÍSTICOS
+→ PRODUTOS / POLÍTICAS
+→ RAG REGULATÓRIO
+→ CONSENTIMENTO + ESCOPO DE AÇÃO
+→ AGENTE / FERRAMENTAS
+→ RASTREABILIDADE + ACOMPANHAMENTO
+```
+
+As regras de projeto incluem preservar fontes e confiança, evitar inferências demográficas sem dados, usar ferramentas determinísticas para números, distinguir regras atuais de futuras e exigir consentimento antes de ações sensíveis.
+
+O [estudo de caso de Context Engineering](docs/context-engineering-case-study.md) conecta essas camadas à documentação pública existente. Descreve a arquitetura e seus limites; não apresenta resultados de avaliação novos.
+
 ## Documentação
 
 - [Ficha de submissão](./docs/ficha-submissao.md)
@@ -122,4 +148,3 @@ Mais detalhes:
 - [Blueprint de arquitetura](./docs/blueprint-arquitetura.md)
 - [Plano de ciclos paralelos (Spec Master)](./docs/ciclos/README.md)
 - [Contratos entre ciclos](./docs/ciclos/contratos.md)
-
