@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
+<title id="title">Bússola — uma jornada agentic para objetivos financeiros</title>
+<desc id="desc">Banner laranja e grafite mostrando objetivo, entender, antecipar, orientar, agir e acompanhar.</desc>
+<defs>
+  <linearGradient id="bg" x2="1" y2="1">
+    <stop stop-color="#151515"/>
+    <stop offset="1" stop-color="#27221f"/>
+  </linearGradient>
+  <linearGradient id="accent" x2="1">
+    <stop stop-color="#ff6200"/>
+    <stop offset="1" stop-color="#ff9a57"/>
+  </linearGradient>
+</defs>
+<rect width="1280" height="420" rx="28" fill="url(#bg)"/>
+<g transform="translate(70 60)">
+  <rect width="72" height="72" rx="20" fill="#ff6200"/>
+  <g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="translate(9 9) scale(2.25)">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M15.5 8.5l-2 5-5 2 2-5z" fill="#fff"/>
+  </g>
+</g>
+<g font-family="Arial, Helvetica, sans-serif">
+  <text x="174" y="100" fill="#ffffff" font-size="50" font-weight="700">Bússola</text>
+  <text x="174" y="142" fill="#ffb485" font-size="25">do objetivo ao caminho — com contexto, consentimento e rastreabilidade</text>
+  <text x="70" y="205" fill="#d8d4d1" font-size="18">Uma PoC agentic criada para a Batalha de Agentes · Itaú × Google</text>
+</g>
+<g font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">
+  <g transform="translate(70 274)">
+    <rect width="150" height="56" rx="16" fill="#fff" opacity=".98"/><text x="75" y="35" text-anchor="middle" fill="#202020">OBJETIVO</text>
+  </g>
+  <g transform="translate(252 274)">
+    <rect width="150" height="56" rx="16" fill="#fff" opacity=".94"/><text x="75" y="35" text-anchor="middle" fill="#202020">ENTENDER</text>
+  </g>
+  <g transform="translate(434 274)">
+    <rect width="150" height="56" rx="16" fill="#fff" opacity=".90"/><text x="75" y="35" text-anchor="middle" fill="#202020">ANTECIPAR</text>
+  </g>
+  <g transform="translate(616 274)">
+    <rect width="150" height="56" rx="16" fill="#fff" opacity=".86"/><text x="75" y="35" text-anchor="middle" fill="#202020">ORIENTAR</text>
+  </g>
+  <g transform="translate(798 274)">
+    <rect width="150" height="56" rx="16" fill="#fff" opacity=".82"/><text x="75" y="35" text-anchor="middle" fill="#202020">AGIR</text>
+  </g>
+  <g transform="translate(980 274)">
+    <rect width="170" height="56" rx="16" fill="url(#accent)"/><text x="85" y="35" text-anchor="middle" fill="#202020">ACOMPANHAR</text>
+  </g>
+</g>
+<g stroke="#ff7a26" stroke-width="3" fill="none">
+  <path d="M220 302h32"/><path d="M402 302h32"/><path d="M584 302h32"/><path d="M766 302h32"/><path d="M948 302h32"/>
+</g>
+<g fill="#ff7a26">
+  <path d="M246 296l10 6-10 6z"/><path d="M428 296l10 6-10 6z"/><path d="M610 296l10 6-10 6z"/><path d="M792 296l10 6-10 6z"/><path d="M974 296l10 6-10 6z"/>
+</g>
+<text x="70" y="376" font-family="Arial, Helvetica, sans-serif" fill="#a9a4a1" font-size="15">Dados sintéticos · cálculos determinísticos · RAG financeiro · MCP · autonomia governada</text>
+</svg>
