@@ -22,7 +22,10 @@ const paraAdk: ProxyOptions = {
   },
 };
 
+const BASE = process.env.VITE_BASE_PATH || "/";
+
 export default defineConfig({
+  base: BASE,
   plugins: [react(), tailwindcss()],
   server: {
     port: PORTA,
