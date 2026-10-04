@@ -4,6 +4,12 @@
 
 Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um objetivo declarado pelo cliente, entende sua situação financeira, antecipa cenários, orienta a tomada de decisão, aciona próximos passos com consentimento e acompanha a evolução até a realização do objetivo.
 
+## Protótipo navegável
+
+[Abrir o protótipo do Bússola](https://eusouakell.github.io/bussola/)
+
+Explore a experiência demonstrativa da jornada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. O protótipo apresenta uma simulação; não representa uma oferta bancária, aprovação de crédito ou atendimento real do Itaú.
+
 ## Colaboração e autoria
 
 Bússola foi desenvolvida em equipe para a **Batalha de Agentes — Itaú × Google**. **Victor Lopes ([theguitarvity](https://github.com/theguitarvity)) originou e liderou o repositório e a implementação técnica.**
