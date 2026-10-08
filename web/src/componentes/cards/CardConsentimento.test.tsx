@@ -19,16 +19,16 @@ const item: ItemConsentimento = {
 };
 
 describe("CardConsentimento", () => {
-  it("pendente → pedido com as 3 colunas; Autorizar envia 'sim' e Agora não envia 'não'", () => {
+  it("pendente → pedido com as 3 colunas; CTA específica envia 'sim' e Agora não envia 'não'", () => {
     const onEnviar = vi.fn();
     const pendente: Consentimento = { consent_id: item.consentId, status: "pendente" };
     render(<CardConsentimento item={item} consentimento={pendente} onEnviar={onEnviar} ocupado={false} />);
-    const artigo = screen.getByRole("article", { name: "CardConsentimento" });
+    const artigo = screen.getByRole("article", { name: "Pedido de autorização: Criar o plano Primeiro apartamento" });
     expect(artigo.textContent).toContain("O que vou fazer");
     expect(artigo.textContent).toContain("O que não vou fazer");
     expect(artigo.textContent).toContain("Dados usados");
     expect(artigo.textContent).toContain("Mover dinheiro, contratar produtos");
-    fireEvent.click(screen.getByRole("button", { name: "Autorizar" }));
+    fireEvent.click(screen.getByRole("button", { name: "Autorizar criação do plano" }));
     fireEvent.click(screen.getByRole("button", { name: "Agora não" }));
     expect(onEnviar.mock.calls).toEqual([["sim"], ["não"]]);
   });
@@ -40,7 +40,7 @@ describe("CardConsentimento", () => {
     expect(recibo.textContent).toContain("Autorizado");
     expect(recibo.textContent).toContain("26/09/2026 14:32");
     expect(recibo.textContent).toContain("consentimento c-00…7f3a");
-    expect(screen.queryByRole("button", { name: "Autorizar" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Autorizar criação do plano" })).toBeNull();
   });
 
   it("recusado → recibo neutro; outro consent_id na mesma ação → pedido encerrado", () => {
