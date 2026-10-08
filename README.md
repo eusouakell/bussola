@@ -10,6 +10,12 @@ Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um obj
 
 Explore a experiência demonstrativa da jornada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. O protótipo apresenta uma simulação; não representa uma oferta bancária, aprovação de crédito ou atendimento real do Itaú.
 
+## Auditoria de UX/UI e UX Writing
+
+O projeto documenta a evolução da experiência com um [relatório visual antes/depois](https://eusouakell.github.io/bussola/auditoria/): scorecard heurístico, problemas rastreáveis no código, soluções propostas e melhorias implementadas. O relatório distingue correções de interface de testes ainda pendentes; a nota pós-melhoria depende de validação.
+
+Para revisar o HTML no repositório: [web/public/auditoria/index.html](web/public/auditoria/index.html).
+
 ## Colaboração e autoria
 
 Bússola foi desenvolvida em equipe para a **Batalha de Agentes — Itaú × Google**. **Victor Lopes ([theguitarvity](https://github.com/theguitarvity)) originou e liderou o repositório e a implementação técnica.**

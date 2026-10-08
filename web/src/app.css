@@ -58,8 +58,8 @@ body {
 /* ---------- tokens (claro) ---------- */
 .tokens {
   --accent: #ff6200;
-  --accent-cta: #ff6200;
-  --accent-ink: #ff6200;
+  --accent-cta: #bd4900; /* branco sobre CTA atende AA */
+  --accent-ink: #bd4900; /* texto laranja sobre fundos claros */
   --accent-soft: rgba(255, 98, 0, 0.13);
   --ink: #02036c;
   --ink-2: #5c6b79;
@@ -70,7 +70,7 @@ body {
   --surface-solid: #f4f6f9;
   --ok: #0f470c;
   --ok-soft: rgba(15, 71, 12, 0.12);
-  --warn: #ff6200;
+  --warn: #bd4900;
   --warn-fill: #ff6200;
   --warn-soft: rgba(255, 98, 0, 0.2);
   --err: #e60000;
@@ -79,7 +79,7 @@ body {
   --tag-diag-bg: rgba(2, 3, 108, 0.11);
   --tag-sim: #5c6b79;
   --tag-sim-bg: rgba(92, 107, 121, 0.11);
-  --tag-rec: #ff6200;
+  --tag-rec: #bd4900;
   --tag-rec-bg: rgba(255, 98, 0, 0.13);
   --tag-acao: #0f470c;
   --tag-acao-bg: rgba(15, 71, 12, 0.12);
@@ -103,7 +103,7 @@ body {
 
 /* ---------- tokens (escuro · vidro fumê) ---------- */
 .tokens.dark {
-  --accent-ink: #ff6200;
+  --accent-ink: #ffad78;
   --accent-soft: rgba(255, 98, 0, 0.22);
   --ink: #f4f6f9;
   --ink-2: #f4f6f9;
@@ -114,15 +114,15 @@ body {
   --surface-solid: #02036c;
   --ok: #f4f6f9;
   --ok-soft: rgba(244, 246, 249, 0.14);
-  --warn: #ff6200;
+  --warn: #ffad78;
   --warn-soft: rgba(255, 98, 0, 0.15);
-  --err: #e60000;
+  --err: #ff9696;
   --err-soft: rgba(230, 0, 0, 0.13);
   --tag-diag: #f4f6f9;
   --tag-diag-bg: rgba(244, 246, 249, 0.14);
   --tag-sim: #f4f6f9;
   --tag-sim-bg: rgba(244, 246, 249, 0.15);
-  --tag-rec: #ff6200;
+  --tag-rec: #ffad78;
   --tag-rec-bg: rgba(255, 98, 0, 0.15);
   --tag-acao: #f4f6f9;
   --tag-acao-bg: rgba(244, 246, 249, 0.14);
@@ -317,7 +317,7 @@ body {
 .wp.done .dot { background: var(--ink); color: var(--amb-base, #fff); }
 .dark .wp.done .dot { color: #02036c; }
 .wp.done .lbl { color: var(--ink-2); }
-.wp.now .dot { background: var(--accent); color: #fff; box-shadow: 0 0 0 5px rgba(255, 98, 0, 0.2), 0 0 18px rgba(255, 98, 0, 0.45); }
+.wp.now .dot { background: var(--accent-cta); color: #fff; box-shadow: 0 0 0 5px rgba(255, 98, 0, 0.2), 0 0 18px rgba(255, 98, 0, 0.45); }
 .wp.now .lbl { color: var(--accent-ink); }
 .wp.next .dot { border: 1.5px dashed var(--ink-3); color: var(--ink-3); }
 .wp.next .lbl { color: var(--ink-3); font-weight: 800; }
@@ -335,7 +335,7 @@ body {
 @media (max-width: 420px) {
   .step-compact .step-tracos { display: none; }
 }
-.step-compact .n { height: 26px; padding: 0 8px; border-radius: 999px; background: var(--accent); color: #fff; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 900; }
+.step-compact .n { height: 26px; padding: 0 8px; border-radius: 999px; background: var(--accent-cta); color: #fff; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 900; }
 
 /* ---------- conversa ---------- */
 .convo {
