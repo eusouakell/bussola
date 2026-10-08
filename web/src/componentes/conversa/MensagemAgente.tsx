@@ -21,13 +21,15 @@ interface Grupo {
   linhas: string[];
   /** Número do primeiro item de uma lista numerada. */
   inicio?: number;
+  /** Nível do título no Markdown gerado pelo agente. */
+  nivel?: number;
 }
 
 /** Classifica uma linha; `null` para o separador "---", que só quebra o fluxo. */
-function classificar(linha: string): { tipo: TipoLinha; texto: string; numero?: number } | null {
+function classificar(linha: string): { tipo: TipoLinha; texto: string; numero?: number; nivel?: number } | null {
   if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(linha)) return null;
-  let m = /^\s{0,3}#{1,6}\s+(.*)$/.exec(linha);
-  if (m) return { tipo: "titulo", texto: m[1] };
+  let m = /^\s{0,3}(#{1,6})\s+(.*)$/.exec(linha);
+  if (m) return { tipo: "titulo", texto: m[2], nivel: m[1].length };
   m = /^\s*[-•*]\s+(.*)$/.exec(linha);
   if (m) return { tipo: "ul", texto: m[1] };
   m = /^\s*(\d{1,3})[.)]\s+(.*)$/.exec(linha);
@@ -49,7 +51,7 @@ function agruparLinhas(texto: string): Grupo[] {
       if (anterior?.tipo === l.tipo && l.tipo !== "titulo") {
         anterior.linhas.push(l.texto);
       } else {
-        anterior = { tipo: l.tipo, linhas: [l.texto], inicio: l.numero };
+        anterior = { tipo: l.tipo, linhas: [l.texto], inicio: l.numero, nivel: l.nivel };
         grupos.push(anterior);
       }
     }
@@ -81,9 +83,15 @@ export function blocosDeTexto(texto: string, cursor = false): ReactNode[] {
         </ul>
       );
     }
+    if (g.tipo === "titulo") {
+      // A tela já tem um H1: preservamos níveis relativos sem duplicar o título principal.
+      const nivel = Math.min(6, (g.nivel ?? 1) + 1);
+      const Heading = (`h${nivel}` as "h2" | "h3" | "h4" | "h5" | "h6");
+      return <Heading key={i} className="prose agent-heading">{emLinha(g.linhas[0])}{fim}</Heading>;
+    }
     return (
       <p key={i} className="prose">
-        {g.tipo === "titulo" ? <strong>{emLinha(g.linhas[0])}</strong> : emLinha(g.linhas.join("\n"))}
+        {emLinha(g.linhas.join("\n"))}
         {fim}
       </p>
     );

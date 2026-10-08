@@ -35,7 +35,7 @@ export const OBJETIVOS: Record<Exclude<TipoObjetivo, "dividas">, { descricao: st
 };
 
 export function perguntaValores(frase: string): string {
-  return `Ótimo objetivo! Anotei ${frase}, com prioridade alta. Pra eu calcular certinho: quanto você quer juntar de entrada, e em quanto tempo?`;
+  return `Vamos planejar ${frase}. Quanto você quer juntar e em quanto tempo?`;
 }
 
 export const SEM_VALOR =
@@ -157,8 +157,8 @@ export function comparacao(d: {
   }
   const r = d.recomendado;
   const fora = d.fora.map((c) => `${c.nome}: ${meses(c.prazo_meses)}`).join("; ");
-  const frase = `Montei três caminhos com a sua sobra. Recomendo o ${r.nome}: ${brl(r.aporte_mensal)} por mês, com a meta atingida em ${meses(r.prazo_meses)}, dentro do seu prazo de ${meses(d.prazo_objetivo)}.`;
-  return fora ? `${frase} Os outros passam do prazo (${fora}).` : frase;
+  const frase = `Comparei três caminhos. O ${r.nome} atinge a meta em ${meses(r.prazo_meses)}, com aporte de ${brl(r.aporte_mensal)} por mês, mas pode exigir cortes. Antes de escolher, compare o impacto no orçamento: chegar mais rápido não é necessariamente melhor.`;
+  return fora ? `${frase} Os outros levam mais tempo (${fora}). Você também pode simular o aporte para o prazo desejado de ${meses(d.prazo_objetivo)}.` : frase;
 }
 
 export function escolha(nome: string, viavel: boolean): string {

@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { MODELO_INICIAL, type ItemConversa, type ModeloSessao } from "../../sessao/modelo";
@@ -76,6 +76,66 @@ describe("Conversa: roteiro canônico", () => {
       <Conversa itens={modelo.itens} estado={modelo.estado} ocupado={false} lento={false} onEnviar={() => {}} onRepetir={() => {}} vazio={<p>boas-vindas</p>} />,
     );
     expect(screen.queryByText("boas-vindas")).not.toBeInTheDocument();
+  });
+});
+
+describe("Conversa: leitura sem interrupção", () => {
+  it("não move a rolagem quando a pessoa está lendo mensagens antigas", () => {
+    const props = {
+      estado: {},
+      ocupado: false,
+      lento: false,
+      onEnviar: () => {},
+      onRepetir: () => {},
+    };
+    const { rerender } = render(<Conversa {...props} itens={[cliente("c1", "oi"), agente("a1")]} />);
+    const area = screen.getByRole("region", { name: "Conversa" });
+    Object.defineProperty(area, "scrollHeight", { configurable: true, value: 1400 });
+    Object.defineProperty(area, "clientHeight", { configurable: true, value: 400 });
+    area.scrollTop = 200;
+    fireEvent.scroll(area);
+
+    rerender(<Conversa {...props} itens={[cliente("c1", "oi"), agente("a1"), agente("a2")]} />);
+    expect(area.scrollTop).toBe(200);
+
+    area.scrollTop = 1000;
+    fireEvent.scroll(area);
+    rerender(<Conversa {...props} itens={[cliente("c1", "oi"), agente("a1"), agente("a2"), agente("a3")]} />);
+    expect(area.scrollTop).toBe(1400);
+  });
+
+  it("prioriza a mensagem nova do usuário mesmo quando ele estava lendo acima", () => {
+    const props = {
+      estado: {},
+      ocupado: false,
+      lento: false,
+      onEnviar: () => {},
+      onRepetir: () => {},
+    };
+    const { rerender } = render(<Conversa {...props} itens={[cliente("c1", "oi"), agente("a1")]} />);
+    const area = screen.getByRole("region", { name: "Conversa" });
+    Object.defineProperty(area, "scrollHeight", { configurable: true, value: 1400 });
+    Object.defineProperty(area, "clientHeight", { configurable: true, value: 400 });
+    area.scrollTop = 200;
+    fireEvent.scroll(area);
+    rerender(<Conversa {...props} itens={[cliente("c1", "oi"), agente("a1"), cliente("c2", "novo pedido")]} />);
+    expect(area.scrollTop).toBe(1400);
+  });
+});
+
+describe("Conversa: anúncio acessível da resposta", () => {
+  it("só anuncia o resultado depois que o agente terminou de responder", () => {
+    const props = {
+      estado: {},
+      lento: false,
+      onEnviar: () => {},
+      onRepetir: () => {},
+    };
+    const itens = [cliente("c1", "oi"), agente("a1")];
+    const { rerender } = render(<Conversa {...props} itens={itens} ocupado />);
+    expect(screen.queryByText("Resposta disponível na conversa.")).not.toBeInTheDocument();
+    rerender(<Conversa {...props} itens={itens} ocupado={false} />);
+    expect(screen.getByRole("status", { name: "" })).toHaveTextContent("Resposta disponível na conversa.");
   });
 });
 

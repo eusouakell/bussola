@@ -18,17 +18,17 @@
   <div class="container nav-in">
     <div class="brand"><span class="mark" aria-hidden="true">↗</span> Bússola <span class="sub">/ experiência & confiança</span></div>
     <nav class="links" aria-label="Navegação do relatório">
-      <a href="#scorecard">Scorecard</a><a href="#evidencias">Evidências</a><a href="#antes-depois">Antes & depois</a><a href="#plano">Roadmap</a><a href="#metodo">Método</a>
+      <a href="#scorecard">Scorecard</a><a href="#evidencias">Evidências</a><a href="#antes-depois">Antes & depois</a><a href="#ciclo2">Ciclo 02</a><a href="#plano">Roadmap</a><a href="#metodo">Método</a>
     </nav>
   </div>
 </header>
 <main id="conteudo">
   <section class="hero" aria-labelledby="hero-title">
     <div class="container">
-      <span class="kicker">Auditoria de produto digital · versão 01</span>
+      <span class="kicker">Auditoria de produto digital · versão 02</span>
       <h1 id="hero-title">Clareza para decidir.<br>Confiança para agir.</h1>
       <p>Revisão da Bússola a partir das heurísticas de Nielsen, Gestalt, WCAG 2.2 AA, linguagem simples e UX Writing. Da evidência no protótipo à solução implementada no fork.</p>
-      <div class="metadata"><span class="meta">08 out 2026</span><span class="meta">Protótipo demonstrativo · dados sintéticos</span><span class="meta">React + design Dynamic Glass</span><span class="meta">Base congelada: adee460</span></div>
+      <div class="metadata"><span class="meta">08 out 2026</span><span class="meta">Protótipo demonstrativo · dados sintéticos</span><span class="meta">React + design Dynamic Glass</span><span class="meta">Baseline: adee460</span><span class="meta">Ciclo 02: semântica + controle</span></div>
     </div>
   </section>
   <section class="section" id="scorecard" aria-labelledby="score-title">
@@ -90,23 +90,61 @@
       </div>
     </div>
   </section>
+  <section class="section" id="ciclo2" aria-labelledby="ciclo2-title">
+    <div class="container">
+      <header class="section-header"><div><span class="eyebrow">04 / Evolução incremental</span><h2 id="ciclo2-title">O usuário recupera o controle</h2><p>Segundo ciclo de implementação. Os comparativos abaixo são modelos explicativos, não capturas de tela. Eles registram alterações no comportamento e os critérios que os testes devem demonstrar.</p></div></header>
+      <div class="evidence-list">
+        <article class="finding">
+          <span class="tag done">Nielsen H3 · WCAG 2.1.2</span>
+          <h3>Foco contido no painel mobile</h3>
+          <p><strong>Antes:</strong> o botão de fechar recebia foco, mas Tab e Shift+Tab podiam sair do diálogo e alcançar controles por trás da folha.</p>
+          <p><strong>Depois:</strong> o foco fica entre os controles do painel; Escape fecha; o foco retorna ao acionador; o fundo não rola enquanto a folha está aberta.</p>
+          <span class="code">Bastidores.tsx · Bastidores.test.tsx</span>
+          <a href="https://github.com/eusouakell/bussola/blob/main/web/src/componentes/layout/Bastidores.tsx">Ver implementação do diálogo ↗</a>
+        </article>
+        <article class="finding">
+          <span class="tag done">Nielsen H3 · Controle</span>
+          <h3>Leitura não interrompida pelo streaming</h3>
+          <p><strong>Antes:</strong> a área de conversa rolava até o fim sempre que novas mensagens ou estados chegavam.</p>
+          <p><strong>Depois:</strong> o conteúdo acompanha a resposta somente quando o leitor está perto do final ou envia uma nova mensagem. Uma pessoa revisando informações anteriores mantém sua posição.</p>
+          <span class="code">Conversa.tsx · Conversa.test.tsx</span>
+          <a href="https://github.com/eusouakell/bussola/blob/main/web/src/componentes/conversa/Conversa.tsx">Ver controle de rolagem ↗</a>
+        </article>
+        <article class="finding">
+          <span class="tag done">WCAG 1.3.1 · Semântica</span>
+          <h3>Os títulos do agente viram títulos reais</h3>
+          <p><strong>Antes:</strong> a estrutura Markdown <code>###</code> gerava parágrafos com negrito, sem navegação por headings.</p>
+          <p><strong>Depois:</strong> a hierarquia do texto é preservada em <code>h2</code> até <code>h6</code>, sem aceitar HTML arbitrário recebido do modelo.</p>
+          <span class="code">MensagemAgente.tsx · MensagemAgente.test.tsx</span>
+          <a href="https://github.com/eusouakell/bussola/blob/main/web/src/componentes/conversa/MensagemAgente.tsx">Ver semântica do conteúdo ↗</a>
+        </article>
+      </div>
+      <div class="comparison">
+        <article class="view before"><div class="view-header"><span>ANTES · orientação prescritiva</span><span class="tag high">Viés de decisão</span></div><div class="view-body"><p class="sample-quote">“Recomendo o acelerado: R$ 1.660,85 por mês, com a meta atingida em 19 meses.”</p><p class="reason">O agente confundia velocidade com qualidade da decisão e não convidava o cliente a comparar impactos.</p></div></article>
+        <article class="view after"><div class="view-header"><span>DEPOIS · escolha fundamentada</span><span class="tag done">Copy implementada</span></div><div class="view-body"><p class="sample-quote">“O acelerado atinge a meta em 19 meses, com aporte de R$ 1.660,85 por mês, mas pode exigir cortes. Antes de escolher, compare o impacto no orçamento.”</p><p class="reason">A comunicação explicita a consequência e abre espaço para o usuário simular o próprio prazo. A política de recomendação do agente real ainda requer revisão.</p></div></article>
+      </div>
+      <div class="callout"><strong>Evidência nova — divergência entre tokens:</strong> o teste de regressão encontrou <code>--color-accent-cta: #FF6200</code> na camada Tailwind enquanto o token do componente já utilizava <code>--accent-cta: #BD4900</code>. Foram sincronizados os tokens acessíveis; um teste automatizado agora exige contraste mínimo de 4,5:1 para o botão primário e igualdade entre as duas definições. <a href="https://github.com/eusouakell/bussola/blob/ux/quality-gates-v2-20261008/web/src/componentes/base/paleta-acessivel.test.ts">Ver teste de contraste ↗</a>.</div>
+      <div class="callout"><strong>Por que a nota continua 6,4/10?</strong> A nota é uma linha de base, não um contador de commits. A nova avaliação só será publicada após teste mobile real, teclado, leitor de tela, consistência entre o agente simulado e o agente real, e compreensão financeira com participantes. Meta desejada: 10/10, condicionada a evidências — sem inflar pontuação.</div>
+    </div>
+  </section>
   <section class="section" id="plano" aria-labelledby="plan-title">
     <div class="container">
-      <header class="section-header"><div><span class="eyebrow">04 / Plano executável</span><h2 id="plan-title">O que mudou e o que falta</h2><p>Status factual relativo a esta branch; “implementado” não equivale a “validado em produção”.</p></div></header>
+      <header class="section-header"><div><span class="eyebrow">05 / Plano executável</span><h2 id="plan-title">O que mudou e o que falta</h2><p>Status factual relativo a esta branch; “implementado” não equivale a “validado em produção”.</p></div></header>
       <div class="roadmap">
         <div class="road"><span class="priority">P0</span><div><strong>Contraste de CTA e tokens de texto</strong><p>Separação entre acento de marca e variações legíveis. Ajustes para tema claro/escuro e indicadores.</p></div><span class="state">Implementado</span></div>
         <div class="road"><span class="priority">P0</span><div><strong>Composição do aporte acelerado</strong><p>Expõe parcela-base, economias adicionais e proporção total; não mascara a dependência de cortes.</p></div><span class="state">Implementado</span></div>
         <div class="road"><span class="priority">P0</span><div><strong>Consentimento e microcopy de ação</strong><p>CTA nomeia a ação e texto deixa de prometer uma revogação não encontrada.</p></div><span class="state">Implementado</span></div>
         <div class="road"><span class="priority">P1</span><div><strong>Explicar sobra mediana e variabilidade</strong><p>Mais contexto sobre a estimativa e linguagem menos categórica.</p></div><span class="state">Implementado</span></div>
+        <div class="road"><span class="priority">P1</span><div><strong>Foco no diálogo, rolagem e headings do agente</strong><p>Segunda rodada: correções semânticas e de controle com testes de regressão. A validação assistiva manual continua pendente.</p></div><span class="state">Implementado</span></div>
         <div class="road"><span class="priority">P1</span><div><strong>Revisar política de recomendação financeira</strong><p>Incluir o caminho de 24 meses como opção explícita e rever critérios de recomendação, com validação de regras e premissas.</p></div><span class="state wait">Pendente</span></div>
-        <div class="road"><span class="priority">P1</span><div><strong>Completar auditoria de acessibilidade</strong><p>Teclado, leitores de tela, foco em bottom sheet, headings do conteúdo do agente, zoom e estados de carregamento.</p></div><span class="state wait">Pendente</span></div>
+        <div class="road"><span class="priority">P1</span><div><strong>Completar auditoria de acessibilidade</strong><p>Validar a correção de foco e headings com tecnologias assistivas; testar zoom, estados de carregamento e reflow em dispositivos reais.</p></div><span class="state wait">Pendente</span></div>
         <div class="road"><span class="priority">P2</span><div><strong>Validar mobile, compreensão e métrica pós-UX</strong><p>Executar testes em 320/390 px, aferir WCAG AA e validar entendimento do plano com participantes.</p></div><span class="state wait">Pendente</span></div>
       </div>
     </div>
   </section>
   <section class="section" id="metodo" aria-labelledby="method-title">
     <div class="container">
-      <header class="section-header"><div><span class="eyebrow">05 / Método e rastreabilidade</span><h2 id="method-title">O que sustenta a análise</h2><p>Transparência entre evidência observada, problema inferido e solução implementada.</p></div></header>
+      <header class="section-header"><div><span class="eyebrow">06 / Método e rastreabilidade</span><h2 id="method-title">O que sustenta a análise</h2><p>Transparência entre evidência observada, problema inferido e solução implementada.</p></div></header>
       <div class="resources">
         <div class="resource"><h3>Fontes e critérios</h3><ul><li><a href="https://github.com/eusouakell/bussola/tree/adee460c877653e3e017f071d157d7871a7c6364">Baseline congelado do repositório (commit adee460)</a></li><li><a href="https://eusouakell.github.io/bussola/">Protótipo público navegável</a> (inspeção em desktop, modo simulado)</li><li><a href="https://www.nngroup.com/articles/ten-usability-heuristics/">Heurísticas de Nielsen</a></li><li><a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2 — padrão normativo</a></li><li><a href="https://www.w3.org/WAI/cognitive/">W3C — acessibilidade cognitiva</a></li><li>Princípios de Gestalt: proximidade, semelhança, continuidade e figura-fundo.</li></ul></div>
         <div class="resource"><h3>Limites e próximos testes</h3><ul><li>Comparações visuais são <strong>reconstruções editoriais</strong> dos componentes, não capturas de tela.</li><li>A nota 6,4/10 é uma <strong>avaliação heurística</strong>, não uma amostra representativa de usuários.</li><li>Nenhum teste de leitor de tela ou auditoria WCAG completa foi concluído nesta rodada.</li><li>Viewport mobile real, validação de cálculos além do roteiro e comportamento do agente ao vivo requerem testes adicionais.</li><li>O design inspira-se em linguagem bancária brasileira, com laranja e azul: <strong>não é material oficial nem endossado pelo Itaú.</strong></li></ul></div>

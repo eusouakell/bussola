@@ -262,17 +262,58 @@ interface Props {
 export function Bastidores({ modelo, variante, onFechar, apresentador }: Props) {
   const [aba, setAba] = useState<Aba>("Jornada");
   const fechar = useRef<HTMLButtonElement>(null);
+  const dialogo = useRef<HTMLElement>(null);
+  const fecharAtual = useRef(onFechar);
   const folha = variante === "folha";
+
+  // A função de fechamento muda quando o pai renderiza; não reiniciamos o foco por isso.
+  useEffect(() => {
+    fecharAtual.current = onFechar;
+  }, [onFechar]);
 
   useEffect(() => {
     if (!folha) return;
+    const focoAnterior = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const overflowAnterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     fechar.current?.focus();
+
     const tecla = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onFechar();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        fecharAtual.current();
+      }
+      if (e.key !== "Tab") return;
+      const elementos = Array.from(
+        dialogo.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((el) => !el.hasAttribute("hidden") && el.getAttribute("aria-hidden") !== "true");
+      if (!elementos.length) {
+        e.preventDefault();
+        fechar.current?.focus();
+        return;
+      }
+      const primeiro = elementos[0];
+      const ultimo = elementos[elementos.length - 1];
+      if (!dialogo.current?.contains(document.activeElement)) {
+        e.preventDefault();
+        (e.shiftKey ? ultimo : primeiro).focus();
+      } else if (e.shiftKey && document.activeElement === primeiro) {
+        e.preventDefault();
+        ultimo.focus();
+      } else if (!e.shiftKey && document.activeElement === ultimo) {
+        e.preventDefault();
+        primeiro.focus();
+      }
     };
-    window.addEventListener("keydown", tecla);
-    return () => window.removeEventListener("keydown", tecla);
-  }, [folha, onFechar]);
+    document.addEventListener("keydown", tecla);
+    return () => {
+      document.removeEventListener("keydown", tecla);
+      document.body.style.overflow = overflowAnterior;
+      if (focoAnterior?.isConnected) focoAnterior.focus();
+    };
+  }, [folha]);
 
   const cabecalho = (
     <div className="row-between" style={{ padding: folha ? "4px 12px 10px 18px" : "16px 16px 12px 18px", flexWrap: "nowrap" }}>
@@ -323,7 +364,7 @@ export function Bastidores({ modelo, variante, onFechar, apresentador }: Props) 
     return (
       <>
         <div className="sheet-backdrop" aria-hidden="true" onClick={onFechar} />
-        <section className="sheet" role="dialog" aria-modal="true" aria-label="Bastidores">
+        <section ref={dialogo} className="sheet" role="dialog" aria-modal="true" aria-label="Bastidores">
           <span className="grip" aria-hidden="true" />
           {cabecalho}
           <div style={{ margin: "0 14px 12px" }}>{apresentador}</div>

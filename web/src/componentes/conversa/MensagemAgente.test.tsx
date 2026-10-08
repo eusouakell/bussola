@@ -22,10 +22,18 @@ describe("MensagemAgente", () => {
       ].join("\n"),
     );
     expect(container.textContent).not.toMatch(/###|\*\*|---|^\*/m);
-    expect(screen.getByText("1. Sua situação").tagName).toBe("STRONG");
+    expect(screen.getByRole("heading", { name: "1. Sua situação", level: 4 })).toBeInTheDocument();
     expect(screen.getByText("perfil_financeiro").tagName).toBe("EM");
     expect(container.querySelectorAll("ul > li")).toHaveLength(2);
     expect(container.querySelectorAll("ol > li")).toHaveLength(2);
+  });
+
+  it("mantém níveis de títulos legíveis por leitores de tela", () => {
+    const { container } = renderizar("# Visão geral\n\n## Seus números\n\n### Próximos passos");
+    expect(screen.getByRole("heading", { name: "Visão geral", level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Seus números", level: 3 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Próximos passos", level: 4 })).toBeInTheDocument();
+    expect(container.querySelector("p > strong")).toBeNull();
   });
 
   it("lista numerada separada por linha em branco continua a contagem", () => {

@@ -16,21 +16,21 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --color-accent: #ff6200;
-  --color-accent-cta: #ff6200;
-  --color-accent-ink: #ff6200;
+  --color-accent-cta: #bd4900;
+  --color-accent-ink: #bd4900;
   --color-ink: #02036c;
   --color-ink-2: #5c6b79;
   --color-ink-3: #5c6b79;
   --color-sand-50: #f4f6f9;
   --color-smoke-900: #02036c;
   --color-ok: #0f470c;
-  --color-warn: #ff6200;
+  --color-warn: #bd4900;
   --color-warn-fill: #ff6200;
   --color-err: #e60000;
 
   --color-tag-diagnostico: #02036c;
   --color-tag-simulacao: #5c6b79;
-  --color-tag-recomendacao: #ff6200;
+  --color-tag-recomendacao: #bd4900;
   --color-tag-acao: #0f470c;
 
   --radius-card: 22px;
@@ -338,6 +338,7 @@ body {
 .step-compact .n { height: 26px; padding: 0 8px; border-radius: 999px; background: var(--accent-cta); color: #fff; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 900; }
 
 /* ---------- conversa ---------- */
+.agent-heading { font-size: 17px; line-height: 1.4; font-weight: 850; letter-spacing: -0.01em; margin: 0; }
 .convo {
   flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #02036c 40px);
