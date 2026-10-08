@@ -34,10 +34,10 @@ export function BoasVindas({ nome = "Fernando", onEscolher, desabilitado, compac
       </span>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <h1 style={{ margin: 0, fontSize: compacto ? 32 : 44, lineHeight: compacto ? "38px" : "50px", fontWeight: 900, letterSpacing: "-.02em" }}>
-          Oi, {nome}!
+          Oi, {nome}.
         </h1>
         <p style={{ margin: 0, fontSize: compacto ? 18 : 22, lineHeight: compacto ? "26px" : "32px", fontWeight: 600, color: "var(--ink-2)" }}>
-          Eu sou a Bússola, seu assistente financeiro. Qual objetivo você quer tirar do papel?
+          Que objetivo você quer planejar? Eu ajudo a entender o orçamento e comparar caminhos antes de decidir.
         </p>
       </div>
       <div
@@ -56,7 +56,7 @@ export function BoasVindas({ nome = "Fernando", onEscolher, desabilitado, compac
           <button
             key={texto}
             type="button"
-            className="glass-card"
+            className="glass-card welcome-goal"
             disabled={desabilitado}
             onClick={() => onEscolher(texto)}
             style={{
@@ -92,7 +92,7 @@ export function BoasVindas({ nome = "Fernando", onEscolher, desabilitado, compac
       </div>
       <p className="disclaimer" style={{ margin: 0, justifyContent: compacto ? "flex-start" : "center" }}>
         <Icone nome="escudo" tamanho="sm" />
-        Eu analiso, simulo e recomendo. Qualquer ação só acontece com a sua autorização.
+        Os resultados são simulações. Você escolhe os próximos passos e autoriza cada ação sensível.
       </p>
     </div>
   );
