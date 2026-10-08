@@ -48,6 +48,31 @@ describe("CardCenario · explicabilidade financeira", () => {
     expect(escolher).toHaveBeenCalledWith("acelerado");
   });
 
+  it("não confunde viabilidade financeira com atendimento do prazo", () => {
+    render(
+      <CardCenario
+        cenario={{
+          nome: "conservador",
+          pct_capacidade: 0.4,
+          prazo_meses: 44,
+          aporte_mensal: 691.6,
+          viavel: true,
+          cortes_sugeridos: [],
+          trade_offs: ["Demora mais que o prazo escolhido."],
+        }}
+        recomendado={false}
+        escolhido={false}
+        bloqueado={false}
+        prazoObjetivo={24}
+        onEscolher={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Conservador", level: 3 })).toBeTruthy();
+    expect(screen.getByText("Após o prazo desejado de 24 meses")).toBeTruthy();
+    expect(screen.getByText("O que considerar neste caminho")).toBeTruthy();
+    expect(screen.queryByText("Cabe em 24 meses")).toBeNull();
+  });
+
   it("não inventa economias adicionais quando não há cortes", () => {
     render(
       <CardCenario
