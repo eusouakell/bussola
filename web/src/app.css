@@ -798,3 +798,61 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .welcome-option { transition: none; }
 }
+
+/* UX Lead V6: fontes de consulta são secundárias à decisão financeira.
+   Preserva explicação e avisos materiais sem criar um novo cartão na conversa. */
+.fonte-orientacao {
+  width: 100%;
+  min-width: 0;
+  margin: 6px 0 10px;
+  color: var(--ink-2);
+}
+.fonte-detalhes {
+  border-top: 1px solid var(--line);
+  padding-top: 11px;
+}
+.fonte-detalhes summary {
+  display: list-item;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 730;
+  width: fit-content;
+  color: var(--ink-2);
+  padding: 5px 0;
+}
+.fonte-detalhes summary:hover { color: var(--ink); }
+.fonte-detalhes summary:focus-visible {
+  outline: 3px solid var(--accent-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.fonte-detalhes ul {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+.fonte-detalhes li {
+  padding: 13px 16px;
+  background: var(--row);
+  border-radius: 12px;
+  min-width: 0;
+  font-size: 14px;
+}
+.fonte-detalhes li strong,.fonte-origem { display: block; }
+.fonte-origem,.fonte-detalhes li p,.fonte-ressalva {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+}
+.fonte-ressalva { margin: 13px 0 0; }
+.fonte-aviso {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--warn);
+  margin: 5px 0;
+}
