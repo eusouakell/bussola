@@ -55,7 +55,7 @@ export function CardDiagnostico({ item }: { item: ItemCard }) {
       {(perfilOk || capacidadeOk) && (
         <>
           <strong className="resumo-orcamento-valor num">{brl(sobraMediana)}</strong>
-          <p className="small">É uma estimativa do seu histórico, não um valor garantido todos os meses.</p>
+          <p className="small">É uma estimativa do histórico. O valor pode mudar a cada mês.</p>
           <details className="cenario-detalhes">
             <summary>Como calculamos esse valor?</summary>
             <div className="cenario-detalhes-corpo">
