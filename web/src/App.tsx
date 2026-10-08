@@ -114,7 +114,7 @@ export function App() {
         vazio={<BoasVindas nome={modo === "ao-vivo" ? auth.persona?.displayName : undefined} onEscolher={enviar} desabilitado={!pronta || ocupado} compacto={!desktop} />}
       />
       <Composer
-        sugestoes={sugestoesDoComposer(modelo, modo)}
+        sugestoes={modelo.itens.some((item) => item.tipo === "mensagem_cliente") ? sugestoesDoComposer(modelo, modo) : []}
         onEnviar={enviar}
         onParar={sessao.parar}
         ocupado={ocupado}
