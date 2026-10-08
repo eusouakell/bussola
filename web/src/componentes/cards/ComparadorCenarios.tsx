@@ -44,6 +44,7 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
     (texto) => economiaAdicional === 0 || !/^Compromete \d+% da sobra/i.test(texto),
   );
   const noPrazo = prazoObjetivo !== undefined && prazo !== undefined ? prazo <= prazoObjetivo : undefined;
+  const condicoesAtendidas = viavel !== false && noPrazo !== false;
   const classes = ["glass-card", "cen", "enter", recomendado ? "rec" : ""].filter(Boolean).join(" ");
   return (
     <article className={classes} aria-label={`Cenário ${capitalizar(nome)}${recomendado ? ", em destaque" : ""}`}>
@@ -77,15 +78,15 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
         </div>
       )}
       {viavel !== undefined && (
-        <span className={viavel ? "badge badge-ok" : "badge badge-warn"} style={{ alignSelf: "flex-start" }}>
-          <Icone nome={viavel ? "check" : "alerta"} tamanho="sm" traco={viavel ? 3 : undefined} />
-          {noPrazo !== undefined
-            ? noPrazo
-              ? "Dentro do prazo desejado"
-              : `Após o prazo desejado de ${meses(prazoObjetivo)}`
-            : viavel
-              ? "Viável nas condições simuladas"
-              : "Rever condições do cenário"}
+        <span className={condicoesAtendidas ? "badge badge-ok" : "badge badge-warn"} style={{ alignSelf: "flex-start" }}>
+          <Icone nome={condicoesAtendidas ? "check" : "alerta"} tamanho="sm" traco={condicoesAtendidas ? 3 : undefined} />
+          {noPrazo === false
+            ? `Após o prazo desejado de ${meses(prazoObjetivo)}`
+            : viavel === false
+              ? "Rever viabilidade financeira"
+              : noPrazo === true
+                ? "Dentro do prazo desejado"
+                : "Ver condições do cenário"}
         </span>
       )}
       <div className="spec">
