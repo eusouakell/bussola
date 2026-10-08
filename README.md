@@ -12,9 +12,11 @@ Explore a experiência demonstrativa da jornada de Fernando, persona criada pela
 
 ## Case público — da resposta à decisão
 
-[**Conhecer o case V3**](https://eusouakell.github.io/bussola/case/) — história do produto, análise dos dados sintéticos, escolhas de escopo no hackathon, evolução antes/depois, método de Context Engineering e créditos com fotos da equipe e da mentora. Material independente, sem expor documentos internos da organização.
+[**Conhecer o case editorial V4**](https://eusouakell.github.io/bussola/case/) — história do produto, análise dos dados sintéticos, escolhas de escopo no hackathon, evolução antes/depois, método de Context Engineering e créditos com fotos da equipe e da mentora. Material independente, sem expor documentos internos da organização.
 
-Fonte da página: [web/public/case/index.html](web/public/case/index.html). Após o merge, o GitHub Pages atualiza o endereço automaticamente via workflow `static-demo-pages`.
+Fonte da página: [web/public/case/index.html](web/public/case/index.html).
+
+A V4 utiliza uma direção editorial minimalista e padrões de acessibilidade/espacamento do Fluent 2. O [registro de revisão orientado pelos contratos da Fábrica Agêntica](docs/ux/factory-review-v4.md) descreve decisões, verificações e limitações. A composição está isolada em `web/public/case/editorial-v4.css`, sem substituir o design system do protótipo. Após o merge, o GitHub Pages atualiza o endereço automaticamente via workflow `static-demo-pages`.
 
 ## Auditoria de UX/UI e UX Writing
 
