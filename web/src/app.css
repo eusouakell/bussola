@@ -338,6 +338,7 @@ body {
 .step-compact .n { height: 26px; padding: 0 8px; border-radius: 999px; background: var(--accent-cta); color: #fff; display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 900; }
 
 /* ---------- conversa ---------- */
+.agent-heading { font-size: 17px; line-height: 1.4; font-weight: 850; letter-spacing: -0.01em; margin: 0; }
 .convo {
   flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #02036c 40px);
