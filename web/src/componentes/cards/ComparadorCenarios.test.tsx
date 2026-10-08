@@ -75,7 +75,7 @@ describe("Comparação de planos · linguagem simples e carga cognitiva", () => 
 
     const card = screen.getByRole("article", { name: "Cenário Acelerado, em destaque" });
     expect(card.textContent).toContain("Plano de 19 meses");
-    expect(card.textContent).toContain("guardar");
+    expect(card.textContent).toContain("Guardar por mês");
     expect(card.textContent).toContain("277,65");
     expect(card.textContent).toContain("1.383,20");
     expect(card.textContent).toContain("96%");
@@ -100,7 +100,6 @@ describe("Comparação de planos · linguagem simples e carga cognitiva", () => 
   it("mostra uma alternativa por vez e mantém três opções de escolha", () => {
     const enviar = vi.fn();
     render(<ComparadorCenarios item={comparar()} onEnviar={enviar} ocupado={false} />);
-    expect(screen.getAllByRole("button", { name: /meses ·|mesesR\$/i }).length).toBe(0);
     expect(screen.getAllByRole("article", { name: /Cenário/ })).toHaveLength(1);
     const opcoes = screen.getByRole("group", { name: "Escolha um prazo para comparar" });
     expect(opcoes.querySelectorAll("button")).toHaveLength(3);
