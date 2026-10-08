@@ -10,6 +10,12 @@ Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um obj
 
 Explore a experiência demonstrativa da jornada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. O protótipo apresenta uma simulação; não representa uma oferta bancária, aprovação de crédito ou atendimento real do Itaú.
 
+## Case público — da resposta à decisão
+
+[**Conhecer o case V3**](https://eusouakell.github.io/bussola/case/) — história do produto, análise dos dados sintéticos, escolhas de escopo no hackathon, evolução antes/depois, método de Context Engineering e créditos com fotos da equipe e da mentora. Material independente, sem expor documentos internos da organização.
+
+Fonte da página: [web/public/case/index.html](web/public/case/index.html). Após o merge, o GitHub Pages atualiza o endereço automaticamente via workflow `static-demo-pages`.
+
 ## Auditoria de UX/UI e UX Writing
 
 O projeto documenta a evolução da experiência com um [relatório visual antes/depois](https://eusouakell.github.io/bussola/auditoria/): scorecard heurístico, problemas rastreáveis no código, soluções propostas e melhorias implementadas. O relatório distingue correções de interface de testes ainda pendentes; a nota pós-melhoria depende de validação.
