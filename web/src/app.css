@@ -617,3 +617,40 @@ body {
 .tabela-hist thead th { font-size: 12.5px; font-weight: 800; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
 .tabela-hist tbody th { font-weight: 800; }
 .linha-lista .valor { font-size: 15.5px; font-weight: 800; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Fábrica Agêntica · Experience Designer + Fluent 2 fundamentals.
+   Apenas padrões locais: não modifica tokens canônicos da marca. */
+.welcome-goal {
+  border-color: var(--line);
+  transition: border-color 160ms ease, transform 160ms ease, background-color 160ms ease;
+}
+.welcome-goal:not(:disabled):hover {
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+.welcome-goal:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
+.cen .t-title { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 850; }
+.cenario-observacoes {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.cenario-observacoes summary {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.cenario-observacoes ul {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+.cenario-observacoes li { line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) {
+  .welcome-goal { transition: none; }
+  .welcome-goal:not(:disabled):hover { transform: none; }
+}
