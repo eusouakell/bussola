@@ -1,5 +1,5 @@
-// Comparação de cenários (ORIENTAR): três caminhos lado a lado, selo
-// destaque contextualizado (metadado do agente ou regra R9) e campo "Outro caminho".
+// Planos financeiros: uma alternativa por vez; linguagem simples na interface.
+// Mantém nomes e dados do agente no envio, sem recalcular recomendações.
 import { useId, useState, type FormEvent } from "react";
 import { avisosDe, dadosDe } from "../../agente/envelope";
 import type { Dados } from "../../agente/tipos";
@@ -7,11 +7,9 @@ import { brl, fracaoPercentual, meses } from "../../formatacao/formatar";
 import type { ItemCard } from "../../sessao/modelo";
 import { Avisos } from "../base/Avisos";
 import { DISCLAIMER_SIMULACAO, Disclaimer } from "../base/Disclaimer";
-import { Icone } from "../base/Icone";
 import { bool, capitalizar, lista, num, obj, textos, txt } from "./ler";
-import { CabecalhoCard } from "./partes";
 
-/** R9: metadado `recomendado`; sem ele, o viável de menor % da sobra. */
+/** Metadado do agente ou, quando ausente, plano viável com menor uso da sobra. */
 export function cenarioRecomendado(cenarios: Dados[], metadado?: string): string | undefined {
   if (metadado && cenarios.some((c) => c.nome === metadado)) return metadado;
   const viaveis = cenarios.filter((c) => c.viavel === true && typeof c.pct_capacidade === "number");
@@ -28,109 +26,106 @@ interface CenarioProps {
   onEscolher: (nome: string) => void;
 }
 
+/** Tradução de um detalhe produzido pelo agente. Só a apresentação é alterada. */
+export function explicarConsequencia(texto: string): string {
+  return texto
+    .replace(/Compromete (\d+)% da sobra mensal mediana[^.]*(\.)?/i, (_, pct: string) =>
+      `Para seguir este plano, você usaria ${pct}% do dinheiro que costuma sobrar no mês.`)
+    .replace(/sobra mensal mediana/gi, "dinheiro que costuma sobrar no mês")
+    .replace(/aporte mensal/gi, "valor guardado por mês");
+}
+
 export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoObjetivo, onEscolher }: CenarioProps) {
   const nome = txt(cenario, "nome") ?? "cenário";
   const pct = num(cenario, "pct_capacidade");
   const viavel = bool(cenario, "viavel");
   const prazo = num(cenario, "prazo_meses");
+  const aporte = num(cenario, "aporte_mensal");
   const cortes = lista(cenario, "cortes_sugeridos");
   const economiaAdicional = cortes.reduce((total, corte) => total + (num(corte, "valor_mensal") ?? 0), 0);
-  const aporte = num(cenario, "aporte_mensal");
   const aporteBase = aporte !== undefined ? aporte - economiaAdicional : undefined;
   const sobraBase = pct !== undefined && pct > 0 && aporteBase !== undefined ? aporteBase / pct : undefined;
   const proporcaoTotal = sobraBase && aporte !== undefined ? aporte / sobraBase : undefined;
-  // Percentual-base e aporte total não são equivalentes quando há economias adicionais.
-  const tradeOffs = textos(cenario, "trade_offs").filter(
-    (texto) => economiaAdicional === 0 || !/^Compromete \d+% da sobra/i.test(texto),
-  );
   const noPrazo = prazoObjetivo !== undefined && prazo !== undefined ? prazo <= prazoObjetivo : undefined;
-  const condicoesAtendidas = viavel !== false && noPrazo !== false;
-  const classes = ["glass-card", "cen", "enter", recomendado ? "rec" : ""].filter(Boolean).join(" ");
+  const atraso = prazoObjetivo !== undefined && prazo !== undefined && prazo > prazoObjetivo
+    ? prazo - prazoObjetivo : undefined;
+  const tradeOffs = textos(cenario, "trade_offs")
+    .filter((texto) => economiaAdicional === 0 || !/^Compromete \d+% da sobra/i.test(texto))
+    .map(explicarConsequencia);
+
   return (
-    <article className={classes} aria-label={`Cenário ${capitalizar(nome)}${recomendado ? ", em destaque" : ""}`}>
-      {recomendado && (
-        <span className="rec-flag">
-          <Icone nome="estrela" tamanho="sm" />
-          {economiaAdicional > 0 ? "Exige mudanças no orçamento" : "Caminho em destaque"}
-        </span>
-      )}
-      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <h3 className="t-title">{capitalizar(nome)}</h3>
-        <span className="small num">{fracaoPercentual(proporcaoTotal ?? pct)} da sobra típica {economiaAdicional > 0 ? "no total" : ""}</span>
-      </div>
-      <div className={recomendado ? "meter accent" : "meter"} aria-hidden="true">
-        <span style={{ width: (proporcaoTotal ?? pct) !== undefined ? `${Math.min(100, (proporcaoTotal ?? pct ?? 0) * 100)}%` : "0%" }} />
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <span className="kpi num">
-          {brl(num(cenario, "aporte_mensal"))}
-          <span style={{ fontSize: 15, fontWeight: 800, color: "var(--ink-2)" }}>/mês</span>
-        </span>
-        <span className="small num">{meses(prazo)} até a meta</span>
-      </div>
-      {economiaAdicional > 0 && aporteBase !== undefined && (
-        <div className="note note-info" style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 14, lineHeight: "20px", padding: "12px" }}>
-          <strong>Cortes propostos: {brl(economiaAdicional)}/mês</strong>
-          <span>Essas economias ainda precisam acontecer.</span>
-          <details>
-            <summary style={{ fontWeight: 750, cursor: "pointer" }}>Como se forma o aporte</summary>
-            <div style={{ display: "grid", gap: 4, marginTop: 8 }}>
-              <span className="num">{brl(aporteBase)} da sobra típica + {brl(economiaAdicional)} em cortes.</span>
-              {proporcaoTotal !== undefined && <span>O total usa cerca de <strong className="num">{fracaoPercentual(proporcaoTotal)}</strong> da sobra típica.</span>}
-            </div>
-          </details>
+    <article className="glass-card cen cen-simples" aria-label={`Cenário ${capitalizar(nome)}${recomendado ? ", em destaque" : ""}`}>
+      <header className="cenario-cabecalho">
+        <div>
+          <h3 className="t-title">{prazo !== undefined ? `Plano de ${meses(prazo)}` : "Outra opção de plano"}</h3>
+          <span className="small">Prazo estimado</span>
         </div>
+        {recomendado && <span className="cenario-selo">Em destaque</span>}
+      </header>
+
+      <div className="cenario-valor">
+        <span className="small">Guardar por mês</span>
+        <strong className="kpi num">{brl(aporte)}</strong>
+      </div>
+
+      {atraso !== undefined && (
+        <p className="cenario-alerta" role="note">{meses(atraso)} depois do prazo que você escolheu.</p>
       )}
-      {viavel !== undefined && (
-        <span className={condicoesAtendidas ? "badge badge-ok" : "badge badge-warn"} style={{ alignSelf: "flex-start" }}>
-          <Icone nome={condicoesAtendidas ? "check" : "alerta"} tamanho="sm" traco={condicoesAtendidas ? 3 : undefined} />
-          {noPrazo === false
-            ? `Após o prazo desejado de ${meses(prazoObjetivo)}`
-            : viavel === false
-              ? "Rever viabilidade financeira"
-              : noPrazo === true
-                ? "Dentro do prazo desejado"
-                : "Ver condições do cenário"}
-        </span>
+      {viavel === false && (
+        <p className="cenario-alerta" role="note">Esse valor é maior que o dinheiro que costuma sobrar no mês.</p>
       )}
-      {cortes.length > 0 && (
-          <div className="spec"><details>
-            <summary className="small" style={{ fontWeight: 800, cursor: "pointer" }}>
-              {cortes.length} categorias com corte
-            </summary>
-            <ul style={{ margin: "6px 0 0", paddingLeft: 18, display: "flex", flexDirection: "column", gap: 2 }}>
-              {cortes.map((c, i) => (
-                <li key={`${txt(c, "micro")}-${i}`} className="small num" style={{ fontWeight: 700 }}>
-                  {txt(c, "micro") ?? txt(c, "macro")}: {brl(num(c, "valor_mensal"))}/mês
-                </li>
-              ))}
-            </ul>
-          </details></div>
+      {noPrazo === true && viavel !== false && (
+        <p className="cenario-estado">Dentro do prazo que você escolheu.</p>
       )}
-      {tradeOffs.length > 0 && (
-        <details className="cenario-observacoes">
-          <summary>O que considerar neste caminho</summary>
-          <ul>
-            {tradeOffs.map((t) => <li key={t}>{t}</li>)}
-          </ul>
+      {economiaAdicional > 0 && (
+        <p className="cenario-alerta" role="note">
+          Para isso, seria preciso reduzir gastos em {brl(economiaAdicional)} por mês.
+        </p>
+      )}
+
+      {(pct !== undefined || cortes.length > 0 || tradeOffs.length > 0) && (
+        <details className="cenario-detalhes">
+          <summary>Entenda os valores deste plano</summary>
+          <div className="cenario-detalhes-corpo">
+            {proporcaoTotal !== undefined && (
+              <p>Você usaria cerca de <strong>{fracaoPercentual(proporcaoTotal)}</strong> do dinheiro que costuma sobrar no mês.</p>
+            )}
+            {proporcaoTotal === undefined && pct !== undefined && (
+              <p>Você usaria cerca de <strong>{fracaoPercentual(pct)}</strong> do dinheiro que costuma sobrar no mês.</p>
+            )}
+            {economiaAdicional > 0 && aporteBase !== undefined && (
+              <p>{brl(aporteBase)} do dinheiro que já costuma sobrar + {brl(economiaAdicional)} em economias que ainda precisariam acontecer.</p>
+            )}
+            {cortes.length > 0 && (
+              <>
+                <strong>Onde seria preciso economizar</strong>
+                <ul>{cortes.map((c, i) => (
+                  <li key={`${txt(c, "micro")}-${i}`}>
+                    {txt(c, "micro") ?? txt(c, "macro")}: {brl(num(c, "valor_mensal"))}/mês
+                  </li>
+                ))}</ul>
+              </>
+            )}
+            {tradeOffs.length > 0 && (
+              <>
+                <strong>O que mais considerar</strong>
+                <ul>{tradeOffs.map((t) => <li key={t}>{t}</li>)}</ul>
+              </>
+            )}
+            <p>Os valores são estimativas com base nos meses analisados. A quantia disponível pode mudar.</p>
+          </div>
         </details>
       )}
+
       <button
         type="button"
-        className="btn btn-secondary"
-        style={{ marginTop: "auto" }}
+        className="btn btn-secondary cenario-escolher"
         disabled={bloqueado}
         aria-pressed={escolhido || undefined}
+        aria-label={escolhido ? "Plano escolhido" : `Escolher plano de ${meses(prazo)}`}
         onClick={() => onEscolher(nome)}
       >
-        {escolhido ? (
-          <>
-            <Icone nome="check" tamanho="sm" traco={3} />
-            Caminho escolhido
-          </>
-        ) : (
-          `Escolher plano de ${meses(prazo)}`
-        )}
+        {escolhido ? "Plano escolhido" : "Escolher este plano"}
       </button>
     </article>
   );
@@ -140,18 +135,20 @@ interface Props {
   item: ItemCard;
   onEnviar: (texto: string) => void;
   ocupado: boolean;
-  /** Cenário já escolhido no state atual (desabilita as escolhas). */
   cenarioEscolhido?: string | null;
 }
 
 export function ComparadorCenarios({ item, onEnviar, ocupado, cenarioEscolhido }: Props) {
   const [valor, setValor] = useState("");
+  const [opcao, setOpcao] = useState<string | null>(null);
   const idCampo = useId();
   const dados = dadosDe(item.resposta);
   const cenarios = lista(dados, "cenarios");
   const recomendado = cenarioRecomendado(cenarios, item.recomendado);
   const prazoObjetivo = num(obj(item.estado as Dados, "objetivo"), "prazo_meses");
   const bloqueado = ocupado || Boolean(cenarioEscolhido);
+  const escolhidaParaVer = cenarioEscolhido ?? opcao ?? recomendado ?? txt(cenarios[0], "nome");
+  const atual = cenarios.find((c) => txt(c, "nome") === escolhidaParaVer) ?? cenarios[0];
 
   const simular = (e: FormEvent) => {
     e.preventDefault();
@@ -162,45 +159,56 @@ export function ComparadorCenarios({ item, onEnviar, ocupado, cenarioEscolhido }
   };
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: 12 }} aria-label="Comparação de caminhos para o objetivo">
-      <CabecalhoCard tag="recomendacao" textoTag="Cenários" resposta={item.resposta} />
-      <div className="note note-info" style={{ padding: "12px 14px", lineHeight: "21px" }}>
-        <Icone nome="info" tamanho="sm" />
-        <span>Compare o prazo, o valor mensal e os cortes necessários. O caminho mais rápido pode deixar menos folga no orçamento.</span>
+    <section className="comparador-simples" aria-label="Planos para seu objetivo">
+      <div className="comparador-intro">
+        <h2>Compare os planos</h2>
+        <p>Escolha um prazo para ver quanto precisaria guardar por mês.</p>
       </div>
-      <div role="group" aria-label="Cenários para o seu objetivo" className="grid-cen">
-        {cenarios.map((c) => (
+      <div role="group" aria-label="Escolha um prazo para comparar" className="cenario-opcoes">
+        {cenarios.map((c) => {
+          const nome = txt(c, "nome") ?? "cenário";
+          const selecionado = nome === txt(atual, "nome");
+          return (
+            <button
+              key={nome}
+              type="button"
+              className={selecionado ? "cenario-opcao ativa" : "cenario-opcao"}
+              aria-pressed={selecionado}
+              onClick={() => setOpcao(nome)}
+            >
+              <span>{meses(num(c, "prazo_meses"))}</span>
+              <small>{brl(num(c, "aporte_mensal"))}/mês</small>
+            </button>
+          );
+        })}
+      </div>
+      {atual && (
+        <div className="cenario-unico">
           <CardCenario
-            key={txt(c, "nome")}
-            cenario={c}
-            recomendado={txt(c, "nome") === recomendado}
-            escolhido={txt(c, "nome") === cenarioEscolhido}
+            key={txt(atual, "nome")}
+            cenario={atual}
+            recomendado={txt(atual, "nome") === recomendado}
+            escolhido={txt(atual, "nome") === cenarioEscolhido}
             bloqueado={bloqueado}
             prazoObjetivo={prazoObjetivo}
             onEscolher={(nome) => onEnviar(`Quero o caminho ${nome}`)}
           />
-        ))}
-      </div>
+        </div>
+      )}
       {!cenarioEscolhido && (
-        <form className="glass-card" onSubmit={simular} style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
-          <label htmlFor={idCampo} style={{ fontSize: 15, fontWeight: 800 }}>
-            Prefere outro valor mensal? Simule aqui
-          </label>
-          <div className="field">
-            <input
-              id={idCampo}
-              inputMode="decimal"
-              autoComplete="off"
-              placeholder="ex.: R$ 2.000"
-              value={valor}
-              onChange={(e) => setValor(e.target.value)}
-              disabled={ocupado}
-            />
-            <button type="submit" className="btn btn-secondary btn-sm" disabled={ocupado || !valor.trim()}>
-              Simular
-            </button>
-          </div>
-        </form>
+        <details className="cenario-outro">
+          <summary>Quero guardar outro valor</summary>
+          <form onSubmit={simular} className="cenario-outro-form">
+            <label htmlFor={idCampo}>Quanto você quer guardar por mês?</label>
+            <div className="field">
+              <input id={idCampo} inputMode="decimal" autoComplete="off" placeholder="Ex.: R$ 500"
+                value={valor} onChange={(e) => setValor(e.target.value)} disabled={ocupado} />
+              <button type="submit" className="btn btn-secondary btn-sm" disabled={ocupado || !valor.trim()}>
+                Calcular
+              </button>
+            </div>
+          </form>
+        </details>
       )}
       <Avisos avisos={avisosDe(item.resposta)} />
       <Disclaimer>{DISCLAIMER_SIMULACAO}</Disclaimer>
