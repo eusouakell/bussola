@@ -21,7 +21,7 @@ function textoPremissas(p: Record<string, unknown> | undefined): string[] {
   if (usarSaldo === true) saida.push(`partindo de ${brl(num(p, "saldo_inicial"))} já guardados`);
   if (txt(p, "base_capacidade") === "sobra_mediana") {
     const n = num(p, "meses_considerados");
-    saida.push(n !== undefined ? `sobra mediana de ${meses(n)}` : "sobra mediana");
+    saida.push(n !== undefined ? `sobra mediana (valor central de ${meses(n)} de histórico)` : "sobra mediana");
   }
   return saida;
 }
@@ -41,7 +41,7 @@ export function CardSimulacao({ item }: { item: ItemCard }) {
   const lista = textoPremissas(premissas);
 
   return (
-    <article className="glass-card card-pad enter" aria-label="CardSimulacao">
+    <article className="glass-card card-pad enter" aria-label="Simulação do objetivo financeiro">
       <CabecalhoCard tag="simulacao" resposta={item.resposta} />
       <div style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: "1 1 auto", minWidth: 0 }}>
@@ -70,7 +70,7 @@ export function CardSimulacao({ item }: { item: ItemCard }) {
         {viavel !== undefined && (
           <span className={viavel ? "badge badge-ok" : "badge badge-warn"} style={{ height: 34, fontSize: 14 }}>
             <Icone nome={viavel ? "check" : "alerta"} tamanho="sm" traco={viavel ? 3 : undefined} />
-            {viavel ? "Cabe na sua sobra" : "Não cabe na sua sobra"}
+            {viavel ? "Dentro da sobra estimada" : "Acima da sobra estimada"}
           </span>
         )}
       </div>
@@ -82,13 +82,14 @@ export function CardSimulacao({ item }: { item: ItemCard }) {
           </div>
           <div className="row-between">
             <span className="small num">Aporte {brl(aporte)}</span>
-            <span className="small num">Sua sobra mediana {brl(capacidade)}</span>
+            <span className="small num">Sobra típica (mediana) {brl(capacidade)}</span>
           </div>
           {folga !== undefined && (
             <span className="small num" style={{ fontWeight: 700, color: folga < 0 ? "var(--warn)" : "var(--ok)" }}>
               {folga < 0 ? `Faltam ${brl(Math.abs(folga))}/mês na sua sobra` : `Sobram ${brl(folga)}/mês de folga`}
             </span>
           )}
+          <span className="small">A sobra é uma estimativa baseada no histórico e pode variar de um mês para outro.</span>
         </div>
       )}
 
