@@ -62,10 +62,16 @@ interface MetaForaDoPerfil {
  * insiste: o sonho vira destino final e a meta possível vira degrau.
  */
 export function metaForaDoPerfil(d: MetaForaDoPerfil, tentativa: number): string {
-  const valores = `Sua meta de ${brl(d.valor_alvo)} em ${meses(d.prazo_meses)} exigiria ${brl(d.aporte_necessario)}/mês; a sobra típica é ${brl(d.sobra_mediana)}.`;
-  const alternativa = `Também podemos simular uma primeira etapa de ${brl(d.meta_intermediaria)}.`;
-  if (tentativa <= 1) return `${valores} ${alternativa} Você prefere rever o prazo ou começar por essa etapa?`;
-  return `Seu objetivo continua sendo ${d.descricao}. ${valores} ${alternativa} Qual caminho quer explorar?`;
+  const conta = `${brl(d.valor_alvo)} em ${meses(d.prazo_meses)} pedem ${brl(d.aporte_necessario)} por mês, e o que costuma sobrar no seu mês é ${brl(d.sobra_mediana)}`;
+  const etapa = `${brl(d.meta_intermediaria)} em ${meses(d.prazo_meses)}`;
+  if (tentativa <= 1) {
+    return `Anotei o seu objetivo: ${d.descricao}, ${brl(d.valor_alvo)} em ${meses(d.prazo_meses)}. O plano para chegar nesse tamanho é complexo: ${conta}. Minha sugestão é focar primeiro numa meta que cabe no seu perfil, de ${etapa}. Depois dela, a gente aumenta o objetivo e chega mais perto do seu sonho — assim você tem mais chance de avançar de verdade.`;
+  }
+  const variantes = [
+    `Seu destino final continua anotado: ${d.descricao}, ${brl(d.valor_alvo)}. A conta é que não fecha hoje: ${conta}. Então vamos por etapas, e a primeira é ${etapa}, no seu ritmo. Com ela de pé, subimos o objetivo um degrau, e depois outro, até chegar perto do que você quer.`,
+    `Entendo a vontade, e ela segue no mapa como destino final. Só que os números do seu mês são estes: ${conta}. Por isso eu insisto na primeira etapa de ${etapa}: é dela que sai o próximo degrau em direção ao seu objetivo maior.`,
+  ];
+  return variantes[(tentativa - 2) % variantes.length];
 }
 
 /** BUG-02: assunto fora do escopo, com resposta que escalona a cada turno seguido. */
@@ -110,16 +116,25 @@ export function diagnostico(d: {
   e4: boolean;
   e3: boolean;
 }): string {
-  const partes = [`Este é o retrato do seu histórico de ${periodo(d.periodo)}.`];
-  if (d.e4) partes.push("Os dados são insuficientes para estimar uma sobra confiável.");
-  if (d.e3) partes.push("Não consegui consultar possíveis economias agora.");
+  const partes = [`Olhei seu extrato de ${periodo(d.periodo)}.`];
+  if (typeof d.renda_media === "number") partes.push(`Sua renda média é de ${brl(d.renda_media)}.`);
+  if (d.e4) {
+    partes.push("Tenho poucos meses de histórico para estimar sua sobra com segurança, então trate a simulação como uma referência.");
+  } else if (typeof d.sobra_mediana === "number") {
+    partes.push(`Na mediana, sobram ${brl(d.sobra_mediana)} por mês.`);
+  }
+  if (typeof d.comprometimento === "number") {
+    partes.push(`Suas parcelas comprometem ${percentual(d.comprometimento)} da renda.`);
+  }
+  if (d.e3) partes.push("Não consegui consultar as oportunidades de corte agora; sigo com o que tenho.");
   return partes.join(" ");
 }
 
 export function simulacao(d: { valor_alvo: number; prazo_meses: number; aporte_mensal: number; folga_mensal: number; viavel: boolean }): string {
+  const base = `Para juntar ${brl(d.valor_alvo)} em ${meses(d.prazo_meses)}, o aporte seria de ${brl(d.aporte_mensal)} por mês`;
   return d.viavel
-    ? "A simulação está abaixo. O valor cabe na sobra estimada; quer comparar alternativas?"
-    : "A simulação está abaixo. O aporte supera a sobra estimada; quer comparar alternativas?";
+    ? `${base}, e ainda ficaria uma folga de ${brl(d.folga_mensal)}. Quer ver os caminhos possíveis?`
+    : `${base}, acima do que costuma sobrar. Quer ver os caminhos possíveis?`;
 }
 
 export function aporteLivre(d: { aporte_mensal: number; valor_alvo: number; prazo_meses: number; viavel: boolean; capacidade: number }): string {
@@ -140,12 +155,15 @@ export function comparacao(d: {
   if (!d.recomendado) {
     return `Montei três caminhos com a sua sobra. Nenhum deles cabe em ${meses(d.prazo_objetivo)}; dá para alongar o prazo ou rever a meta.`;
   }
-  return "Compare os três caminhos abaixo. O mais rápido nem sempre deixa mais folga no orçamento. Você também pode testar outro valor mensal.";
+  const r = d.recomendado;
+  const fora = d.fora.map((c) => `${c.nome}: ${meses(c.prazo_meses)}`).join("; ");
+  const frase = `Comparei três caminhos. O ${r.nome} atinge a meta em ${meses(r.prazo_meses)}, com aporte de ${brl(r.aporte_mensal)} por mês, mas pode exigir cortes. Antes de escolher, compare o impacto no orçamento: chegar mais rápido não é necessariamente melhor.`;
+  return fora ? `${frase} Os outros levam mais tempo (${fora}). Você também pode simular o aporte para o prazo desejado de ${meses(d.prazo_objetivo)}.` : frase;
 }
 
 export function escolha(nome: string, viavel: boolean): string {
   const aviso = viavel ? "" : " Esse caminho passa do seu prazo, mas posso seguir com ele.";
-  return `Caminho ${nome} selecionado.${aviso} Confira as condições antes de autorizar a criação do plano.`;
+  return `Boa escolha: caminho ${nome}.${aviso} Antes de criar o plano, preciso da sua autorização.`;
 }
 
 export function pedidoPlano(d: { aporte_mensal: number; prazo_meses: number; valor_alvo: number; periodo: string; descricao: string }) {
@@ -187,7 +205,7 @@ export const PEDIDO_FINANCIAMENTO = {
 export const PRECISO_AUTORIZACAO = "Essa ação precisa da sua autorização. Confira o que vou e o que não vou fazer.";
 
 export function planoCriado(d: { aporte_mensal: number; prazo_meses: number }): string {
-  return `Plano criado: ${brl(d.aporte_mensal)}/mês por ${meses(d.prazo_meses)}. Veja o acompanhamento quando quiser.`;
+  return `Pronto, seu plano está criado: ${brl(d.aporte_mensal)} por mês por ${meses(d.prazo_meses)}. Quando quiser, use “Avançar um mês” para ver como o próximo mês foi.`;
 }
 
 export const RECUSA_RESPEITOSA =
