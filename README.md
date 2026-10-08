@@ -10,13 +10,11 @@ Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um obj
 
 Explore a experiência demonstrativa da jornada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. O protótipo apresenta uma simulação; não representa uma oferta bancária, aprovação de crédito ou atendimento real do Itaú.
 
-## Case público — da resposta à decisão
+## Case público — a história por trás da Bússola
 
-[**Conhecer o case editorial V4**](https://eusouakell.github.io/bussola/case/) — história do produto, análise dos dados sintéticos, escolhas de escopo no hackathon, evolução antes/depois, método de Context Engineering e créditos com fotos da equipe e da mentora. Material independente, sem expor documentos internos da organização.
+[**Ver o case**](https://eusouakell.github.io/bussola/case/) — narrativa curta, evolução visual antes/depois, método e créditos. A versão V5 removeu conteúdo repetido e grandes fundos azuis, sem publicar materiais internos do evento.
 
-Fonte da página: [web/public/case/index.html](web/public/case/index.html).
-
-A V4 utiliza uma direção editorial minimalista e padrões de acessibilidade/espacamento do Fluent 2. O [registro de revisão orientado pelos contratos da Fábrica Agêntica](docs/ux/factory-review-v4.md) descreve decisões, verificações e limitações. A composição está isolada em `web/public/case/editorial-v4.css`, sem substituir o design system do protótipo. Após o merge, o GitHub Pages atualiza o endereço automaticamente via workflow `static-demo-pages`.
+Código: [web/public/case/index.html](web/public/case/index.html). Revisão de UX Lead, UX Writing e Experience Design: [docs/ux/lead-review-v5.md](docs/ux/lead-review-v5.md). O site atualiza após o merge e a conclusão do workflow `static-demo-pages`.
 
 ## Auditoria de UX/UI e UX Writing
 
