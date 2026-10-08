@@ -58,6 +58,14 @@ export function CardConsentimento({ item, consentimento, onEnviar, ocupado }: Pr
   const [detalhes, setDetalhes] = useState(false);
   const situacao = situacaoConsentimento(item, consentimento);
   const resumo = txt(item.pedido, "resumo") ?? consentimento?.resumo ?? "Autorizar esta ação";
+  const acoes: Record<string, string> = {
+    criar_plano: "Autorizar criação do plano",
+    ativar_lembretes: "Autorizar lembretes mensais",
+    ajustar_plano: "Autorizar ajuste do plano",
+    simular_contratacao: "Autorizar simulação de financiamento",
+    compartilhar_dados: "Autorizar compartilhamento de dados",
+  };
+  const rotuloAutorizacao = acoes[item.acao] ?? "Autorizar esta ação";
 
   if (situacao !== "pendente") {
     const aceito = situacao === "aceito";
@@ -102,7 +110,7 @@ export function CardConsentimento({ item, consentimento, onEnviar, ocupado }: Pr
   }
 
   return (
-    <article className="glass-consent enter" aria-label="CardConsentimento" style={{ padding: 24, display: "flex", flexDirection: "column", gap: 18 }}>
+    <article className="glass-consent enter" aria-label={`Pedido de autorização: ${resumo}`} style={{ padding: 24, display: "flex", flexDirection: "column", gap: 18 }}>
       <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
         <span className="shield-badge">
           <Icone nome="escudo" tamanho="lg" />
@@ -118,14 +126,14 @@ export function CardConsentimento({ item, consentimento, onEnviar, ocupado }: Pr
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
         <button type="button" className="btn btn-auth" disabled={ocupado} onClick={() => onEnviar("sim")}>
           <Icone nome="check" traco={3} />
-          Autorizar
+          {rotuloAutorizacao}
         </button>
         <button type="button" className="btn btn-secondary" disabled={ocupado} onClick={() => onEnviar("não")}>
           Agora não
         </button>
       </div>
       <div className="hline" />
-      <Disclaimer icone="escudo">Você pode revogar quando quiser. Esta decisão fica registrada.</Disclaimer>
+      <Disclaimer icone="escudo">Esta decisão fica registrada e vale somente para a finalidade descrita acima.</Disclaimer>
     </article>
   );
 }
