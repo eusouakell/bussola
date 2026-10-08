@@ -98,7 +98,7 @@
           "content": {
             "parts": [
               {
-                "text": "Ótimo objetivo! Anotei seu primeiro apartamento, com prioridade alta. Pra eu calcular certinho: quanto você quer juntar de entrada, e em quanto tempo?"
+                "text": "Vamos planejar seu primeiro apartamento. Quanto você quer juntar e em quanto tempo?"
               }
             ],
             "role": "model"
@@ -996,7 +996,7 @@
           "content": {
             "parts": [
               {
-                "text": "Montei três caminhos com a sua sobra. Recomendo o acelerado: R$ 1.660,85 por mês, com a meta atingida em 19 meses, dentro do seu prazo de 24 meses. Os outros passam do prazo (conservador: 44 meses; equilibrado: 29 meses)."
+                "text": "Comparei três caminhos. O acelerado atinge a meta em 19 meses, com aporte de R$ 1.660,85 por mês, mas pode exigir cortes. Antes de escolher, compare o impacto no orçamento: chegar mais rápido não é necessariamente melhor. Os outros levam mais tempo (conservador: 44 meses; equilibrado: 29 meses). Você também pode simular o aporte para o prazo desejado de 24 meses."
               }
             ],
             "role": "model"
