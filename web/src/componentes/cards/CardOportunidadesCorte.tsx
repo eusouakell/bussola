@@ -20,7 +20,7 @@ export function CardOportunidadesCorte({ item }: { item: ItemCard }) {
       <span className="t-title">Onde dá para economizar</span>
       {categorias.length === 0 ? (
         <p className="small" style={{ margin: 0 }}>
-          Não encontrei gastos discricionários com espaço para corte neste período.
+          Não encontrei gastos que você poderia reduzir nesse período.
         </p>
       ) : (
         <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -54,7 +54,7 @@ export function CardOportunidadesCorte({ item }: { item: ItemCard }) {
       )}
       {!todas && categorias.length > VISIVEIS && (
         <button type="button" className="link-btn" style={{ alignSelf: "flex-start" }} onClick={() => setTodas(true)}>
-          Ver todas as {categorias.length} categorias
+          Ver outras opções ({categorias.length})
         </button>
       )}
       <Avisos avisos={avisosDe(item.resposta)} />
