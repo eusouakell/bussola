@@ -1,29 +1,26 @@
-// Simulação do objetivo (ANTECIPAR): aporte exigido (modo prazo) ou prazo
-// resultante (modo aporte), premissas explícitas e disclaimer.
+// Simulação: mostrar a decisão antes dos detalhes estatísticos.
 import { avisosDe, dadosDe } from "../../agente/envelope";
 import { brl, fracaoPercentual, meses } from "../../formatacao/formatar";
 import type { ItemCard } from "../../sessao/modelo";
 import { Avisos } from "../base/Avisos";
 import { DISCLAIMER_SIMULACAO, Disclaimer } from "../base/Disclaimer";
-import { Icone } from "../base/Icone";
 import { bool, num, obj, txt } from "./ler";
-import { CabecalhoCard } from "./partes";
 
-function textoPremissas(p: Record<string, unknown> | undefined): string[] {
+function explicarCondicoes(p: Record<string, unknown> | undefined): string[] {
   if (!p) return [];
-  const saida: string[] = [];
+  const lista: string[] = [];
   const rendimento = num(p, "rendimento_mensal");
-  if (rendimento !== undefined) {
-    saida.push(rendimento === 0 ? "sem rendimento considerado" : `rendimento de ${fracaoPercentual(rendimento)} ao mês`);
-  }
-  const usarSaldo = bool(p, "usar_saldo_atual");
-  if (usarSaldo === false) saida.push("sem usar o saldo atual da conta");
-  if (usarSaldo === true) saida.push(`partindo de ${brl(num(p, "saldo_inicial"))} já guardados`);
+  if (rendimento !== undefined) lista.push(rendimento === 0 ? "Sem considerar rendimentos." : `Considerando rendimento de ${fracaoPercentual(rendimento)} ao mês.`);
+  const saldoAtual = bool(p, "usar_saldo_atual");
+  if (saldoAtual === false) lista.push("Sem contar dinheiro que você já tem guardado.");
+  if (saldoAtual === true) lista.push(`Inclui ${brl(num(p, "saldo_inicial"))} já guardados.`);
   if (txt(p, "base_capacidade") === "sobra_mediana") {
     const n = num(p, "meses_considerados");
-    saida.push(n !== undefined ? `sobra mediana (valor central de ${meses(n)} de histórico)` : "sobra mediana");
+    lista.push(n !== undefined
+      ? `O valor disponível por mês foi estimado a partir de ${meses(n)} do seu histórico.`
+      : "O valor disponível por mês foi estimado a partir do seu histórico.");
   }
-  return saida;
+  return lista;
 }
 
 export function CardSimulacao({ item }: { item: ItemCard }) {
@@ -36,70 +33,39 @@ export function CardSimulacao({ item }: { item: ItemCard }) {
   const folga = num(dados, "folga_mensal");
   const viavel = bool(dados, "viavel");
   const modoAporte = txt(dados, "modo") === "aporte";
-  const largura =
-    aporte !== undefined && capacidade ? `${Math.min(100, Math.max(2, (aporte / capacidade) * 100))}%` : "0%";
-  const lista = textoPremissas(premissas);
+  const condicoes = explicarCondicoes(premissas);
 
   return (
-    <article className="glass-card card-pad enter" aria-label="Simulação do objetivo financeiro">
-      <CabecalhoCard tag="simulacao" resposta={item.resposta} />
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: "1 1 auto", minWidth: 0 }}>
-          <span className="prose" style={{ fontWeight: 700, color: "var(--ink-2)" }}>
-            {modoAporte ? (
-              <>
-                Guardando <strong className="num">{brl(aporte)}</strong>/mês, você junta <strong className="num">{brl(valor)}</strong> em
-              </>
-            ) : (
-              <>
-                Juntar <strong className="num">{brl(valor)}</strong> em <strong className="num">{meses(prazo)}</strong> exige
-              </>
-            )}
-          </span>
-          <span className="kpi-xl">
-            {modoAporte ? (
-              meses(prazo)
-            ) : (
-              <>
-                {brl(aporte)}
-                <span style={{ fontSize: 20, fontWeight: 800, color: "var(--ink-2)" }}>/mês</span>
-              </>
-            )}
-          </span>
-        </div>
-        {viavel !== undefined && (
-          <span className={viavel ? "badge badge-ok" : "badge badge-warn"} style={{ height: 34, fontSize: 14 }}>
-            <Icone nome={viavel ? "check" : "alerta"} tamanho="sm" traco={viavel ? 3 : undefined} />
-            {viavel ? "Dentro da sobra estimada" : "Acima da sobra estimada"}
-          </span>
-        )}
-      </div>
-
-      {capacidade !== undefined && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <div className="meter lg" aria-hidden="true">
-            <span style={{ width: largura, background: viavel === false ? "var(--warn-fill)" : "var(--tag-sim)" }} />
-          </div>
-          <div className="row-between">
-            <span className="small num">Aporte {brl(aporte)}</span>
-            <span className="small num">Sobra típica (mediana) {brl(capacidade)}</span>
-          </div>
-          {folga !== undefined && (
-            <span className="small num" style={{ fontWeight: 700, color: folga < 0 ? "var(--warn)" : "var(--ok)" }}>
-              {folga < 0 ? `Faltam ${brl(Math.abs(folga))}/mês na sua sobra` : `Sobram ${brl(folga)}/mês de folga`}
-            </span>
-          )}
-          <span className="small">A sobra é uma estimativa baseada no histórico e pode variar de um mês para outro.</span>
-        </div>
+    <article className="glass-card card-pad enter resumo-simulacao" aria-label="Simulação do objetivo financeiro">
+      <h3 className="t-title">{modoAporte ? "Quando você pode chegar à meta" : "Quanto guardar por mês"}</h3>
+      <strong className="resumo-orcamento-valor num">
+        {modoAporte ? meses(prazo) : brl(aporte)}
+      </strong>
+      <p className="small">
+        {modoAporte
+          ? `Se você guardar ${brl(aporte)} por mês para chegar a ${brl(valor)}.`
+          : `Estimativa para juntar ${brl(valor)} em ${meses(prazo)}.`}
+      </p>
+      {viavel === false && (
+        <p className="cenario-alerta" role="note">Esse valor é maior do que o dinheiro que costuma sobrar no mês.</p>
       )}
-
-      {lista.length > 0 && (
-        <div className="note note-info" style={{ fontSize: 14.5, lineHeight: "20px", padding: "10px 12px" }}>
-          <Icone nome="info" />
-          <span>
-            <strong>Premissas:</strong> {lista.join(" · ")}
-          </span>
-        </div>
+      {viavel === true && (
+        <p className="cenario-estado">Pelo histórico, esse valor cabe no dinheiro que costuma sobrar.</p>
+      )}
+      {(condicoes.length > 0 || capacidade !== undefined || folga !== undefined) && (
+        <details className="cenario-detalhes">
+          <summary>Confira como calculamos</summary>
+          <div className="cenario-detalhes-corpo">
+            {capacidade !== undefined && <p>Dinheiro que costuma sobrar por mês: {brl(capacidade)}.</p>}
+            {folga !== undefined && (
+              <p>{folga >= 0
+                ? `Depois de guardar esse valor, sobrariam cerca de ${brl(folga)} no mês.`
+                : `Faltariam cerca de ${brl(Math.abs(folga))} por mês para seguir esse plano.`}</p>
+            )}
+            {condicoes.map((condicao) => <p key={condicao}>{condicao}</p>)}
+            <p>Isso é uma simulação, e o dinheiro disponível pode variar de um mês para outro.</p>
+          </div>
+        </details>
       )}
       <Avisos avisos={avisosDe(item.resposta)} />
       <Disclaimer>{DISCLAIMER_SIMULACAO}</Disclaimer>
