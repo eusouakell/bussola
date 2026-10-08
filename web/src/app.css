@@ -16,21 +16,21 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --color-accent: #ff6200;
-  --color-accent-cta: #ff6200;
-  --color-accent-ink: #ff6200;
+  --color-accent-cta: #bd4900;
+  --color-accent-ink: #bd4900;
   --color-ink: #02036c;
   --color-ink-2: #5c6b79;
   --color-ink-3: #5c6b79;
   --color-sand-50: #f4f6f9;
   --color-smoke-900: #02036c;
   --color-ok: #0f470c;
-  --color-warn: #ff6200;
+  --color-warn: #bd4900;
   --color-warn-fill: #ff6200;
   --color-err: #e60000;
 
   --color-tag-diagnostico: #02036c;
   --color-tag-simulacao: #5c6b79;
-  --color-tag-recomendacao: #ff6200;
+  --color-tag-recomendacao: #bd4900;
   --color-tag-acao: #0f470c;
 
   --radius-card: 22px;
