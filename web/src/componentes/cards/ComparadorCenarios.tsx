@@ -43,6 +43,8 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
   const tradeOffs = textos(cenario, "trade_offs").filter(
     (texto) => economiaAdicional === 0 || !/^Compromete \d+% da sobra/i.test(texto),
   );
+  const noPrazo = prazoObjetivo !== undefined && prazo !== undefined ? prazo <= prazoObjetivo : undefined;
+  const condicoesAtendidas = viavel !== false && noPrazo !== false;
   const classes = ["glass-card", "cen", "enter", recomendado ? "rec" : ""].filter(Boolean).join(" ");
   return (
     <article className={classes} aria-label={`Cenário ${capitalizar(nome)}${recomendado ? ", em destaque" : ""}`}>
@@ -53,8 +55,8 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
         </span>
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <span className="t-title">{capitalizar(nome)}</span>
-        <span className="small num">{fracaoPercentual(pct)} da sobra como base{economiaAdicional > 0 ? " (antes dos cortes)" : ""}</span>
+        <h3 className="t-title">{capitalizar(nome)}</h3>
+        <span className="small num">{fracaoPercentual(pct)} da sobra estimada{economiaAdicional > 0 ? " antes dos cortes" : ""}</span>
       </div>
       <div className={recomendado ? "meter accent" : "meter"} aria-hidden="true">
         <span style={{ width: pct !== undefined ? `${Math.min(100, pct * 100)}%` : "0%" }} />
@@ -76,13 +78,15 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
         </div>
       )}
       {viavel !== undefined && (
-        <span className={viavel ? "badge badge-ok" : "badge badge-warn"} style={{ alignSelf: "flex-start" }}>
-          <Icone nome={viavel ? "check" : "alerta"} tamanho="sm" traco={viavel ? 3 : undefined} />
-          {prazoObjetivo !== undefined
-            ? `${viavel ? "Cabe" : "Não cabe"} em ${meses(prazoObjetivo)}`
-            : viavel
-              ? "Cabe no prazo"
-              : "Não cabe no prazo"}
+        <span className={condicoesAtendidas ? "badge badge-ok" : "badge badge-warn"} style={{ alignSelf: "flex-start" }}>
+          <Icone nome={condicoesAtendidas ? "check" : "alerta"} tamanho="sm" traco={condicoesAtendidas ? 3 : undefined} />
+          {noPrazo === false
+            ? `Após o prazo desejado de ${meses(prazoObjetivo)}`
+            : viavel === false
+              ? "Rever viabilidade financeira"
+              : noPrazo === true
+                ? "Dentro do prazo desejado"
+                : "Ver condições do cenário"}
         </span>
       )}
       <div className="spec">
@@ -104,11 +108,14 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
           </details>
         )}
       </div>
-      {tradeOffs.map((t) => (
-        <p key={t} className="quote">
-          {t}
-        </p>
-      ))}
+      {tradeOffs.length > 0 && (
+        <details className="cenario-observacoes">
+          <summary>O que considerar neste caminho</summary>
+          <ul>
+            {tradeOffs.map((t) => <li key={t}>{t}</li>)}
+          </ul>
+        </details>
+      )}
       <button
         type="button"
         className="btn btn-secondary"
@@ -160,7 +167,7 @@ export function ComparadorCenarios({ item, onEnviar, ocupado, cenarioEscolhido }
       <CabecalhoCard tag="recomendacao" textoTag="Cenários" resposta={item.resposta} />
       <div className="note note-info" style={{ padding: "12px 14px", lineHeight: "21px" }}>
         <Icone nome="info" tamanho="sm" />
-        <span>Compare prazo, aporte mensal e cortes necessários. Chegar antes não significa ter mais folga financeira. Você pode simular outro valor antes de escolher.</span>
+        <span>Compare o prazo, o valor mensal e os cortes necessários. O caminho mais rápido pode deixar menos folga no orçamento.</span>
       </div>
       <div role="group" aria-label="Cenários para o seu objetivo" className="grid-cen">
         {cenarios.map((c) => (
@@ -178,7 +185,7 @@ export function ComparadorCenarios({ item, onEnviar, ocupado, cenarioEscolhido }
       {!cenarioEscolhido && (
         <form className="glass-card" onSubmit={simular} style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
           <label htmlFor={idCampo} style={{ fontSize: 15, fontWeight: 800 }}>
-            Outro caminho: quanto você quer guardar por mês?
+            Prefere outro valor mensal? Simule aqui
           </label>
           <div className="field">
             <input

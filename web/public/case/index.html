@@ -15,6 +15,7 @@
 @media(max-width:980px){.journey{grid-template-columns:repeat(3,1fr)}.team{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-grid{grid-template-columns:1fr}.hero-aside{max-width:580px}.hero:after{right:4%;bottom:26%;width:70px;height:70px}.baseline{grid-template-columns:200px 1fr}}
 @media(max-width:680px){.nav{position:relative}.nav-inner{padding:13px 0;align-items:start;flex-direction:column;gap:10px}.nav-links{gap:11px}.hero{padding:65px 0 76px}.hero:after{display:none}.section{padding:61px 0}.two,.three,.evidence-row,.metric-strip,.baseline,.resource-list{grid-template-columns:1fr}.journey{grid-template-columns:repeat(2,minmax(0,1fr))}.intro{display:block}.metric{padding:19px}.baseline-score strong{font-size:3.7rem}.evidence-content{padding:19px}.wrap{width:min(1170px,calc(100% - 30px))}}@media(max-width:390px){.team{grid-template-columns:1fr 1fr;gap:10px}.person{padding:14px}.person img{width:84px;height:84px}.person h3{font-size:.91rem}.journey li{min-height:95px;padding:15px 10px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{.nav{position:relative}.hero,.author{background:#fff;color:var(--ink)}.hero p,.author p{color:var(--ink)}.section{padding:28px 0}.evidence-row,.team,.baseline,.two{break-inside:avoid}.page-break{break-before:page}}
 </style>
+<link rel="stylesheet" href="./editorial-v4.css">
 </head>
 <body>
 <a class="skip" href="#main">Pular para o conteúdo</a>
@@ -75,7 +76,7 @@
 
 <section class="section" id="scorecard"><div class="wrap"><div class="intro"><div><div class="section-num">05 / Medição</div><h2>Progresso comprovado. Nota final em aberto.</h2><p>O scorecard abaixo é uma avaliação heurística independente feita antes das melhorias, não uma nota atribuída pelo Itaú.</p></div></div>
  <div class="metric-strip"><div class="metric"><strong>2 PRs</strong><span>rodadas integradas à main</span></div><div class="metric"><strong>CI verde</strong><span>pipeline automatizado aprovado após a segunda rodada</span></div><div class="metric"><strong>6,4/10</strong><span>baseline heurístico, ainda sem reavaliação</span></div></div>
- <div class="baseline"><div class="baseline-score"><div><div class="top-label" style="color:#ffbb91">Avaliação inicial</div><strong>6,4<small> /10</small></strong></div><p>Não se atribui 10/10 por adicionar testes ou redesenhar componentes. A experiência ainda precisa ser validada por pessoas e tecnologias assistivas.</p></div><div class="baseline-list" aria-label="Dimensões da avaliação inicial">
+ <details class="score-details"><summary>Consultar as nove dimensões do scorecard original</summary><div class="baseline"><div class="baseline-score"><div><div class="top-label" style="color:#ffbb91">Avaliação inicial</div><strong>6,4<small> /10</small></strong></div><p>Não se atribui 10/10 por adicionar testes ou redesenhar componentes. A experiência ainda precisa ser validada por pessoas e tecnologias assistivas.</p></div><div class="baseline-list" aria-label="Dimensões da avaliação inicial">
   <div class="dimension"><span>Jornada e arquitetura da informação</span><b>8/10</b><div class="meter"><i style="width:80%"></i></div></div>
   <div class="dimension"><span>Feedback e estados do sistema</span><b>7/10</b><div class="meter"><i style="width:70%"></i></div></div>
   <div class="dimension"><span>Hierarquia visual e Gestalt</span><b>7/10</b><div class="meter"><i style="width:70%"></i></div></div>
@@ -86,6 +87,7 @@
   <div class="dimension"><span>Confiança e consentimento</span><b>6/10</b><div class="meter"><i style="width:60%"></i></div></div>
   <div class="dimension"><span>Sistema visual e componentes</span><b>8/10</b><div class="meter"><i style="width:80%"></i></div></div>
  </div></div>
+ </details>
  <h3 style="margin-top:39px">O que ainda precisa de evidência</h3>
  <div class="three" style="margin-top:16px"><div class="panel"><span class="index">Acessibilidade</span><h3>WCAG 2.2 AA</h3><p>Testar reflow, foco, leitura por tecnologias assistivas, interação por teclado, erros e modos de exibição.</p></div><div class="panel"><span class="index">Decisão financeira</span><h3>Compreensão real</h3><p>Validar se as pessoas entendem o que depende de cortes, quais são as alternativas e o que autorizam.</p></div><div class="panel"><span class="index">Responsible AI</span><h3>Guardrails verificáveis</h3><p>Confrontar arquitetura declarada, políticas, execução e evidências de bloqueio em cenários adversariais.</p></div></div>
 </div></section>
