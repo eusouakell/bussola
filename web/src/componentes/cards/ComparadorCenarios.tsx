@@ -1,5 +1,5 @@
 // Comparação de cenários (ORIENTAR): três caminhos lado a lado, selo
-// Recomendado (metadado do agente ou regra R9) e campo "Outro caminho".
+// destaque contextualizado (metadado do agente ou regra R9) e campo "Outro caminho".
 import { useId, useState, type FormEvent } from "react";
 import { avisosDe, dadosDe } from "../../agente/envelope";
 import type { Dados } from "../../agente/tipos";
@@ -34,19 +34,27 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
   const viavel = bool(cenario, "viavel");
   const prazo = num(cenario, "prazo_meses");
   const cortes = lista(cenario, "cortes_sugeridos");
-  const tradeOffs = textos(cenario, "trade_offs");
+  const economiaAdicional = cortes.reduce((total, corte) => total + (num(corte, "valor_mensal") ?? 0), 0);
+  const aporte = num(cenario, "aporte_mensal");
+  const aporteBase = aporte !== undefined ? aporte - economiaAdicional : undefined;
+  const sobraBase = pct !== undefined && pct > 0 && aporteBase !== undefined ? aporteBase / pct : undefined;
+  const proporcaoTotal = sobraBase && aporte !== undefined ? aporte / sobraBase : undefined;
+  // Percentual-base e aporte total não são equivalentes quando há economias adicionais.
+  const tradeOffs = textos(cenario, "trade_offs").filter(
+    (texto) => economiaAdicional === 0 || !/^Compromete \d+% da sobra/i.test(texto),
+  );
   const classes = ["glass-card", "cen", "enter", recomendado ? "rec" : ""].filter(Boolean).join(" ");
   return (
-    <article className={classes} aria-label={`Cenário ${capitalizar(nome)}${recomendado ? ", recomendado" : ""}`}>
+    <article className={classes} aria-label={`Cenário ${capitalizar(nome)}${recomendado ? ", em destaque" : ""}`}>
       {recomendado && (
         <span className="rec-flag">
           <Icone nome="estrela" tamanho="sm" />
-          Recomendado
+          {economiaAdicional > 0 ? "Em destaque · exige cortes" : "Em destaque"}
         </span>
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <span className="t-title">{capitalizar(nome)}</span>
-        <span className="small num">{fracaoPercentual(pct)} da sobra</span>
+        <span className="small num">{fracaoPercentual(pct)} da sobra como base{economiaAdicional > 0 ? " (antes dos cortes)" : ""}</span>
       </div>
       <div className={recomendado ? "meter accent" : "meter"} aria-hidden="true">
         <span style={{ width: pct !== undefined ? `${Math.min(100, pct * 100)}%` : "0%" }} />
@@ -58,6 +66,15 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
         </span>
         <span className="small num">{meses(prazo)} até a meta</span>
       </div>
+      {economiaAdicional > 0 && aporteBase !== undefined && (
+        <div className="note note-info" style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 14.5, lineHeight: "20px", padding: "12px" }}>
+          <strong>Como se forma o aporte</strong>
+          <span className="num">{brl(aporteBase)}/mês da sobra atual + {brl(economiaAdicional)}/mês de cortes propostos.</span>
+          {proporcaoTotal !== undefined && (
+            <span>O total equivale a cerca de <strong className="num">{fracaoPercentual(proporcaoTotal)}</strong> da sobra atual. Os cortes ainda precisam acontecer.</span>
+          )}
+        </div>
+      )}
       {viavel !== undefined && (
         <span className={viavel ? "badge badge-ok" : "badge badge-warn"} style={{ alignSelf: "flex-start" }}>
           <Icone nome={viavel ? "check" : "alerta"} tamanho="sm" traco={viavel ? 3 : undefined} />
@@ -94,7 +111,7 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
       ))}
       <button
         type="button"
-        className={recomendado ? "btn btn-primary" : "btn btn-secondary"}
+        className="btn btn-secondary"
         style={{ marginTop: "auto" }}
         disabled={bloqueado}
         aria-pressed={escolhido || undefined}
@@ -106,7 +123,7 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
             Caminho escolhido
           </>
         ) : (
-          "Escolher este caminho"
+          `Escolher plano de ${meses(prazo)}`
         )}
       </button>
     </article>
@@ -139,8 +156,12 @@ export function ComparadorCenarios({ item, onEnviar, ocupado, cenarioEscolhido }
   };
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: 12 }} aria-label="ComparadorCenarios">
+    <section style={{ display: "flex", flexDirection: "column", gap: 12 }} aria-label="Comparação de caminhos para o objetivo">
       <CabecalhoCard tag="recomendacao" textoTag="Cenários" resposta={item.resposta} />
+      <div className="note note-info" style={{ padding: "12px 14px", lineHeight: "21px" }}>
+        <Icone nome="info" tamanho="sm" />
+        <span>Compare prazo, aporte mensal e cortes necessários. Chegar antes não significa ter mais folga financeira. Você pode simular outro valor antes de escolher.</span>
+      </div>
       <div role="group" aria-label="Cenários para o seu objetivo" className="grid-cen">
         {cenarios.map((c) => (
           <CardCenario
