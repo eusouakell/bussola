@@ -123,6 +123,22 @@ describe("Conversa: leitura sem interrupção", () => {
   });
 });
 
+describe("Conversa: anúncio acessível da resposta", () => {
+  it("só anuncia o resultado depois que o agente terminou de responder", () => {
+    const props = {
+      estado: {},
+      lento: false,
+      onEnviar: () => {},
+      onRepetir: () => {},
+    };
+    const itens = [cliente("c1", "oi"), agente("a1")];
+    const { rerender } = render(<Conversa {...props} itens={itens} ocupado />);
+    expect(screen.queryByText("Resposta disponível na conversa.")).not.toBeInTheDocument();
+    rerender(<Conversa {...props} itens={itens} ocupado={false} />);
+    expect(screen.getByRole("status", { name: "" })).toHaveTextContent("Resposta disponível na conversa.");
+  });
+});
+
 describe("Conversa: estados de espera", () => {
   it("mostra boas-vindas sem mensagens do cliente", () => {
     render(<Conversa itens={[]} estado={{}} ocupado={false} lento={false} onEnviar={() => {}} onRepetir={() => {}} vazio={<p>boas-vindas</p>} />);
