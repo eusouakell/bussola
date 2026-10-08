@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 // Gate mínimo: cobre o texto comum dos CTAs. Não substitui auditoria WCAG no navegador.
-const css = readFileSync(new URL("../../app.css", import.meta.url), "utf8");
+const css = readFileSync("src/app.css", "utf8");
 
 function corToken(nome: string): string {
   const resultado = css.match(new RegExp(`--${nome}:\\s*(#[0-9a-fA-F]{6})\\s*;`));
