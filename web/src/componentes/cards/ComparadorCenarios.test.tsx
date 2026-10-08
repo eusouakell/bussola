@@ -38,7 +38,7 @@ describe("CardCenario · explicabilidade financeira", () => {
     );
 
     const artigo = screen.getByRole("article", { name: "Cenário Acelerado, em destaque" });
-    expect(artigo.textContent).toContain("Em destaque · exige cortes");
+    expect(artigo.textContent).toContain("Exige mudanças no orçamento");
     expect(artigo.textContent).toContain("1.383,20");
     expect(artigo.textContent).toContain("277,65");
     expect(artigo.textContent).toContain("96%");

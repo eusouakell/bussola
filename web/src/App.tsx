@@ -37,7 +37,7 @@ export function App() {
   const pedeLogin = modo === "ao-vivo" && (auth.fase === "anonimo" || auth.fase === "verificando");
   const desktop = useMidia("(min-width: 1024px)", true);
   const [tema, setTema] = useState<Tema>("claro");
-  const [painel, setPainel] = useState(true);
+  const [painel, setPainel] = useState(false); // Bastidores só quando solicitados: a jornada tem prioridade.
   const [folha, setFolha] = useState(false);
   const [vista, setVista] = useState<NomeVista | null>(null);
 
@@ -114,7 +114,7 @@ export function App() {
         vazio={<BoasVindas nome={modo === "ao-vivo" ? auth.persona?.displayName : undefined} onEscolher={enviar} desabilitado={!pronta || ocupado} compacto={!desktop} />}
       />
       <Composer
-        sugestoes={sugestoesDoComposer(modelo, modo)}
+        sugestoes={modelo.itens.some((item) => item.tipo === "mensagem_cliente") ? sugestoesDoComposer(modelo, modo) : []}
         onEnviar={enviar}
         onParar={sessao.parar}
         ocupado={ocupado}
