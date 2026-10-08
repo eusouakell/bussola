@@ -82,16 +82,32 @@ function semCard(nome: never): null {
 
 export function Conversa({ itens, estado, ocupado, lento, onEnviar, onRepetir, onModoSimulado, vazio }: Props) {
   const rolagem = useRef<HTMLElement>(null);
+  const pertoDoFim = useRef(true);
+  const ultimaMensagemCliente = useRef<string | null>(null);
   const grupos = agrupar(itens);
   const ultimo = itens.at(-1);
   const semCliente = !itens.some((i) => i.tipo === "mensagem_cliente");
   const consultando = itens.some((i) => i.tipo === "ferramenta" && i.status === "consultando");
   const esperando = ocupado && (ultimo?.tipo === "mensagem_cliente" || ultimo?.tipo === "divisor_mes");
 
-  // Rola para o fim a cada novidade; nas boas-vindas fica no topo.
+  // Só acompanha as novidades se a pessoa estiver no fim ou tiver enviado mensagem.
+  // Ler uma resposta anterior não deve ser interrompido pelo streaming do agente.
   useEffect(() => {
     const el = rolagem.current;
-    if (el) el.scrollTop = semCliente ? 0 : el.scrollHeight;
+    if (!el) return;
+    if (semCliente) {
+      el.scrollTop = 0;
+      pertoDoFim.current = true;
+      ultimaMensagemCliente.current = null;
+      return;
+    }
+    const ultima = itens.at(-1);
+    const clienteNovo = ultima?.tipo === "mensagem_cliente" && ultima.chave !== ultimaMensagemCliente.current;
+    if (clienteNovo) ultimaMensagemCliente.current = ultima.chave;
+    if (pertoDoFim.current || clienteNovo) {
+      el.scrollTop = el.scrollHeight;
+      pertoDoFim.current = true;
+    }
   }, [itens, ocupado, semCliente]);
 
   function card(item: ItemCard): ReactNode {
@@ -170,7 +186,16 @@ export function Conversa({ itens, estado, ocupado, lento, onEnviar, onRepetir, o
   const blocoNovo = (espera || (esqueleto && !extraNoFim)) && ultimoGrupo?.tipo !== "agente";
 
   return (
-    <section ref={rolagem} className="convo" aria-label="Conversa" aria-live="polite" aria-busy={ocupado}>
+    <section
+      ref={rolagem}
+      className="convo"
+      aria-label="Conversa"
+      aria-busy={ocupado}
+      onScroll={(e) => {
+        const el = e.currentTarget;
+        pertoDoFim.current = el.scrollHeight - el.scrollTop - el.clientHeight <= 96;
+      }}
+    >
       <div className="col" style={semCliente ? { marginBottom: "auto" } : undefined}>
         {semCliente && vazio}
         {grupos.map((g) =>
