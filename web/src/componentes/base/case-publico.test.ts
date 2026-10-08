@@ -27,6 +27,15 @@ describe("Gate editorial do case público", () => {
     }
   });
 
+  it("oferece cards com nome, categoria, mini bio e LinkedIn somente verificado", () => {
+    const cards = Array.from(pageDocument.querySelectorAll<HTMLElement>("#pessoas article.person"));
+    expect(cards).toHaveLength(5);
+    expect(cards.every((card) => card.querySelector("h3") && card.querySelector(".role") && card.querySelector(".bio"))).toBe(true);
+    expect(cards.filter((card) => card.querySelector('a[href*="linkedin.com/in/"]'))).toHaveLength(2);
+    expect(cards.some((card) => card.textContent?.includes("Tecnologia e Dados"))).toBe(true);
+    expect(cards.some((card) => card.textContent?.includes("Yasmim Mafra Maroum"))).toBe(true);
+  });
+
   it("carrega a direção visual sem dependências externas e conserva a medição original", () => {
     const folha = pageDocument.querySelector("head style");
     expect(folha?.textContent).toContain("--ink:#171719");
