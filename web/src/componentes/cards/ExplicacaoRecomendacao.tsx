@@ -13,10 +13,10 @@ export function ExplicacaoRecomendacao({ item }: { item: ItemCard }) {
   const id = useId();
   const trechos = lista(dadosDe(item.resposta), "trechos");
   return (
-    <article className="glass-card card-pad enter" aria-label="ExplicacaoRecomendacao" style={{ gap: 12 }}>
+    <article className="glass-card card-pad enter" aria-label="Fontes e critérios da orientação" style={{ gap: 12 }}>
       <CabecalhoCard tag="recomendacao" resposta={item.resposta} />
       <p className="prose" style={{ fontSize: 16 }}>
-        A recomendação segue boas práticas de planejamento e normas públicas sobre crédito.
+        Esta orientação considera a simulação financeira e, quando disponíveis, as referências listadas aqui. Confira as premissas antes de escolher.
       </p>
       {trechos.length > 0 && (
         <button
@@ -27,7 +27,7 @@ export function ExplicacaoRecomendacao({ item }: { item: ItemCard }) {
           style={{ alignSelf: "flex-start" }}
           onClick={() => setAberto((a) => !a)}
         >
-          Por que essa recomendação?
+          Consultar fontes da orientação
           <Icone nome="chevronBaixo" tamanho="sm" estilo={{ transform: aberto ? "rotate(180deg)" : undefined }} />
         </button>
       )}
