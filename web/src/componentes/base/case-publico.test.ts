@@ -18,7 +18,7 @@ describe("Gate editorial do case público", () => {
   });
 
   it("contém os cinco retratos com descrições e arquivos presentes", () => {
-    const imagens = Array.from(pageDocument.querySelectorAll<HTMLImageElement>('#creditos img'));
+    const imagens = Array.from(pageDocument.querySelectorAll<HTMLImageElement>('#pessoas img'));
     expect(imagens).toHaveLength(5);
     for (const img of imagens) {
       expect(img.alt.trim().length).toBeGreaterThan(12);
@@ -28,10 +28,9 @@ describe("Gate editorial do case público", () => {
   });
 
   it("carrega a direção visual sem dependências externas e conserva a medição original", () => {
-    const css = pageDocument.querySelector<HTMLLinkElement>('link[rel="stylesheet"][href="./editorial-v4.css"]');
-    expect(css).not.toBeNull();
-    expect(existsSync("public/case/editorial-v4.css")).toBe(true);
-    expect(pageDocument.querySelector(".score-details > summary")).not.toBeNull();
+    const folha = pageDocument.querySelector("head style");
+    expect(folha?.textContent).toContain("--ink:#171719");
+    expect(pageDocument.querySelector(".resources details > summary")).not.toBeNull();
     expect(page).toContain("6,4/10");
   });
 });
