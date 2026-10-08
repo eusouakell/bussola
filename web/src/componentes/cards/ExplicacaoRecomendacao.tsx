@@ -1,57 +1,52 @@
-// Explicação da recomendação (ORIENTAR): trechos da base de conhecimento
-// (buscar_contexto_financeiro) atrás de "Por que essa recomendação?".
-import { useId, useState } from "react";
+// Fontes opcionais da orientação. Sem cartão redundante na conversa.
 import { avisosDe, dadosDe } from "../../agente/envelope";
 import type { ItemCard } from "../../sessao/modelo";
-import { Avisos } from "../base/Avisos";
-import { Icone } from "../base/Icone";
 import { lista, obj, txt } from "./ler";
-import { CabecalhoCard } from "./partes";
+
+/** Metadados da demonstração e aviso educativo padrão já aparecem no contexto geral.
+ *  Alertas materiais (ex.: fonte não localizada) continuam visíveis. */
+export function avisosContextuais(avisos: string[]): string[] {
+  return [...new Set(avisos)].filter((aviso) =>
+    !/^Resposta simulada pelo front; regravar após o ciclo \d{3}$/.test(aviso) &&
+    !/conteúdo educativo e geral, não é recomendação individual/i.test(aviso) &&
+    !/confira a norma em vigor no site do Banco Central/i.test(aviso) &&
+    !/\bmock\b|valor_alvo\s*=|prazo_meses\s*=/i.test(aviso),
+  );
+}
 
 export function ExplicacaoRecomendacao({ item }: { item: ItemCard }) {
-  const [aberto, setAberto] = useState(false);
-  const id = useId();
   const trechos = lista(dadosDe(item.resposta), "trechos");
+  const alertas = avisosContextuais(avisosDe(item.resposta));
+  if (trechos.length === 0 && alertas.length === 0) return null;
+
   return (
-    <article className="glass-card card-pad enter" aria-label="Fontes e critérios da orientação" style={{ gap: 12 }}>
-      <CabecalhoCard tag="recomendacao" resposta={item.resposta} />
-      <p className="prose" style={{ fontSize: 16 }}>
-        Esta orientação considera a simulação financeira e, quando disponíveis, as referências listadas aqui. Confira as premissas antes de escolher.
-      </p>
+    <div className="fonte-orientacao" aria-label="Informações complementares da orientação">
+      {alertas.map((aviso) => (
+        <p key={aviso} className="fonte-aviso" role="status">{aviso}</p>
+      ))}
       {trechos.length > 0 && (
-        <button
-          type="button"
-          className="link-btn"
-          aria-expanded={aberto}
-          aria-controls={id}
-          style={{ alignSelf: "flex-start" }}
-          onClick={() => setAberto((a) => !a)}
-        >
-          Consultar fontes da orientação
-          <Icone nome="chevronBaixo" tamanho="sm" estilo={{ transform: aberto ? "rotate(180deg)" : undefined }} />
-        </button>
+        <details className="fonte-detalhes">
+          <summary>Fontes consultadas</summary>
+          <ul>
+            {trechos.map((trecho, indice) => {
+              const fonte = obj(trecho, "fonte");
+              const identificador = txt(trecho, "trecho_id") ?? String(indice);
+              return (
+                <li key={identificador}>
+                  <strong>{txt(trecho, "titulo") ?? "Referência"}</strong>
+                  {fonte && (
+                    <span className="fonte-origem">
+                      {[txt(fonte, "nome"), txt(fonte, "referencia")].filter(Boolean).join(" · ")}
+                    </span>
+                  )}
+                  {txt(trecho, "texto") && <p>{txt(trecho, "texto")}</p>}
+                </li>
+              );
+            })}
+          </ul>
+          <p className="fonte-ressalva">Fontes informam a explicação; os valores da simulação são calculados separadamente.</p>
+        </details>
       )}
-      {aberto && (
-        <ul id={id} style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-          {trechos.map((t, i) => {
-            const fonte = obj(t, "fonte");
-            return (
-              <li key={txt(t, "trecho_id") ?? i} className="check-item" style={{ flexDirection: "column", gap: 6 }}>
-                <span style={{ fontSize: 15.5, fontWeight: 800 }}>{txt(t, "titulo") ?? "Trecho"}</span>
-                <span className="small" style={{ color: "var(--ink-2)" }}>
-                  {txt(t, "texto")}
-                </span>
-                {fonte && (
-                  <span className="small" style={{ fontSize: 13, color: "var(--ink-3)", fontWeight: 700 }}>
-                    {[txt(fonte, "nome"), txt(fonte, "referencia")].filter(Boolean).join(" · ")}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      <Avisos avisos={avisosDe(item.resposta)} />
-    </article>
+    </div>
   );
 }
