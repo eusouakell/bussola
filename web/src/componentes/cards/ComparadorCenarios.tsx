@@ -51,15 +51,15 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
       {recomendado && (
         <span className="rec-flag">
           <Icone nome="estrela" tamanho="sm" />
-          {economiaAdicional > 0 ? "Em destaque · exige cortes" : "Em destaque"}
+          {economiaAdicional > 0 ? "Exige mudanças no orçamento" : "Caminho em destaque"}
         </span>
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <h3 className="t-title">{capitalizar(nome)}</h3>
-        <span className="small num">{fracaoPercentual(pct)} da sobra estimada{economiaAdicional > 0 ? " antes dos cortes" : ""}</span>
+        <span className="small num">{fracaoPercentual(proporcaoTotal ?? pct)} da sobra típica {economiaAdicional > 0 ? "no total" : ""}</span>
       </div>
       <div className={recomendado ? "meter accent" : "meter"} aria-hidden="true">
-        <span style={{ width: pct !== undefined ? `${Math.min(100, pct * 100)}%` : "0%" }} />
+        <span style={{ width: (proporcaoTotal ?? pct) !== undefined ? `${Math.min(100, (proporcaoTotal ?? pct ?? 0) * 100)}%` : "0%" }} />
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <span className="kpi num">
@@ -69,12 +69,16 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
         <span className="small num">{meses(prazo)} até a meta</span>
       </div>
       {economiaAdicional > 0 && aporteBase !== undefined && (
-        <div className="note note-info" style={{ display: "flex", flexDirection: "column", gap: 4, fontSize: 14.5, lineHeight: "20px", padding: "12px" }}>
-          <strong>Como se forma o aporte</strong>
-          <span className="num">{brl(aporteBase)}/mês da sobra atual + {brl(economiaAdicional)}/mês de cortes propostos.</span>
-          {proporcaoTotal !== undefined && (
-            <span>O total equivale a cerca de <strong className="num">{fracaoPercentual(proporcaoTotal)}</strong> da sobra atual. Os cortes ainda precisam acontecer.</span>
-          )}
+        <div className="note note-info" style={{ display: "flex", flexDirection: "column", gap: 8, fontSize: 14, lineHeight: "20px", padding: "12px" }}>
+          <strong>Cortes propostos: {brl(economiaAdicional)}/mês</strong>
+          <span>Essas economias ainda precisam acontecer.</span>
+          <details>
+            <summary style={{ fontWeight: 750, cursor: "pointer" }}>Como se forma o aporte</summary>
+            <div style={{ display: "grid", gap: 4, marginTop: 8 }}>
+              <span className="num">{brl(aporteBase)} da sobra típica + {brl(economiaAdicional)} em cortes.</span>
+              {proporcaoTotal !== undefined && <span>O total usa cerca de <strong className="num">{fracaoPercentual(proporcaoTotal)}</strong> da sobra típica.</span>}
+            </div>
+          </details>
         </div>
       )}
       {viavel !== undefined && (
@@ -89,12 +93,8 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
                 : "Ver condições do cenário"}
         </span>
       )}
-      <div className="spec">
-        <span className="k">Cortes</span>
-        {cortes.length === 0 ? (
-          <span className="v">—</span>
-        ) : (
-          <details>
+      {cortes.length > 0 && (
+          <div className="spec"><details>
             <summary className="small" style={{ fontWeight: 800, cursor: "pointer" }}>
               {cortes.length} categorias com corte
             </summary>
@@ -105,9 +105,8 @@ export function CardCenario({ cenario, recomendado, escolhido, bloqueado, prazoO
                 </li>
               ))}
             </ul>
-          </details>
-        )}
-      </div>
+          </details></div>
+      )}
       {tradeOffs.length > 0 && (
         <details className="cenario-observacoes">
           <summary>O que considerar neste caminho</summary>
