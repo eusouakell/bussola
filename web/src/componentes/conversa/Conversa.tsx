@@ -219,6 +219,11 @@ export function Conversa({ itens, estado, ocupado, lento, onEnviar, onRepetir, o
           </BlocoAgente>
         )}
       </div>
+      {!ocupado && itens.some((item) => item.tipo === "mensagem_agente") && (
+        <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          Resposta disponível na conversa.
+        </span>
+      )}
     </section>
   );
 }
