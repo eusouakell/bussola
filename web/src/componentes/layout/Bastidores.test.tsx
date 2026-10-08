@@ -173,6 +173,28 @@ describe("Bastidores", () => {
     expect(onFechar).toHaveBeenCalledTimes(2);
   });
 
+  it("mantém o foco no diálogo e restaura o controle anterior no fechamento", async () => {
+    const disparador = document.createElement("button");
+    disparador.textContent = "Abrir painel";
+    document.body.appendChild(disparador);
+    disparador.focus();
+    const { user, unmount } = renderizar(modeloComUuidCompleto(), "folha");
+    const dialogo = screen.getByRole("dialog", { name: "Bastidores" });
+    const botoes = within(dialogo).getAllByRole("button");
+    expect(botoes[0]).toHaveFocus();
+    expect(document.body.style.overflow).toBe("hidden");
+
+    await user.tab({ shift: true });
+    expect(botoes.at(-1)).toHaveFocus();
+    await user.tab();
+    expect(botoes[0]).toHaveFocus();
+
+    unmount();
+    expect(disparador).toHaveFocus();
+    expect(document.body.style.overflow).not.toBe("hidden");
+    disparador.remove();
+  });
+
   it("variante painel é um aside com 'Recolher Bastidores' e Escape não fecha", async () => {
     const { onFechar, user } = renderizar(await sessaoAteODesvio());
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
