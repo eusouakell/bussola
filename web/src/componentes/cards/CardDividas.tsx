@@ -6,7 +6,6 @@ import type { ItemCard } from "../../sessao/modelo";
 import { Avisos } from "../base/Avisos";
 import { ChipFonte } from "../base/ChipFonte";
 import { Icone } from "../base/Icone";
-import { Tag } from "../base/Tag";
 import { capitalizar, lista, num, txt } from "./ler";
 
 const VISIVEIS = 3;
@@ -21,17 +20,15 @@ export function CardDividas({ item }: { item: ItemCard }) {
   return (
     <article className="glass-card enter" aria-label="CardDividas" style={{ padding: "14px 18px", display: "flex", flexDirection: "column", gap: 12 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <Tag tipo="diagnostico" />
+        <h3 className="t-title">Parcelas e juros</h3>
         <span style={{ fontSize: 16, fontWeight: 800 }}>
-          Parcelas comprometem <span className="num">{percentual(num(dados, "comprometimento_renda_pct"))}</span> da renda
+          <span className="num">{percentual(num(dados, "comprometimento_renda_pct"))}</span> da sua renda vai para parcelas
         </span>
-        {juros !== undefined && <span className="small num">· juros pagos {brl(juros)}/mês</span>}
-        <span style={{ flex: "1 1 auto" }} />
-        <ChipFonte fonte={fonteDe(item.resposta)} avisos={avisosDe(item.resposta)} />
+        {juros !== undefined && <span className="small num">Juros pagos por mês, em média: {brl(juros)}</span>}
       </div>
       {parcelas.length > 0 && (
         <button type="button" className="link-btn" aria-expanded={aberto} onClick={() => setAberto((a) => !a)} style={{ alignSelf: "flex-start" }}>
-          {aberto ? "Esconder parcelas" : `Ver parcelas ativas (${parcelas.length})`}
+          {aberto ? "Ocultar parcelas" : `Ver as parcelas (${parcelas.length})`}
           <Icone nome="chevronBaixo" tamanho="sm" estilo={{ transform: aberto ? "rotate(180deg)" : undefined }} />
         </button>
       )}
@@ -57,6 +54,7 @@ export function CardDividas({ item }: { item: ItemCard }) {
           )}
         </ul>
       )}
+      <details className="cenario-detalhes"><summary>Origem dos dados</summary><ChipFonte fonte={fonteDe(item.resposta)} avisos={avisosDe(item.resposta)} /></details>
       <Avisos avisos={avisosDe(item.resposta)} />
     </article>
   );

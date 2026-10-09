@@ -12,6 +12,9 @@ import { SUGESTOES_POR_ESTADO, TEXTO_AVANCAR } from "./sugestoes-padrao";
 export function sugestoesDoComposer(modelo: ModeloSessao, modo: Modo): string[] {
   const { itens, estado } = modelo;
   if (!itens.some((i) => i.tipo === "mensagem_cliente")) return [];
+  // A etapa AGIR pode começar antes de existir um plano.
+  // Não oferecemos acompanhamento ou lembretes quando ainda falta escolhê-lo/autorizar.
+  if ((estado.estado_jornada === "AGIR" || estado.estado_jornada === "ACOMPANHAR") && !estado.plano_id) return [];
   const semAvanco = motivoSemAvanco(estado) !== null;
   const filtrar = (lista: string[]) =>
     semAvanco ? lista.filter((s) => s.toLocaleLowerCase("pt-BR") !== TEXTO_AVANCAR) : lista;

@@ -24,7 +24,7 @@ export function CardPlano({ item, consentimentos, onEnviar, ocupado }: Props) {
     <article className="glass-card card-pad enter" aria-label="CardPlano">
       <CabecalhoCard
         tag="acao"
-        textoTag="Ação · plano criado"
+        textoTag="Plano criado"
         direita={
           <span className="mono" style={{ color: "var(--ink-3)" }}>
             plano {mascararId(txt(dados, "plano_id"))}
@@ -35,11 +35,11 @@ export function CardPlano({ item, consentimentos, onEnviar, ocupado }: Props) {
         <span className="t-title" style={{ fontSize: 22 }}>
           {descricao || "Seu plano"}
         </span>
-        {txt(dados, "cenario") && <span className="small">Caminho {capitalizar(txt(dados, "cenario"))}</span>}
+        {txt(dados, "cenario") && <span className="small">Opção escolhida: {capitalizar(txt(dados, "cenario"))}</span>}
       </div>
       <div className="grid-kpi">
         <Kpi rotulo="Meta" valor={brl(num(dados, "valor_alvo"))} />
-        <Kpi rotulo="Aporte" valor={brl(num(dados, "aporte_mensal"))} sufixo="/mês" />
+        <Kpi rotulo="Guardar por mês" valor={brl(num(dados, "aporte_mensal"))} sufixo="/mês" />
         <Kpi rotulo="Prazo" valor={meses(num(dados, "prazo_meses"))} />
       </div>
       {passos.length > 0 && (

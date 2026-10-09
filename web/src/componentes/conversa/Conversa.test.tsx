@@ -64,7 +64,7 @@ describe("Conversa: roteiro canônico", () => {
 
   it("mostra cards de cada etapa com rótulos acessíveis (FR-030)", () => {
     render(<Conversa itens={modelo.itens} estado={modelo.estado} ocupado={false} lento={false} onEnviar={() => {}} onRepetir={() => {}} />);
-    for (const nome of ["CardDiagnostico", "Simulação do objetivo financeiro", "Comparação de caminhos para o objetivo", "CardPlano", "CardPlanejadoRealizado"]) {
+    for (const nome of ["Resumo do orçamento", "Simulação do objetivo financeiro", "Planos para seu objetivo", "CardPlano", "CardPlanejadoRealizado"]) {
       expect(screen.getAllByLabelText(nome).length).toBeGreaterThan(0);
     }
     const mensagens = modelo.itens.filter((i) => i.tipo === "mensagem_cliente");

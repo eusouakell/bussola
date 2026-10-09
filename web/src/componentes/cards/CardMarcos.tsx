@@ -34,13 +34,13 @@ export function CardMarcos({ item }: { item: ItemCard }) {
 
   return (
     <article className="glass-card card-pad enter" aria-label="CardMarcos">
-      <CabecalhoCard tag="recomendacao" textoTag="Próximo marco" resposta={item.resposta} />
+      <CabecalhoCard tag="recomendacao" textoTag="Primeira etapa" resposta={item.resposta} />
 
       {objetivo && (
         <span className="prose" style={{ fontWeight: 700, color: "var(--ink-2)" }}>
           Objetivo de <strong className="num">{brl(num(objetivo, "valor_alvo"))}</strong> em{" "}
           <strong className="num">{meses(num(objetivo, "prazo_meses"))}</strong>
-          {motivos.length > 0 ? ": ainda não fecha com as condições de hoje." : "."}
+          {motivos.length > 0 ? ". Hoje, o valor mensal necessário ultrapassa o que os dados indicam como disponível." : "."}
         </span>
       )}
 
@@ -50,14 +50,16 @@ export function CardMarcos({ item }: { item: ItemCard }) {
             <span style={{ width: largura, background: "var(--tag-sim)" }} />
           </div>
           <div className="row-between">
-            <span className="small num">Sua capacidade sustentável {brl(capacidade)}/mês</span>
-            <span className="small num">O objetivo pediria {brl(aporte)}/mês</span>
+            <span className="small num">Dinheiro disponível por mês, segundo o histórico: {brl(capacidade)}</span>
+            <span className="small num">Para atingir o prazo, seria preciso guardar: {brl(aporte)}/mês</span>
           </div>
         </div>
       )}
 
       {motivos.length > 0 && (
-        <ul
+        <details className="cenario-detalhes">
+          <summary>Por que sugerimos começar por uma etapa menor?</summary>
+          <ul
           style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 4 }}
           aria-label="Situação atual"
         >
@@ -68,6 +70,7 @@ export function CardMarcos({ item }: { item: ItemCard }) {
             </li>
           ))}
         </ul>
+        </details>
       )}
 
       {proximo && (
@@ -75,12 +78,12 @@ export function CardMarcos({ item }: { item: ItemCard }) {
           <div style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 2, flex: "1 1 auto", minWidth: 0 }}>
               <span className="kpi-label">
-                <Icone nome="estrela" tamanho="sm" /> Próximo marco
+                <Icone nome="estrela" tamanho="sm" /> Primeira etapa
               </span>
               <span style={{ fontSize: 17, fontWeight: 800 }}>{txt(proximo, "titulo") ?? "—"}</span>
               <span className="small">{txt(proximo, "indicador") ?? ""}</span>
             </div>
-            <Kpi rotulo="Meta do marco" valor={<span className="num">{metaDoMarco(proximo)}</span>} />
+            <Kpi rotulo="Valor e prazo" valor={<span className="num">{metaDoMarco(proximo)}</span>} />
           </div>
           {txt(proximo, "por_que") && <p className="prose" style={{ margin: 0 }}>{txt(proximo, "por_que")}</p>}
           {txt(proximo, "relacao_com_objetivo") && (
@@ -90,7 +93,9 @@ export function CardMarcos({ item }: { item: ItemCard }) {
       )}
 
       {seguintes.length > 0 && (
-        <ul
+        <details className="cenario-detalhes">
+          <summary>Ver as próximas etapas</summary>
+          <ul
           style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}
           aria-label="Marcos seguintes"
         >
@@ -106,6 +111,7 @@ export function CardMarcos({ item }: { item: ItemCard }) {
             </li>
           ))}
         </ul>
+        </details>
       )}
 
       {ressalvas.length > 0 && (

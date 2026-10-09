@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import goldensJson from "../../../fixtures/goldens.json";
 import type { Envelope, RespostaFerramenta } from "../../agente/tipos";
@@ -36,14 +36,19 @@ describe("CardDiagnostico", () => {
         })}
       />,
     );
-    const artigo = screen.getByRole("article", { name: "CardDiagnostico" });
+    const artigo = screen.getByRole("article", { name: "Resumo do orçamento" });
     const texto = sp(artigo.textContent);
     expect(texto).toContain("R$ 6.691,39");
     expect(texto).toContain("R$ 4.789,93");
     expect(texto).toContain("R$ 1.729,00");
-    expect(texto).toContain("média R$ 1.901,47");
+    expect(texto).toContain("R$ 1.901,47");
     expect(texto).toContain("-R$ 2.072,31");
     expect(texto).toContain("R$ 19.023,89");
+    // Números complementares e fontes ficam disponíveis quando a pessoa solicita.
+    const detalhes = within(artigo).getByText("Como calculamos esse valor?").closest("details");
+    expect(detalhes).not.toHaveAttribute("open");
+    fireEvent.click(within(artigo).getByText("Como calculamos esse valor?"));
+    expect(detalhes).toHaveAttribute("open");
     // uma fonte por ferramenta
     expect(within(artigo).getByRole("button", { name: /Perfil financeiro · jan–jun\/2025/ })).toBeInTheDocument();
     expect(within(artigo).getByRole("button", { name: /Capacidade de poupança · jan–jun\/2025/ })).toBeInTheDocument();

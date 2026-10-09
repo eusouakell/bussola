@@ -856,3 +856,54 @@ body {
   color: var(--warn);
   margin: 5px 0;
 }
+
+/* V7 | Linguagem simples e revelação progressiva na jornada financeira.
+   A interpretação fica na UI; cálculos e contratos permanecem intactos. */
+.comparador-simples { display:flex;flex-direction:column;gap:16px;min-width:0; }
+.comparador-intro { display:grid;gap:6px;padding:0 3px; }
+.comparador-intro h2 {margin:0;font-size:clamp(1.2rem,2.1vw,1.55rem);font-weight:780;letter-spacing:-.035em;line-height:1.2}
+.comparador-intro p {color:var(--ink-2);font-size:14px;line-height:1.5;margin:0}
+.cenario-opcoes {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;min-width:0}
+.cenario-opcao {display:flex;flex-direction:column;gap:5px;min-height:62px;justify-content:center;text-align:center;
+ padding:10px 8px;min-width:0;background:var(--g-card);color:var(--ink);border:1px solid var(--line);
+ border-radius:14px;font:inherit;font-size:15px;font-weight:740;cursor:pointer;line-height:1.32}
+.cenario-opcao small {font-size:12px;color:var(--ink-2);font-weight:550;overflow-wrap:anywhere}
+.cenario-opcao.ativa {border:2px solid var(--accent-ink);background:var(--row)}
+.cenario-opcao:hover:not(.ativa) {border-color:var(--line-strong)}
+.cenario-opcao:focus-visible,.cenario-detalhes summary:focus-visible,.cenario-outro summary:focus-visible {
+ outline:3px solid var(--accent-ink);outline-offset:3px}
+.cenario-unico {min-width:0}
+.cen-simples {display:flex;flex-direction:column;gap:18px;padding:23px;min-width:0}
+.cenario-cabecalho {display:flex;justify-content:space-between;align-items:start;gap:12px}
+.cenario-cabecalho .t-title {font-size:clamp(1.25rem,2vw,1.5rem);font-weight:800;margin:0}
+.cenario-cabecalho .small {color:var(--ink-3)}
+.cenario-selo {font-size:12px;padding:5px 9px;background:var(--row);border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+.cenario-valor {display:grid;gap:4px}
+.cenario-valor .kpi {font-size:clamp(1.9rem,4vw,2.5rem);font-weight:830;line-height:1.13;overflow-wrap:anywhere}
+.cenario-alerta,.cenario-estado {margin:0;padding:12px 14px;font-size:14px;line-height:1.5;border-radius:12px}
+.cenario-alerta {background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn-edge)}
+.cenario-estado {background:var(--row);color:var(--ink-2)}
+.cenario-detalhes {border-top:1px solid var(--line);min-width:0;padding:9px 0 0}
+.cenario-detalhes summary {display:list-item;cursor:pointer;font-size:14px;font-weight:750;color:var(--ink);padding:8px 0;line-height:1.4}
+.cenario-detalhes-corpo {display:grid;gap:12px;padding:13px 0 8px;font-size:14px;line-height:1.58;color:var(--ink-2)}
+.cenario-detalhes-corpo p {margin:0}
+.cenario-detalhes-corpo ul {margin:0;padding-left:22px;display:grid;gap:7px}
+.cenario-escolher {margin-top:4px;min-height:46px}
+.cenario-outro {padding:4px 12px 8px;border:1px solid var(--line);border-radius:14px;background:var(--g-card)}
+.cenario-outro summary {display:list-item;cursor:pointer;font-size:14px;font-weight:740;padding:13px 4px}
+.cenario-outro-form {display:grid;gap:10px;padding:4px 0 12px}
+.cenario-outro-form label {font-size:14px;font-weight:710}
+.resumo-orcamento,.resumo-simulacao {display:flex;flex-direction:column;align-items:stretch;gap:13px;min-width:0}
+.resumo-orcamento .t-title,.resumo-simulacao .t-title {font-size:clamp(1.15rem,2vw,1.4rem);font-weight:760;line-height:1.25}
+.resumo-orcamento-valor {display:block;font-size:clamp(1.95rem,4vw,2.65rem);letter-spacing:-.04em;font-weight:820;line-height:1.12;overflow-wrap:anywhere}
+.resumo-orcamento .small,.resumo-simulacao .small {line-height:1.6;margin:0;color:var(--ink-2)}
+@media(max-width:480px){
+ .cenario-opcoes{gap:6px}
+ .cenario-opcao{font-size:13px;min-height:64px;padding:8px 3px}
+ .cenario-opcao small{font-size:11px}
+ .cen-simples{padding:20px 17px}
+ .cenario-cabecalho{flex-wrap:wrap}
+ .cenario-selo{font-size:11px}
+}
+@media(max-width:340px){.cenario-opcoes{grid-template-columns:minmax(0,1fr)}.cenario-opcao{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:10px 15px;min-height:44px}}
+@media(prefers-reduced-motion:reduce){.cenario-opcao{transition:none}}
