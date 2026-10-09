@@ -67,7 +67,8 @@ describe("Case unificado V6 — UX / conteúdo / evidências", () => {
   });
 
   it("não reintroduz azul dominante nem texto confidencial de avaliação", () => {
-    expect(page).not.toContain("#02036c");
+    expect(page).toContain(":root{--ink:#1c1c1e");
+    // Azul permanece apenas na reconstrução visual da tela antiga.
     expect(page).not.toContain("Corporativo | Interno");
     expect(page).not.toContain("abaixo da média");
     expect(document.querySelector(".open-source details")).not.toBeNull();
