@@ -56,3 +56,15 @@ Duas comparações de celular lado a lado (entrada e cenários) são **reconstit
 5. **CI verde:** testes de links, imagens reais, stack, telas e compilação. Não confundir CI verde com teste de experiência em produção.
 
 Não há placeholders intencionais, mas os itens 1–4 ainda são decisões e validações reais de publicação.
+
+## Inspeção visual preliminar (preview HTML)
+
+Uma revisão via navegador em um proxy de preview HTML da branch observou os **dois pares de celulares lado a lado e sem sobreposição no desktop**. No entanto, a reprodução pelo proxy não foi conclusiva para:
+
+- carregamento da foto do Fernando (arquivo PNG existe na tree do GitHub e foi obtido do Drive);
+- foto da mentora, que fica separada da grade principal; o navegador não percorreu completamente o rodapé para confirmar sua exibição;
+- animação e estado acessível dos cards de verso;
+- viewport 390px / 320px, não testável na sessão.
+
+**Não afirmar QA mobile concluído.** A observação automática chamou indevidamente a quinta pessoa de “Maria”; o crédito correto e documentado é **Yasmim Mafra Maroum**, como está no HTML. Os testes estáticos validam os cinco arquivos locais, mas não substituem inspeção da renderização no Pages após merge.
+
