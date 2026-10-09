@@ -54,7 +54,6 @@ describe("Case unificado V6 — UX / conteúdo / evidências", () => {
       expect(binary.readUInt32LE(4) + 8).toBe(binary.byteLength);
     }
     expect(document.querySelectorAll(".person .flip")).toHaveLength(4);
-    expect(document.querySelectorAll(".flip-back[ inert ]")).toHaveLength(0);
     expect(document.querySelectorAll(".flip-back[inert]")).toHaveLength(4);
     expect(document.querySelectorAll(".person a[href*='linkedin.com/in/']")).toHaveLength(4);
     expect(document.querySelectorAll(".mentor a[href*='linkedin.com/in/']")).toHaveLength(1);
