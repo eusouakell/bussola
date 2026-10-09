@@ -10,11 +10,11 @@ Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um obj
 
 Explore a experiência demonstrativa da jornada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. O protótipo apresenta uma simulação; não representa uma oferta bancária, aprovação de crédito ou atendimento real do Itaú.
 
-## Case público — a história por trás da Bússola
+## Case unificado — produto, dados e evolução de UX
 
-[**Ver o case**](https://eusouakell.github.io/bussola/case/) — narrativa curta, evolução visual antes/depois, método e créditos. A versão V5 removeu conteúdo repetido e grandes fundos azuis, sem publicar materiais internos do evento.
+[**Ler o case Bússola**](https://eusouakell.github.io/bussola/case/) — a investigação dos dados sintéticos e personas, a prova de conceito com stack Google Cloud, o antes/depois de UX em mockups de celular, uma demonstração interativa embutida e créditos com mini-bios verificáveis. O diagnóstico de UX passou a integrar a história, sem disputar espaço com uma segunda página.
 
-Código: [web/public/case/index.html](web/public/case/index.html). Revisão de UX Lead, UX Writing e Experience Design: [docs/ux/lead-review-v5.md](docs/ux/lead-review-v5.md). O site atualiza após o merge e a conclusão do workflow `static-demo-pages`.
+Fontes: [HTML do case](web/public/case/index.html) e [parecer editorial V6](docs/ux/editorial-case-v6-evidence.md). **A V6 está em PR de revisão**: só estará pública após validação de dados/fotos, merge e deploy do GitHub Pages. As comparações são reconstituições visuais do código; o conteúdo aponta expressamente essa limitação.
 
 ## Auditoria de UX/UI e UX Writing
 
