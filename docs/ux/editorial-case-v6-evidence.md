@@ -22,7 +22,7 @@ Uma equipe multidisciplinar investigou os dados sintéticos do desafio e descobr
 
 | Afirmativa do case | Evidência | Status |
 |---|---|---|
-| Segmentação por saldo negativo, dívida formal e rotativo; 4 perfis | Drive: `Personas de Clientes - Agente de Saúde Financeira.docx`, autoria registrada de Carlos, 26/09/2026; `Proposta de Negócio — Bussola` | **Revisar autorização de divulgação** de agregados derivados da base |
+| Segmentação por saldo negativo, dívida formal e rotativo; 4 perfis | Drive: `Personas de Clientes - Agente de Saúde Financeira.docx`, autoria registrada de Carlos, 26/09/2026; `Proposta de Negócio — Bussola` | Distribuição numérica retida da página pública; divulgação dos agregados depende de autorização |
 | 1.000 usuários sintéticos e Fernando como personagem narrativo | Proposta de Negócio e Racional de Prototipação, 26/09 | Confirmado como dado de projeto; **não** extrapolar |
 | ADK + Gemini / BigQuery / RAG / Cloud Run / Secret Manager | Documento Explicativo de Arquitetura do Drive e commits do período do evento | Arquitetura documentada; implementação individual varia |
 | Victor: arquitetura, integração, RAG, governança e BigQuery | Commits de `theguitarvity` no repositório até 27/09; exemplos `85cd9d25c` (BigQuery real), `4ade78407` (Model Armor), `723194057` (corpus) | Provado no histórico técnico |
@@ -41,7 +41,7 @@ Os quatro links do LinkedIn retornaram bloqueio automatizado (HTTP 999), mas ind
 - [Victor Lucas Lopes](https://www.linkedin.com/in/victorllsilvdev/): especialista em Arquitetura de Software na Vivo, atuação com sistemas distribuídos e IA. GitHub `theguitarvity` traz currículo e commits.
 - [Yasmim Mafra Maroum](https://www.linkedin.com/in/mafrayasmim/): cientista de dados coordenadora, dados e crédito; mentoria registrada na ficha de submissão.
 
-**Limite:** não houve extração de imagens do LinkedIn. O mapeamento de retratos está baseado nos nomes dos arquivos originais compartilhados, não em reconhecimento facial. A confirmação de direitos/identificação dos retratos permanece responsabilidade dos respectivos titulares.
+**Limite:** não houve extração de imagens do LinkedIn. O mapeamento de retratos está baseado nos nomes dos arquivos originais compartilhados, não em reconhecimento facial. Em 09/10/2026 a autora informou ter confirmado com os participantes a identificação e a autorização de uso público dos retratos; confirmação não auditada de modo independente.
 
 ## Antes/depois no case
 
