@@ -26,9 +26,11 @@ describe("Case unificado V6 — narrativa visual e evidencias", () => {
   });
 
   it("fundamenta a descoberta em dados sinteticos e referencia a stack Google", () => {
-    for (const termo of ["1.000", "40,8%", "BigQuery", "Gemini + ADK", "Cloud Run", "Secret Manager", "base sintética"]) {
+    for (const termo of ["1.000", "BigQuery", "Gemini + ADK", "Cloud Run", "Secret Manager", "base sintética"]) {
       expect(html).toContain(termo);
     }
+    expect(html).not.toContain("40,8%");
+    expect(html).toContain("uso do rotativo do cartão mesmo sem saldo negativo");
   });
 
   it("mantem cinco fotos locais de equipe e mentora, com arquivos WebP validos", () => {
