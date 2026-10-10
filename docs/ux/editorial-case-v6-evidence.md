@@ -49,8 +49,8 @@ Quatro comparações de celular lado a lado (entrada, cenários, consentimento e
 
 ## Gates antes do merge/publicação
 
-1. **Autorização para divulgar números derivados da base sintética** (40,8%, 26,5%, 22,5%, 10,2%). O regulamento original pode limitar divulgação de informação acessada no hackathon mesmo após seu término. Se não houver liberação, remover a distribuição e reter apenas a narrativa sem percentuais.
-2. **Confirmação dos cinco retratos e permissão de uso público**. Arquivos têm nomes individuais, mas a extração do LinkedIn foi bloqueada.
+1. **Percentuais retirados da página pública por precaução editorial.** Os agregados permanecem na documentação interna para rastreabilidade, mas a publicação dos números depende de autorização explícita sob o regulamento do evento. A narrativa pública utiliza somente o insight qualitativo.
+2. **Retratos: confirmação informada pela autora em 09/10/2026.** Ela declarou ter confirmado com os participantes a identificação e o uso das fotografias. Não houve verificação independente dos consentimentos; manter o registro dessa confirmação.
 3. **Aprovar cargo/título de cada mini-bio**, em especial Carlos (cargo no LinkedIn por indexação), João (estudante / laboratório) e Yasmim (posição atual).
 4. **Revisão visual humana:** duas telas de 320px e 390px; desktop; scroll horizontal dos mockups; cartões flip por teclado, touch e leitor de tela; ausência de sobreposições.
 5. **CI verde:** testes de links, imagens reais, stack, telas e compilação. Não confundir CI verde com teste de experiência em produção.
@@ -78,11 +78,20 @@ A V6 reúne as evidências na experiência narrativa e demonstra os quatro pares
 | Página única com protótipo e prova visual | Implementado na branch, CI pendente | `web/public/case/index.html` + iframe `/bussola/` |
 | Quatro pares de mockups móveis lado a lado | Implementado como reconstituição, não captura real | 8 telas desenhadas com HTML e aviso editorial |
 | Eliminar sobreposições da página | Layout responsivo aplicado, revisão mobile pendente | Inspeção visual desktop/320/390 px após build |
-| Fotos da equipe e Fernando | Assets locais versionados, permissão pendente | WebPs no repo + PNG do Drive |
+| Fotos da equipe e Fernando | Retratos dos participantes: confirmação de autorização informada pela autora em 09/10/2026; Fernando: imagem sintética identificada | WebPs no repo + PNG do Drive |
 | Texto conciso e precisão financeira | Revisado; interface real segue PRs anteriores | Conferir cálculo, consentimento, fluxos completos |
 | Cenários financeiros atendem preferências do usuário | **Pendente** | Validação da lógica do agente, não apenas copy |
 | Revogação efetiva de consentimento | **Pendente** | Integrar controle real ou não prometer revogação |
 | Teste assistivo e compreensão com usuários | **Pendente** | WCAG 2.2 AA, leitor de tela, teclado, zoom e testes com participantes |
-| Publicação de cifras da base | **Aguardando autorização** | Regulamento do evento tem cláusula de confidencialidade |
+| Publicação de cifras da base | **Não publicadas na página** | Manter agregados somente no material de trabalho até autorização explícita |
 
 A navegação pública de auditoria pode permanecer como registro histórico do código, mas a narrativa e as demonstrações do produto precisam ser consultáveis na única URL do case.
+
+## Revisão editorial — 09/10/2026
+
+- **Enquadramento aprovado pela autora:** case de uma prova de conceito produzida em hackathon, seguida por refinamento posterior de UX e escrita. Não representar a Bússola como serviço bancário em produção.
+- **Privacidade dos dados do evento:** substituição da taxa de 40,8% na página pública por descrição qualitativa do uso do rotativo mesmo com saldo positivo. Os percentuais detalhados continuam neste documento de evidência para controle editorial, sem aprovação de divulgação.
+- **Retratos:** autora informou ter confirmado com os participantes a identificação e autorização de uso público das imagens; títulos e mini-bios continuam baseados em fontes públicas e sujeitos à validação de atualização.
+- **Precisão técnica:** trocar promessas categóricas sobre o agente por formulações relativas ao que a PoC explorou; não declarar recomendação validada, revogação real de consentimento nem conformidade assistiva.
+- **Autoria:** distinguir trabalho coletivo entregue na hackathon do refinamento de UX e conteúdo realizado depois do evento.
+- **Evidência visual:** preservar o rótulo de reconstituições editoriais enquanto não houver screenshots verificáveis. QA responsivo/assistivo e estado do CI ainda precisam ser conferidos.
