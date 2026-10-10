@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 const html = readFileSync("public/case/index.html", "utf8");
 const document = new DOMParser().parseFromString(html, "text/html");
 
-describe("Case unificado V6 — narrativa visual e evidencias", () => {
+describe("Case editorial V7 — narrativa visual e evidencias", () => {
   it("tem apenas um titulo principal e todas as ancoras locais resolvidas", () => {
     expect(document.documentElement.lang).toBe("pt-BR");
     expect(document.querySelectorAll("h1")).toHaveLength(1);
@@ -46,7 +46,9 @@ describe("Case unificado V6 — narrativa visual e evidencias", () => {
       expect(buffer.toString("ascii", 0, 4)).toBe("RIFF");
       expect(buffer.toString("ascii", 8, 12)).toBe("WEBP");
     }
-    expect(document.querySelectorAll("#pessoas .flip button")).toHaveLength(4);
+    expect(document.querySelectorAll("#pessoas .person-credit")).toHaveLength(4);
+    expect(document.querySelectorAll("#pessoas .career")).toHaveLength(4);
+    expect(document.querySelectorAll("#pessoas button, #pessoas [aria-hidden='true']")).toHaveLength(0);
     expect(document.querySelectorAll("#pessoas a[href*='linkedin.com/in/']")).toHaveLength(5);
   });
 
@@ -57,5 +59,14 @@ describe("Case unificado V6 — narrativa visual e evidencias", () => {
     expect(existsSync("public/case/assets/fernando-ai.png")).toBe(true);
     expect(html).not.toContain("Corporativo | Interno");
     expect(html).not.toContain("abaixo da média");
+  });
+
+  it("explicita provenance e limites sem apresentar arquitetura como produto validado", () => {
+    expect(html).toContain("Batalha de Agentes Itaú, Google Cloud e SantoDigital");
+    expect(html).toContain("Imagem gerada com IA");
+    expect(html).toContain("Não são capturas das versões executadas");
+    expect(html).toContain("Documento de referência; não comprova");
+    expect(html).not.toContain("SALDO POSITIVO ↔ USO DO ROTATIVO");
+    expect(document.querySelector(".sources details")).toBeNull();
   });
 });
