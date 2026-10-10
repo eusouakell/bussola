@@ -15,8 +15,8 @@ Uma equipe multidisciplinar investigou os dados sintéticos do desafio e descobr
 - **Experience Researcher:** não extrapolar a amostra sintética. A segmentação tem 1.000 registros, definidos por sinais transacionais, não por gênero, idade ou região; Fernando é uma persona *narrativa*.
 - **UX Writer:** evitar `o agente revolucionou as finanças`, `plano perfeito` e `a IA conhece você`. Usar sujeitos, verbos e condições observáveis. A headline é expressiva sem transformar hipótese em garantia.
 - **Editorial Art Director / UX Designer:** dispositivos lado a lado, mesmo tamanho, rótulos Antes/Depois; cards reviráveis apenas onde adicionam valor; contraste do código antigo aparece somente nos telefones `Antes`.
-- **Accessibility Auditor:** controles de flip são botões reais, têm foco e atributos `inert` nas faces ocultas; oferecer redução de movimento. Não declarar aprovação WCAG sem inspeção com assistivos.
-- **Readiness Evaluator:** preparar PR em modo draft e apontar fontes/limites para revisão antes de divulgar.
+- **Accessibility Auditor:** controles de flip são botões reais, têm foco e atributos `aria-hidden` alternado nas faces ocultas; oferecer redução de movimento. Não declarar aprovação WCAG sem inspeção com assistivos.
+- **Readiness Evaluator:** preparar PR com aprovação humana obrigatória e apontar fontes/limites para revisão antes de divulgar.
 
 ## Fontes de fato: rastreabilidade
 
@@ -28,7 +28,7 @@ Uma equipe multidisciplinar investigou os dados sintéticos do desafio e descobr
 | Victor: arquitetura, integração, RAG, governança e BigQuery | Commits de `theguitarvity` no repositório até 27/09; exemplos `85cd9d25c` (BigQuery real), `4ade78407` (Model Armor), `723194057` (corpus) | Provado no histórico técnico |
 | João: agente, contratos e deploy | Commits de `joaopaulodevv` em 27/09: `df8cd6b11` (deploy), `1104e9d0b` (simulação), `9fea0312e` (catálogo) | Provado no histórico técnico |
 | Fotos do time | Arquivos nomeados e fornecidos na conversa, em `web/public/case/assets` | Quatro WebPs decodificavam; retrato da mentora foi corrigido com a fonte original fornecida |
-| Foto de Fernando | Drive `06 — Pitch final/Fernando em fotos/1.png`, criada no projeto | Incluída como `fernando-persona-ai.png`, rotulada imagem gerada com IA |
+| Foto de Fernando | Drive `06 — Pitch final/Fernando em fotos/1.png`, criada no projeto | Incluída como `fernando-ai.png`, rotulada imagem gerada com IA |
 | Trabalho posterior de UX | PRs #4, #5, #7, #8, independentes da entrega original | Links públicos de diff e testes |
 
 ## Mini-bios — fontes públicas verificadas por indexação
@@ -45,7 +45,7 @@ Os quatro links do LinkedIn retornaram bloqueio automatizado (HTTP 999), mas ind
 
 ## Antes/depois no case
 
-Duas comparações de celular lado a lado (entrada e cenários) são **reconstituições visuais baseadas no código/roteiro**, e levam aviso explícito. Ainda não são capturas reais das versões executadas. Substituir por screenshots verificáveis, caso sejam recuperadas; não alterar silenciosamente a legenda.
+Quatro comparações de celular lado a lado (entrada, cenários, consentimento e legibilidade) são **reconstituições visuais baseadas no código/roteiro**, e levam aviso explícito. Ainda não são capturas reais das versões executadas. Substituir por screenshots verificáveis, caso sejam recuperadas; não alterar silenciosamente a legenda.
 
 ## Gates antes do merge/publicação
 
@@ -59,7 +59,7 @@ Não há placeholders intencionais, mas os itens 1–4 ainda são decisões e va
 
 ## Inspeção visual preliminar (preview HTML)
 
-Uma revisão via navegador em um proxy de preview HTML da branch observou os **dois pares de celulares lado a lado e sem sobreposição no desktop**. No entanto, a reprodução pelo proxy não foi conclusiva para:
+Uma revisão via navegador em um proxy de preview HTML da branch observou os **quatro pares de celulares lado a lado e sem sobreposição no desktop**. No entanto, a reprodução pelo proxy não foi conclusiva para:
 
 - carregamento da foto do Fernando (arquivo PNG existe na tree do GitHub e foi obtido do Drive);
 - foto da mentora, que fica separada da grade principal; o navegador não percorreu completamente o rodapé para confirmar sua exibição;
@@ -68,3 +68,21 @@ Uma revisão via navegador em um proxy de preview HTML da branch observou os **d
 
 **Não afirmar QA mobile concluído.** A observação automática chamou indevidamente a quinta pessoa de “Maria”; o crédito correto e documentado é **Yasmim Mafra Maroum**, como está no HTML. Os testes estáticos validam os cinco arquivos locais, mas não substituem inspeção da renderização no Pages após merge.
 
+
+## Situação dos problemas prioritários (P0/P1)
+
+A V6 reúne as evidências na experiência narrativa e demonstra os quatro pares de estados. É incorreto afirmar que *todas as pendências técnicas* foram eliminadas pelo case. Estado de controle:
+
+| Critério | Situação | Evidência ou próximo gate |
+|---|---|---|
+| Página única com protótipo e prova visual | Implementado na branch, CI pendente | `web/public/case/index.html` + iframe `/bussola/` |
+| Quatro pares de mockups móveis lado a lado | Implementado como reconstituição, não captura real | 8 telas desenhadas com HTML e aviso editorial |
+| Eliminar sobreposições da página | Layout responsivo aplicado, revisão mobile pendente | Inspeção visual desktop/320/390 px após build |
+| Fotos da equipe e Fernando | Assets locais versionados, permissão pendente | WebPs no repo + PNG do Drive |
+| Texto conciso e precisão financeira | Revisado; interface real segue PRs anteriores | Conferir cálculo, consentimento, fluxos completos |
+| Cenários financeiros atendem preferências do usuário | **Pendente** | Validação da lógica do agente, não apenas copy |
+| Revogação efetiva de consentimento | **Pendente** | Integrar controle real ou não prometer revogação |
+| Teste assistivo e compreensão com usuários | **Pendente** | WCAG 2.2 AA, leitor de tela, teclado, zoom e testes com participantes |
+| Publicação de cifras da base | **Aguardando autorização** | Regulamento do evento tem cláusula de confidencialidade |
+
+A navegação pública de auditoria pode permanecer como registro histórico do código, mas a narrativa e as demonstrações do produto precisam ser consultáveis na única URL do case.
