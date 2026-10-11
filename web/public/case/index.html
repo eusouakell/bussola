@@ -4,8 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Case Bússola: de um insight em dados sintéticos a uma prova de conceito com agentes de IA — e ao refinamento posterior de UX, conteúdo e consentimento.">
+<link rel="canonical" href="https://eusouakell.github.io/bussola/case/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://eusouakell.github.io/bussola/case/">
 <meta property="og:title" content="Bússola — O que o saldo não conta">
 <meta property="og:description" content="Dados, agentes de IA e decisões de experiência: do hackathon ao refinamento posterior de UX e conteúdo.">
+<meta property="og:image" content="https://eusouakell.github.io/bussola/case/assets/og-case.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bússola — O que o saldo não conta">
+<meta name="twitter:description" content="Dados, agentes de IA e decisões de experiência: do hackathon ao refinamento posterior de UX e conteúdo.">
+<meta name="twitter:image" content="https://eusouakell.github.io/bussola/case/assets/og-case.png">
 <title>Bússola | O que o saldo não conta</title>
 <style>
 :root{
@@ -42,6 +50,7 @@ img{display:block;max-width:100%}
 .kicker{font:700 .72rem/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .meta{font:.72rem/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--muted);letter-spacing:.02em}
 .section{padding:118px 0;border-top:1px solid var(--rule)}
+section[id],header[id]{scroll-margin-top:80px}
 .section__head{display:grid;grid-template-columns:190px minmax(0,1fr);gap:38px;align-items:start;margin-bottom:58px}
 .section__head h2{font-size:clamp(2.5rem,5vw,5.6rem);max-width:980px}
 .section__head p{max-width:740px;margin-top:22px;color:var(--muted);font-size:1.06rem;line-height:1.7}
@@ -325,7 +334,7 @@ img{display:block;max-width:100%}
     </div>
 
     <figure class="hero__scene">
-      <div class="hero__ui" aria-label="Estado reconstituído da entrada da Bússola">
+      <div class="hero__ui" role="img" aria-label="Interface reconstituída da Bússola. Oi, Fernando. O que você quer realizar? Opções: comprar um apartamento, planejar uma viagem, fazer uma pós e organizar dívidas.">
         <div class="hero__ui-brand">Bússola</div>
         <div class="hero__ui-hello">Oi, Fernando.</div>
         <h3>O que você quer realizar?</h3>
@@ -355,7 +364,7 @@ img{display:block;max-width:100%}
     </div>
 
     <div class="discovery__grid">
-      <div class="relation" aria-label="Relação observada: saldo positivo mesmo com uso do rotativo">
+      <div class="relation" role="img" aria-label="Relação observada na base sintética: saldo positivo mesmo com uso do rotativo">
         <strong>SALDO<br>POSITIVO</strong>
         <div class="relation__rule"><span>MESMO COM</span></div>
         <strong>USO DO<br>ROTATIVO</strong>
@@ -575,7 +584,8 @@ img{display:block;max-width:100%}
             <p class="meta">SIMULAÇÃO</p>
             <h4>Seu plano</h4>
             <p>Informações distribuídas em vários níveis visuais, com chamada pouco distinguível do fundo.</p>
-            <div class="ui-action" style="background:#e89b74;color:white;padding:13px">Continuar</div>
+            <div class="ui-action" style="background:#e89b74;color:#172331;padding:13px">Continuar</div>
+            <p class="meta" style="margin-top:10px">NO ORIGINAL: TEXTO BRANCO SOBRE LARANJA CLARO · CONTRASTE INSUFICIENTE</p>
           </div>
           <div class="annotation"><span>O contraste e o foco não podiam depender de intenção</span></div>
           <div class="ui-state">
