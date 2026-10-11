@@ -1,0 +1,153 @@
+name: case-v3-proof-qa
+
+on:
+  push:
+    branches:
+      - case/v3-independent-convergence
+    paths:
+      - "outputs/case-v3-proofs/proof.html"
+      - "web/public/case/assets/**"
+      - ".github/workflows/case-v3-proof-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: case-v3-proof-qa
+  cancel-in-progress: true
+
+jobs:
+  render:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: case/v3-independent-convergence
+
+      - name: Locate Chrome
+        id: chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          echo "bin=$chrome" >> "$GITHUB_OUTPUT"
+
+      - name: Build QA-only proof page
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("outputs/case-v3-proofs/proof.html")
+          src = path.read_text()
+          probe = r'''
+          <script>
+          (() => {
+            const id = new URLSearchParams(location.search).get("qaTarget");
+            if (!id) return;
+            addEventListener("load", () => {
+              setTimeout(() => {
+                const target = document.getElementById(id);
+                if (!target) return;
+                const clone = target.cloneNode(true);
+                document.body.replaceChildren(clone);
+                document.documentElement.style.scrollBehavior = "auto";
+                document.body.style.margin = "0";
+              }, 100);
+            }, {once:true});
+          })();
+          </script>
+          '''
+          Path("outputs/case-v3-proofs/qa-proof.html").write_text(src.replace("</body>", probe + "\n</body>"))
+          PY
+
+          python3 -m http.server 4173 --directory . >/tmp/bussola-v3-proof.log 2>&1 &
+          for _ in {1..20}; do
+            if curl --fail --silent http://127.0.0.1:4173/outputs/case-v3-proofs/qa-proof.html >/dev/null; then
+              exit 0
+            fi
+            sleep .25
+          done
+          cat /tmp/bussola-v3-proof.log
+          exit 1
+
+      - name: Render representative proofs
+        shell: bash
+        env:
+          CHROME: ${{ steps.chrome.outputs.bin }}
+        run: |
+          set -euo pipefail
+          out="outputs/case-v3-proofs/qa"
+          mkdir -p "$out"
+          page="http://127.0.0.1:4173/outputs/case-v3-proofs/qa-proof.html"
+
+          render () {
+            local name="$1"
+            local width="$2"
+            local height="$3"
+            local target="$4"
+            "$CHROME" \
+              --headless=new \
+              --no-sandbox \
+              --disable-gpu \
+              --disable-dev-shm-usage \
+              --hide-scrollbars \
+              --force-device-scale-factor=1 \
+              --run-all-compositor-stages-before-draw \
+              --virtual-time-budget=1600 \
+              --window-size="${width},${height}" \
+              --screenshot="$GITHUB_WORKSPACE/$out/${name}.png" \
+              "${page}?qaTarget=${target}"
+          }
+
+          render desktop-hero 1440 820 proof-hero
+          render desktop-discovery 1440 820 proof-discovery
+          render desktop-evolution 1440 900 proof-evolution
+          render desktop-team 1440 760 proof-team
+          render mobile-hero 390 844 proof-mobile-hero
+          render mobile-evolution 390 1200 proof-mobile-evolution
+
+          rm outputs/case-v3-proofs/qa-proof.html
+
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+
+          root = Path("outputs/case-v3-proofs/qa")
+          specs = [
+            ("desktop-hero.png", 1440, "hero", "O saldo está no azul. E a dívida?"),
+            ("desktop-discovery.png", 1440, "discovery", "Não escolhemos o problema antes de olhar os dados."),
+            ("desktop-evolution.png", 1440, "evolution", "Fazer funcionar foi o começo. Fazer entender veio depois."),
+            ("desktop-team.png", 1440, "team", "Créditos que mostram contribuição — sem virar diretório."),
+            ("mobile-hero.png", 390, "hero", "O saldo está no azul. E a dívida?"),
+            ("mobile-evolution.png", 390, "evolution", "Uma decisão por comparação.")
+          ]
+          captures = []
+          for filename, viewport, section, heading in specs:
+            data = (root / filename).read_bytes()
+            captures.append({
+              "filename": filename,
+              "viewport_width": viewport,
+              "section_id": section,
+              "content_sha256": hashlib.sha256(data).hexdigest(),
+              "observed_heading": heading
+            })
+          Path("outputs/case-v3-proofs/proof-evidence.json").write_text(
+            json.dumps({"candidate_ref":"case/v3-independent-convergence","captures":captures}, indent=2, ensure_ascii=False) + "\n"
+          )
+          PY
+
+      - name: Commit proof evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/case-v3-proofs/qa outputs/case-v3-proofs/proof-evidence.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "test(case): capture V3 representative proof evidence"
+          git push origin HEAD:case/v3-independent-convergence
