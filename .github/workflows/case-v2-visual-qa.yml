@@ -51,8 +51,13 @@ jobs:
               setTimeout(() => {
                 const el = document.getElementById(target);
                 if (!el) return;
-                const y = el.getBoundingClientRect().top + scrollY - 64;
-                scrollTo(0, Math.max(0, y));
+                const nav = document.querySelector(".nav");
+                const nodes = [];
+                if (nav) nodes.push(nav.cloneNode(true));
+                nodes.push(el.cloneNode(true));
+                document.body.replaceChildren(...nodes);
+                document.documentElement.style.scrollBehavior = "auto";
+                scrollTo(0, 0);
               }, 150);
             }, { once: true });
           })();
