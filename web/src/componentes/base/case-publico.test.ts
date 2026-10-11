@@ -4,38 +4,68 @@ import { describe, expect, it } from "vitest";
 const html = readFileSync("public/case/index.html", "utf8");
 const document = new DOMParser().parseFromString(html, "text/html");
 
-describe("Case unificado V6 — narrativa visual e evidencias", () => {
-  it("tem apenas um titulo principal e todas as ancoras locais resolvidas", () => {
+describe("Case Bússola V2 — publish-ready landing", () => {
+  it("mantem estrutura semantica, navegacao e experiencia incorporada", () => {
     expect(document.documentElement.lang).toBe("pt-BR");
     expect(document.querySelectorAll("h1")).toHaveLength(1);
+
     for (const link of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
       expect(document.getElementById(link.getAttribute("href")!.slice(1))).not.toBeNull();
     }
-    expect(document.querySelector("#descoberta")).not.toBeNull();
-    expect(document.querySelector("#evolucao")).not.toBeNull();
-    expect(document.querySelector("#pessoas")).not.toBeNull();
-    expect(document.querySelector('#experimente iframe[title]')).not.toBeNull();
+
+    for (const id of ["descoberta", "produto", "evolucao", "experimente", "pessoas"]) {
+      expect(document.getElementById(id)).not.toBeNull();
+    }
+
+    expect(document.querySelector('#experimente iframe[title="Protótipo demonstrativo da Bússola"]')).not.toBeNull();
+    expect(html).toContain("prefers-reduced-motion");
   });
 
-  it("traz quatro comparacoes em duas colunas de celular por secao", () => {
-    expect(document.querySelectorAll(".proof > div")).toHaveLength(4);
-    expect(document.querySelectorAll(".pair")).toHaveLength(4);
-    expect(document.querySelectorAll(".pair .phone")).toHaveLength(8);
-    expect(document.querySelectorAll(".compare-panel.after")).toHaveLength(4);
-    expect(html).toContain("reconstituições editoriais");
+  it("usa o hero aprovado como uma cena e nao volta a cards/flips como gramatica", () => {
+    const fernando = document.querySelector<HTMLImageElement>('img[src="./assets/fernando-hero.png"]');
+    expect(fernando).not.toBeNull();
+    expect(fernando!.alt.toLowerCase()).toContain("inteligência artificial");
+    expect(existsSync("public/case/assets/fernando-hero.png")).toBe(true);
+
+    expect(document.querySelectorAll(".hero__ui")).toHaveLength(1);
+    expect(document.querySelectorAll(".flip")).toHaveLength(0);
+    expect(document.querySelectorAll(".phone")).toHaveLength(0);
+    expect(html).not.toContain("backdrop-filter");
   });
 
-  it("fundamenta a descoberta em dados sinteticos e referencia a stack Google", () => {
-    for (const termo of ["1.000", "BigQuery", "Gemini + ADK", "Cloud Run", "Secret Manager", "base sintética"]) {
+  it("fundamenta a descoberta sem publicar percentuais retidos", () => {
+    for (const termo of [
+      "1.000 usuários",
+      "SALDO",
+      "POSITIVO",
+      "USO DO",
+      "ROTATIVO",
+      "base sintética",
+      "Gemini + ADK",
+      "BigQuery",
+      "Cloud Run",
+      "Secret Manager",
+    ]) {
       expect(html).toContain(termo);
     }
+
     expect(html).not.toContain("40,8%");
-    expect(html).toContain("uso do rotativo do cartão mesmo sem saldo negativo");
+    expect(html).not.toContain("17 anos");
+    expect(html).toContain("SEM PERCENTUAIS PÚBLICOS");
   });
 
-  it("mantem cinco fotos locais de equipe e mentora, com arquivos WebP validos", () => {
-    const imagens = [...document.querySelectorAll<HTMLImageElement>("#pessoas img")];
+  it("traz quatro comparacoes de UX sem esconder o antes/depois", () => {
+    expect(document.querySelectorAll("#evolucao .craft-item")).toHaveLength(4);
+    expect(document.querySelectorAll("#evolucao .compare")).toHaveLength(4);
+    expect(document.querySelectorAll("#evolucao .ui-state")).toHaveLength(8);
+    expect(html).toContain("RECONSTITUIÇÕES EDITORIAIS");
+    expect(document.querySelectorAll("#evolucao input, #evolucao button")).toHaveLength(0);
+  });
+
+  it("mantem cinco retratos locais com contribuicoes e LinkedIn sempre visiveis", () => {
+    const imagens = [...document.querySelectorAll<HTMLImageElement>("#pessoas .credit img")];
     expect(imagens).toHaveLength(5);
+
     for (const img of imagens) {
       expect(img.alt.length).toBeGreaterThan(18);
       const src = img.getAttribute("src")!;
@@ -46,16 +76,18 @@ describe("Case unificado V6 — narrativa visual e evidencias", () => {
       expect(buffer.toString("ascii", 0, 4)).toBe("RIFF");
       expect(buffer.toString("ascii", 8, 12)).toBe("WEBP");
     }
-    expect(document.querySelectorAll("#pessoas .flip button")).toHaveLength(4);
+
     expect(document.querySelectorAll("#pessoas a[href*='linkedin.com/in/']")).toHaveLength(5);
+    expect(document.querySelectorAll("#pessoas button")).toHaveLength(0);
   });
 
-  it("inclui Fernando gerado com IA e nao revela material interno do evento", () => {
-    const img = document.querySelector<HTMLImageElement>('img[src="./assets/fernando-ai.png"]');
-    expect(img).not.toBeNull();
-    expect(img!.alt.toLowerCase()).toContain("inteligência artificial");
-    expect(existsSync("public/case/assets/fernando-ai.png")).toBe(true);
-    expect(html).not.toContain("Corporativo | Interno");
-    expect(html).not.toContain("abaixo da média");
+  it("explicita provenance e os limites da PoC sem inflar maturidade", () => {
+    expect(html).toContain("PERSONA NARRATIVA");
+    expect(html).toContain("IMAGEM GERADA COM IA");
+    expect(html).toContain("arquitetura de referência");
+    expect(html).toContain("não está pronta para uso financeiro em produção");
+    expect(html).toContain("testes assistivos completos");
+    expect(html).toContain("agentes de IA");
+    expect(html).not.toContain("IA agentiva");
   });
 });
