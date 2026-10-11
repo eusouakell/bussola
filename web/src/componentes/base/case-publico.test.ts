@@ -22,10 +22,10 @@ describe("Case Bússola V2 — publish-ready landing", () => {
   });
 
   it("usa o hero aprovado como uma cena e nao volta a cards/flips como gramatica", () => {
-    const fernando = document.querySelector<HTMLImageElement>('img[src="./assets/fernando-hero.png"]');
+    const fernando = document.querySelector<HTMLImageElement>('img[src="./assets/fernando-hero.webp"]');
     expect(fernando).not.toBeNull();
     expect(fernando!.alt.toLowerCase()).toContain("inteligência artificial");
-    expect(existsSync("public/case/assets/fernando-hero.png")).toBe(true);
+    expect(existsSync("public/case/assets/fernando-hero.webp")).toBe(true);
 
     expect(document.querySelectorAll(".hero__ui")).toHaveLength(1);
     expect(document.querySelectorAll(".flip")).toHaveLength(0);
