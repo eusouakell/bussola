@@ -17,7 +17,9 @@ describe("Case Bússola V2 — publish-ready landing", () => {
       expect(document.getElementById(id)).not.toBeNull();
     }
 
-    expect(document.querySelector('#experimente iframe[title="Protótipo demonstrativo da Bússola"]')).not.toBeNull();
+    const prototypeUrl = "https://eusouakell.github.io/bussola/";
+    expect(document.querySelector(`#experimente iframe[src="${prototypeUrl}"][title="Protótipo demonstrativo da Bússola"]`)).not.toBeNull();
+    expect(document.querySelectorAll(`#experimente a[href="${prototypeUrl}"]`).length).toBeGreaterThanOrEqual(2);
     expect(html).toContain("prefers-reduced-motion");
   });
 
