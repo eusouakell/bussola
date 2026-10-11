@@ -139,6 +139,14 @@ jobs:
           Path("outputs/case-v3-proofs/proof-evidence.json").write_text(
             json.dumps({"candidate_ref":"case/v3-independent-convergence","captures":captures}, indent=2, ensure_ascii=False) + "\n"
           )
+
+          cards = "\n".join(
+            f'<figure><img src="./qa/{item["filename"]}" alt="{item["section_id"]} at {item["viewport_width"]}px"><figcaption>{item["viewport_width"]}px · {item["section_id"]} · {item["observed_heading"]}</figcaption></figure>'
+            for item in captures
+          )
+          gallery = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bússola V3 proof evidence</title><style>
+          body{{margin:0;background:#172331;color:#fffdfa;font-family:system-ui,sans-serif}}header{{padding:28px 32px;border-bottom:1px solid #51606f}}h1{{margin:0;font-size:26px}}p{{color:#c5ced6}}main{{padding:32px;display:grid;gap:32px}}figure{{margin:0;background:#fffdfa;padding:12px;color:#172331}}img{{display:block;max-width:100%;height:auto;margin:auto}}figcaption{{font:12px/1.5 ui-monospace,monospace;padding:10px 4px 2px;color:#59636e}}</style></head><body><header><h1>Bússola V3 · representative proof evidence</h1><p>Deterministic captures used by independent review runs.</p></header><main>{cards}</main></body></html>'''
+          Path("outputs/case-v3-proofs/review.html").write_text(gallery)
           PY
 
       - name: Commit proof evidence
@@ -147,7 +155,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add outputs/case-v3-proofs/qa outputs/case-v3-proofs/proof-evidence.json
+          git add outputs/case-v3-proofs/qa outputs/case-v3-proofs/proof-evidence.json outputs/case-v3-proofs/review.html
           if git diff --cached --quiet; then
             exit 0
           fi
