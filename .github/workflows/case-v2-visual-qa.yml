@@ -1,0 +1,78 @@
+name: case-v2-visual-qa
+
+on:
+  push:
+    branches:
+      - case/publish-ready-v2
+    paths:
+      - "web/public/case/**"
+      - ".github/workflows/case-v2-visual-qa.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: case-v2-visual-qa
+  cancel-in-progress: true
+
+jobs:
+  render:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: case/publish-ready-v2
+
+      - name: Locate Chrome
+        id: chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          echo "bin=$chrome" >> "$GITHUB_OUTPUT"
+
+      - name: Render QA viewports
+        shell: bash
+        env:
+          CHROME: ${{ steps.chrome.outputs.bin }}
+        run: |
+          set -euo pipefail
+          mkdir -p outputs/case-v2-qa
+          page="file://$GITHUB_WORKSPACE/web/public/case/index.html"
+
+          render () {
+            local name="$1"
+            local width="$2"
+            local height="$3"
+            local hash="$4"
+            "$CHROME"               --headless               --no-sandbox               --disable-gpu               --hide-scrollbars               --force-device-scale-factor=1               --run-all-compositor-stages-before-draw               --virtual-time-budget=1500               --window-size="${width},${height}"               --screenshot="$GITHUB_WORKSPACE/outputs/case-v2-qa/${name}.png"               "${page}${hash}"
+          }
+
+          render desktop-hero 1440 1000 "#top"
+          render desktop-discovery 1440 1000 "#descoberta"
+          render desktop-evolution 1440 1000 "#evolucao"
+          render desktop-team 1440 1000 "#pessoas"
+
+          render mobile-390-hero 390 844 "#top"
+          render mobile-390-discovery 390 844 "#descoberta"
+          render mobile-390-evolution 390 844 "#evolucao"
+          render mobile-390-team 390 844 "#pessoas"
+
+          render mobile-320-hero 320 800 "#top"
+          render mobile-320-discovery 320 800 "#descoberta"
+          render mobile-320-evolution 320 800 "#evolucao"
+          render mobile-320-team 320 800 "#pessoas"
+
+      - name: Commit QA evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add outputs/case-v2-qa
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "test(case): add V2 visual QA renders"
+          git push origin HEAD:case/publish-ready-v2
