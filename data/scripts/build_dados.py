@@ -58,6 +58,8 @@ from bussola_mcp.contratos import (
     CORTES_GOLDEN,
     ENTRADA_CANONICA_SIMULACAO,
     FERRAMENTAS_GOLDEN,
+    FERRAMENTAS,
+    TABELAS_FERRAMENTA,
     ID_ANCORA,
     ID_CONTROLE,
     UUID_V4_RE,
@@ -67,6 +69,7 @@ from bussola_mcp.contratos import (
     arquivo_resumo_mes,
 )
 from bussola_mcp.dominio import metricas
+from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.dominio.fakes import RepositorioFake
 from bussola_mcp.dominio.interfaces import RepositorioFinanceiro
 from bussola_mcp.dominio.repositorio_bq import (
@@ -462,6 +465,14 @@ GOLDEN_ARGUMENTS: dict[str, dict[str, Any]] = {
     "oportunidades_corte": {"top_n": 10},
     "simular_objetivo": dict(ENTRADA_CANONICA_SIMULACAO),
     "comparar_cenarios": dict(ENTRADA_CANONICA_SIMULACAO),
+    # Caso canônico da funcionalidade 009: um sonho deliberadamente distante,
+    # para o golden provar a trajetória intermediária em vez de um "não dá".
+    "planejar_marcos": {
+        "valor_alvo": 100_000_000.0,
+        "prazo_meses": 24,
+        "prioridade": "alta",
+        "usar_saldo_atual": True,
+    },
 }
 
 
@@ -503,6 +514,28 @@ def fixture_users(perfil: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
 
 
 def _golden(repository: RepositorioFinanceiro, tool: str, ate: int, **kwargs: Any) -> Any:
+    if tool == "planejar_marcos":
+        try:
+            result = DomainComputations(repository).planejar_marcos(
+                ID_ANCORA,
+                ate,
+                kwargs["valor_alvo"],
+                kwargs["prazo_meses"],
+                kwargs.get("prioridade"),
+                kwargs.get("usar_saldo_atual", True),
+            )
+        except Exception as exc:
+            codigo = getattr(exc, "codigo", type(exc).__name__)
+            raise BuildError(f"golden {tool} até {ate}: {codigo}") from exc
+        return {
+            "dados": result.dados.model_dump(mode="json"),
+            "fonte": {
+                "ferramenta": tool,
+                "tabelas": list(TABELAS_FERRAMENTA[tool]),
+                "periodo": result.periodo.model_dump(mode="json"),
+            },
+            "avisos": list(result.avisos),
+        }
     try:
         result = getattr(metricas, tool)(repository, ID_ANCORA, ate, **kwargs)
     except metricas.MetricError as exc:
