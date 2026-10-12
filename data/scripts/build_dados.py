@@ -58,9 +58,9 @@ from bussola_mcp.contratos import (
     CORTES_GOLDEN,
     ENTRADA_CANONICA_SIMULACAO,
     FERRAMENTAS_GOLDEN,
-    TABELAS_FERRAMENTA,
     ID_ANCORA,
     ID_CONTROLE,
+    TABELAS_FERRAMENTA,
     UUID_V4_RE,
     FaixaRenda,
     UserPersona,
@@ -68,7 +68,6 @@ from bussola_mcp.contratos import (
     arquivo_resumo_mes,
 )
 from bussola_mcp.dominio import metricas
-from bussola_mcp.ferramentas.computations import DomainComputations
 from bussola_mcp.dominio.fakes import RepositorioFake
 from bussola_mcp.dominio.interfaces import RepositorioFinanceiro
 from bussola_mcp.dominio.repositorio_bq import (
@@ -76,6 +75,7 @@ from bussola_mcp.dominio.repositorio_bq import (
     RepositorioBigQuery,
     RepositoryUnavailableError,
 )
+from bussola_mcp.ferramentas.computations import DomainComputations
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 # A raiz do repositório e os defaults de ambiente têm um dono só:
