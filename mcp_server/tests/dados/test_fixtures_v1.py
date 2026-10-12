@@ -132,14 +132,20 @@ GOLDEN_CALLS = [
 @pytest.mark.parametrize(("arquivo", "tool", "ate", "kwargs"), GOLDEN_CALLS)
 def test_golden_versionado_igual_a_metricas_sobre_as_linhas(arquivo, tool, ate, kwargs):
     repo = RepositorioFake(COMMITTED)
-    resultado = getattr(metricas, tool)(repo, ID_ANCORA, ate, **kwargs)
-    assert metricas.build_envelope(tool, resultado) == _read(COMMITTED / "ferramentas" / arquivo)
+    esperado = build._golden(repo, tool, ate, **kwargs)
+    assert esperado == _read(COMMITTED / "ferramentas" / arquivo)
 
 
 def test_entradas_canonicas_dos_goldens():
     assert build.GOLDEN_ARGUMENTS["simular_objetivo"] == ENTRADA_CANONICA_SIMULACAO
     assert build.GOLDEN_ARGUMENTS["comparar_cenarios"] == ENTRADA_CANONICA_SIMULACAO
     assert build.GOLDEN_ARGUMENTS["oportunidades_corte"] == {"top_n": gerar.TOP_MAX}
+    assert build.GOLDEN_ARGUMENTS["planejar_marcos"] == {
+        "valor_alvo": 100_000_000.0,
+        "prazo_meses": 24,
+        "prioridade": "alta",
+        "usar_saldo_atual": True,
+    }
 
 
 def test_resumo_mes_nao_depende_do_corte():
