@@ -34,6 +34,7 @@ from bussola_mcp.contratos import (  # noqa: E402
     DadosDividasParcelas,
     DadosOportunidadesCorte,
     DadosPerfilFinanceiro,
+    DadosPlanejarMarcos,
     DadosResumoMes,
     DadosSimularObjetivo,
     EntradaCategoria,
@@ -392,6 +393,52 @@ def _golden(ferramenta: str, corte: int) -> BaseModel:
                 for nome, pct in regras.pct_capacidade.items()
             ],
             regras=regras,
+        )
+    if ferramenta == "planejar_marcos":
+        proximo = {
+            "ordem": 1,
+            "nivel": 3,
+            "tipo": "ACUMULAR_PARTE_DA_META",
+            "titulo": "Acumular a primeira parte relevante da meta",
+            "indicador": "R$ 28.800,00 acumulados para o objetivo",
+            "valor_alvo": 28800.0,
+            "prazo_meses": 24,
+            "aporte_mensal": 1200.0,
+            "por_que": "É um primeiro marco verificável com a capacidade sustentável atual.",
+            "relacao_com_objetivo": "É uma etapa intermediária; não garante o objetivo final.",
+        }
+        return DadosPlanejarMarcos(
+            objetivo={"valor_alvo": 100000000.0, "prazo_meses": 24, "prioridade": "alta"},
+            situacao={
+                "renda_media": 5000.0,
+                "gasto_medio": 3000.0,
+                "sobra_media": 2000.0,
+                "sobra_mediana": 2000.0,
+                "meses_negativos": 0,
+                "meses_considerados": n,
+                "saldo_atual": 100.0 * n,
+                "recursos_disponiveis": 100.0 * n,
+                "juros_pagos_media": 5.0,
+                "parcelas_mensais": 100.0,
+                "comprometimento_renda_pct": 2.0,
+                "meses_ate_fim_parcela": max(12 - n, 0),
+                "dados_ausentes": [],
+            },
+            motivos=[
+                {
+                    "codigo": "PRAZO_NAO_CABE",
+                    "observado": 4166666.67,
+                    "limite": 1200.0,
+                    "explicacao": "O objetivo pede um aporte acima da capacidade sustentável atual.",
+                }
+            ],
+            marcos=[proximo],
+            proximo=proximo,
+            aporte_necessario=4166666.67,
+            capacidade_sustentavel=1200.0,
+            trajetoria_incerta=True,
+            ressalvas=["Atingir este marco não garante o objetivo final."],
+            regras={},
         )
     raise ValueError(ferramenta)
 
