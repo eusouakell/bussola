@@ -67,7 +67,7 @@ async def test_every_number_has_a_source_offline(rodar_eval: ModuleType, tmp_pat
     assert summary.checked > 40 and summary.unavailable == 0
     ids = {r.case.id for r in results}
     assert {"jornada-demo", "escopo-controle", "recusa-credito"} <= ids
-    assert {f"q{n}" for n in range(1, 8)} == {i.split("-")[0] for i in ids if i.startswith("q")}
+    assert {f"q{n}" for n in range(1, 9)} == {i.split("-")[0] for i in ids if i.startswith("q")}
 
     report = output.read_text("utf-8")
     assert "<!-- eval:offline:inicio -->" in report and "**sem fonte: 0**" in report
