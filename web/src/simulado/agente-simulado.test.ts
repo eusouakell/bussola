@@ -321,10 +321,11 @@ describe("BUG-03 / feature 009: meta acima do perfil", () => {
   });
 
   it("a resposta de planejar_marcos vira CardMarcos no reducer", () => {
-    const motor = motorAte(0);
+    const motor = new MotorSimulado(relogioFixo());
+    const inicio = motor.iniciar();
     const eventos = motor.turno(META);
     const modelo = reduzir([
-      { mensagem: null, eventos: motor.iniciar() },
+      { mensagem: null, eventos: inicio },
       { mensagem: META, eventos },
     ]);
     expect(
