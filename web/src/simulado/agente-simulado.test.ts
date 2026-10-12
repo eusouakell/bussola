@@ -5,7 +5,7 @@ import { reducerSessao, type AcaoSessao } from "../sessao/reducer";
 import { AgenteSimulado, MotorSimulado, fatiar, relogioFixo } from "./agente-simulado";
 import { gerarRoteiro, MENSAGENS_ROTEIRO } from "./roteiro";
 import * as T from "./textos";
-import { brl, meses } from "../formatacao/formatar";
+import { brl } from "../formatacao/formatar";
 import roteiroGravado from "../../fixtures/roteiro-demo.json";
 import { R_OUTRO_OBJETIVO } from "../vistas/P1Encerramento";
 
