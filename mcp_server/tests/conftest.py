@@ -429,7 +429,9 @@ def _golden(ferramenta: str, corte: int) -> BaseModel:
                     "codigo": "PRAZO_NAO_CABE",
                     "observado": 4166666.67,
                     "limite": 1200.0,
-                    "explicacao": "O objetivo pede um aporte acima da capacidade sustentável atual.",
+                    "explicacao": (
+                        "O objetivo pede um aporte acima da capacidade sustentável atual."
+                    ),
                 }
             ],
             marcos=[proximo],
