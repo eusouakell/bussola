@@ -235,6 +235,35 @@ casos:
               em R$ 56,07 por mês.
               Fonte: dívidas e parcelas, jan–jun/2025.
 
+  - id: q8-marcos
+    titulo: Como avançar quando o objetivo está muito distante?
+    ao_vivo: true
+    estado:
+      objetivo:
+        tipo: imovel
+        descricao: Casa de alto valor
+        valor_alvo: 100000000.0
+        prazo_meses: 24
+        prioridade: alta
+      estado_jornada: ANTECIPAR
+    turnos:
+      - cliente: Esse objetivo está muito longe do que eu consigo hoje. Qual é o próximo passo realista?
+        espera:
+          ferramentas: [planejar_marcos]
+        roteiro:
+          - chamar:
+              - planejar_marcos:
+                  valor_alvo: 100000000
+                  prazo_meses: 24
+                  prioridade: alta
+                  usar_saldo_atual: true
+          - responder: |-
+              **Recomendação**
+              Em vez de descartar o seu objetivo, organizei um próximo marco verificável
+              com base na sua situação atual. Atingir esse marco melhora sua posição,
+              mas não garante o objetivo final.
+              Fonte: marcos do objetivo, jan–jun/2025.
+
   # -------------------------------------------------------------------------
   # Só offline: recusa e escopo verificados de forma determinística
   # -------------------------------------------------------------------------
