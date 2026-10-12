@@ -33,6 +33,12 @@ ENTRADA_GOLDEN: dict[str, dict[str, object]] = {
     "oportunidades_corte": {"top_n": 10},
     "simular_objetivo": dict(ENTRADA_CANONICA_SIMULACAO),
     "comparar_cenarios": dict(ENTRADA_CANONICA_SIMULACAO),
+    "planejar_marcos": {
+        "valor_alvo": 100_000_000.0,
+        "prazo_meses": 24,
+        "prioridade": "alta",
+        "usar_saldo_atual": True,
+    },
 }
 
 
@@ -153,8 +159,6 @@ def _todas_chamadas() -> list[tuple[str, dict[str, object]]]:
         ("resumo_mes", argumentos("resumo_mes")),
         ("referencia_coorte", argumentos("referencia_coorte")),
         (BUSCA, argumentos(BUSCA, pergunta="Como funciona o rotativo do cartão?")),
-        # 009: sem golden gravado, calcula pelo domínio — mas o envelope é o mesmo contrato.
-        ("planejar_marcos", argumentos("planejar_marcos")),
     ]
     return chamadas
 
