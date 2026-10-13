@@ -90,6 +90,7 @@ def test_202601_invalido_em_toda_ferramenta(ferramenta):
         "comparar_cenarios": {"valor_alvo": 1000.0, "prazo_meses": 12},
         "buscar_contexto_financeiro": {"pergunta": "aluguel"},
         "resumo_mes": {"anomes": 202501},
+        "planejar_marcos": {"valor_alvo": 1000.0, "prazo_meses": 12},
     }.get(ferramenta, {})
     mensagem = _mensagem(classe, id_usuario=ID_ANCORA, ate_anomes=202601, **extras)
     assert "ate_anomes" in mensagem
@@ -248,7 +249,7 @@ def test_envelope_erro_usa_a_mensagem_padrao():
 
 def test_catalogo_do_mock():
     assert len(FERRAMENTAS_P0) == 7
-    assert FERRAMENTAS_MOCK == (*FERRAMENTAS_P0, "resumo_mes")
+    assert FERRAMENTAS_MOCK == (*FERRAMENTAS_P0, "resumo_mes", "planejar_marcos")
     assert set(FERRAMENTAS_MOCK) <= set(FERRAMENTAS)
     assert "referencia_coorte" not in FERRAMENTAS_MOCK
     assert set(FERRAMENTAS_P0) - set(FERRAMENTAS_GOLDEN) == {"buscar_contexto_financeiro"}

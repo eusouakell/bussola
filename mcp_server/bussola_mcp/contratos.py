@@ -780,13 +780,15 @@ FERRAMENTAS_P0: tuple[str, ...] = (
     "buscar_contexto_financeiro",
 )
 
-# Ferramentas servidas pelo MCP mock do 000 (7 P0 + resumo_mes).
-FERRAMENTAS_MOCK: tuple[str, ...] = (*FERRAMENTAS_P0, "resumo_mes")
+# Ferramentas servidas no modo fixture. Marcos entrou após os ciclos 001/003/004
+# chegarem à main; continua read-only e usa as mesmas tabelas financeiras.
+FERRAMENTAS_MOCK: tuple[str, ...] = (*FERRAMENTAS_P0, "resumo_mes", "planejar_marcos")
 
-# P0 com golden por corte em ``ferramentas/``. ``buscar_contexto_financeiro`` busca
-# no corpus de ``rag/trechos_exemplo.json`` (Q-17).
-FERRAMENTAS_GOLDEN: tuple[str, ...] = tuple(
-    f for f in FERRAMENTAS_P0 if f != "buscar_contexto_financeiro"
+# Ferramentas com golden por corte em ``ferramentas/``. O RAG busca no corpus
+# de ``rag/trechos_exemplo.json`` e não tem golden próprio.
+FERRAMENTAS_GOLDEN: tuple[str, ...] = (
+    *(f for f in FERRAMENTAS_P0 if f != "buscar_contexto_financeiro"),
+    "planejar_marcos",
 )
 
 # Tabelas citadas em ``fonte.tabelas`` por ferramenta (sugestão do 000; o 003 pode refinar).

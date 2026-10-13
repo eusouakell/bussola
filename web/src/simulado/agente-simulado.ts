@@ -364,6 +364,34 @@ export class MotorSimulado {
    */
   private metaAcimaDoPerfil(d: { valor: number; prazo: number; necessario: number; sobra: number; descricao: string }) {
     this.metasForaDoPerfil += 1;
+
+    // O caso de stress da demo usa a feature 009 de verdade: a resposta vem do
+    // golden determinístico de planejar_marcos e vira CardMarcos no reducer.
+    if (d.valor === 100_000_000 && d.prazo === 24) {
+      const r = this.chamarUma(
+        "planejar_marcos",
+        this.argsMcp({
+          valor_alvo: d.valor,
+          prazo_meses: d.prazo,
+          prioridade: "alta",
+          usar_saldo_atual: true,
+        }),
+        () => L.goldenAte("planejar_marcos", this.ate()),
+        (res) => (L.ehErro(res) ? undefined : { marcos: res.dados, estado_jornada: "ORIENTAR" }),
+      );
+      if (!L.ehErro(r)) {
+        const proximo = r.dados.proximo as { titulo?: string } | null;
+        const titulo = proximo?.titulo ? ` O próximo marco é “${proximo.titulo}”.` : "";
+        this.falar(
+          `Seu objetivo continua sendo o destino final.${titulo} É uma etapa intermediária baseada na sua situação atual; atingi-la melhora sua posição financeira, mas não garante o objetivo final.`,
+          { tag: "recomendacao", respostas_rapidas: [T.R_OUTRO_CAMINHO] },
+        );
+        return;
+      }
+    }
+
+    // Para valores arbitrários que não têm golden de demo, mantém a heurística
+    // determinística existente em vez de fingir que o fixture canônico é daquele objetivo.
     const intermediaria = metaRedonda(d.sobra * d.prazo);
     const prazoLongo = Math.min(d.prazo * 2, 360);
     const longa = metaRedonda(d.sobra * prazoLongo);

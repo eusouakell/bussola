@@ -1,4 +1,4 @@
-"""MCP server da Bússola (ciclo 003): 9 ferramentas read-only em streamable HTTP.
+"""MCP server da Bússola (ciclo 003 + 009): 10 ferramentas read-only em streamable HTTP.
 
 Substitui o mock do 000. Expõe as ferramentas de contratos §5 em ``/mcp``, cada
 uma num módulo de :mod:`bussola_mcp.ferramentas`, sobre portas injetadas
@@ -116,7 +116,7 @@ def create_server(
     host: str = "127.0.0.1",
     port: int = PORTA_PADRAO,
 ) -> FastMCP:
-    """FastMCP com as 9 ferramentas de ``contratos.FERRAMENTAS``.
+    """FastMCP com as 10 ferramentas de ``contratos.FERRAMENTAS``.
 
     As assinaturas usam tipos simples com os padrões de §5; faixas e UUID são
     validados dentro da ferramenta (research R-05 do 000). Com ``host`` de

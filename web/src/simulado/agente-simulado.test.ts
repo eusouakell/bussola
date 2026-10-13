@@ -5,7 +5,7 @@ import { reducerSessao, type AcaoSessao } from "../sessao/reducer";
 import { AgenteSimulado, MotorSimulado, fatiar, relogioFixo } from "./agente-simulado";
 import { gerarRoteiro, MENSAGENS_ROTEIRO } from "./roteiro";
 import * as T from "./textos";
-import { brl, meses } from "../formatacao/formatar";
+import { brl } from "../formatacao/formatar";
 import roteiroGravado from "../../fixtures/roteiro-demo.json";
 import { R_OUTRO_OBJETIVO } from "../vistas/P1Encerramento";
 
@@ -297,57 +297,61 @@ describe("BUG-02: fora do escopo escalona em vez de repetir", () => {
   });
 });
 
-describe("BUG-03: meta acima do perfil", () => {
+describe("BUG-03 / feature 009: meta acima do perfil", () => {
   const META = "gostaria de comprar uma casa de 100 milhoes de reais em 2 anos";
 
-  it("registra o sonho do cliente e faz a checagem de realidade com os números dele", () => {
+  it("mantem o sonho registrado e chama planejar_marcos em vez de inventar uma meta intermediaria", () => {
     const motor = motorAte(0);
     const eventos = motor.turno(META);
-    expect(dados(respostas(eventos).registrar_objetivo).objetivo).toMatchObject({ valor_alvo: 100000000, prazo_meses: 24 });
+    expect(dados(respostas(eventos).registrar_objetivo).objetivo).toMatchObject({
+      valor_alvo: 100000000,
+      prazo_meses: 24,
+    });
     expect(respostas(eventos).simular_objetivo).toBeUndefined();
+
+    const marcos = dados(respostas(eventos).planejar_marcos);
+    expect(marcos.objetivo).toMatchObject({ valor_alvo: 100000000, prazo_meses: 24 });
+    expect(Array.isArray(marcos.marcos)).toBe(true);
+    expect((marcos.marcos as Dados[]).length).toBeGreaterThan(0);
+    expect(marcos.proximo).toBeTruthy();
+
     const texto = textos(eventos).join(" ");
-    expect(texto).toContain(`${brl(100_000_000)} em ${meses(24)}`);
-    expect(texto).toContain(`${brl(4_166_666.67)} por mês`); // valor ÷ prazo
-    expect(texto).toContain(brl(1729)); // sobra mediana do golden de capacidade_poupanca
-    expect(texto).toContain(`${brl(41_000)} em ${meses(24)}`); // meta intermediária vinda da sobra
+    expect(texto).toContain("destino final");
+    expect(texto).toContain("não garante o objetivo final");
   });
 
-  it("propõe a meta intermediária e o prazo mais longo nas respostas rápidas", () => {
+  it("a resposta de planejar_marcos vira CardMarcos no reducer", () => {
+    const motor = new MotorSimulado(relogioFixo());
+    const inicio = motor.iniciar();
+    const eventos = motor.turno(META);
+    const modelo = reduzir([
+      { mensagem: null, eventos: inicio },
+      { mensagem: META, eventos },
+    ]);
+    expect(
+      modelo.itens.some(
+        (item) => item.tipo === "card" && item.componente === "CardMarcos" && item.nome === "planejar_marcos",
+      ),
+    ).toBe(true);
+  });
+
+  it("o próximo passo vem do contrato de marcos, sem oferecer o atalho antigo de 41 mil", () => {
     const motor = motorAte(0);
-    const rapidas = motor.turno(META).at(-2)?.customMetadata?.bussola?.respostas_rapidas;
-    expect(rapidas).toEqual([`Começar com ${brl(41_000)} em ${meses(24)}`, `Alongar para ${meses(48)} e mirar ${brl(82_000)}`]);
+    const eventos = motor.turno(META);
+    const resposta = dados(respostas(eventos).planejar_marcos);
+    const proximo = resposta.proximo as { titulo: string };
+    expect(textos(eventos).join(" ")).toContain(proximo.titulo);
+    expect(textos(eventos).join(" ")).not.toContain(brl(41_000));
   });
 
-  it("a meta intermediária proposta é aceita e simulada", () => {
-    const motor = motorAte(0);
-    motor.turno(META);
-    const eventos = motor.turno(`Começar com ${brl(41_000)} em ${meses(24)}`);
-    expect(dados(respostas(eventos).simular_objetivo)).toMatchObject({ valor_alvo: 41000, aporte_mensal: 1708.33, viavel: true });
-  });
-
-  it("insistir muda o texto e o aviso da demonstração aparece uma única vez", () => {
-    const motor = motorAte(0);
-    const primeira = textos(motor.turno(META));
-    const segunda = textos(motor.turno("quero 100 milhoes em 2 anos mesmo assim"));
-    const terceira = textos(motor.turno("insisto: 100 milhoes em 2 anos"));
-    // A checagem de realidade é o texto que repete o valor pedido pelo cliente.
-    const checagem = (ts: string[]) => ts.find((t) => t.includes(brl(100_000_000)));
-    expect(primeira).toContain(T.AVISO_SIMULACAO_GRAVADA);
-    expect(segunda.join(" ")).not.toContain(T.AVISO_SIMULACAO_GRAVADA);
-    expect(checagem(segunda)).not.toBe(checagem(primeira));
-    expect(checagem(terceira)).not.toBe(checagem(segunda));
-    expect(segunda.join(" ")).toContain("destino final");
-  });
-
-  it("renegociar o valor não repete o mesmo diagnóstico (BUG-05b)", () => {
+  it("renegociar o valor não repete o mesmo diagnóstico", () => {
     const motor = motorAte(0);
     const primeira = textos(motor.turno(META));
     const segunda = textos(motor.turno("quero 100 milhoes em 2 anos mesmo assim"));
     const diagnostico = primeira.find((t) => t.startsWith("Olhei seu extrato"));
     expect(diagnostico).toBeDefined();
     expect(segunda.some((t) => t.startsWith("Olhei seu extrato"))).toBe(false);
-    // e a sobra reaproveitada continua alimentando a checagem de realidade
-    expect(segunda.join(" ")).toContain(brl(1729));
+    expect(respostas(motor.turno("insisto: 100 milhoes em 2 anos")).planejar_marcos).toBeDefined();
   });
 });
 

@@ -89,6 +89,7 @@ from bussola_mcp.contratos import (
     Recorrente,
     RefCoorte,
     RegrasCenario,
+    RegrasMarco,
     Resposta,
     Saldo,
     TrechoCorpus,
@@ -99,6 +100,7 @@ from bussola_mcp.contratos import (
     brl,
     id_usuario_valido,
 )
+from bussola_mcp.dominio import marcos
 
 # A raiz do repositório e o diretório de fixtures têm um dono só:
 # ``bussola_mcp.config`` (contratos §7 e §8). Aqui só se lê de lá.
@@ -1071,6 +1073,29 @@ def golden_comparar_cenarios(
     return _envelope("comparar_cenarios", resultado, meses[0].anomes, corte, avisos)
 
 
+def golden_planejar_marcos(
+    dados: DadosUsuario,
+    corte: int,
+    valor_alvo: float = 100_000_000.0,
+    prazo_meses: int = 24,
+    prioridade: str = "alta",
+) -> dict[str, Any]:
+    """Golden canônico do 009, gerado pela mesma engine determinística da ferramenta."""
+    meses = dados.meses_ate(corte)
+    parcelas = [p for p in dados.parcelas if p.anomes <= corte]
+    regras = RegrasMarco()
+    contexto = marcos.contexto_de_perfil(meses, parcelas, regras)
+    resultado = marcos.planejar(
+        valor_alvo,
+        prazo_meses,
+        contexto,
+        regras,
+        prioridade,
+    )
+    avisos = marcos.avisos_do_plano(contexto, regras, resultado)
+    return _envelope("planejar_marcos", resultado, meses[0].anomes, corte, avisos)
+
+
 def _gastos_macro(gastos: Iterable[GastoCategoria]) -> list[GastoMacro]:
     por_macro = _agrupar(gastos, attrgetter("macro"))
     return sorted(
@@ -1162,6 +1187,7 @@ def gerar_conjunto(
             "dividas_e_parcelas": golden_dividas_e_parcelas(ancora, corte),
             "simular_objetivo": golden_simular_objetivo(ancora, corte),
             "comparar_cenarios": golden_comparar_cenarios(ancora, categorias, corte),
+            "planejar_marcos": golden_planejar_marcos(ancora, corte),
         }
         for ferramenta in FERRAMENTAS_GOLDEN:
             conjunto[f"ferramentas/{arquivo_golden(ferramenta, corte)}"] = golden[ferramenta]

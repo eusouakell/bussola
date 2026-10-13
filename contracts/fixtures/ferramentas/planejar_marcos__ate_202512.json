@@ -1,0 +1,121 @@
+{
+  "avisos": [
+    "Marcos são uma rota adaptativa: atingir um marco não garante o objetivo final. Renda, patrimônio, prazo e condições futuras podem precisar mudar.",
+    "Não há dado de patrimônio nem de investimentos nesta base; os marcos consideram só renda, gastos, parcelas e saldo em conta.",
+    "Sem rendimento considerado: nenhuma valorização de investimento entra nas contas.",
+    "O saldo atual em conta foi considerado como recurso já disponível."
+  ],
+  "dados": {
+    "aporte_necessario": 4164683.43,
+    "capacidade_sustentavel": 1493.66,
+    "marcos": [
+      {
+        "aporte_mensal": 1493.66,
+        "indicador": "R$ 35.847,84 acumulados para o objetivo",
+        "nivel": 3,
+        "ordem": 1,
+        "por_que": "É o que a sua capacidade sustentável de R$ 1.493,66 por mês constrói em 24 meses, sem apertar o orçamento nem contar com sorte.",
+        "prazo_meses": 24,
+        "relacao_com_objetivo": "São 0% do objetivo já formados em patrimônio seu, que seguem valendo se o valor, o prazo ou a prioridade mudarem.",
+        "tipo": "ACUMULAR_PARTE_DA_META",
+        "titulo": "Acumular a primeira parte relevante da meta",
+        "valor_alvo": 35847.84
+      }
+    ],
+    "motivos": [
+      {
+        "codigo": "VALOR_DISTANTE_DOS_RECURSOS",
+        "explicacao": "O objetivo é de R$ 100.000.000,00 e os recursos que você já tem somam R$ 47.597,68: o ponto de partida ainda está distante da meta.",
+        "limite": 10000000.0,
+        "observado": 47597.68
+      },
+      {
+        "codigo": "RENDA_NAO_SUSTENTA",
+        "explicacao": "Fechar o objetivo no prazo pedido exigiria guardar R$ 4.164.683,43 por mês, acima dos 30% da sua renda média que tratamos como teto seguro.",
+        "limite": 2235.38,
+        "observado": 4164683.43
+      },
+      {
+        "codigo": "PREMISSA_IRREALISTA",
+        "explicacao": "O aporte necessário de R$ 4.164.683,43 por mês passa de toda a sua sobra mediana (R$ 2.489,44). Só fecharia com premissas que não usamos, como valorização de investimento.",
+        "limite": 2489.44,
+        "observado": 4164683.43
+      },
+      {
+        "codigo": "PRAZO_NAO_CABE",
+        "explicacao": "Em 24 meses, o objetivo pede R$ 4.164.683,43 por mês, e a sua capacidade sustentável hoje é de R$ 1.493,66 por mês.",
+        "limite": 1493.66,
+        "observado": 4164683.43
+      }
+    ],
+    "objetivo": {
+      "prazo_meses": 24,
+      "prioridade": "alta",
+      "valor_alvo": 100000000.0
+    },
+    "proximo": {
+      "aporte_mensal": 1493.66,
+      "indicador": "R$ 35.847,84 acumulados para o objetivo",
+      "nivel": 3,
+      "ordem": 1,
+      "por_que": "É o que a sua capacidade sustentável de R$ 1.493,66 por mês constrói em 24 meses, sem apertar o orçamento nem contar com sorte.",
+      "prazo_meses": 24,
+      "relacao_com_objetivo": "São 0% do objetivo já formados em patrimônio seu, que seguem valendo se o valor, o prazo ou a prioridade mudarem.",
+      "tipo": "ACUMULAR_PARTE_DA_META",
+      "titulo": "Acumular a primeira parte relevante da meta",
+      "valor_alvo": 35847.84
+    },
+    "regras": {
+      "fator_desnivel_incerto": 3.0,
+      "fracao_reserva_parcial": 0.3333333333333333,
+      "max_marcos": 4,
+      "meses_fluxo_equilibrado": 3,
+      "meses_reserva": 3,
+      "pct_aporte_renda_max": 0.3,
+      "pct_capacidade_sustentavel": 0.6,
+      "pct_comprometimento_renda_max": 30.0,
+      "pct_juros_renda_divida_cara": 0.01,
+      "pct_meses_negativos_max": 0.25,
+      "pct_recursos_minimo_meta": 0.1,
+      "piso_valor_marco": 500.0,
+      "prazo_maximo_marco": 360,
+      "rendimento_mensal": 0.0,
+      "usar_saldo_atual": true
+    },
+    "ressalvas": [
+      "Hoje não há uma trajetória financeiramente responsável para projetar esse objetivo com segurança nas condições atuais. Podemos, porém, trabalhar num primeiro marco concreto que aumente suas possibilidades futuras.",
+      "Este marco melhora sua posição financeira e mantém o objetivo aberto, mas atingi-lo não garante o objetivo final.",
+      "A decisão de mudar valor, prazo ou prioridade do objetivo é sua: nada aqui troca o seu objetivo automaticamente."
+    ],
+    "situacao": {
+      "comprometimento_renda_pct": 1.47,
+      "dados_ausentes": [
+        "PATRIMONIO",
+        "INVESTIMENTOS"
+      ],
+      "gasto_medio": 4614.52,
+      "juros_pagos_media": 60.51,
+      "meses_ate_fim_parcela": 0,
+      "meses_considerados": 12,
+      "meses_negativos": 1,
+      "parcelas_mensais": 109.62,
+      "recursos_disponiveis": 47597.68,
+      "renda_media": 7451.27,
+      "saldo_atual": 47597.68,
+      "sobra_media": 2836.75,
+      "sobra_mediana": 2489.44
+    },
+    "trajetoria_incerta": true
+  },
+  "fonte": {
+    "ferramenta": "planejar_marcos",
+    "periodo": {
+      "fim": 202512,
+      "inicio": 202501
+    },
+    "tabelas": [
+      "bussola_dados.perfil_mensal",
+      "bussola_dados.parcelas"
+    ]
+  }
+}

@@ -418,7 +418,7 @@ def _layout_esperado() -> set[str]:
 
 def test_layout_do_conjunto(conjunto: dict[str, Any]) -> None:
     assert set(conjunto) == _layout_esperado()
-    assert len(conjunto) == 32
+    assert len(conjunto) == 34
     gf.validar_conjunto(conjunto)
 
 
@@ -740,7 +740,7 @@ def test_main_grava_fixtures_com_cliente_falso(
     assert (saida / "usuarios.json").read_text(encoding="utf-8") == gf.serializar(
         gerar()["usuarios.json"]
     )
-    assert "32 arquivos gravados" in capsys.readouterr().out
+    assert "34 arquivos gravados" in capsys.readouterr().out
 
 
 def test_main_usa_google_cloud_project(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

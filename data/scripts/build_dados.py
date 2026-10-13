@@ -60,6 +60,7 @@ from bussola_mcp.contratos import (
     FERRAMENTAS_GOLDEN,
     ID_ANCORA,
     ID_CONTROLE,
+    TABELAS_FERRAMENTA,
     UUID_V4_RE,
     FaixaRenda,
     UserPersona,
@@ -74,6 +75,7 @@ from bussola_mcp.dominio.repositorio_bq import (
     RepositorioBigQuery,
     RepositoryUnavailableError,
 )
+from bussola_mcp.ferramentas.computations import DomainComputations
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 # A raiz do repositório e os defaults de ambiente têm um dono só:
@@ -462,6 +464,14 @@ GOLDEN_ARGUMENTS: dict[str, dict[str, Any]] = {
     "oportunidades_corte": {"top_n": 10},
     "simular_objetivo": dict(ENTRADA_CANONICA_SIMULACAO),
     "comparar_cenarios": dict(ENTRADA_CANONICA_SIMULACAO),
+    # Caso canônico da funcionalidade 009: um sonho deliberadamente distante,
+    # para o golden provar a trajetória intermediária em vez de um "não dá".
+    "planejar_marcos": {
+        "valor_alvo": 100_000_000.0,
+        "prazo_meses": 24,
+        "prioridade": "alta",
+        "usar_saldo_atual": True,
+    },
 }
 
 
@@ -503,6 +513,28 @@ def fixture_users(perfil: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
 
 
 def _golden(repository: RepositorioFinanceiro, tool: str, ate: int, **kwargs: Any) -> Any:
+    if tool == "planejar_marcos":
+        try:
+            result = DomainComputations(repository).planejar_marcos(
+                ID_ANCORA,
+                ate,
+                kwargs["valor_alvo"],
+                kwargs["prazo_meses"],
+                kwargs.get("prioridade"),
+                kwargs.get("usar_saldo_atual", True),
+            )
+        except Exception as exc:
+            codigo = getattr(exc, "codigo", type(exc).__name__)
+            raise BuildError(f"golden {tool} até {ate}: {codigo}") from exc
+        return {
+            "dados": result.dados.model_dump(mode="json"),
+            "fonte": {
+                "ferramenta": tool,
+                "tabelas": list(TABELAS_FERRAMENTA[tool]),
+                "periodo": result.periodo.model_dump(mode="json"),
+            },
+            "avisos": list(result.avisos),
+        }
     try:
         result = getattr(metricas, tool)(repository, ID_ANCORA, ate, **kwargs)
     except metricas.MetricError as exc:
