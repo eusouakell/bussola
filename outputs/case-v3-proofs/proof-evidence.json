@@ -1,0 +1,47 @@
+{
+  "candidate_ref": "case/v3-independent-convergence",
+  "captures": [
+    {
+      "filename": "desktop-hero.png",
+      "viewport_width": 1440,
+      "section_id": "hero",
+      "content_sha256": "b5052ece1059f42560dd4bc18a50e4f86bfa16106daf5d10fff98f3f5f28b434",
+      "observed_heading": "O saldo está no azul. E a dívida?"
+    },
+    {
+      "filename": "desktop-discovery.png",
+      "viewport_width": 1440,
+      "section_id": "discovery",
+      "content_sha256": "dcfa02899ea90245d5d1870d27c5648c1e8388a62a496957ff4ce551b0c0da03",
+      "observed_heading": "Não escolhemos o problema antes de olhar os dados."
+    },
+    {
+      "filename": "desktop-evolution.png",
+      "viewport_width": 1440,
+      "section_id": "evolution",
+      "content_sha256": "eaf2c7342ce5445b778c016c2e9ee51a1c2d05799cf30ea23d93da55c592182b",
+      "observed_heading": "Fazer funcionar foi o começo. Fazer entender veio depois."
+    },
+    {
+      "filename": "desktop-team.png",
+      "viewport_width": 1440,
+      "section_id": "team",
+      "content_sha256": "3fadd4358eca1d88b950f0c51c14fa324619913197f0f74e8ac6924f32662c9b",
+      "observed_heading": "Créditos que mostram contribuição — sem virar diretório."
+    },
+    {
+      "filename": "mobile-hero.png",
+      "viewport_width": 390,
+      "section_id": "hero",
+      "content_sha256": "1cef0841ea0487dd56a63a3f55c9461e558622906407812cb787a2770b077525",
+      "observed_heading": "O saldo está no azul. E a dívida?"
+    },
+    {
+      "filename": "mobile-evolution.png",
+      "viewport_width": 390,
+      "section_id": "evolution",
+      "content_sha256": "bc99132e8460e9de5803dbf21e1ecd07d01259285282897a6348e841e43151ef",
+      "observed_heading": "Uma decisão por comparação."
+    }
+  ]
+}
