@@ -4,16 +4,22 @@
 
 Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um objetivo declarado pelo cliente, entende sua situação financeira, antecipa cenários, orienta a tomada de decisão, aciona próximos passos com consentimento e acompanha a evolução até a realização do objetivo.
 
-> **Projeto concluído · outubro de 2026.** Esta é a documentação histórica de uma prova de conceito desenvolvida em equipe para a Batalha de Agentes. O protótipo não é um produto bancário em operação. O fork não está mais em desenvolvimento, a landing page pública foi descontinuada e a publicação automática deve permanecer desligada. Antes de arquivar o repositório, a proprietária deve desativar o GitHub Pages em Settings → Pages. [Registro de encerramento](docs/PROJECT-CLOSURE-2026-10.md).
+> **Projeto concluído · outubro de 2026.** Esta é a documentação histórica de uma prova de conceito desenvolvida em equipe para a Batalha de Agentes. **O protótipo estático e simulado permanece público no GitHub Pages; somente a landing page do case foi descontinuada.** Não há produto bancário em operação nem novo roadmap de desenvolvimento. [Registro de encerramento](docs/PROJECT-CLOSURE-2026-10.md).
+
+## Protótipo navegável — demonstração preservada
+
+**[Abrir o protótipo da Bússola](https://eusouakell.github.io/bussola/)**
+
+Explore a jornada simulada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. A experiência usa dados sintéticos e não constitui serviço bancário, aprovação de crédito ou atendimento real do Itaú. O GitHub Pages deve permanecer ativado.
 
 ## Evidências e materiais preservados
 
-- [Context Engineering: estudo de caso](docs/context-engineering-case-study.md), documentado como parte do aprendizado do projeto.
-- [Código do protótipo simulado](web/) e [documentação de operação](docs/operacao.md) para consulta histórica, sem suporte ou serviço ativo.
-- [Auditoria de UX/UI e UX Writing](web/public/auditoria/index.html) e [case HTML arquivado no código](web/public/case/index.html): registros históricos, **não** páginas públicas mantidas.
+- [Context Engineering: estudo de caso](docs/context-engineering-case-study.md), documentado como parte do aprendizado.
+- [Código do protótipo simulado](web/) e [documentação de operação](docs/operacao.md), disponíveis para consulta histórica.
+- [Auditoria de UX/UI e UX Writing](web/public/auditoria/index.html) e [fonte HTML da landing page do case](web/public/case/index.html), mantidos no repositório como evidência. **A rota pública `/bussola/case/` não integra mais o artefato publicado.**
 - [Arquitetura](docs/arquitetura.md), [decisões](docs/escopo-decisoes.md), [ficha de submissão](docs/ficha-submissao.md) e histórico de PRs.
 
-O encerramento não implica certificação de prontidão de produção, ganho medido de produtividade ou validação clínica/financeira de recomendações. Dados e cenários da demonstração são sintéticos.
+O encerramento não implica certificação de prontidão de produção, ganho medido de produtividade nem validação financeira das recomendações.
 
 ## Auditoria de UX/UI e UX Writing
 
@@ -113,26 +119,11 @@ usa o `make agent` pelo proxy do Vite. O BFF (`make bff`) precisa de
 Os testes contra o BigQuery real: `make test-bq` (gravam só em
 `bussola_app_dev`).
 
-### Deploy histórico em Cloud Run (desativado no fork)
+### Implantação Cloud Run (histórico, desativada)
 
-Este procedimento é preservado apenas para documentação e **não deve ser executado neste fork arquivado**. O deploy histórico era feito pelo chart Helm `deploy/helm/bussola`, usado só como templater e
-aplicado com `gcloud run services replace`. Não existe GKE. A revisão nova
-sai **sempre com tag e 0% de tráfego**. Só a promoção move tráfego, com
-confirmação humana.
+O projeto utilizou uma arquitetura de referência com ADK, MCP, BigQuery, RAG e Cloud Run. Os procedimentos históricos constam de [docs/operacao.md](docs/operacao.md) e do histórico do Git. Os workflows de deploy e promoção da nuvem foram removidos do fork e **não devem ser reativados como parte da manutenção estática do protótipo**.
 
-| Passo | Como |
-|---|---|
-| Publicar (tag `main` ou `cNNN`, 0%) | Push na `main` → `.github/workflows/deploy.yml`. Sem WIF: fluxo local de [operacao.md §3](docs/operacao.md#3-deploy-de-uma-versão-nova) |
-| Testar a revisão pela tag | `make smoke SMOKE_ARGS="--tag cNNN --only agent"` ([operacao.md §4](docs/operacao.md#4-smoke)) |
-| Promover ou voltar | `.github/workflows/promote.yml` (aprovação no environment `production`) ou o fluxo local de [operacao.md §8](docs/operacao.md#8-promoção-e-rollback) |
-| Conferir produção | `make smoke` |
-
-Mais detalhes:
-
-- operação, logs, auditoria, rollback e Plano B: [docs/operacao.md](docs/operacao.md);
-- roteiro da demo (≤ 5 min): [docs/roteiro-demo.md](docs/roteiro-demo.md);
-- chart e guardas: [deploy/helm/README.md](deploy/helm/README.md);
-- operação por agente (Antigravity): [AGENTS.md](AGENTS.md).
+O GitHub Pages publica exclusivamente a demonstração estática, sem credenciais ou dependência dos serviços GCP originais. A landing page `/case/` é excluída durante o build, mas seu código-fonte permanece preservado.
 
 ## Arquitetura de contexto
 
