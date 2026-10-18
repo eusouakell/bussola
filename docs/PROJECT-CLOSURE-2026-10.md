@@ -1,41 +1,36 @@
 # Encerramento do projeto Bússola — outubro de 2026
 
-**Estado editorial/operacional:** desenvolvimento encerrado por decisão da mantenedora em 18/10/2026.  
-**Natureza:** prova de conceito colaborativa de hackathon, documentação e experimento de UX/Context Engineering; não é produto em operação.
+**Decisão:** desenvolvimento concluído pela mantenedora em 18/10/2026. O protótipo simulado segue público; a landing page do case sai de publicação. Esta decisão corrige o escopo anterior do PR #16, que havia proposto desativar o GitHub Pages por inteiro.
 
-## O que fica concluído
+## Estado pretendido
 
-- A participação e a documentação do projeto desenvolvido para a Batalha de Agentes.
-- O fork de Kell como registro de seus trabalhos em estratégia, pesquisa, UX/UX Writing, contexto, Responsible AI e narrativa, com créditos coletivos e procedência preservados.
-- As integrações já incorporadas a `main`, incluindo `planejar_marcos` do PR #15, ficam arquivadas no código.
-- As revisões e testes experimentais de landing page permanecem visíveis no histórico do Git, sem reivindicação de aprovação visual final.
+| Superfície | Estado |
+|---|---|
+| `https://eusouakell.github.io/bussola/` | Manter disponível como demonstração estática com dados sintéticos |
+| `https://eusouakell.github.io/bussola/case/` | Retirar do artefato GitHub Pages; preservar HTML e assets no Git |
+| `https://eusouakell.github.io/bussola/auditoria/` | Preservar como documentação histórica |
+| `main` e histórico Git | Preservar código, PRs, documentos, equipe e créditos |
+| Cloud Run / serviços GCP | Não manter como parte do protótipo estático; recursos externos exigem conferência independente |
 
-## O que foi descontinuado
+## Decisões técnicas
 
-- Evolução do protótipo e redesign da landing page/case público.
-- Releases do protótipo por GitHub Pages e deploy/promoção em Google Cloud por Actions.
-- Dependências externas e trabalho planejado da reestruturação V3; PR #14 deve ser fechado sem merge como **not planned**, com referência a este encerramento.
-- Atualizações editoriais ou métricas decorrentes de novas iterações do produto.
+1. Restaurar **somente** o workflow de GitHub Pages (`.github/workflows/static-demo-pages.yml`), que testa, faz lint e publica o build do modo `simulado` com `VITE_BUSSOLA_MODO=simulado`, `VITE_BUSSOLA_LOGIN=FALSE` e base `/bussola/`.
+2. Após `npm run build`, remover `dist/case` do **artefato publicado** e conferir `dist/index.html`. Não apagar `web/public/case` do repositório: sua presença é histórico, não obrigação de manter a página no ar.
+3. Manter desativados os workflows de deploy/promoção do GCP. Não permitir que scripts de publicação estática usem segredos da nuvem.
+4. README aponta para o protótipo ativo, não para a LP rejeitada. A revisão visual V3 PR #14 permanece encerrada sem merge, e a integração de marcos PR #15 fica registrada no histórico.
+5. Projeto concluído não significa sistema financeiro de produção nem evidência de economia de tempo mensurada. Manter autoria e créditos coletivos; evitar republicar dados restritos.
 
-## Limites e propriedade intelectual
+## Critérios para encerrar as pendências
 
-- Manter autoria coletiva, créditos e vínculos a contribuições verificáveis.
-- Não caracterizar o protótipo como serviço bancário, produto validado em produção, resultado de experimento controlado ou caso com resultados medidos.
-- Não republicar dados ou materiais não autorizados do hackathon.
-- Não alterar repositórios de outros colaboradores.
-- Preservar fonte, docs, PRs, decisões e assets do fork como arquivo histórico.
+- [ ] PR corretivo aprovado e integrado à `main`.
+- [ ] Job de GitHub Pages executado com sucesso na `main` e novo artefato implantado.
+- [ ] Protótipo `/bussola/` carregando e com jornada simulada funcional.
+- [ ] Rota `/bussola/case/` não entrega mais a landing page rejeitada (testar em janela anônima para evitar cache).
+- [ ] Auditoria `/bussola/auditoria/` permanece acessível, se antes publicada.
+- [ ] Se desejar arquivar o repositório, fazê-lo **somente depois** de verificar a implantação final. Arquivamento torna código e configurações somente leitura, impedindo novos ajustes até reabrir o repositório.
 
-## Passos para concluir a retirada pública
-
-1. Fazer merge do PR de encerramento e verificar que os workflows de publicação `static-demo-pages.yml`, `deploy.yml` e `promote.yml` não existem mais na `main`. O CI pode permanecer como registro de testes.
-2. **Desativar GitHub Pages manualmente em Settings → Pages**, para retirar de fato `https://eusouakell.github.io/bussola/` e suas rotas `/case/` e `/auditoria/`. A remoção de workflows **não** derruba uma implantação já publicada.
-3. Conferir eventuais serviços Google Cloud/Cloud Run fora do fork: cancelar recursos remanescentes somente após checar titularidade, permissões e custos. GitHub não comprova sua situação atual.
-4. Em Settings → General → Danger Zone, escolher **Archive this repository** após confirmar a retirada pública. Arquivamento é reversível por administradores; não exclui o código ou histórico.
-5. Marcar as referências externas de portfólio como **case arquivado**, sem apontar para uma landing page que não estará disponível.
+**Importante:** Não usar **Unpublish site**, não desligar GitHub Pages e não alterar a visibilidade do repositório para privado apenas para esconder o case. Essas ações podem indisponibilizar também o protótipo.
 
 ## Prioridade posterior
 
-Concentrar a produção em Cereja Flamejante e em uma oferta inicial monetizável. Nenhum novo sprint Bússola está previsto. Trabalho posterior exigirá decisão explícita de reabertura, e não será criado implicitamente por automações.
-
----
-Este registro documenta a intenção de encerramento; ações em Settings, a retirada da hospedagem e o arquivamento só podem ser marcados como concluídos após verificação direta.
+Nenhuma evolução funcional ou sprint da Bússola está prevista. O foco editorial e comercial passa para a Cereja Flamejante; manter o protótipo como evidência navegável, sem trabalhos de redesign.
