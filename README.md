@@ -4,21 +4,20 @@
 
 Bússola é uma proposta para a **Batalha de Agentes**. O agente parte de um objetivo declarado pelo cliente, entende sua situação financeira, antecipa cenários, orienta a tomada de decisão, aciona próximos passos com consentimento e acompanha a evolução até a realização do objetivo.
 
-## Protótipo navegável
+> **Projeto concluído · outubro de 2026.** Esta é a documentação histórica de uma prova de conceito desenvolvida em equipe para a Batalha de Agentes. O protótipo não é um produto bancário em operação. O fork não está mais em desenvolvimento, a landing page pública foi descontinuada e a publicação automática deve permanecer desligada. Antes de arquivar o repositório, a proprietária deve desativar o GitHub Pages em Settings → Pages. [Registro de encerramento](docs/PROJECT-CLOSURE-2026-10.md).
 
-[Abrir o protótipo do Bússola](https://eusouakell.github.io/bussola/)
+## Evidências e materiais preservados
 
-Explore a experiência demonstrativa da jornada de Fernando, persona criada pela equipe para planejar a compra do primeiro apartamento. O protótipo apresenta uma simulação; não representa uma oferta bancária, aprovação de crédito ou atendimento real do Itaú.
+- [Context Engineering: estudo de caso](docs/context-engineering-case-study.md), documentado como parte do aprendizado do projeto.
+- [Código do protótipo simulado](web/) e [documentação de operação](docs/operacao.md) para consulta histórica, sem suporte ou serviço ativo.
+- [Auditoria de UX/UI e UX Writing](web/public/auditoria/index.html) e [case HTML arquivado no código](web/public/case/index.html): registros históricos, **não** páginas públicas mantidas.
+- [Arquitetura](docs/arquitetura.md), [decisões](docs/escopo-decisoes.md), [ficha de submissão](docs/ficha-submissao.md) e histórico de PRs.
 
-## Case unificado — produto, dados e evolução de UX
-
-[**Ler o case Bússola**](https://eusouakell.github.io/bussola/case/) — a investigação dos dados sintéticos e personas, a prova de conceito com stack Google Cloud, o antes/depois de UX em mockups de celular, uma demonstração interativa embutida e créditos com mini-bios verificáveis. O diagnóstico de UX passou a integrar a história, sem disputar espaço com uma segunda página.
-
-Fontes: [HTML do case](web/public/case/index.html) e [parecer editorial V6](docs/ux/editorial-case-v6-evidence.md). **A V6 está em PR de revisão**: só estará pública após validação de dados/fotos, merge e deploy do GitHub Pages. As comparações são reconstituições visuais do código; o conteúdo aponta expressamente essa limitação.
+O encerramento não implica certificação de prontidão de produção, ganho medido de produtividade ou validação clínica/financeira de recomendações. Dados e cenários da demonstração são sintéticos.
 
 ## Auditoria de UX/UI e UX Writing
 
-O projeto documenta a evolução da experiência com um [relatório visual antes/depois](https://eusouakell.github.io/bussola/auditoria/): scorecard heurístico, problemas rastreáveis no código, soluções propostas e melhorias implementadas. O relatório distingue correções de interface de testes ainda pendentes; a nota pós-melhoria depende de validação.
+O projeto documenta a evolução da experiência com um [relatório visual antes/depois](web/public/auditoria/index.html): scorecard heurístico, problemas rastreáveis no código, soluções propostas e melhorias implementadas. O relatório distingue correções de interface de testes ainda pendentes; a nota pós-melhoria depende de validação.
 
 Para revisar o HTML no repositório: [web/public/auditoria/index.html](web/public/auditoria/index.html).
 
@@ -73,7 +72,7 @@ A Bússola deve:
 - **Segurança:** Model Armor, Secret Manager, controles de consentimento e autonomia governada.
 - **Observabilidade:** Cloud Logging.
 
-## Como rodar local / publicar
+## Reprodução local e arquitetura histórica (sem manutenção)
 
 Pré-requisitos: [`uv`](https://docs.astral.sh/uv/), Node 24 (front), `jq` e
 `helm` v4 (deploy). Os dados são sintéticos. Segredos só no `.env` local
@@ -114,9 +113,9 @@ usa o `make agent` pelo proxy do Vite. O BFF (`make bff`) precisa de
 Os testes contra o BigQuery real: `make test-bq` (gravam só em
 `bussola_app_dev`).
 
-### Publicar no Cloud Run
+### Deploy histórico em Cloud Run (desativado no fork)
 
-O deploy é o chart Helm `deploy/helm/bussola`, usado só como templater e
+Este procedimento é preservado apenas para documentação e **não deve ser executado neste fork arquivado**. O deploy histórico era feito pelo chart Helm `deploy/helm/bussola`, usado só como templater e
 aplicado com `gcloud run services replace`. Não existe GKE. A revisão nova
 sai **sempre com tag e 0% de tráfego**. Só a promoção move tráfego, com
 confirmação humana.
